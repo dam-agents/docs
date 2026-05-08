@@ -1,0 +1,91 @@
+site_name: DAM
+site_url: https://pages.github.ibm.com/dam-agents/docs/
+
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    - scheme: default
+      primary: white
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.copy
+    - header.autohide
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+docs_dir: docs
+site_dir: site
+
+nav:
+  - Getting Started:
+    - Welcome: index.md
+    - Quickstart: getting-started/quickstart.md
+  - Agents:
+    - Overview: agents/overview.md
+    - Claude Code: agents/claude-code.md
+    - Pi Agent: agents/pi-agent.md
+    - Google Workspace: agents/google-workspace.md
+    - Code Guardian: agents/code-guardian.md
+  - Features:
+    - Chat Sessions: features/chat-sessions.md
+    - Terminal Sessions: features/terminal-sessions.md
+    - Credentials: features/credentials.md
+    - Secrets: features/secrets.md
+    - Skills: features/skills.md
+    - MCP Tools: features/mcp-tools.md
+    - Schedules: features/schedules.md
+    - Approvals: features/approvals.md
+    - Egress Rules: features/egress-rules.md
+    - File Manager: features/file-manager.md
+    - Multiplayer: features/multiplayer.md
+  - Integrations:
+    - Slack: integrations/slack.md
+    - GitHub: integrations/github.md
+    - And More: integrations/more.md
+  - Security:
+    - Overview: security/index.md
+  - Reference:
+    - Glossary: reference/glossary.md
+    - FAQ: reference/faq.md
+    - Troubleshooting: reference/troubleshooting.md
+    - Contact: reference/contact.md
