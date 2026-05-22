@@ -64,7 +64,7 @@ This means:
 
 - An agent cannot reach arbitrary internet endpoints
 - All outbound requests are mediated by the credential gateway
-- New destinations require explicit approval (via [Egress Rules](../features/egress-rules.md))
+- New destinations require explicit approval (via [Network & Approvals](../features/network-access.md))
 
 ### What This Prevents
 
@@ -101,7 +101,7 @@ When a colleague messages your agent via Slack or Telegram:
 
 | Shared (workspace) | Private (per-user) |
 |-------------------|-------------------|
-| Files in `/workspace` | API tokens and credentials |
+| Files in `/home/agent/work` | API tokens and credentials |
 | Conversation history | OAuth connections |
 | Installed skills | Egress rule approvals |
 | Agent memory | |

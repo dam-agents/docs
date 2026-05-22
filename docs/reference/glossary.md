@@ -9,7 +9,7 @@ Key terms used throughout DAM.
 | **Template** | A read-only blueprint that defines which AI harness powers an agent |
 | **Agent** | A user-owned definition created from a template |
 | **Instance** | The running deployment of an agent — its pod, workspace, and configuration |
-| **Workspace** | The persistent filesystem (`/workspace` and `/home/agent`) attached to an agent |
+| **Workspace** | The persistent filesystem (`/home/agent/work`) attached to an agent |
 
 ## Sessions
 
@@ -26,7 +26,7 @@ Key terms used throughout DAM.
 |------|-----------|
 | **Running** | Agent pod is active and accepting messages |
 | **Hibernated** | Agent pod scaled to zero. Workspace preserved, no compute used. |
-| **Wake** | Transition from hibernated to running (~20 seconds) |
+| **Wake** | Transition from hibernated to running (typically under a minute) |
 | **Hibernate** | Transition from running to hibernated after idle timeout |
 
 ## Credentials & Security

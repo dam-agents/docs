@@ -7,7 +7,7 @@ An agent is a running AI assistant with its own persistent workspace, credential
 When you create an agent, the platform provisions:
 
 - **A compute pod** — an isolated Linux environment running the AI harness
-- **A persistent workspace** — `/workspace` and `/home/agent` directories that survive restarts and hibernation
+- **A persistent workspace** — `/home/agent/work` directory that survives restarts and hibernation
 - **A credential gateway** — a paired security pod that injects your tokens on the wire
 - **Network isolation** — the agent can only reach services you explicitly allow
 
@@ -16,16 +16,18 @@ Each agent is independent. You can run multiple agents simultaneously, each with
 ## Agent Lifecycle
 
 ```
-Created → Running → Hibernated → Running → ...
-                                     ↓
-                                  Deleted
+Created → Starting → Running → Hibernating → Hibernated → Starting → Running → ...
+                                                                        ↓
+                                                                     Deleted
 ```
 
 | State | What's happening |
 |-------|-----------------|
+| **Starting** | Pod is scaling up from hibernated or newly created. |
 | **Running** | Pod is active, ready to chat. Uses compute resources. |
+| **Hibernating** | Pod is scaling down after inactivity. |
 | **Hibernated** | Pod scaled to zero. Workspace and configuration preserved. No compute cost. |
-| **Waking** | Transitioning from hibernated to running (takes ~20 seconds). |
+| **Error** | Pod failed to start or encountered a fatal issue. |
 
 ### Automatic Hibernation
 
@@ -35,7 +37,7 @@ Agents automatically hibernate after a period of inactivity (no active sessions,
 
 | Persists | Lost |
 |----------|------|
-| Workspace files (`/workspace`) | Running processes |
+| Workspace files (`/home/agent/work`) | Running processes |
 | Home directory (`/home/agent`) | In-memory state |
 | Installed skills | Open terminal sessions |
 | Session history | Temporary files outside workspace |
@@ -47,8 +49,10 @@ Agents automatically hibernate after a period of inactivity (no active sessions,
 |----------|---------|----------|
 | [Claude Code](claude-code.md) | Anthropic Claude Code | General-purpose coding, debugging, refactoring |
 | [Pi Agent](pi-agent.md) | pi.dev | Multi-model coding (GPT-4, Mistral, Gemini, etc.) |
-| [Google Workspace](google-workspace.md) | Custom | Email, calendar, drive, and sheets automation |
-| [Code Guardian](code-guardian.md) | Claude Code | Automated PR code review with Slack notifications |
+| [Bob](bob.md) | IBM Bob Shell | General-purpose AI shell with tenant scoping |
+| [Codex](codex.md) | OpenAI Codex (Zed) | Coding with OpenAI models or compatible endpoints |
+
+Want to bring your own agent? See the [Custom Harness Image](../guides/custom-harness.md) guide.
 
 ## Managing Agents
 

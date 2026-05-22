@@ -6,7 +6,7 @@
 |---------|-------------|----------|
 | Agent stuck in "Starting" | Pod provisioning delay | Wait 30-60 seconds; if it persists, delete and recreate |
 | Agent not responding | Pending approval blocking it | Check your Inbox for pending approvals |
-| Agent waking slowly | Normal hibernation wake time | Allow ~20 seconds |
+| Agent waking slowly | Normal hibernation wake time | Allow up to a minute |
 
 ## Credential Issues
 
@@ -22,7 +22,7 @@
 |---------|-------------|----------|
 | Bot not responding | Identity not linked | Run `/dam login` in Slack |
 | "Not authorized" | Not on allowed users list | Ask the agent owner to add you |
-| Messages delayed | Agent waking from hibernation | Wait ~20 seconds |
+| Messages delayed | Agent waking from hibernation | Allow up to a minute |
 
 ## Session Issues
 

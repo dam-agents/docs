@@ -75,7 +75,7 @@ Some agents (like Code Guardian) can post messages to Slack without being prompt
 
 ## Wake-on-Message
 
-If your agent is hibernated and someone messages it in Slack, the platform automatically wakes the agent. There's a brief delay (~20 seconds) while the pod starts, then the agent responds normally.
+If your agent is hibernated and someone messages it in Slack, the platform automatically wakes the agent. There's a brief delay while the pod starts (typically under a minute), then the agent responds normally.
 
 ## Troubleshooting
 
@@ -83,5 +83,5 @@ If your agent is hibernated and someone messages it in Slack, the platform autom
 |---------|----------|
 | Bot not responding | Check that you've linked your identity (`/dam login`) |
 | "Not authorized" error | Ask the agent owner to add you to the allowed users list |
-| Agent slow to respond | It may be waking from hibernation — wait ~20 seconds |
+| Agent slow to respond | It may be waking from hibernation — can take up to a minute |
 | Messages not appearing | Verify the agent is connected to this specific channel |

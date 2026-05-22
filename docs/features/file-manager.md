@@ -6,7 +6,7 @@ Browse, edit, and upload files in your agent's persistent workspace.
 
 The File Manager gives you direct access to your agent's filesystem:
 
-- `/workspace` — your main working directory (repos, project files)
+- `/home/agent/work` — your main working directory (repos, project files)
 - `/home/agent` — agent home directory (configuration, memory, skills)
 
 ## Capabilities
@@ -31,8 +31,8 @@ The built-in editor supports:
 
 | Limit | Value |
 |-------|-------|
-| Max viewable file size | 1 MB |
-| Max upload size | 50 MB |
+| Max viewable file size | 10 MB |
+| Max import bundle size | 5 GB |
 | Supported formats | All text files; binary files are downloadable but not viewable |
 
 ## Key Notes

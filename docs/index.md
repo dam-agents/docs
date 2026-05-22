@@ -5,16 +5,14 @@ hide:
 
 <div class="hero" markdown>
 
-# Deploy Agents Massively
+# Deploy<br>Agents<br>Massively
 
 Run agent harnesses like Claude Code headless in the cloud, on a schedule, connected to your tools — without exposing your tokens.
 
-[Launch DAM →](https://dam-dev.apps.dam-cl.fmaas.res.ibm.com/){:target="_blank" .md-button .md-button--primary}
+[Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
 
 </div>
-
----
 
 ## Why DAM?
 
@@ -100,21 +98,21 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     [:octicons-arrow-right-24: Learn more](agents/pi-agent.md)
 
--   :material-shield-check:{ .lg .middle } **Code Guardian**
+-   :material-console:{ .lg .middle } **Bob**
 
     ---
 
-    Automated PR code review with Slack notifications.
+    IBM's general-purpose AI shell with tenant scoping.
 
-    [:octicons-arrow-right-24: Learn more](agents/code-guardian.md)
+    [:octicons-arrow-right-24: Learn more](agents/bob.md)
 
--   :material-google:{ .lg .middle } **Google Workspace**
+-   :material-code-tags:{ .lg .middle } **Codex**
 
     ---
 
-    Gmail triage, Calendar, Drive, Sheets automation.
+    OpenAI-powered coding with any compatible endpoint.
 
-    [:octicons-arrow-right-24: Learn more](agents/google-workspace.md)
+    [:octicons-arrow-right-24: Learn more](agents/codex.md)
 
 </div>
 
@@ -130,11 +128,11 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Create a Claude Code agent and start chatting in 5 minutes.
 
--   **[Set up Code Guardian →](agents/code-guardian.md)**
+-   **[Build a Custom Agent →](guides/custom-harness.md)**
 
     ---
 
-    Automated PR reviews posted to your Slack channel.
+    Package your own harness as a DAM-compatible container image.
 
 -   **[Chat from Slack →](integrations/slack.md)**
 

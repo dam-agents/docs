@@ -27,4 +27,4 @@ DAM agents support multi-user collaboration. You can grant colleagues access to 
 
 ## How It's Secured
 
-Each collaborator's turn runs in an isolated fork pod with only their credentials loaded. See [Multiplayer Security](../security/index.md#multiplayer-security) for the full architecture.
+Each collaborator's turn runs in an isolated fork pod with only their credentials loaded. See [Architecture](../reference/architecture.md#multiplayer-security) for the full model.

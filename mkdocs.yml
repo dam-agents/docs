@@ -4,6 +4,8 @@ site_url: https://pages.github.ibm.com/dam-agents/docs/
 theme:
   name: material
   custom_dir: overrides
+  logo: assets/logo.png
+  favicon: assets/logo.png
   palette:
     - scheme: default
       primary: white
@@ -70,27 +72,22 @@ nav:
     - Overview: agents/overview.md
     - Claude Code: agents/claude-code.md
     - Pi Agent: agents/pi-agent.md
-    - Google Workspace: agents/google-workspace.md
-    - Code Guardian: agents/code-guardian.md
+    - Bob: agents/bob.md
+    - Codex: agents/codex.md
   - Features:
-    - Chat Sessions: features/chat-sessions.md
-    - Terminal Sessions: features/terminal-sessions.md
-    - Credentials: features/credentials.md
-    - Secrets: features/secrets.md
-    - Skills: features/skills.md
-    - MCP Tools: features/mcp-tools.md
+    - Sessions: features/sessions.md
+    - Connections: features/connections.md
+    - Network & Approvals: features/network-access.md
+    - Skills & Tools: features/skills-and-tools.md
     - Schedules: features/schedules.md
-    - Approvals: features/approvals.md
-    - Egress Rules: features/egress-rules.md
     - File Manager: features/file-manager.md
     - Multiplayer: features/multiplayer.md
-  - Integrations:
     - Slack: integrations/slack.md
-    - GitHub: integrations/github.md
-    - And More: integrations/more.md
-  - Security:
-    - Overview: security/index.md
+  - Guides:
+    - Custom Harness Image: guides/custom-harness.md
   - Reference:
+    - Architecture: reference/architecture.md
+    - CLI: reference/cli.md
     - Glossary: reference/glossary.md
     - FAQ: reference/faq.md
     - Troubleshooting: reference/troubleshooting.md

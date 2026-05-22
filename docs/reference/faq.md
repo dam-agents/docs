@@ -17,7 +17,7 @@ Yes, via Slack. Connect your agent to a channel and add colleagues to the allowe
 ## Credentials
 
 **Is my API key safe?**  
-Yes. Credentials are stored in a secure vault and injected by a separate gateway pod. The agent never has access to raw tokens. See [How Credentials Work](../security/index.md).
+Yes. Credentials are stored in a secure vault and injected by a separate gateway pod. The agent never has access to raw tokens. See [Architecture](architecture.md) for the full security model.
 
 **What if my token expires?**  
 OAuth tokens are auto-refreshed. API keys don't expire unless you rotate them at the provider.
@@ -25,7 +25,7 @@ OAuth tokens are auto-refreshed. API keys don't expire unless you rotate them at
 ## Agents
 
 **Why is my agent not responding?**  
-It may be waking from hibernation (~20 seconds). If it still doesn't respond, check the Inbox for pending approvals.
+It may be waking from hibernation (can take up to a minute). If it still doesn't respond, check the Inbox for pending approvals.
 
 **Can I change an agent's template after creation?**  
 No. Create a new agent with the desired template instead.

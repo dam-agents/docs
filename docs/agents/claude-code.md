@@ -19,7 +19,7 @@ Claude Code is a general-purpose coding agent powered by Anthropic's Claude. It 
 | Anthropic API key | **Yes** | Powers the Claude model behind the agent |
 | GitHub | Recommended | Clone repos, push branches, create PRs |
 
-See [Secrets](../features/secrets.md) and [Credentials](../features/credentials.md) for setup instructions.
+See [Connections](../features/connections.md) for setup instructions.
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ See [Secrets](../features/secrets.md) and [Credentials](../features/credentials.
 Your first message should typically clone the project you want to work on:
 
 ```
-Clone github.ibm.com/my-org/my-project into /workspace
+Clone github.ibm.com/my-org/my-project and give me a summary
 ```
 
 The agent will clone the repo into its persistent workspace. This only needs to happen once — the repo persists across sessions and hibernation.
