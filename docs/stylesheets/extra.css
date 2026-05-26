@@ -76,6 +76,8 @@
 
 .md-sidebar__scrollwrap {
   margin-top: 0;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
 }
 
 .md-nav--primary > .md-nav__title {
@@ -89,12 +91,18 @@
   letter-spacing: 0.05em;
   color: #8d8d8d;
   padding: 0.4rem 0.6rem;
+  margin-bottom: 0.3rem;
 }
 
 .md-nav--secondary .md-nav__link {
   font-size: 0.6875rem;
   font-weight: 400;
+  color: #161616 !important;
   padding: 0.2rem 0.6rem;
+}
+
+[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__link {
+  color: #c6c6c6 !important;
 }
 
 .md-nav__link {
@@ -376,38 +384,90 @@
   text-decoration: underline;
 }
 
-/* Code */
+/* Code — inline */
 .md-typeset code {
   background: #f4f4f4;
   border: none;
   border-radius: 4px;
   padding: 0.15em 0.4em;
-  font-size: 0.8125em;
-  color: #da1e28;
-  font-weight: 400;
+  font-size: 0.8em;
+  color: #161616;
+  font-weight: 500;
 }
 
 [data-md-color-scheme="slate"] .md-typeset code {
   background: #262626;
-  color: #ff8389;
+  color: #e0e0e0;
 }
 
+/* Code — blocks */
 .md-typeset pre {
   border-radius: 8px;
   border: 1px solid #e0e0e0;
-  background: #f9f9f9;
+  background: #fafafa;
+  padding: 0;
+  overflow: hidden;
 }
 
 [data-md-color-scheme="slate"] .md-typeset pre {
-  border-color: #262626;
-  background: #1c1c1c;
+  border-color: #333;
+  background: #1a1a1a;
 }
 
 .md-typeset pre code {
-  color: inherit;
+  color: #161616;
   background: none;
   border: none;
-  padding: 0;
+  padding: 1rem 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  display: block;
+}
+
+[data-md-color-scheme="slate"] .md-typeset pre code {
+  color: #c6c6c6;
+}
+
+.md-clipboard {
+  color: #8d8d8d !important;
+}
+
+.md-clipboard:hover {
+  color: #161616 !important;
+}
+
+[data-md-color-scheme="slate"] .md-clipboard {
+  color: #6f6f6f !important;
+}
+
+[data-md-color-scheme="slate"] .md-clipboard:hover {
+  color: #f4f4f4 !important;
+}
+
+.md-typeset .md-clipboard__message {
+  background: #161616;
+  color: #f4f4f4;
+  border-radius: 4px;
+  padding: 0.4em 0.8em;
+  font-size: 0.75rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .md-clipboard__message {
+  background: #262626;
+  color: #f4f4f4;
+}
+
+.md-dialog {
+  background: #161616 !important;
+  color: #f4f4f4 !important;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-md-color-scheme="slate"] .md-dialog {
+  background: #262626 !important;
+  color: #f4f4f4 !important;
 }
 
 /* Tables */

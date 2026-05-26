@@ -2,130 +2,131 @@
 
 Get a Claude Code agent running in 5 minutes.
 
-=== "Web UI"
+Prefer the command line? [Jump to CLI quickstart](#cli).
 
-    ## Step 1: Log In
+## Web UI
 
-    Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} and sign in with your IBM SSO credentials.
+### Step 1: Log In
 
-    ## Step 2: Create a Claude Code Agent
+Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} and sign in with your IBM SSO credentials.
 
-    1. Click **"New Agent"**
-    2. Select the **Claude Code** template
-    3. Give it a name (e.g., `my-coding-agent`)
-    4. Click **Create**
+### Step 2: Add a Model Provider
 
-    Your agent will provision in a few seconds — you'll see the status change to "Running."
+1. Go to **Providers**
+2. Click **"Add Provider"**
+3. Select **IBM LiteLLM ETE Proxy**
+4. Paste your LiteLLM API key
+5. Click **Save**
 
-    ## Step 3: Add Your Anthropic API Key
+### Step 3: Add Connections (optional but recommended)
 
-    Claude Code needs an Anthropic API key to function:
+Connections let your agent access your repositories — clone, push branches, and create PRs.
 
-    1. Navigate to **Connections** → **Secrets**
-    2. Click **"Add Secret"**
-    3. Select type: **Anthropic API Key**
-    4. Paste your key
-    5. Click **Save**
+1. Go to **Connections**
+2. Click **"Add Connection"**
+3. Choose the GitHub type based on where your project lives:
+    - **GitHub Public** — for repos on `github.com`
+    - **GitHub Enterprise** — for repos on your company's GitHub Enterprise instance (e.g., `github.ibm.com`)
+4. Provide a Personal Access Token (PAT) with appropriate repo permissions
+5. Click **Save**
 
-    !!! tip "Don't have an API key?"
-        Visit [console.anthropic.com](https://console.anthropic.com){:target="_blank"} to create one.
+### Step 4: Create an Agent from Template
 
-    !!! info "Your key is safe"
-        The key is stored in a secure vault and injected on the network wire by a separate gateway. Your agent never sees the raw token. Even if compromised, it can't leak your key.
+1. Click **"New Agent"**
+2. Select the **Claude Code** template
+3. Give it a name (e.g., `my-agent`)
+4. Click **Create**
 
-    ## Step 4: Connect GitHub (optional but recommended)
+Your agent will provision in a few seconds — you'll see the status change to "Running."
 
-    1. Go to **Connections**
-    2. Click **"Connect GitHub"**
-    3. Complete the OAuth flow
-    4. Authorize repository access
+### Step 5: Start Working
 
-    This lets your agent clone private repos, push branches, and create PRs.
+Open your agent and type your first message:
 
-    ## Step 5: Start Working
+```
+Clone github.ibm.com/my-org/my-project and give me a summary
+of the codebase architecture.
+```
 
-    Open your agent and type your first message:
+Or click **"Terminal"** to launch the full Claude Code interactive TUI.
 
-    ```
-    Clone github.ibm.com/my-org/my-project and give me a summary
-    of the codebase architecture.
-    ```
+---
 
-    Or click **"Terminal"** to launch the full Claude Code interactive TUI.
+## CLI
 
-=== "CLI"
+### Step 1: Install the CLI
 
-    ## Step 1: Install the CLI
+```bash
+npm install -g @dam-agents/cli@0.1.0-rc4
+```
 
-    ```bash
-    npm install -g @dam-agents/cli@0.1.0-rc4
-    ```
+Requires Node 20 or later.
 
-    Requires Node 20 or later.
+### Step 2: Configure and Log In
 
-    ## Step 2: Configure and Log In
+```bash
+dam config set server https://dam-prod.apps.dam-cl.fmaas.res.ibm.com/
+dam auth login
+```
 
-    ```bash
-    dam config set server https://ibm.biz/dam-agents
-    dam auth login
-    ```
+A browser window will open for IBM SSO authentication. Confirm the device code to complete login.
 
-    A browser window will open for IBM SSO authentication. Confirm the device code to complete login.
+### Step 3: Create a Claude Code Agent
 
-    ## Step 3: Create a Claude Code Agent
+Interactive setup (walks you through template selection and configuration):
 
-    Interactive setup (walks you through template, API key, and GitHub PAT):
+```bash
+dam agent create
+```
 
-    ```bash
-    dam agent create-interactive
-    ```
+Or scripted:
 
-    Or scripted:
+```bash
+dam instance create my-agent --template claude-code
+```
 
-    ```bash
-    dam agent create my-coding-agent --template claude-code
-    ```
+Wait for it to reach running state:
 
-    Wait for it to reach running state:
+```bash
+dam instance create my-agent --template claude-code --wait
+```
 
-    ```bash
-    dam agent create my-coding-agent --template claude-code --wait
-    ```
+### Step 4: Upload Your Project (optional)
 
-    ## Step 4: Upload Your Project (optional)
+Import a local project into the agent's workspace:
 
-    Import a local project into the agent's workspace:
+```bash
+dam import my-agent ./my-project
+```
 
-    ```bash
-    dam import my-coding-agent ./my-project
-    ```
+This uploads the folder to `work/my-project` on the agent.
 
-    This uploads the folder to `work/my-project` on the agent.
+### Step 5: Start Working
 
-    ## Step 5: Start Working
+Attach your terminal to the agent:
 
-    Attach your terminal to the agent:
+```bash
+dam chat my-agent
+```
 
-    ```bash
-    dam chat my-coding-agent
-    ```
+You're now in the Claude Code interactive TUI — the same experience as running `claude` locally, but persistent in the cloud. Use slash commands, approve tool calls, and work as normal.
 
-    You're now in the Claude Code interactive TUI — the same experience as running `claude` locally, but persistent in the cloud. Use slash commands, approve tool calls, and work as normal.
+To reattach later:
 
-    To reattach later:
+```bash
+dam chat my-agent --continue
+```
 
-    ```bash
-    dam chat my-coding-agent --continue
-    ```
+### Other Useful Commands
 
-    ### Other Useful Commands
+```bash
+dam instance list                    # List your instances
+dam instance get my-agent     # Show instance details
+dam session list my-agent     # List sessions
+dam template list                    # List available templates
+```
 
-    ```bash
-    dam agent list                    # List your agents
-    dam session list my-coding-agent  # List sessions
-    dam file list my-coding-agent     # Browse workspace files
-    dam file get my-coding-agent work/output.txt  # Download a file
-    ```
+---
 
 ## What Just Happened
 
