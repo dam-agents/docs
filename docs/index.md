@@ -5,7 +5,7 @@ hide:
 
 <div class="hero" markdown>
 
-# Deploy<br>Agents<br>Massively
+# Deploy Agents Massively
 
 Run agent harnesses like Claude Code headless in the cloud, on a schedule, connected to your tools — without exposing your tokens.
 
