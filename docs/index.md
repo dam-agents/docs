@@ -20,35 +20,35 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
 <div class="grid cards" markdown>
 
--   :material-lightning-bolt:{ .lg .middle } **Always-on compute**
+-   :material-cloud-outline:{ .lg .middle } **Runs in the cloud**
 
     ---
 
-    Your agent runs on cloud infrastructure — close your laptop, shut it down, it keeps working.
+    Agents keep running after you close your laptop or go offline.
 
--   :material-shield-lock:{ .lg .middle } **Zero-trust credentials**
-
-    ---
-
-    Tokens are injected at the network layer by a separate gateway. The agent process never sees them.
-
--   :material-account-group:{ .lg .middle } **Multiplayer**
+-   :material-shield-lock:{ .lg .middle } **Isolated execution**
 
     ---
 
-    Your whole team interacts with shared agents via Slack — each person authenticated individually.
+    Each agent runs in an isolated container with all access routed through a policy-enforced gateway.
 
--   :material-clock-outline:{ .lg .middle } **Unattended execution**
+-   :material-key-variant:{ .lg .middle } **Zero trust credentials**
 
     ---
 
-    Agents run on a schedule with no human in the loop. Daily PR reviews, nightly audits, whatever you need.
+    Connect agents to your tools without exposing credentials to the runtime.
+
+-   :material-account-group:{ .lg .middle } **Built for teams**
+
+    ---
+
+    Collaborate in Slack and run agents on schedules for recurring workflows.
 
 </div>
 
 ---
 
-## Modes of Interaction
+## Ways to Use DAM
 
 <div class="grid cards" markdown>
 
