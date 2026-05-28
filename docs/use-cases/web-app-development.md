@@ -1,6 +1,8 @@
 # Web App Development
 
-Turn an idea into a deployed application — without writing a single line of code yourself. This agent interviews you about what to build, writes a PRD, breaks it into GitHub issues, implements each one, and deploys the result to GitHub Pages.
+Turn an idea into a deployed application — without writing a single line of code yourself.
+
+This Claude Code configuration interviews you about what to build, then runs autonomously on a schedule to write a PRD, break it into GitHub issues, implement each one, and deploy the result to GitHub Pages. You describe the idea once, then walk away — DAM's scheduled execution keeps the agent working with no human in the loop.
 
 ## What It Does
 
@@ -49,6 +51,10 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 - **GitHub** (Enterprise or Public) — the agent creates issues, opens PRs, and merges code. Choose based on where your target repo lives.
 
+### Network Access
+
+**Trusted defaults** (recommended) — covers GitHub, npm, PyPI, and package mirrors out of the box. Any additional hosts the agent needs will surface in your inbox for approval.
+
 ## Setup
 
 1. **Create a Claude Code agent** — use the standard Claude Code template from the Web UI or CLI
@@ -57,7 +63,6 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 4. **Clone the Software Factory repo** — in your agent session, clone [github.com/dam-agents/software-factory](https://github.com/dam-agents/software-factory) into the workspace
 5. **Start a chat session** — the agent will use the cloned CLAUDE.md and skills to guide the workflow
 
-Alternatively, you can [build a custom image](../guides/custom-harness.md) that seeds the software-factory workspace into the container — so every new agent starts preconfigured without the clone step.
 
 ## Using the Agent
 

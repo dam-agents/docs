@@ -1,6 +1,8 @@
 # Code Review
 
-Get automated PR reviews on every pull request — posted to GitHub and summarized in Slack. This agent gives you an always-on reviewer that checks for correctness, security, performance, architecture issues, and documentation drift.
+Get automated PR reviews on every pull request — posted to GitHub and summarized in Slack.
+
+This Claude Code configuration runs on a schedule, continuously watching for new or updated PRs and reviewing them for correctness, security, performance, architecture issues, and documentation drift. No one needs to trigger it — DAM's scheduled execution keeps the reviewer running around the clock with no human in the loop.
 
 ## What It Does
 
@@ -50,6 +52,10 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 - **GitHub** (Enterprise or Public) — the agent reads PRs, posts reviews, and clones branches
 - **Slack** (optional but recommended) — sends review summaries to your team channel
 
+### Network Access
+
+**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack API access will surface in your inbox for approval on first use.
+
 ## Setup
 
 1. **Create a Claude Code agent** — use the standard Claude Code template from the Web UI or CLI
@@ -60,7 +66,6 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 6. **Create a schedule** — set a heartbeat interval (e.g., every 5 minutes) so the agent checks for new PRs automatically
 7. **Connect Slack** (optional) — link a Slack channel to receive review notifications
 
-Alternatively, you can [build a custom image](../guides/custom-harness.md) that bakes the Code Guardian workspace into the container.
 
 ## Review Output
 

@@ -1,6 +1,8 @@
 # Broken Link Monitor
 
-Keep your documentation links healthy automatically. This agent scans markdown files across your repositories on a daily schedule, finds broken links, and maintains a single tracking issue per repo so your team can fix them.
+Keep your documentation links healthy automatically.
+
+This Claude Code configuration runs on a daily schedule, scanning markdown files across your repositories for broken links and maintaining a single tracking issue per repo. No one needs to remember to check — DAM's scheduled execution keeps the monitor running every day with no human in the loop.
 
 ## What It Does
 
@@ -46,6 +48,10 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 - **GitHub** (Enterprise or Public) — the agent clones repos (read) and manages issues (write). A fine-grained PAT with `contents: read` and `issues: write` is sufficient.
 
+### Network Access
+
+**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface in your inbox.
+
 ## Setup
 
 1. **Create a Claude Code agent** — use the standard Claude Code template from the Web UI or CLI
@@ -55,7 +61,6 @@ State is persisted on a volume between runs — the agent remembers what it foun
 5. **Run the first session** — the agent will ask you which org/repos to watch and save the configuration
 6. **Create a schedule** — set a daily heartbeat so the agent checks links automatically
 
-Alternatively, you can [build a custom image](../guides/custom-harness.md) that bakes the Link Guardian workspace into the container.
 
 ## First Run
 
