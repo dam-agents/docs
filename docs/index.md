@@ -122,16 +122,10 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Create a Claude Code agent and start chatting in 5 minutes.
 
--   **[Build a Custom Image →](guides/custom-harness.md)**
+-   **[Use Cases →](use-cases/code-review.md)**
 
     ---
 
-    Package your own harness as a DAM-compatible container image.
-
--   **[Chat from Slack →](integrations/slack.md)**
-
-    ---
-
-    Message your agent directly from Slack threads.
+    See what teams are building — autonomous code review, app development, and more.
 
 </div>
