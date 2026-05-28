@@ -1,6 +1,6 @@
 # Quickstart
 
-Get a Claude Code agent running in 5 minutes.
+Launch a Claude Code agent in the cloud in minutes.
 
 Prefer the command line? [Jump to CLI quickstart](#cli).
 
@@ -91,17 +91,7 @@ Wait for it to reach running state:
 dam instance create my-agent --template claude-code --wait
 ```
 
-### Step 4: Upload Your Project (optional)
-
-Import a local project into the agent's workspace:
-
-```bash
-dam import my-agent ./my-project
-```
-
-This uploads the folder to `work/my-project` on the agent.
-
-### Step 5: Start Working
+### Step 4: Start Working
 
 Attach your terminal to the agent:
 
@@ -120,27 +110,16 @@ dam chat my-agent --continue
 ### Other Useful Commands
 
 ```bash
-dam instance list                    # List your instances
-dam instance get my-agent     # Show instance details
-dam session list my-agent     # List sessions
-dam template list                    # List available templates
+dam instance list              # List your instances
+dam instance get my-agent      # Show instance details
+dam session list my-agent      # List sessions
 ```
 
 ---
 
-## What Just Happened
+## Next Steps
 
-You now have:
-
-- **A persistent workspace** — anything you clone or create lives here permanently (survives restarts and hibernation)
-- **Secure credential injection** — your tokens are safe in a separate gateway pod
-- **Network isolation** — your agent can only reach services you explicitly allow
-- **Resumable sessions** — close the tab and come back anytime, the conversation persists
-
-## What to Try Next
-
-- **[Set up Slack](../integrations/slack.md)** — chat with your agent from Slack threads
-- **[Create a schedule](../core-concepts/schedules.md)** — run tasks automatically (e.g., daily PR reviews)
-- **[Install skills](../core-concepts/skills-and-tools.md)** — add specialized capabilities to your agent
-- **[Learn about agents](../core-concepts/agents.md)** — available harnesses, lifecycle, and configuration
-- **[CLI Reference](../reference/cli.md)** — full command documentation
+- **[Run code reviews automatically](../use-cases/code-review.md)** — set up an agent that reviews every PR
+- **[Build a web app from scratch](../use-cases/web-app-development.md)** — describe an idea, let the agent build and deploy it
+- **[Add Slack](../core-concepts/multiplayer.md)** — let your team interact with shared agents
+- **[Schedule tasks](../core-concepts/schedules.md)** — run agents on a timer with no human in the loop
