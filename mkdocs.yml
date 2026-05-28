@@ -68,10 +68,10 @@ nav:
   - Getting Started:
     - Welcome: index.md
     - Quickstart: getting-started/quickstart.md
-  - Agent Templates:
-    - Web App Development: agent-templates/web-app-development.md
-    - Code Review: agent-templates/code-review.md
-    - Custom Harness Image: agent-templates/custom-harness.md
+  - Use Cases:
+    - Web App Development: use-cases/web-app-development.md
+    - Code Review: use-cases/code-review.md
+    - Broken Link Monitor: use-cases/broken-link-monitor.md
   - Core Concepts:
     - Agents & Harnesses: core-concepts/agents.md
     - Sessions: core-concepts/sessions.md
@@ -82,6 +82,8 @@ nav:
     - File Manager: core-concepts/file-manager.md
     - Multiplayer: core-concepts/multiplayer.md
     - Slack: integrations/slack.md
+  - Guides:
+    - Building a Custom Image: guides/custom-harness.md
   - Reference:
     - Architecture: reference/architecture.md
     - CLI: reference/cli.md

@@ -1,6 +1,6 @@
 # Web App Development
 
-Turn an idea into a deployed application — without writing a single line of code yourself. This template gives you a fully autonomous agent that interviews you about what to build, writes a PRD, breaks it into GitHub issues, implements each one, and deploys the result to GitHub Pages.
+Turn an idea into a deployed application — without writing a single line of code yourself. This agent interviews you about what to build, writes a PRD, breaks it into GitHub issues, implements each one, and deploys the result to GitHub Pages.
 
 ## What It Does
 
@@ -57,7 +57,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 4. **Clone the Software Factory repo** — in your agent session, clone [github.com/dam-agents/software-factory](https://github.com/dam-agents/software-factory) into the workspace
 5. **Start a chat session** — the agent will use the cloned CLAUDE.md and skills to guide the workflow
 
-Alternatively, you can [build a custom harness image](custom-harness.md) that seeds the software-factory workspace into the container — so every new agent starts preconfigured without the clone step.
+Alternatively, you can [build a custom image](../guides/custom-harness.md) that seeds the software-factory workspace into the container — so every new agent starts preconfigured without the clone step.
 
 ## Using the Agent
 

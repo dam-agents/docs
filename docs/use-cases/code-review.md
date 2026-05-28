@@ -1,6 +1,6 @@
 # Code Review
 
-Get automated PR reviews on every pull request — posted to GitHub and summarized in Slack. This template gives you an always-on reviewer that checks for correctness, security, performance, architecture issues, and documentation drift.
+Get automated PR reviews on every pull request — posted to GitHub and summarized in Slack. This agent gives you an always-on reviewer that checks for correctness, security, performance, architecture issues, and documentation drift.
 
 ## What It Does
 
@@ -60,7 +60,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 6. **Create a schedule** — set a heartbeat interval (e.g., every 5 minutes) so the agent checks for new PRs automatically
 7. **Connect Slack** (optional) — link a Slack channel to receive review notifications
 
-Alternatively, you can [build a custom harness image](custom-harness.md) that bakes the Code Guardian workspace into the container.
+Alternatively, you can [build a custom image](../guides/custom-harness.md) that bakes the Code Guardian workspace into the container.
 
 ## Review Output
 

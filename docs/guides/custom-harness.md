@@ -1,4 +1,4 @@
-# Custom Harness Image
+# Building a Custom Image
 
 Build your own agent as a container image and run it on DAM. Any harness that speaks the Agent Client Protocol (ACP) is supported.
 
