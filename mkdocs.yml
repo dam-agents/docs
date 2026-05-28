@@ -4,8 +4,8 @@ site_url: https://pages.github.ibm.com/dam-agents/docs/
 theme:
   name: material
   custom_dir: overrides
-  logo: assets/logo-light.png
-  favicon: assets/logo-light.png
+  logo: assets/DAM - Square Dark.svg
+  favicon: assets/Favicon.png
   palette:
     - scheme: default
       primary: white

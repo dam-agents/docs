@@ -122,7 +122,7 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Create a Claude Code agent and start chatting in 5 minutes.
 
--   **[Build a Custom Agent →](agent-templates/custom-harness.md)**
+-   **[Build a Custom Image →](guides/custom-harness.md)**
 
     ---
 

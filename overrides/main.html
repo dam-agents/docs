@@ -9,5 +9,6 @@
     <meta name="description" content="{{ config.site_description }}">
   {% endif %}
   <link rel="canonical" href="{{ page.canonical_url }}">
-  <link rel="icon" href="{{ config.theme.favicon | url }}">
+  <link rel="icon" href="{{ 'assets/Favicon - Dark.png' | url }}" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="{{ 'assets/Favicon - Light.png' | url }}" media="(prefers-color-scheme: dark)">
 {% endblock %}
