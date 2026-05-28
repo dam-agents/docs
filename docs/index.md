@@ -88,25 +88,25 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     ---
 
-    General-purpose coding, debugging, refactoring, and review.
+    Reasoning-first assistant for complex coding tasks.
 
 -   :material-robot:{ .lg .middle } **Pi Agent**
 
     ---
 
-    Multi-model coding across GPT-4, Gemini, Mistral, and more.
+    Multi-provider coding harness across leading LLMs.
 
 -   :material-console:{ .lg .middle } **Bob**
 
     ---
 
-    IBM's general-purpose coding tool.
+    Enterprise coding assistant for IBM workflows.
 
 -   :material-code-tags:{ .lg .middle } **Codex**
 
     ---
 
-    OpenAI-powered coding with compatible endpoints.
+    Execution-first system for end-to-end coding tasks.
 
 </div>
 
