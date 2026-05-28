@@ -24,7 +24,7 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     ---
 
-    Agents keep running after you close your laptop or go offline.
+    Agents execute continuously in the cloud and keep running after you close your laptop or go offline.
 
 -   :material-shield-lock:{ .lg .middle } **Isolated execution**
 
@@ -56,25 +56,25 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     ---
 
-    Browser-based chat and a full terminal view — quick tasks, file browsing, or the native agent TUI.
+    Chat with your agent, stream its terminal, and manage files — all from the browser.
 
 -   :material-console-line:{ .lg .middle } **CLI**
 
     ---
 
-    Create and manage agents from your local terminal — then attach directly to interactive sessions.
+    Create agents, attach to live sessions, and manage instances from your local terminal.
 
 -   :material-slack:{ .lg .middle } **Slack**
 
     ---
 
-    Message your agent from Slack threads. Teammates join with their own credentials.
+    Message your agent from Slack threads. Teammates interact with their own credentials.
 
 -   :material-calendar-clock:{ .lg .middle } **Schedules**
 
     ---
 
-    Agents run autonomously on a timer — no human in the loop.
+    Run agents on a recurring timer — daily code reviews, nightly audits, continuous monitoring.
 
 </div>
 
