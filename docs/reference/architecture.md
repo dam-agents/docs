@@ -1,4 +1,4 @@
-# Security
+# Architecture
 
 DAM is designed so that even a fully compromised agent cannot leak your credentials or exfiltrate your data.
 
@@ -64,7 +64,7 @@ This means:
 
 - An agent cannot reach arbitrary internet endpoints
 - All outbound requests are mediated by the credential gateway
-- New destinations require explicit approval (via [Network & Approvals](../features/network-access.md))
+- New destinations require explicit approval (via [Network & Approvals](../core-concepts/network-access.md))
 
 ### What This Prevents
 
@@ -112,18 +112,3 @@ When a colleague messages your agent via Slack or Telegram:
 - **Their actions use their identity** — if a colleague pushes to GitHub via your agent, the commit is attributed to them
 - **Workspace access is full** — colleagues can read all files in the shared workspace (this is by design for collaboration)
 
----
-
-## FAQ
-
-**Can I see which credentials are connected?**
-Yes — the Connections panel shows all active connections and their status.
-
-**What if my token expires?**
-OAuth tokens are auto-refreshed. API keys don't expire unless you rotate them manually.
-
-**Can I revoke a credential?**
-Yes — disconnect it in the Connections panel. The agent immediately loses access.
-
-**Can a compromised agent steal my tokens?**
-No. The token is never present in the agent pod — not in env vars, not on disk, not in memory. NetworkPolicy enforcement at the Kubernetes level makes bypass impossible without cluster-level access.

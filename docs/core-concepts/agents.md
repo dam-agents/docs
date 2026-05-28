@@ -47,12 +47,12 @@ Agents automatically hibernate after a period of inactivity (no active sessions,
 
 | Template | Harness | Best For |
 |----------|---------|----------|
-| [Claude Code](claude-code.md) | Anthropic Claude Code | General-purpose coding, debugging, refactoring |
-| [Pi Agent](pi-agent.md) | pi.dev | Multi-model coding (GPT-4, Mistral, Gemini, etc.) |
-| [Bob](bob.md) | IBM Bob Shell | General-purpose AI shell with tenant scoping |
-| [Codex](codex.md) | OpenAI Codex (Zed) | Coding with OpenAI models or compatible endpoints |
+| Claude Code | Anthropic Claude Code | General-purpose coding, debugging, refactoring |
+| Pi Agent | pi.dev | Multi-model coding (GPT-4, Mistral, Gemini, etc.) |
+| Bob | IBM Bob Shell | General-purpose AI shell with tenant scoping |
+| Codex | OpenAI Codex (Zed) | Coding with OpenAI models or compatible endpoints |
 
-Want to bring your own agent? See the [Custom Harness Image](../guides/custom-harness.md) guide.
+Want to bring your own agent? See the [Build a Custom Agent](../agent-templates/custom-harness.md) guide.
 
 ## Managing Agents
 

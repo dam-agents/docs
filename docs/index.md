@@ -12,35 +12,37 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
 
+<small class="vpn-note">[Requires TUNNELALL VPN](https://w3.ibm.com/#/support/article/troubleshoot_secure/connect_issue){:target="_blank"}</small>
+
 </div>
 
 ## Why DAM?
 
 <div class="grid cards" markdown>
 
--   :material-lightning-bolt:{ .lg .middle } **Sessions that don't die**
+-   :material-lightning-bolt:{ .lg .middle } **Always-on compute**
 
     ---
 
-    Your agent runs in the cloud — close your laptop, go home, come back tomorrow. It's still there.
+    Your agent runs on cloud infrastructure — close your laptop, shut it down, it keeps working.
 
--   :material-shield-lock:{ .lg .middle } **Credentials stay safe**
-
-    ---
-
-    Tokens are injected on the wire by a separate gateway. The agent never sees them — even if compromised.
-
--   :material-account-group:{ .lg .middle } **Team collaboration**
+-   :material-shield-lock:{ .lg .middle } **Zero-trust credentials**
 
     ---
 
-    Colleagues interact via Slack using their own credentials. No token sharing, no security trade-offs.
+    Tokens are injected at the network layer by a separate gateway. The agent process never sees them.
 
--   :material-clock-outline:{ .lg .middle } **Scheduled execution**
+-   :material-account-group:{ .lg .middle } **Multiplayer**
 
     ---
 
-    "Review all new PRs every morning at 9am." Set it and forget it.
+    Your whole team interacts with shared agents via Slack — each person authenticated individually.
+
+-   :material-clock-outline:{ .lg .middle } **Unattended execution**
+
+    ---
+
+    Agents run on a schedule with no human in the loop. Daily PR reviews, nightly audits, whatever you need.
 
 </div>
 
@@ -50,17 +52,17 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
 <div class="grid cards" markdown>
 
--   :material-chat:{ .lg .middle } **Web Chat**
+-   :material-chat:{ .lg .middle } **Web UI**
 
     ---
 
-    Browser-based chat UI — quick tasks, file browsing, session history.
+    Browser-based chat and a full terminal view — quick tasks, file browsing, or the native agent TUI.
 
--   :material-console:{ .lg .middle } **Terminal**
+-   :material-console-line:{ .lg .middle } **CLI**
 
     ---
 
-    Full PTY shell preserving native harness TUIs — Claude Code's interactive CLI with slash commands and tool approvals.
+    Create and manage agents from your local terminal — then attach directly to interactive sessions.
 
 -   :material-slack:{ .lg .middle } **Slack**
 
@@ -88,15 +90,11 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     General-purpose coding — write, debug, refactor, review.
 
-    [:octicons-arrow-right-24: Learn more](agents/claude-code.md)
-
 -   :material-robot:{ .lg .middle } **Pi Agent**
 
     ---
 
     Multi-model coding (GPT-4, Mistral, Gemini, etc.)
-
-    [:octicons-arrow-right-24: Learn more](agents/pi-agent.md)
 
 -   :material-console:{ .lg .middle } **Bob**
 
@@ -104,15 +102,11 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     IBM's general-purpose AI shell with tenant scoping.
 
-    [:octicons-arrow-right-24: Learn more](agents/bob.md)
-
 -   :material-code-tags:{ .lg .middle } **Codex**
 
     ---
 
     OpenAI-powered coding with any compatible endpoint.
-
-    [:octicons-arrow-right-24: Learn more](agents/codex.md)
 
 </div>
 
@@ -128,7 +122,7 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Create a Claude Code agent and start chatting in 5 minutes.
 
--   **[Build a Custom Agent →](guides/custom-harness.md)**
+-   **[Build a Custom Agent →](agent-templates/custom-harness.md)**
 
     ---
 

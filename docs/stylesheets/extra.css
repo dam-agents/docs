@@ -85,28 +85,38 @@
 }
 
 .md-nav--secondary > .md-nav__title {
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #8d8d8d;
-  padding: 0.4rem 0.6rem;
-  margin-bottom: 0.3rem;
+  color: #a8a8a8;
+  padding: 0.3rem 0.6rem;
+  margin-bottom: 0.2rem;
 }
 
 .md-nav--secondary .md-nav__link {
-  font-size: 0.6875rem;
+  font-size: 0.6rem;
   font-weight: 400;
+  color: #6f6f6f !important;
+  padding: 0.15rem 0.6rem;
+  line-height: 1.4;
+}
+
+.md-nav--secondary .md-nav__link--active {
   color: #161616 !important;
-  padding: 0.2rem 0.6rem;
+  font-weight: 500;
 }
 
 [data-md-color-scheme="slate"] .md-nav--secondary .md-nav__link {
-  color: #c6c6c6 !important;
+  color: #8d8d8d !important;
+}
+
+[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__link--active {
+  color: #f4f4f4 !important;
 }
 
 .md-nav__link {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 400;
   color: #525252 !important;
   padding: 0.25rem 0.6rem;
@@ -264,6 +274,7 @@
   max-width: 32rem;
   margin: 0 auto 1.5rem;
   line-height: 1.6;
+  text-align: center;
 }
 
 [data-md-color-scheme="slate"] .hero p {
@@ -274,6 +285,23 @@
   margin: 0 0.5rem 0 0;
   position: relative;
   z-index: 1;
+}
+
+.vpn-note {
+  display: block;
+  font-size: 0.6rem;
+  color: #8d8d8d;
+  margin-top: 0.25rem;
+}
+
+.vpn-note a {
+  color: #8d8d8d !important;
+  font-weight: 400 !important;
+  text-decoration: underline;
+}
+
+.vpn-note a:hover {
+  color: #161616 !important;
 }
 
 /* Cards grid */
@@ -346,6 +374,10 @@
 .grid.cards .lg {
   height: 2rem;
   width: 2rem;
+}
+
+.hero .headerlink {
+  display: none;
 }
 
 .md-typeset .headerlink {

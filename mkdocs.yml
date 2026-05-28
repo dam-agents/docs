@@ -68,27 +68,21 @@ nav:
   - Getting Started:
     - Welcome: index.md
     - Quickstart: getting-started/quickstart.md
-  - Agents:
-    - Overview: agents/overview.md
-    - Claude Code: agents/claude-code.md
-    - Pi Agent: agents/pi-agent.md
-    - Bob: agents/bob.md
-    - Codex: agents/codex.md
-  - Features:
-    - Sessions: features/sessions.md
-    - Connections: features/connections.md
-    - Network & Approvals: features/network-access.md
-    - Skills & Tools: features/skills-and-tools.md
-    - Schedules: features/schedules.md
-    - File Manager: features/file-manager.md
-    - Multiplayer: features/multiplayer.md
+  - Agent Templates:
+    - Web App Development: agent-templates/web-app-development.md
+    - Code Review: agent-templates/code-review.md
+    - Custom Harness Image: agent-templates/custom-harness.md
+  - Core Concepts:
+    - Agents & Harnesses: core-concepts/agents.md
+    - Sessions: core-concepts/sessions.md
+    - Connections: core-concepts/connections.md
+    - Network & Approvals: core-concepts/network-access.md
+    - Skills & Tools: core-concepts/skills-and-tools.md
+    - Schedules: core-concepts/schedules.md
+    - File Manager: core-concepts/file-manager.md
+    - Multiplayer: core-concepts/multiplayer.md
     - Slack: integrations/slack.md
-  - Guides:
-    - Custom Harness Image: guides/custom-harness.md
   - Reference:
     - Architecture: reference/architecture.md
     - CLI: reference/cli.md
-    - Glossary: reference/glossary.md
-    - FAQ: reference/faq.md
-    - Troubleshooting: reference/troubleshooting.md
     - Contact: reference/contact.md

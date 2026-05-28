@@ -140,7 +140,7 @@ You now have:
 ## What to Try Next
 
 - **[Set up Slack](../integrations/slack.md)** — chat with your agent from Slack threads
-- **[Create a schedule](../features/schedules.md)** — run tasks automatically (e.g., daily PR reviews)
-- **[Install skills](../features/skills-and-tools.md)** — add specialized capabilities to your agent
-- **[Learn about other agents](../agents/overview.md)** — Code Guardian, Pi Agent, Google Workspace, Bob, Codex
+- **[Create a schedule](../core-concepts/schedules.md)** — run tasks automatically (e.g., daily PR reviews)
+- **[Install skills](../core-concepts/skills-and-tools.md)** — add specialized capabilities to your agent
+- **[Learn about agents](../core-concepts/agents.md)** — available harnesses, lifecycle, and configuration
 - **[CLI Reference](../reference/cli.md)** — full command documentation
