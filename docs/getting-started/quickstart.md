@@ -121,5 +121,5 @@ dam session list my-agent      # List sessions
 
 - **[Run code reviews automatically](../use-cases/code-review.md)** — set up an agent that reviews every PR
 - **[Build a web app from scratch](../use-cases/web-app-development.md)** — describe an idea, let the agent build and deploy it
-- **[Add Slack](../core-concepts/multiplayer.md)** — let your team interact with shared agents
+- **[Add Slack](../integrations/slack.md)** — let your team interact with shared agents
 - **[Schedule tasks](../core-concepts/schedules.md)** — run agents on a timer with no human in the loop
