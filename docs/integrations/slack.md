@@ -28,10 +28,14 @@ Before you can interact with agents from Slack, link your IBM Slack account to D
 ### Step 2: Connect an Agent to a Channel
 
 1. Open your agent in the DAM UI
-2. Navigate to **Settings** → **Channels**
-3. Click **"Connect Slack Channel"**
-4. Select the channel where you want to interact with this agent
-5. The agent is now listening in that channel
+2. Open the **Configuration** panel (right sidebar)
+3. Expand the **Channels** section
+4. Check **Enabled** under Slack
+5. Paste the Slack **Channel ID** (starts with `C0...`) where you want the agent to listen
+6. Click **Save**
+
+!!! tip "Finding a Slack Channel ID"
+    Right-click a channel name in Slack → **View channel details** → scroll to the bottom to find the Channel ID.
 
 ### Step 3: Start Chatting
 
@@ -62,7 +66,7 @@ When a colleague replies in your agent's thread, DAM doesn't reuse your credenti
 This means colleagues can interact with your agent safely — their tokens are never mixed with yours, and the agent can only access repos/services the replier has permission to reach.
 
 !!! tip "Adding allowed users"
-    Edit your agent's settings to add colleagues by their linked Slack identity. This prevents unauthorized users from interacting with your agent.
+    In the Channels section under Slack, add colleagues by their email address. If the list is empty, any linked Slack user can interact with the agent.
 
 
 ## Proactive Notifications
