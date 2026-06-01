@@ -80,7 +80,6 @@ nav:
     - Skills & Tools: core-concepts/skills-and-tools.md
     - Schedules: core-concepts/schedules.md
     - File Manager: core-concepts/file-manager.md
-    - Multiplayer: core-concepts/multiplayer.md
     - Slack: integrations/slack.md
   - Guides:
     - Building a Custom Image: guides/custom-harness.md

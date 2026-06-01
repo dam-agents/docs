@@ -3,7 +3,7 @@
 !!! warning "IBM Enterprise Slack — not yet available"
     DAM is currently going through the IBM Slack enterprise approval process. For now, Slack integration only works with **non-enterprise Slack workspaces**. Enterprise workspace support will be available once org-level approval is granted.
 
-Chat with your agent directly from Slack — no need to switch to the DAM UI.
+Chat with your agent directly from Slack.
 
 ## Overview
 
@@ -103,10 +103,10 @@ Someone else set up an agent in a Slack channel and invited you (or you joined t
 
 ## Proactive Notifications
 
-Some agents (like Code Guardian) can post messages to Slack without being prompted:
+Agents can post messages to Slack without being prompted:
 
-- Code review results posted after a scheduled run
-- Alerts when a scheduled task completes
+- Results posted after a scheduled run completes
+- Alerts when a scheduled task finishes
 - Status updates on long-running operations
 
 ## Wake-on-Message
