@@ -1,5 +1,8 @@
 # Slack
 
+!!! warning "IBM Enterprise Slack — not yet available"
+    DAM is currently going through the IBM Slack enterprise approval process. For now, Slack integration only works with **non-enterprise Slack workspaces**. Enterprise workspace support will be available once org-level approval is granted.
+
 Chat with your agent directly from Slack — no need to switch to the DAM UI.
 
 ## Overview
@@ -11,11 +14,9 @@ DAM integrates with Slack so you can:
 - Collaborate with teammates in shared agent threads
 - Maintain persistent sessions per Slack thread
 
-## Setting Up Slack
+## Link Your Slack Identity
 
-### Step 1: Link Your Slack Identity
-
-Before you can interact with agents from Slack, link your IBM Slack account to DAM:
+Before you can interact with any agent from Slack, link your Slack account to DAM:
 
 1. In any Slack channel where the DAM bot is present, type `/dam login`
 2. Follow the link to complete the identity linking
@@ -24,49 +25,80 @@ Before you can interact with agents from Slack, link your IBM Slack account to D
 !!! info "One-time setup"
     You only need to link your identity once. It persists across all channels and agents.
 
+---
 
-### Step 2: Connect an Agent to a Channel
+## As an Agent Owner
 
-1. Open your agent in the DAM UI
-2. Open the **Configuration** panel (right sidebar)
-3. Expand the **Channels** section
-4. Check **Enabled** under Slack
-5. Paste the Slack **Channel ID** (starts with `C0...`) where you want the agent to listen
-6. Click **Save**
+You own an agent and want to make it available in Slack.
+
+### Connect Your Agent to a Channel
+
+1. Create or pick a Slack channel for your agent
+2. Invite the DAM bot to the channel (if not already present)
+3. Open your agent in the DAM UI
+4. Open the **Configuration** panel (right sidebar)
+5. Expand the **Channels** section
+6. Check **Enabled** under Slack
+7. Paste the Slack **Channel ID** (starts with `C0...`)
+8. Click **Save**
 
 !!! tip "Finding a Slack Channel ID"
     Right-click a channel name in Slack → **View channel details** → scroll to the bottom to find the Channel ID.
 
-### Step 3: Start Chatting
+!!! warning "One agent per channel"
+    A Slack channel can only be connected to **one** agent. If you need multiple agents, use separate channels.
 
-In the connected Slack channel, start a new thread and mention your agent. The agent will respond in the thread.
+### Control Who Can Use Your Agent
 
-## How Slack Sessions Work
+In the **Channels** section you can add an **Allowed users** list (by email address):
+
+- **List is empty** — any user who has linked their Slack identity (`/dam login`) can message your agent in that channel.
+- **List has entries** — only those users can interact. Everyone else gets an ephemeral "not authorized" message.
+
+### What to Expect
+
+- Mention your agent (`@DAM`) in the channel to start a conversation — it replies in a thread.
+- Each thread is its own persistent session. Come back days later and the agent remembers.
+- You can have multiple threads (sessions) running at the same time.
+- If your agent is hibernated, the first message wakes it (takes up to a minute).
+
+### Inviting Colleagues
+
+When colleagues reply in a thread with your agent:
+
+1. They must have linked their identity (`/dam login`) — this is a one-time step.
+2. They must be on your allowed users list (or the list must be empty).
+3. DAM spins up an **isolated fork pod** using the colleague's own credentials — your tokens are never shared.
+4. The fork pod is torn down after each response.
+
+This means teammates can safely interact with your agent without ever seeing or using your credentials.
+
+---
+
+## As an Invited User
+
+Someone else set up an agent in a Slack channel and invited you (or you joined the channel).
+
+### What You Need to Do
+
+1. **Link your identity** (once) — type `/dam login` in any channel where the DAM bot is present and complete the OAuth flow.
+2. **Make sure you're on the allowed list** — if you get a "not authorized" error, ask the agent owner to add your email in the DAM UI.
+3. **Start chatting** — mention the agent (`@DAM`) in the channel or reply in an existing thread.
+
+### What to Expect
+
+- The agent responds in a thread. Each thread is a separate conversation.
+- Your messages run using **your own credentials** (GitHub tokens, API keys, etc.) via an isolated fork pod — the agent owner's credentials are never involved in your turns.
+- If the agent is asleep, your first message wakes it (can take up to a minute).
+- You can have multiple concurrent threads with the same agent.
+
+---
+
+## How Sessions Work
 
 - **One thread = one session** — each Slack thread maps to a persistent DAM session
 - **Sessions resume automatically** — if you come back to a thread days later, the agent picks up where you left off
 - **Multiple threads** — you can have multiple concurrent conversations with the same agent across different threads
-
-## Multiplayer in Slack
-
-When your agent is connected to a team channel:
-
-- **You** can interact as the agent owner (using your credentials)
-- **Colleagues** can reply in the same thread — DAM spawns an isolated fork pod that uses their credentials
-- **Access control** — only users on the agent's "allowed users" list can interact
-
-### How Fork Pods Work
-
-When a colleague replies in your agent's thread, DAM doesn't reuse your credentials. Instead:
-
-1. A **separate pod** is spun up for that turn, paired with a gateway loaded with the colleague's credentials
-2. The agent processes the reply using the colleague's GitHub token, API keys, etc.
-3. The fork pod is torn down after the response completes
-
-This means colleagues can interact with your agent safely — their tokens are never mixed with yours, and the agent can only access repos/services the replier has permission to reach.
-
-!!! tip "Adding allowed users"
-    In the Channels section under Slack, add colleagues by their email address. If the list is empty, any linked Slack user can interact with the agent.
 
 
 ## Proactive Notifications
