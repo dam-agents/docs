@@ -704,3 +704,18 @@
   font-size: 0.8125rem;
   font-weight: 500;
 }
+
+/* Wordmark in the logo slot (replaces the SVG logo icon) */
+.md-logo-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: currentColor;
+}
+
+/* The site name now lives in the logo wordmark; hide the duplicate
+   site-name topic so "DAM" doesn't render twice in the header. */
+.md-header__title .md-header__topic:first-child {
+  display: none;
+}
