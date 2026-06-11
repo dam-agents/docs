@@ -18,6 +18,9 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 4. Paste your LiteLLM API key
 5. Click **Save**
 
+!!! note
+    Don't have a LiteLLM key yet? See [How to Create a LiteLLM Key](../guides/litellm-key.md) for a walkthrough.
+
 ### Step 3: Add Connections (optional but recommended)
 
 Connections let your agent access your repositories — clone, push branches, and create PRs.
