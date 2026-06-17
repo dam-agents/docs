@@ -28,8 +28,9 @@ Open the IBM LiteLLM ETE Proxy and sign in with your IBM SSO credentials:
 
 1. Click **"+ Create New Key"**
 2. For **Team**, specify **`rits-restricted-agentic`**
-3. Under models, select **All Team Models**
-4. Click **Create**
+3. **Name your key** (required)
+4. Under models, select **All Team Models**
+5. Click **Create**
 
 The team grants access to these models:
 
