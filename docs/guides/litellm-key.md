@@ -1,11 +1,11 @@
 # How to Create a LiteLLM Key
 
-DAM agents reach Claude (and other models) through the **IBM LiteLLM ETE Proxy**. To connect an agent to the proxy you need a LiteLLM API key, which you add to DAM as a model provider.
+DAM works with several model providers. One of them is the **IBM LiteLLM ETE Proxy**, which gives you access to a curated set of models picked for DAM. When you're granted DAM access, you also get access to these models through the **`rits-restricted-agentic`** group. To use them, create a LiteLLM API key scoped to that group and add it to DAM as a provider.
 
-This guide walks through generating that key and wiring it into DAM.
+This guide walks through both steps.
 
 !!! note
-    This isn't a DAM-only proxy — it's a separate LiteLLM proxy at `ete-litellm.ai-models.vpc.res.ibm.com` with its own group (`rits-restricted-agentic`) that grants the specific models DAM uses. If you've used a LiteLLM proxy elsewhere at IBM, that key won't work here. You need a key created on this proxy and scoped to this group, as shown below.
+    Create your key on the proxy linked in Step 1 — a key from any other IBM LiteLLM proxy won't work here. If you can't select the `rits-restricted-agentic` group in Step 2, ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
 
 ## Video Walkthrough
 
