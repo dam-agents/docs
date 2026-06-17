@@ -1,13 +1,30 @@
 # How to Create a LiteLLM Key
 
-DAM works with several model providers. One of them is the **IBM LiteLLM ETE Proxy**, which gives you access to a curated set of models picked for DAM. When you're granted DAM access, you also get access to these models through the **`rits-restricted-agentic`** group. To use them, create a LiteLLM API key scoped to that group and add it to DAM as a provider.
+DAM works with several model providers. One of them is the **IBM LiteLLM ETE Proxy**, which gives you access to a curated set of models picked for DAM. When you're granted DAM access, you also get access to these models through the **`rits-restricted-agentic`** group. To use them, create a LiteLLM API key on the proxy — scoped to that group — and add it to DAM as a provider.
 
-This guide walks through both steps.
+This guide walks through both steps. A key from any other IBM LiteLLM proxy won't work here, so create yours fresh on the proxy linked in Step 1. If you get stuck, ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
 
-!!! note
-    Create your key on the proxy linked in Step 1 — a key from any other IBM LiteLLM proxy won't work here. If you can't select the `rits-restricted-agentic` group in Step 2, ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
+## Models you get access to
+
+These are the models available through the `rits-restricted-agentic` group:
+
+```
+rits/zai-org/glm-5-1-fp8-agentic
+rits/deepseek-ai/DeepSeek-V3.2
+rits/moonshotai/Kimi-K2.5
+aws/claude-opus-4-8
+aws/claude-sonnet-4-6
+aws/claude-opus-4-5
+azure/gpt-5.5
+gcp/gemini-3.1-pro-preview
+Azure/text-embedding-3-small-1
+Azure/text-embedding-3-large-1
+azure/gpt-5.3-codex
+```
 
 ## Video Walkthrough
+
+Prefer to watch? This covers the whole process end to end.
 
 <video controls preload="metadata" style="width: 100%; max-width: 880px; border-radius: 8px; margin: 1rem 0;">
   <source src="../../assets/dam-litellm-key.mp4" type="video/mp4">
@@ -32,21 +49,7 @@ Open the IBM LiteLLM ETE Proxy and sign in with your IBM SSO credentials:
 4. Under models, select **All Team Models**
 5. Click **Create**
 
-The team grants access to these models:
-
-```
-rits/zai-org/glm-5-1-fp8-agentic
-rits/deepseek-ai/DeepSeek-V3.2
-rits/moonshotai/Kimi-K2.5
-aws/claude-opus-4-8
-aws/claude-sonnet-4-6
-aws/claude-opus-4-5
-azure/gpt-5.5
-gcp/gemini-3.1-pro-preview
-Azure/text-embedding-3-small-1
-Azure/text-embedding-3-large-1
-azure/gpt-5.3-codex
-```
+Selecting **All Team Models** grants the key access to every model in the group (listed at the top of this page).
 
 ## Step 3: Copy the Key Immediately
 
