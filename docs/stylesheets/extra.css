@@ -638,9 +638,33 @@
   border-top: 1px solid #e0e0e0;
 }
 
+/* Footer link text — Material defaults to white, illegible on the light grey bg */
+.md-footer__link,
+.md-footer__title,
+.md-footer__direction,
+.md-footer .md-footer__button {
+  color: #161616;
+}
+
+.md-footer__direction {
+  opacity: 0.7;
+}
+
+.md-footer__link:hover,
+.md-footer__link:focus {
+  color: var(--md-accent-fg-color);
+}
+
 [data-md-color-scheme="slate"] .md-footer {
   background: #161616;
   border-top-color: #262626;
+}
+
+[data-md-color-scheme="slate"] .md-footer__link,
+[data-md-color-scheme="slate"] .md-footer__title,
+[data-md-color-scheme="slate"] .md-footer__direction,
+[data-md-color-scheme="slate"] .md-footer .md-footer__button {
+  color: #f4f4f4;
 }
 
 /* Lists */
