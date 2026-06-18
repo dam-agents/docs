@@ -82,7 +82,8 @@ nav:
     - Slack: integrations/slack.md
   - Guides:
     - How to Create a LiteLLM Key: guides/litellm-key.md
-    - Building a Custom Image: guides/custom-harness.md
+    - Building a Custom Image: guides/custom-image.md
+    - Calling an External Service: guides/external.md
   - Reference:
     - Architecture: reference/architecture.md
     - CLI: reference/cli.md
