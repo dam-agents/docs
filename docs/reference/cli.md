@@ -5,7 +5,7 @@ The `dam` CLI lets you manage agents, attach to terminal sessions, and transfer 
 ## Installation
 
 ```bash
-npm install -g @dam-agents/cli@0.1.0-rc4
+npm install -g @dam-agents/cli
 ```
 
 Requires Node 20 or later.
