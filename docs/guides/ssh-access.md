@@ -1,6 +1,6 @@
 # Connecting with SSH
 
-`dam ssh` gives you a **real SSH session** into a running agent — not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell in the agent's workspace. Because it's standard SSH, everything that rides on SSH works: `scp`, `sftp`, port-forwarding, and — most usefully — opening the agent's workspace directly in **VS Code** or **Zed**.
+`dam ssh` gives you a **real SSH session** into a running agent — not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell on the agent. Because it's standard SSH, everything that rides on SSH works: `scp`, `sftp`, port-forwarding, and — most usefully — opening the agent's workspace directly in **VS Code** or **Zed**.
 
 The session inherits the agent's full pod environment: the egress proxy, injected credentials, and `PATH`. So `git`, `gh`, and the AI CLIs behave exactly as they do for the harness itself.
 
@@ -20,7 +20,7 @@ The session inherits the agent's full pod environment: the egress proxy, injecte
 dam ssh connect my-agent
 ```
 
-This drops you into a login shell in the agent's workspace (`/home/agent/work`). Exit with `exit` or `Ctrl-D`.
+This drops you into a login shell on the agent (the agent's workspace lives under `~/work`). Exit with `exit` or `Ctrl-D`.
 
 You can reference the agent by **name** or by **ID** (`agent-…`), the same as every other `dam` command.
 
