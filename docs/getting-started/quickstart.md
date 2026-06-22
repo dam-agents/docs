@@ -60,7 +60,7 @@ Or click **"Terminal"** to launch the full Claude Code interactive TUI.
 ### Step 1: Install the CLI
 
 ```bash
-npm install -g @dam-agents/cli@0.1.0-rc4
+npm install -g @dam-agents/cli
 ```
 
 Requires Node 20 or later.
