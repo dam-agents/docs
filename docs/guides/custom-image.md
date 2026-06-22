@@ -215,13 +215,9 @@ No template registration, Helm edit, or platform redeploy is needed; the agent i
 
 ## Calling an external service
 
-DAM never exposes real API keys inside the agent pod. Instead:
+If your agent calls an outside API, DAM never exposes the real API key inside the agent pod: you declare a placeholder env var in your Dockerfile (e.g. `ENV MY_API_KEY=dummy-placeholder`), and the platform injects the real credential on the wire. Your harness only needs the env var to *exist* — it should not validate the value.
 
-1. You declare placeholder environment variables in your Dockerfile (e.g., `ENV MY_API_KEY=dummy-placeholder`).
-2. The platform's Envoy sidecar intercepts outbound requests and injects the real credentials on the wire.
-3. Your harness starts normally with the placeholder — it only needs the env var to *exist*.
-
-Your harness should check that credential env vars are present at startup, but should not validate their values. For the full walkthrough — attaching a credential and allowing the destination host — see [how to call an external service](external.md).
+For the full walkthrough — declaring the placeholder, creating the credential, allowing the destination host, and how the key reaches your tool — see [Calling an External Service](external.md).
 
 ## Constraints
 

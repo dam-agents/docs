@@ -2,7 +2,6 @@
 
 Allowing your agent to call an external service.
 
-
 The key idea: **you never put the real API key in your image.** You give the platform the key once, and it injects it securely at request time so the key never actually sits inside the running agent.
 
 There are three pieces.

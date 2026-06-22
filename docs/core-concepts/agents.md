@@ -52,7 +52,7 @@ Agents automatically hibernate after a period of inactivity (no active sessions,
 | Bob | General-purpose AI shell with tenant scoping |
 | Codex | Coding with OpenAI models or compatible endpoints |
 
-Want to bring your own? See the [Building a Custom Image](../guides/custom-harness.md) guide.
+Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
 ## Managing Agents
 
