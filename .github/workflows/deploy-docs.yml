@@ -1,0 +1,45 @@
+name: Deploy docs
+
+on:
+  # Auto-deploy on every push to main that touches docs sources.
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "requirements.txt"
+      - ".github/workflows/deploy-docs.yml"
+  # Allow manual runs from the Actions tab.
+  workflow_dispatch:
+
+# Prevent overlapping deploys from racing on the gh-pages branch.
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: true
+
+permissions:
+  contents: write  # gh-deploy pushes the built site to the gh-pages branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # gh-deploy needs full history to update gh-pages
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build (strict)
+        run: mkdocs build --strict
+
+      - name: Deploy to gh-pages
+        run: mkdocs gh-deploy --force --no-history --message "Deploy docs from ${GITHUB_SHA} via Actions"
