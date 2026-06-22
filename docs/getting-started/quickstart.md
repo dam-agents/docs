@@ -76,22 +76,22 @@ A browser window will open for IBM SSO authentication. Confirm the device code t
 
 ### Step 3: Create a Claude Code Agent
 
-Interactive setup (walks you through template selection and configuration):
+Scripted (`--template` is required — list available templates with `dam template list`):
 
 ```bash
-dam agent create
-```
-
-Or scripted:
-
-```bash
-dam instance create my-agent --template claude-code
+dam agent create my-agent --template claude-code
 ```
 
 Wait for it to reach running state:
 
 ```bash
-dam instance create my-agent --template claude-code --wait
+dam agent create my-agent --template claude-code --wait
+```
+
+Or run the interactive setup, which walks you through template selection, credentials, and channels:
+
+```bash
+dam agent create-interactive my-agent
 ```
 
 ### Step 4: Start Working
@@ -113,8 +113,8 @@ dam chat my-agent --continue
 ### Other Useful Commands
 
 ```bash
-dam instance list              # List your instances
-dam instance get my-agent      # Show instance details
+dam agent list                 # List your agents
+dam agent get my-agent         # Show agent details
 dam session list my-agent      # List sessions
 ```
 

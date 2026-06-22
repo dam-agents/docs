@@ -1,6 +1,6 @@
 # CLI
 
-The `dam` CLI lets you manage agents, attach to terminal sessions, and transfer files — all from your local machine.
+The `dam` CLI lets you manage agents, attach to terminal sessions, transfer files, wire up connections and channels, and more — all from your local machine.
 
 ## Installation
 
@@ -27,74 +27,226 @@ Config is stored at `~/.config/dam/config.toml`. Credentials are stored separate
 
 Precedence: CLI flag > environment variable > config file.
 
+**Global flags:**
+
+- `--server <url>` — override the configured server URL for a single call. Available on essentially every command that talks to the platform.
+- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting.
+
 ## Authentication
 
 ```bash
-dam auth login       # Opens browser for OAuth device flow
-dam auth logout      # Revokes tokens and clears local credentials
-dam auth status      # Shows auth state per configured host
+dam auth login       # Authenticate via OAuth 2.0 Device Authorization Grant
+dam auth logout      # Clear local credentials and best-effort revoke the refresh token
+dam auth status      # List configured hosts, their credential source, and the active server
 ```
 
 Login uses the OAuth 2.0 Device Authorization Grant — you'll see a URL and code to confirm in your browser. Tokens are stored locally and refreshed automatically.
 
-For CI/headless use, set `DAM_TOKEN=<bearer>` instead of logging in. There is no `--token` flag to avoid leaking tokens into shell history.
+```bash
+dam auth login --server https://host   # set the active host while logging in
+dam auth login --no-browser            # print the verification URL instead of opening a browser
+dam auth login --force                 # skip the re-login confirm when already logged in
+```
+
+For CI/headless use, set `DAM_TOKEN=<bearer>` instead of logging in. There is no `--token` flag, to avoid leaking tokens into shell history.
+
+### API keys (`auth token`)
+
+For headless/CI use you can mint long-lived API keys:
+
+```bash
+dam auth token create --name ci-key                 # mint a key; plaintext printed ONCE on stderr
+dam auth token create --name ci --scope agents:operate --agent agent-123 --expires 2026-12-31T00:00:00Z
+dam auth token list                                 # list your keys (plaintext never shown again)
+dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
+```
+
+- `--name <name>` is required; `--scope <scope...>` and `--agent <agent-id...>` are repeatable.
+- `--expires <iso>` takes an ISO 8601 timestamp.
+- The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 
 ## Commands
 
 ### Agent Management
 
 ```bash
-dam agent list                          # List all your agents (default command)
-dam agent get <name-or-id>              # Get agent details
-dam agent create <name> --template <id> # Create an agent (scripted)
-dam agent create-interactive            # Interactive agent setup (TTY only)
-dam agent delete <name-or-id>           # Delete an agent (confirms by default)
-dam agent delete <name-or-id> --yes     # Delete without confirmation
-dam agent restart <name-or-id>          # Restart agent pod (PVC survives)
+dam agent list                                   # List your agents (default command)
+dam agent get <name-or-id>                        # Show one agent's details
+dam agent create <name> --template <id>           # Create an agent (--template required)
+dam agent create <name> --template <id> --wait    # Block until the agent reaches running
+dam agent create-interactive <name>              # Interactive setup: template, credentials, channels (TTY)
+dam agent delete <name-or-id>                     # Delete an agent and all its persistent data (confirms)
+dam agent delete <name-or-id> --yes               # Delete without confirmation
+dam agent restart <name-or-id>                    # Restart the pod (persistent volumes survive)
 ```
 
-Use `--wait` with `create` or `restart` to block until the agent reaches `running` state (120s timeout).
-
-Use `--json` on `list` or `get` for machine-readable output.
+- `create` flags: `--template <id>` (required), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
+- `--wait` is available on `create` and `restart`; pair with `--timeout` to change the 120s default.
+- `--json` on `list`/`get` for machine-readable output.
 
 ### Templates
 
 ```bash
-dam template list    # List available agent templates
+dam template list    # List agent templates available on the active host
 ```
 
 Templates are read-only from the CLI — operators manage them via Helm.
+
+### Connections
+
+Connections are reusable OAuth/credential bindings (GitHub, MCP servers, custom-header API keys) that you create once for the team, then grant to individual agents.
+
+```bash
+dam connection templates                          # List provider templates you can create from
+dam connection list                               # List team connections
+dam connection list <agent>                       # List the connections granted to one agent
+dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
+dam connection update <id-or-name>                # Replace a connection's stored credential value
+dam connection disconnect <id-or-name>            # Remove a team connection (deletes the credential)
+dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable)
+dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; idempotent)
+```
+
+`connection connect` takes either a provider template id (see `dam connection templates`) or an MCP server URL (`https://…`). Useful flags:
+
+- `--name <name>` — connection name (defaults to a slug of the template name or the MCP host)
+- `--auth oauth|none` — MCP auth mode (auto-detected by default)
+- `-c, --config KEY=VAL` — provider template-specific config input (repeatable)
+- `--no-browser` — for MCP OAuth, print the consent URL instead of opening a browser
+- `--timeout <seconds>` — MCP OAuth timeout (default 300)
+
+`connection update` prompts securely for the new value if `--value` is omitted.
+
+### Channels
+
+Bind messenger channels (Slack, Telegram) to an agent so your team can talk to it from chat.
+
+```bash
+dam channel available                                  # Messenger providers the operator enabled on this host
+dam channel list <agent>                               # An agent's connected channels and its allow-list
+dam channel slack connect <agent> --channel-id C0123   # Bind a Slack channel
+dam channel slack disconnect <agent>                   # Unbind Slack (idempotent)
+dam channel telegram connect <agent>                   # Bind a Telegram bot (prompts for token on a TTY)
+dam channel telegram disconnect <agent>                # Unbind Telegram (deletes its Secret; idempotent)
+dam channel allow <agent> --user alice@example.com     # Add users to the allowed-user list (gates Slack)
+dam channel disallow <agent> --user alice@example.com  # Remove users from the allowed-user list (idempotent)
+```
+
+- `slack connect` requires `--channel-id <id>` (e.g. `C0123ABCD`).
+- `telegram connect` reads the bot token from `--bot-token <token>`, or prompts (masked) on a TTY.
+- `channel allow`/`disallow` accept `--user <email>` repeatably.
+
+### Network access
+
+Per-agent rules that pre-approve the external hosts an agent may reach. (The command is `network`; the underlying module is the egress controller.)
+
+```bash
+dam network list <agent>                               # List network access rules
+dam network create <agent> --host api.example.com      # Add a rule (default method/path '*', verdict allow)
+dam network update <rule-id>                           # Update an existing rule
+dam network revoke <rule-id>                           # Remove a rule
+dam network preset <agent>                             # Show the agent's effective preset
+dam network apply-preset <agent> <preset>              # Apply a network preset
+dam network trusted-hosts                              # Platform-wide hosts seeded by the 'trusted' preset
+```
+
+`network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`.
+
+### Schedules
+
+Time-triggered tasks attached to an agent.
+
+```bash
+dam schedule list <agent>                                       # List an agent's schedules
+dam schedule get <schedule-id>                                  # Show one schedule, expanded
+dam schedule create <agent> --name daily --task "..." --daily 09:00
+dam schedule update <schedule-id>                               # Update an existing schedule
+dam schedule enable <schedule-id>                               # Enable (idempotent)
+dam schedule disable <schedule-id>                              # Disable (idempotent)
+dam schedule delete <schedule-id>                               # Delete (idempotent)
+dam schedule reset-session <schedule-id>                        # Reset the schedule's session state
+```
+
+`schedule create` requires `--name <name>` and `--task <task>`. Pick a recurrence with one of:
+
+- `--daily HH:MM` — run daily at a 24h time
+- `--every <Nm|Nh>` — every N minutes or hours
+- `--rrule <body>` — a raw RFC 5545 RRULE (mutually exclusive with `--daily`/`--every`/`--weekdays`)
+
+Optional: `--weekdays MO,WE,FR` (limit `--daily`/`--every`), `--timezone <IANA>` (default: host zone), `--quiet-window HH:MM-HH:MM` (repeatable; suppress fires inside the window), `--session-mode fresh|continuous` (default `fresh`).
+
+### Skills
+
+Browse skill sources and manage the skills installed on an agent.
+
+```bash
+dam skill source list                                  # List connected skill sources
+dam skill source add <git-url>                         # Register a skill source from a git URL
+dam skill source remove <id>                           # Remove a source (installed skills remain)
+dam skill source refresh <id>                          # Refresh a source
+dam skill catalog <source>                             # Scan a source's available skills
+dam skill catalog <source> --agent <ref>               # Annotate install status against an agent
+dam skill list <agent>                                 # List the skills on an agent
+dam skill install <agent> --source <id-or-url> --name <skill>   # Install (or update) a skill
+dam skill uninstall <agent> --name <skill>             # Remove a skill from an agent
+dam skill publish <agent> --name <skill>               # Publish a skill
+```
+
+### Approvals
+
+The human-in-the-loop inbox — requests your agents are waiting on (held tool calls, network prompts).
+
+```bash
+dam approval list                                      # Pending requests across all your agents
+dam approval list <agent> --status all                 # Include resolved and expired, for one agent
+dam approval approve <id>                               # Approve a pending request
+dam approval approve <id> --entire-host                 # Approve the whole host (network requests only)
+dam approval deny <id>                                  # Deny a pending request
+```
+
+- `list` flags: `--status pending|resolved|expired|all` (default `pending`), `--limit <n>` (1–500).
+- `approve`/`deny` take `--once` to allow/deny only this specific held call (the same request shape re-prompts next time). `approve --entire-host` allows any method and path on the host (network requests only).
 
 ### Terminal Sessions
 
 ```bash
 dam chat <agent>                       # New terminal session
-dam chat <agent> --continue            # Reattach to most recent terminal session
+dam chat <agent> --continue            # Reattach to the most recent terminal session
 dam chat <agent> --resume <session-id> # Resume a specific session
-dam chat <agent> --reset               # Kill PTY and start fresh
+dam chat <agent> --reset               # Kill the existing PTY and start fresh
 dam session list <agent>               # List all sessions for an agent
 ```
 
-`dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness. On disconnect, the CLI prints a `dam chat --resume` command for easy reattach.
+`dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness. On disconnect, the CLI prints a `dam chat --resume` command for easy reattach. Short flags: `-c` (`--continue`), `-r` (`--resume`).
+
+### SSH access
+
+```bash
+dam ssh connect <agent>                # Open an SSH session to an agent
+dam ssh connect <agent> -x code        # Launch VS Code Remote-SSH against the agent
+dam ssh connect <agent> -x zed         # Launch Zed against the agent
+```
+
+`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked.
 
 ### File Operations
 
 ```bash
-dam import <agent> <path...>           # Upload files/folders to agent workspace
-dam file list <agent> [<path>]         # List files in agent workspace
-dam file get <agent> <remote-path>     # Download a file from agent
-dam file put <agent> <local> <remote>  # Upload a single file to agent
+dam import <agent> <path...>           # Upload files/folders to the agent workspace
+dam file list <agent> [<path>]         # List files in the agent workspace
+dam file get <agent> <remote-path>     # Download a single file from the agent
+dam file put <agent> <local> <remote>  # Upload a single file to the agent
 ```
 
-**Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`.
+**Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. Use `-y, --yes` to skip the confirm (required on non-TTY).
 
-**File get/put** operate on single files. Use `--overwrite` to clobber existing files. Use `--stdout` with `get` to stream to stdout instead of writing a local file.
+**File get/put** operate on single files. `file get` writes to `basename(remote-path)` in the current directory by default; use `-o, --output <path>` to choose the local path, `--stdout` to stream to stdout instead of writing a file, and `--overwrite` to clobber an existing local file. `file put` takes `--overwrite` to clobber an existing remote file.
 
 ### Utility
 
 ```bash
-dam ping             # Connectivity and compatibility check
-dam version          # Show server version and CLI compatibility
+dam ping             # Reach the configured server and check compatibility
+dam version          # Print the local CLI version and (best-effort) the server's
 dam --version        # Show CLI version
 dam --help           # Show help
 ```
