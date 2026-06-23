@@ -14,7 +14,8 @@ The File Manager gives you direct access to your agent's filesystem:
 | Action | Description |
 |--------|-------------|
 | Browse | Navigate the directory tree |
-| View | Read file contents with syntax highlighting |
+| View | Read file contents with syntax highlighting, or as a rendered preview (images, PDF, SVG, Markdown, HTML) |
+| Fullscreen | Open a rendered preview at full size in a dialog via the **Fullscreen** button |
 | Edit | Modify files directly in the browser |
 | Upload | Add files from your local machine to the workspace |
 | Download | Save workspace files to your local machine |
@@ -26,6 +27,8 @@ The built-in editor supports:
 - Syntax highlighting for common languages (Python, TypeScript, Go, YAML, JSON, Markdown, etc.)
 - Line numbers
 - Direct in-browser editing with save
+
+When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fullscreen** button opens the rendered preview at full size in a dialog. Leaving fullscreen or switching to another file returns to the side panel.
 
 ## Limits
 
