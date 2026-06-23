@@ -33,6 +33,16 @@ Skills are downloaded to your agent's workspace and available immediately.
 2. Add supporting files (instructions, templates, examples)
 3. Use the **Publish** button to submit as a PR to a connected git repo
 
+### Where skills live in a source repo
+
+When a git repo is scanned as a skill source, each skill is a directory containing a `SKILL.md`. The scanner looks under these source roots, in order:
+
+1. `skills/`
+2. `.claude/skills/`
+3. `.agents/skills/`
+
+Skills found across these roots are combined. If none of them contain skills, the scanner falls back to the repo's top-level directories. When the same skill `name` appears under more than one root, the first match wins (in the order above) and the later duplicate is dropped.
+
 ## MCP Tools
 
 Every agent exposes built-in tools via MCP (Model Context Protocol) for programmatic interaction with the platform:
