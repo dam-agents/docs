@@ -1,6 +1,6 @@
 # CLI
 
-The `dam` CLI lets you manage agents, attach to terminal sessions, transfer files, wire up connections and channels, and more — all from your local machine.
+The `dam` CLI lets you manage agents, attach to terminal sessions, transfer files, wire up connections, and more — all from your local machine.
 
 ## Installation
 
@@ -74,7 +74,7 @@ dam agent list                                   # List your agents (default com
 dam agent get <name-or-id>                        # Show one agent's details
 dam agent create <name> --template <id>           # Create an agent (--template required)
 dam agent create <name> --template <id> --wait    # Block until the agent reaches running
-dam agent create-interactive <name>              # Interactive setup: template, credentials, channels (TTY)
+dam agent create-interactive                     # Interactive setup: name + template + credentials (TTY-only)
 dam agent delete <name-or-id>                     # Delete an agent and all its persistent data (confirms)
 dam agent delete <name-or-id> --yes               # Delete without confirmation
 dam agent restart <name-or-id>                    # Restart the pod (persistent volumes survive)
@@ -101,7 +101,6 @@ dam connection templates                          # List provider templates you 
 dam connection list                               # List team connections
 dam connection list <agent>                       # List the connections granted to one agent
 dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
-dam connection update <id-or-name>                # Replace a connection's stored credential value
 dam connection disconnect <id-or-name>            # Remove a team connection (deletes the credential)
 dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable)
 dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; idempotent)
@@ -111,30 +110,8 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 
 - `--name <name>` — connection name (defaults to a slug of the template name or the MCP host)
 - `--auth oauth|none` — MCP auth mode (auto-detected by default)
-- `-c, --config KEY=VAL` — provider template-specific config input (repeatable)
 - `--no-browser` — for MCP OAuth, print the consent URL instead of opening a browser
 - `--timeout <seconds>` — MCP OAuth timeout (default 300)
-
-`connection update` prompts securely for the new value if `--value` is omitted.
-
-### Channels
-
-Bind messenger channels (Slack, Telegram) to an agent so your team can talk to it from chat.
-
-```bash
-dam channel available                                  # Messenger providers the operator enabled on this host
-dam channel list <agent>                               # An agent's connected channels and its allow-list
-dam channel slack connect <agent> --channel-id C0123   # Bind a Slack channel
-dam channel slack disconnect <agent>                   # Unbind Slack (idempotent)
-dam channel telegram connect <agent>                   # Bind a Telegram bot (prompts for token on a TTY)
-dam channel telegram disconnect <agent>                # Unbind Telegram (deletes its Secret; idempotent)
-dam channel allow <agent> --user alice@example.com     # Add users to the allowed-user list (gates Slack)
-dam channel disallow <agent> --user alice@example.com  # Remove users from the allowed-user list (idempotent)
-```
-
-- `slack connect` requires `--channel-id <id>` (e.g. `C0123ABCD`).
-- `telegram connect` reads the bot token from `--bot-token <token>`, or prompts (masked) on a TTY.
-- `channel allow`/`disallow` accept `--user <email>` repeatably.
 
 ### Network access
 
@@ -146,34 +123,11 @@ dam network create <agent> --host api.example.com      # Add a rule (default met
 dam network update <rule-id>                           # Update an existing rule
 dam network revoke <rule-id>                           # Remove a rule
 dam network preset <agent>                             # Show the agent's effective preset
-dam network apply-preset <agent> <preset>              # Apply a network preset
+dam network apply-preset <agent> --preset <none|trusted|all>   # Apply a network preset
 dam network trusted-hosts                              # Platform-wide hosts seeded by the 'trusted' preset
 ```
 
 `network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`.
-
-### Schedules
-
-Time-triggered tasks attached to an agent.
-
-```bash
-dam schedule list <agent>                                       # List an agent's schedules
-dam schedule get <schedule-id>                                  # Show one schedule, expanded
-dam schedule create <agent> --name daily --task "..." --daily 09:00
-dam schedule update <schedule-id>                               # Update an existing schedule
-dam schedule enable <schedule-id>                               # Enable (idempotent)
-dam schedule disable <schedule-id>                              # Disable (idempotent)
-dam schedule delete <schedule-id>                               # Delete (idempotent)
-dam schedule reset-session <schedule-id>                        # Reset the schedule's session state
-```
-
-`schedule create` requires `--name <name>` and `--task <task>`. Pick a recurrence with one of:
-
-- `--daily HH:MM` — run daily at a 24h time
-- `--every <Nm|Nh>` — every N minutes or hours
-- `--rrule <body>` — a raw RFC 5545 RRULE (mutually exclusive with `--daily`/`--every`/`--weekdays`)
-
-Optional: `--weekdays MO,WE,FR` (limit `--daily`/`--every`), `--timezone <IANA>` (default: host zone), `--quiet-window HH:MM-HH:MM` (repeatable; suppress fires inside the window), `--session-mode fresh|continuous` (default `fresh`).
 
 ### Skills
 
@@ -188,8 +142,8 @@ dam skill catalog <source>                             # Scan a source's availab
 dam skill catalog <source> --agent <ref>               # Annotate install status against an agent
 dam skill list <agent>                                 # List the skills on an agent
 dam skill install <agent> --source <id-or-url> --name <skill>   # Install (or update) a skill
-dam skill uninstall <agent> --name <skill>             # Remove a skill from an agent
-dam skill publish <agent> --name <skill>               # Publish a skill
+dam skill uninstall <agent> --source <id-or-url> --name <skill>   # Remove a skill (both flags required)
+dam skill publish <agent> --name <skill> --source <id-or-url>     # Publish a standalone skill (both flags required)
 ```
 
 ### Approvals
@@ -225,9 +179,12 @@ dam session list <agent>               # List all sessions for an agent
 dam ssh connect <agent>                # Open an SSH session to an agent
 dam ssh connect <agent> -x code        # Launch VS Code Remote-SSH against the agent
 dam ssh connect <agent> -x zed         # Launch Zed against the agent
+dam ssh configure <agent>              # Write SSH host config for an agent (no launch)
+dam ssh configure --all                # Reconcile config for every agent (prunes deleted ones)
+dam ssh configure --clear              # Remove all dam-managed SSH host config
 ```
 
-`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked.
+`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked. `dam ssh configure` writes the same host config without launching a client.
 
 ### File Operations
 

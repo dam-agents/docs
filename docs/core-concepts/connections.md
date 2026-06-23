@@ -66,7 +66,7 @@ For services that use static API keys rather than OAuth:
 ## Managing Connections
 
 - **View** — the Connections panel shows all active connections and their status
-- **Replace key** — for API-key/secret connections you can rotate the stored value in place (UI: "Replace key"; CLI: `dam connection update`) without dropping the connection's existing agent grants. OAuth connections refresh automatically and don't need this.
+- **Replace key** — for API-key/secret connections you can rotate the stored value in place (UI: "Replace key") without dropping the connection's existing agent grants. OAuth connections refresh automatically and don't need this.
 - **Revoke** — click "Disconnect" to immediately remove access
 - **Per-user** — your connections are yours alone, never shared with teammates
 - **All agents** — your connected credentials are available to all your agents
