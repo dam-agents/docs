@@ -33,6 +33,15 @@ Created → Starting → Running → Hibernating → Hibernated → Starting →
 
 Agents automatically hibernate after a period of inactivity (no active sessions, no pending triggers). When you open a chat or send a Slack message, the agent wakes automatically.
 
+### Keeping an Agent Awake
+
+For long-running background workloads that must never be paused, you can disable automatic hibernation:
+
+- **In the UI** — turn on the **Keep awake (never hibernate)** toggle when creating an agent (image step) or later from its settings.
+- **In a custom image** — set the `PLATFORM_KEEP_AWAKE` environment variable (accepts `1`, `true`, `yes`, or `on`).
+
+While keep-awake is enabled the agent always reports itself as busy, so it stays running and continues to use compute resources (and billing) even when idle.
+
 ### What Survives Hibernation
 
 | Persists | Lost |
