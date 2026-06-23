@@ -112,6 +112,7 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 - `--auth oauth|none` — MCP auth mode (auto-detected by default)
 - `--no-browser` — for MCP OAuth, print the consent URL instead of opening a browser
 - `--timeout <seconds>` — MCP OAuth timeout (default 300)
+- `-c, --config <key=value>` — set an optional template config input (repeatable), e.g. `--config model=premium-shell`; values are validated against the template's declared inputs.
 
 ### Network access
 
