@@ -2,7 +2,7 @@
 
 DAM works with several model providers. One of them is the **IBM LiteLLM ETE Proxy**, which gives you access to a curated set of models picked for DAM. When you're granted DAM access, you also get access to these models through the **`rits-restricted-agentic`** group. To use them, create a LiteLLM API key on the proxy — scoped to that group — and add it to DAM as a provider.
 
-This guide walks through both steps. A key from any other IBM LiteLLM proxy won't work here, so create yours fresh on the proxy linked in Step 1. If you get stuck, ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
+This guide walks through both steps. A key from any other IBM LiteLLM proxy won't work here, so create yours fresh on the proxy linked in Step 1. If you get stuck, ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24).
 
 ## Models you get access to
 
