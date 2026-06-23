@@ -88,10 +88,10 @@ Wait for it to reach running state:
 dam agent create my-agent --template claude-code --wait
 ```
 
-Or run the interactive setup, which walks you through template selection, credentials, and channels:
+Or run the interactive setup, which walks you through the name, template selection, and credentials:
 
 ```bash
-dam agent create-interactive my-agent
+dam agent create-interactive
 ```
 
 ### Step 4: Start Working
