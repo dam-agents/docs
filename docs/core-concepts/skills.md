@@ -1,8 +1,4 @@
-# Skills & MCP Tools
-
-Extend your agent with installable skills and built-in platform tools.
-
-## Skills
+# Skills
 
 Skills are packaged instructions from git repos that teach your agent new capabilities. Examples:
 
@@ -26,6 +22,9 @@ Skills are packaged instructions from git repos that teach your agent new capabi
 3. Click **Install**
 
 Skills are downloaded to your agent's workspace and available immediately.
+
+!!! tip "Your agent can manage skills itself"
+    Beyond the panel, the agent has built-in tools to discover and install skills mid-task — `list_skill_sources`, `list_skills_in_source`, `install_skill`, `uninstall_skill`, and `publish_skill` (open a PR adding a skill it authored to a source). These are always available; nothing to configure.
 
 ### Authoring Custom Skills
 

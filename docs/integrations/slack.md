@@ -109,6 +109,9 @@ Agents can post messages to Slack without being prompted:
 - Alerts when a scheduled task finishes
 - Status updates on long-running operations
 
+!!! tip "How the agent posts"
+    This works through two built-in tools the agent calls itself: `describe_channel` (list the chats it can post to) and `send_channel_message` (post text, optionally with a file attached). They're available automatically whenever a channel is connected — no per-session setup.
+
 ## Wake-on-Message
 
 If your agent is hibernated and someone messages it in Slack, the platform automatically wakes the agent. There's a brief delay while the pod starts (typically under a minute), then the agent responds normally.

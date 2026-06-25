@@ -1,6 +1,8 @@
-# Connecting with SSH
+# VS Code (SSH)
 
-`dam ssh` gives you a **real SSH session** into a running agent — not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell on the agent. Because it's standard SSH, everything that rides on SSH works: `scp`, `sftp`, port-forwarding, and — most usefully — opening the agent's workspace directly in **VS Code** or **Zed**.
+You can open a running agent's workspace directly in **VS Code** (or **Zed**) and work in it like any other remote folder — editing files, running the terminal, debugging — with the agent's full environment behind it.
+
+This works because `dam ssh` gives you a **real SSH session** into the agent: not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell. Because it's standard SSH, everything that rides on SSH works too — `scp`, `sftp`, and port-forwarding — but opening the workspace in your editor is the part most people want.
 
 The session inherits the agent's full pod environment: the egress proxy, injected credentials, and `PATH`. So `git`, `gh`, and the AI CLIs behave exactly as they do for the harness itself.
 

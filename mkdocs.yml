@@ -72,19 +72,21 @@ nav:
     - Code Review: use-cases/code-review.md
     - Broken Link Monitor: use-cases/broken-link-monitor.md
   - Core Concepts:
-    - Agents & Harnesses: core-concepts/agents.md
+    - Sandboxes: core-concepts/sandboxes.md
     - Sessions: core-concepts/sessions.md
     - Connections: core-concepts/connections.md
     - Network & Approvals: core-concepts/network-access.md
-    - Skills & Tools: core-concepts/skills-and-tools.md
+    - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md
     - File Manager: core-concepts/file-manager.md
+  - Integrations:
     - Slack: integrations/slack.md
+    - Telegram: integrations/telegram.md
+    - VS Code (SSH): guides/vs-code-ssh.md
   - Guides:
     - How to Create a LiteLLM Key: guides/litellm-key.md
     - Building a Custom Image: guides/custom-image.md
     - Calling an External Service: guides/external.md
-    - Connecting with SSH: guides/ssh-access.md
   - Reference:
     - Architecture: reference/architecture.md
     - CLI: reference/cli.md

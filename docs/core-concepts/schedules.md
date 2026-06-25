@@ -21,6 +21,9 @@ Schedules let you define automated tasks that fire on a timer:
     - **Quiet hours** — time windows when the schedule is suppressed
 4. Click **Create**
 
+!!! tip "Your agent can manage schedules itself"
+    The agent has built-in tools to manage its own schedules — `list_schedules`, `create_schedule`, `toggle_schedule`, and `delete_schedule`. These create **persistent** schedules that run on the platform, survive restarts, and show up in this panel — distinct from any in-session timers a harness sets for itself, which vanish when the session ends.
+
 ## Session Modes
 
 | Mode | Behavior |
