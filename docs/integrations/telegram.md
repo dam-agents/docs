@@ -4,9 +4,6 @@ Chat with your agent directly from Telegram.
 
 Unlike Slack — where one DAM app serves the whole workspace — Telegram works **one bot per agent**. You create a bot with Telegram's `@BotFather`, paste its token into DAM, and that bot becomes the front door to that one agent.
 
-!!! info "This is a channel, not a Connection"
-    Telegram is set up in your agent's chat **Configuration** (below), not under **Settings → [Connections](../core-concepts/connections.md)**. The one thing you provide is the **bot token** — pasted into the channel config, not created as a Connection. Once paired, the agent can receive messages and post back (proactively or when you ask), all through that bot.
-
 ## Overview
 
 Connect an agent to Telegram so you can:
