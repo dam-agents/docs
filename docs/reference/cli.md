@@ -13,7 +13,7 @@ Requires Node 20 or later.
 ## Configuration
 
 ```bash
-dam config set server https://your-platform-url.example.com
+dam config set server https://dam-prod.apps.dam-cl.fmaas.res.ibm.com/
 ```
 
 Config is stored at `~/.config/dam/config.toml`. Credentials are stored separately at `~/.local/state/dam/auth.toml` (mode 0600).
