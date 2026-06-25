@@ -14,6 +14,9 @@ DAM **Settings** has three separate tabs that are easy to confuse. They do diffe
 
 The rest of this page covers **Connections**. Providers are set when you create a sandbox (see [the LiteLLM key guide](../guides/litellm-key.md)); API keys are covered in [the CLI reference](../reference/cli.md).
 
+!!! tip "Slack and Telegram are not Connections"
+    To chat with an agent over [Slack](../integrations/slack.md) or [Telegram](../integrations/telegram.md), you enable a **channel** in the agent's chat configuration — not here. You don't need a Connection for normal Slack/Telegram use. (A Slack Connection is only needed for the advanced case of posting *as you* rather than as the DAM bot.)
+
 ## How It Works
 
 Connection credentials (OAuth tokens and API keys) are stored in a secure vault and injected on the network wire by a paired gateway pod. The agent never has access to raw tokens — even if compromised, it can't leak your keys.

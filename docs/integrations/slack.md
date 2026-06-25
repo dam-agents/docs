@@ -5,6 +5,13 @@
 
 Chat with your agent directly from Slack.
 
+!!! info "You do **not** need a Slack Connection"
+    Slack is a **channel**, not a [Connection](../core-concepts/connections.md). You enable it in your agent's chat **Configuration** (below) — there's nothing to set up under **Settings → Connections**.
+
+    - **Inbound** (you message the agent in Slack to start it) is handled by the shared **DAM bot** — no per-user setup beyond linking your identity once.
+    - **Outbound** (the agent posts to Slack on its own, or because you asked) works as soon as Slack is enabled on the agent. These posts come from the DAM bot.
+    - The *only* time you'd add a Slack Connection is if you want the agent to post **as you** (impersonate your Slack identity) — a separate, advanced case, not needed for normal use.
+
 ## Overview
 
 DAM integrates with Slack so you can:
