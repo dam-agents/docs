@@ -94,7 +94,7 @@ Templates are read-only from the CLI — operators manage them via Helm.
 
 ### Connections
 
-Connections are reusable OAuth/credential bindings (GitHub, MCP servers, custom-header API keys) that you create once for the team, then grant to individual agents.
+Connections are reusable OAuth/credential bindings (GitHub, MCP servers, custom-header API keys) that you create once — they're yours alone — then grant to any of your agents.
 
 ```bash
 dam connection templates                          # List provider templates you can create from
@@ -144,7 +144,7 @@ dam skill catalog <source> --agent <ref>               # Annotate install status
 dam skill list <agent>                                 # List the skills on an agent
 dam skill install <agent> --source <id-or-url> --name <skill>   # Install (or update) a skill
 dam skill uninstall <agent> --source <id-or-url> --name <skill>   # Remove a skill (both flags required)
-dam skill publish <agent> --name <skill> --source <id-or-url>     # Publish a standalone skill (both flags required)
+dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--body <b>]   # Publish a skill as a PR (--name/--source required; --title/--body optional)
 ```
 
 ### Approvals

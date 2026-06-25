@@ -33,14 +33,14 @@ Connections let your agent access your repositories — clone, push branches, an
 4. Provide a Personal Access Token (PAT) with appropriate repo permissions
 5. Click **Save**
 
-### Step 4: Create an Agent from Template
+### Step 4: Create a Sandbox
 
-1. Click **"New Agent"**
-2. Select the **Claude Code** template
+1. Click **"Create sandbox"**
+2. Choose **Claude Code** as the coding agent
 3. Give it a name (e.g., `my-agent`)
 4. Click **Create**
 
-Your agent will provision in a few seconds — you'll see the status change to "Running."
+Your sandbox will provision in a few seconds — you'll see the status change to "Running."
 
 ### Step 5: Start Working
 

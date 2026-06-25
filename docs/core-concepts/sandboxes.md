@@ -14,19 +14,20 @@ When you create a sandbox, the platform provisions:
 - **A credential gateway** — a paired security pod that injects your tokens on the wire
 - **Network isolation** — the sandbox can only reach services you explicitly allow
 
-Each sandbox is independent. You can run multiple sandboxes at once, each with different templates and configurations.
+Each sandbox is independent. You can run multiple sandboxes at once, each with a different coding agent and configuration.
 
 ## Lifecycle
 
 ```
-Created → Starting → Running → Hibernating → Hibernated → Starting → Running → ...
-                                                                        ↓
-                                                                     Deleted
+Starting → Preparing workspace → Running → Hibernating → Hibernated → Starting → ...
+                                                                          ↓
+                                                                        Error
 ```
 
 | State | What's happening |
 |-------|-----------------|
 | **Starting** | Pod is scaling up from hibernated or newly created. |
+| **Preparing workspace** | Pod is setting up its persistent storage and workspace (typically on first start). |
 | **Running** | Pod is active, ready to chat. Uses compute resources. |
 | **Hibernating** | Pod is scaling down after inactivity. |
 | **Hibernated** | Pod scaled to zero. Workspace and configuration preserved. No compute cost. |
@@ -36,14 +37,7 @@ Created → Starting → Running → Hibernating → Hibernated → Starting →
 
 Sandboxes automatically hibernate after a period of inactivity (no active sessions, no pending triggers). When you open a chat or send a message from a connected channel, the sandbox wakes automatically.
 
-### Keeping a Sandbox Awake
-
-For long-running background workloads that must never be paused, you can disable automatic hibernation:
-
-- **In the UI** — turn on the **Keep awake (never hibernate)** toggle when creating a sandbox (image step) or later from its settings.
-- **In a custom image** — set the `PLATFORM_KEEP_AWAKE` environment variable (accepts `1`, `true`, `yes`, or `on`).
-
-While keep-awake is enabled the sandbox always reports itself as busy, so it stays running and continues to use compute resources (and billing) even when idle.
+A sandbox that is **busy** — actively working a turn, or running a session — is never hibernated by the idle checker; it only scales down once it goes idle.
 
 ### What Survives Hibernation
 
@@ -55,9 +49,9 @@ While keep-awake is enabled the sandbox always reports itself as busy, so it sta
 | Session history | Temporary files outside the workspace |
 | Connections and egress rules | |
 
-## Available Harnesses
+## Available Coding Agents
 
-A sandbox runs one **harness** — the AI agent software inside the pod:
+A sandbox runs one **coding agent** — the AI software inside the pod:
 
 | Harness | Best For |
 |---------|----------|
@@ -65,7 +59,6 @@ A sandbox runs one **harness** — the AI agent software inside the pod:
 | Pi Agent | Multi-model coding (GPT, Mistral, Gemini, etc.) |
 | Bob | General-purpose AI shell with tenant scoping |
 | Codex | Coding with OpenAI models or compatible endpoints |
-| Nous | Knowledge and campaign workflows |
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 

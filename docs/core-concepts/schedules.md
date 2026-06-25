@@ -13,10 +13,10 @@ Schedules let you define automated tasks that fire on a timer:
 ## Creating a Schedule
 
 1. Open your agent's **Schedules** panel
-2. Click **"New Schedule"**
+2. Click **"Add Schedule"**
 3. Configure:
     - **Prompt** — what the agent should do when it wakes
-    - **Frequency** — daily, weekdays, weekly, or custom (RRULE)
+    - **Frequency** — minutely, hourly, daily, or custom (RRULE). In daily mode you can pick any combination of days (e.g. weekdays only).
     - **Time and timezone**
     - **Quiet hours** — time windows when the schedule is suppressed
 4. Click **Create**

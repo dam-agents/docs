@@ -43,4 +43,4 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 - Files persist across sessions, restarts, and hibernation
 - Files modified in chat sessions appear immediately in the File Manager (and vice versa)
 - The workspace is shared across all sessions for an agent
-- Uploaded files land in the current directory you're browsing
+- Uploaded files are extracted to the workspace root (`/home/agent/work`), replacing any existing top-level entry with the same name — regardless of which directory you're currently browsing

@@ -64,7 +64,7 @@ The key looks like `sk-...`.
 
 In DAM, the model provider is configured as part of creating a sandbox.
 
-1. Start creating a sandbox to reach the **Configure your sandbox** step
+1. Start creating a sandbox to reach the **Setup your sandbox** step
 2. In the provider list, select **IBM LiteLLM ETE Proxy**
 3. Paste your LiteLLM API key
 4. Continue setting up the sandbox

@@ -68,8 +68,8 @@ When colleagues reply in a thread with your agent:
 
 1. They must have linked their identity (`/dam login`) — this is a one-time step.
 2. They must be on your allowed users list (or the list must be empty).
-3. DAM spins up an **isolated fork pod** using the colleague's own credentials — your tokens are never shared.
-4. The fork pod is torn down after each response.
+3. DAM spins up an **isolated paired pod set** (a fork agent Job + fork gateway Pod) using the colleague's own credentials — your tokens are never shared.
+4. The fork pods are torn down after each response.
 
 This means teammates can safely interact with your agent without ever seeing or using your credentials.
 
@@ -88,7 +88,7 @@ Someone else set up an agent in a Slack channel and invited you (or you joined t
 ### What to Expect
 
 - The agent responds in a thread. Each thread is a separate conversation.
-- Your messages run using **your own credentials** (GitHub tokens, API keys, etc.) via an isolated fork pod — the agent owner's credentials are never involved in your turns.
+- Your messages run using **your own credentials** (GitHub tokens, API keys, etc.) via an isolated paired fork pod set — the agent owner's credentials are never involved in your turns.
 - If the agent is asleep, your first message wakes it (can take up to a minute).
 - You can have multiple concurrent threads with the same agent.
 

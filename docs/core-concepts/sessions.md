@@ -11,7 +11,7 @@ Open your agent in the DAM UI and type a message. A new session is created autom
 - **History** — scroll up to see full conversation including tool calls and file changes
 - **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
 
-Sessions are stored in the database and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
+Sessions are stored as files on the agent's persistent volume (PVC) — not in a central database — and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
 
 ## Terminal Sessions
 

@@ -76,11 +76,11 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Connect a per-agent bot and chat with your agent from a Telegram DM or group.
 
--   :material-microsoft-visual-studio-code:{ .lg .middle } **Open in VS Code**
+-   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code**
 
     ---
 
-    Open your agent's workspace in VS Code or Zed over a real SSH session.
+    Open your agent's workspace in VS Code or Zed via the CLI's `dam ssh` editor modes.
 
 -   :material-calendar-clock:{ .lg .middle } **Schedules**
 
@@ -92,7 +92,7 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
 ---
 
-## Available Agent Harnesses
+## Available Coding Agents
 
 <div class="grid cards" markdown>
 
