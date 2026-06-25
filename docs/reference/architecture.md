@@ -8,7 +8,7 @@ Your tokens and API keys are never visible to your agent — they're injected on
 
 ### The Gateway Model
 
-Every agent instance has a **paired gateway pod** — a separate, hardened container that handles credential injection:
+Every agent has a **paired gateway pod** — a separate, hardened container that handles credential injection:
 
 ```
 ┌─────────────────────────────────────────────────────┐

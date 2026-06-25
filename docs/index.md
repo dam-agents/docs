@@ -62,13 +62,25 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     ---
 
-    Create agents, attach to live sessions, and manage instances from your local terminal.
+    Create sandboxes, attach to live sessions, and manage them from your local terminal.
 
 -   :material-slack:{ .lg .middle } **Slack**
 
     ---
 
     Message your agent from Slack threads. Teammates interact with their own credentials.
+
+-   :material-send:{ .lg .middle } **Telegram**
+
+    ---
+
+    Connect a per-agent bot and chat with your agent from a Telegram DM or group.
+
+-   :material-microsoft-visual-studio-code:{ .lg .middle } **Open in VS Code**
+
+    ---
+
+    Open your agent's workspace in VS Code or Zed over a real SSH session.
 
 -   :material-calendar-clock:{ .lg .middle } **Schedules**
 

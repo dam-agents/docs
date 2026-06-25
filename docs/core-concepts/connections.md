@@ -20,14 +20,6 @@ DAM integrates with both GitHub.com and GitHub Enterprise (`github.ibm.com`):
 
 Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
 
-### Google Workspace
-
-Connect Google services (Gmail, Calendar, Drive, Sheets, Docs, and more):
-
-1. Navigate to **Connections**
-2. Click **"Connect Google"**
-3. Sign in and grant the requested scopes
-
 ### Generic OAuth
 
 Connect any OAuth 2.1 provider (Linear, Jira, Notion, Spotify, etc.):
@@ -38,6 +30,16 @@ Connect any OAuth 2.1 provider (Linear, Jira, Notion, Spotify, etc.):
 
 The credential gateway injects the token on matching requests automatically.
 
+## MCP Servers
+
+Connect an external MCP server to give your agent **additional tools** beyond the built-in ones. Once a server is connected and granted to an agent, its tools are exposed to the agent automatically — no per-session setup.
+
+- **Prebuilt** — pick a ready-made MCP connection (e.g. Linear MCP, Atlassian MCP) and complete its auth flow.
+- **Custom** — under **Connections → MCP servers**, choose **Add MCP server**, then provide the server's URL (e.g. `https://mcp.acme.internal/sse`) and its auth mode.
+
+!!! info "Built-in vs. connected tools"
+    Every agent already has built-in tools for managing its own skills, channels, and schedules — those need no setup and are noted on each feature's page. MCP server connections are how you add *more* tools on top of those.
+
 ## API Key Secrets
 
 For services that use static API keys rather than OAuth:
@@ -46,21 +48,13 @@ For services that use static API keys rather than OAuth:
 2. Click **"Add Secret"**
 3. Choose the type and paste your key
 
-| Type | Required By |
-|------|-------------|
-| Anthropic API Key | Claude Code |
-| OpenAI API Key | Codex, Pi Agent |
-| Mistral API Key | Pi Agent |
-| Bob API Key | Bob Agent |
-| Generic API Token | Any Bearer-token service |
-
 ### Secrets vs. OAuth Connections
 
 | | Secrets | OAuth Connections |
 |---|---------|-------------------|
 | How you add them | Paste a key | OAuth flow |
 | Token refresh | Manual (you rotate) | Automatic |
-| Use case | API keys, static tokens | GitHub, Google, OAuth apps |
+| Use case | API keys, static tokens | GitHub, OAuth apps |
 | Security | Same gateway injection | Same gateway injection |
 
 ## Managing Connections
