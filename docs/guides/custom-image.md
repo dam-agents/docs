@@ -86,11 +86,13 @@ COPY harness-terminal.sh /usr/local/bin/harness-terminal
 RUN chmod +x /usr/local/bin/harness-chat /usr/local/bin/harness-terminal
 
 # (7) CUSTOMIZE: seed files into the agent's home directory. Anything you put
-#     in your local workspace/ folder shows up where the agent starts. This is
-#     how you give the agent instructions and files to work from, e.g.:
+#     in your local workspace/ folder is copied into the agent's persistent
+#     home (/home/agent), which is where the agent starts and what survives
+#     hibernation. This is how you give the agent instructions and files to
+#     work from, e.g.:
 #       workspace/<instructions-file> -> instructions the agent reads on startup
 #       workspace/data/prices.csv     -> a dataset it can open
-COPY --chown=65532:0 workspace/ /app/working-dir/
+COPY --chown=65532:0 workspace/ /home/agent/
 
 # (8) OPTIONAL: declare placeholder env vars for any external credentials.
 #     Real values are injected on the wire by the platform — never bake a real

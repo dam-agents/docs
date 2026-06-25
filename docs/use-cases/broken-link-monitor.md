@@ -46,7 +46,7 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ### Connections
 
-- **GitHub** (Enterprise or Public) — the agent clones repos (read) and manages issues (write). A fine-grained PAT with `contents: read` and `issues: write` is sufficient.
+- **GitHub** (Enterprise or Public) — the agent clones repos (read) and manages issues (write). The default GitHub connection uses OAuth (scopes `repo`, `read:user`, `user:email`). If you'd rather use a Personal Access Token, pick the separate **GitHub (Personal Access Token)** template instead.
 
 ### Network Access
 
@@ -54,9 +54,9 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ## Setup
 
-1. **Create a Claude Code agent** — use the standard Claude Code template from the Web UI or CLI
+1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
-3. **Add a GitHub connection** — provide a PAT with repo read + issues write access
+3. **Add a GitHub connection** — connect GitHub via OAuth (default), or use the **GitHub (Personal Access Token)** template if you prefer a PAT
 4. **Clone the Link Guardian repo** — in your agent session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into the workspace
 5. **Run the first session** — the agent will ask you which org/repos to watch and save the configuration
 6. **Create a schedule** — set a daily heartbeat so the agent checks links automatically

@@ -14,8 +14,8 @@ Each agent has an allowlist of external services it can reach.
 
 ### How Rules Are Created
 
-1. **From connections** — connecting GitHub automatically allows `api.github.com` and `github.ibm.com`
-2. **From approvals** — clicking "Allow always" on an approval prompt creates a rule
+1. **From connections** — connecting GitHub automatically allows `api.github.com`, `github.com`, and `raw.githubusercontent.com`. Connecting GitHub Enterprise allows the host you specify plus its `api.<host>`.
+2. **From approvals** — clicking "Allow permanently" on an approval prompt creates a rule
 3. **Manually** — add rules directly in the Egress Rules panel
 
 ## Approvals
@@ -29,8 +29,10 @@ When your agent tries to reach a service not in its allowlist:
 | Verdict | Effect |
 |---------|--------|
 | **Allow once** | This request proceeds; future requests prompt again |
-| **Allow always** | Creates a permanent egress rule |
-| **Deny** | Request is blocked; agent is informed |
+| **Allow permanently** | Creates a lasting egress rule for that host/method/path |
+| **Allow `<host>`** | Creates a host-level rule (all methods/paths on that host) |
+| **Deny forever** | Creates a lasting deny rule; the agent is informed |
+| **Dismiss** | Blocks just this request; future requests prompt again |
 
 ### Timeout
 

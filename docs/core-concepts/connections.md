@@ -1,10 +1,22 @@
 # Connections
 
-Connect your accounts and API keys so your agent can act on your behalf — without ever seeing your tokens.
+Connect your accounts so your agent can act on your behalf — without ever seeing your tokens.
+
+## Providers, Connections & API Keys
+
+DAM **Settings** has three separate tabs that are easy to confuse. They do different things:
+
+| Tab | What it's for | Example |
+|-----|---------------|---------|
+| **Providers** | The **model** that powers a sandbox. Every sandbox needs one. | Anthropic, IBM LiteLLM, Bob |
+| **Connections** | Credentials and tools that let the agent **act on external services** on your behalf. | GitHub, a custom-header API, an MCP server |
+| **API keys** | Tokens that let **you or your automation** drive the DAM platform itself via the API/CLI. | A scoped key for a CI pipeline |
+
+The rest of this page covers **Connections**. Providers are set when you create a sandbox (see [the LiteLLM key guide](../guides/litellm-key.md)); API keys are covered in [the CLI reference](../reference/cli.md).
 
 ## How It Works
 
-All credentials (OAuth tokens and API keys) are stored in a secure vault and injected on the network wire by a paired gateway pod. The agent never has access to raw tokens — even if compromised, it can't leak your keys.
+Connection credentials (OAuth tokens and API keys) are stored in a secure vault and injected on the network wire by a paired gateway pod. The agent never has access to raw tokens — even if compromised, it can't leak your keys.
 
 ## OAuth Connections
 
@@ -20,50 +32,35 @@ DAM integrates with both GitHub.com and GitHub Enterprise (`github.ibm.com`):
 
 Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
 
-### Generic OAuth
+## API Key Connections
 
-Connect any OAuth 2.1 provider (Linear, Jira, Notion, Spotify, etc.):
+For services that use a static API key rather than OAuth, connect a prebuilt template:
 
-1. Navigate to **Connections** → **"Add Generic OAuth"**
-2. Provide: display name, host, authorization URL, token endpoint, client ID/secret, scopes
-3. Complete the OAuth flow
+1. Navigate to **Connections** → under **Apps**, pick the service (e.g. **Anthropic (API Key)**)
+2. Click **Connect** and paste your key
 
-The credential gateway injects the token on matching requests automatically.
+For a service without a prebuilt template, use **Other** → **Custom header credential** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
 
 ## MCP Servers
 
 Connect an external MCP server to give your agent **additional tools** beyond the built-in ones. Once a server is connected and granted to an agent, its tools are exposed to the agent automatically — no per-session setup.
 
-- **Prebuilt** — pick a ready-made MCP connection (e.g. Linear MCP, Atlassian MCP) and complete its auth flow.
-- **Custom** — under **Connections → MCP servers**, choose **Add MCP server**, then provide the server's URL (e.g. `https://mcp.acme.internal/sse`) and its auth mode.
+Under **Connections → MCP servers**:
+
+- **Custom MCP server (OAuth)** — for a server that authenticates via OAuth.
+- **Custom MCP server (no auth)** — for a server that needs no credentials.
+
+Provide the server's URL (e.g. `https://mcp.acme.internal/sse`); the OAuth variant walks you through its auth flow.
 
 !!! info "Built-in vs. connected tools"
     Every agent already has built-in tools for managing its own skills, channels, and schedules — those need no setup and are noted on each feature's page. MCP server connections are how you add *more* tools on top of those.
 
-## API Key Secrets
-
-For services that use static API keys rather than OAuth:
-
-1. Navigate to **Connections** → **Secrets**
-2. Click **"Add Secret"**
-3. Choose the type and paste your key
-
-### Secrets vs. OAuth Connections
-
-| | Secrets | OAuth Connections |
-|---|---------|-------------------|
-| How you add them | Paste a key | OAuth flow |
-| Token refresh | Manual (you rotate) | Automatic |
-| Use case | API keys, static tokens | GitHub, OAuth apps |
-| Security | Same gateway injection | Same gateway injection |
-
 ## Managing Connections
 
-- **View** — the Connections panel shows all active connections and their status
-- **Replace key** — for API-key/secret connections you can rotate the stored value in place (UI: "Replace key") without dropping the connection's existing agent grants. OAuth connections refresh automatically and don't need this.
-- **Revoke** — click "Disconnect" to immediately remove access
-- **Per-user** — your connections are yours alone, never shared with teammates
-- **All agents** — your connected credentials are available to all your agents
+- **View** — the Connections panel shows all your connections; **Connect** / **Disconnect** toggles each one.
+- **Revoke** — **Disconnect** immediately removes access.
+- **Per-user** — your connections are yours alone, never shared with teammates.
+- **All agents** — your connected credentials are available to all your agents.
 
 ## Security
 

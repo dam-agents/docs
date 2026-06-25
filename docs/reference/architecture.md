@@ -40,14 +40,14 @@ Every agent has a **paired gateway pod** — a separate, hardened container that
 ### Credential Scoping
 
 - **Per-user:** Your credentials are yours alone. No other team member can use or see them.
-- **Per-service:** Each connected service (GitHub, Anthropic, Google) is stored separately.
+- **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
 - **All your agents:** Any agent you own can use your connected credentials.
 
 ### Token Management
 
 | Type | Storage | Refresh |
 |------|---------|---------|
-| **OAuth** (GitHub, Google) | Kubernetes Secret in gateway pod | Auto-refreshed by the platform |
+| **OAuth** (GitHub, etc.) | Kubernetes Secret in gateway pod | Auto-refreshed by the platform |
 | **API Key** (Anthropic, etc.) | Kubernetes Secret in gateway pod | No expiry unless you rotate manually |
 
 ---
@@ -79,7 +79,7 @@ When your agent tries to reach a service for the first time:
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
 3. If no rule exists, the request is **held** and you see an approval prompt
-4. You decide: **Allow once**, **Allow always** (creates a permanent rule), or **Deny**
+4. You decide: **Allow once** (releases just this call), **Allow permanently** (a lasting rule for that host/method/path), **Allow `<host>`** (a host-level rule), or **Deny forever**. You can also **Dismiss** (block this request; future ones prompt again) or **Customize** the rule directly.
 
 ---
 
@@ -89,13 +89,15 @@ When colleagues interact with your agent, they act as themselves — with their 
 
 ### How It Works
 
-When a colleague messages your agent via Slack or Telegram:
+When a colleague messages your agent in a shared Slack channel:
 
 1. The platform identifies the colleague by their linked identity
-2. A short-lived **fork pod** is spawned for that colleague's turn
-3. The fork mounts the **colleague's** credentials (not yours)
+2. A short-lived **paired pod set** — a fork agent Job and a fork gateway Pod, each with its own NetworkPolicy — is spawned for that colleague's turn
+3. The fork gateway mounts the **colleague's** credentials (not yours)
 4. The fork reads/writes the same workspace files (shared context)
-5. When the turn completes, the fork terminates
+5. When the turn completes, the fork pods terminate
+
+This foreign-replier fork is a Slack-specific mechanism (Slack has a workspace identity to fork under). Telegram authorizes per conversation and has no foreign fork — every turn runs on the main pod.
 
 ### What's Shared vs. Private
 

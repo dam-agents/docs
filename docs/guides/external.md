@@ -18,7 +18,7 @@ The platform installs its CA into the image's system trust store at startup, so 
 
 ### 2. A credential, created in the UI
 
-Under **Connections → add a secret**, create a custom-header credential:
+Under **Connections → Other → Custom header credential**, create the credential:
 
 - **Name:** any label, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`
@@ -27,7 +27,7 @@ Under **Connections → add a secret**, create a custom-header credential:
 - **Secret value:** the real key
 - **Environment variable:** the same variable name from your Dockerfile, e.g. `MY_TOOL_API_KEY`
 
-Then attach it to the agent: **Connections → Secrets → check it.** (You can add a secret to an existing agent — no need to recreate it.) And under **Network access**, allow the host your tool calls, or its requests will be blocked.
+Then grant it to the agent from the agent's **Connections** panel. (You can add it to an existing agent — no need to recreate it.) Granting the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**.
 
 ### 3. How the key reaches your tool
 

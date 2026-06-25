@@ -23,9 +23,9 @@ All of this runs on a 1-minute heartbeat schedule — no human in the loop after
 ```
 You ←→ Agent (interactive session)
          │
-         ├── /grill-me    → interviews you about the problem
-         ├── /to-prd      → creates PRD issue on GitHub
-         └── /to-issues   → decomposes into tickets
+         ├── /grill-me     → interviews you about the problem
+         ├── /write-a-prd  → creates PRD issue on GitHub
+         └── /plan-feature → decomposes into tickets
                               │
                               ▼
                     Scheduled Heartbeat (every 1 min)
@@ -57,7 +57,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ## Setup
 
-1. **Create a Claude Code agent** — use the standard Claude Code template from the Web UI or CLI
+1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — provide a PAT with repo access to your target repository
 4. **Clone the Software Factory repo** — in your agent session, clone [github.com/dam-agents/software-factory](https://github.com/dam-agents/software-factory) into the workspace
@@ -74,7 +74,7 @@ The agent provides its own recommended answer for each question. You can accept,
 
 ### PRD Creation
 
-Once the interview reaches shared understanding, the agent runs `/to-prd` — synthesizing everything into a structured PRD with:
+Once the interview reaches shared understanding, the agent runs `/write-a-prd` — synthesizing everything into a structured PRD with:
 
 - Problem statement
 - Proposed solution
@@ -87,7 +87,7 @@ The PRD is published as a GitHub issue with the `PRD` label.
 
 ### Issue Decomposition
 
-Next, `/to-issues` breaks the PRD into independently-implementable tickets. Each ticket is a **vertical slice** — a thin cut through all layers (UI, API, data, tests) that's demoable on its own. Tickets are ordered by dependency so the agent works on them in the right sequence.
+Next, `/plan-feature` breaks the PRD into independently-implementable tickets. Each ticket is a **vertical slice** — a thin cut through all layers (UI, API, data, tests) that's demoable on its own. Tickets are ordered by dependency so the agent works on them in the right sequence.
 
 ### Autonomous Execution
 
@@ -115,10 +115,9 @@ To resume: remove the `paused` label or tell the agent "resume" in a chat sessio
 | Skill | What it does |
 |-------|-------------|
 | `/grill-me` | Interviews you relentlessly about your plan until shared understanding |
-| `/to-prd` | Turns conversation context into a PRD published to GitHub |
-| `/to-issues` | Decomposes a PRD into vertical-slice tickets with dependencies |
-| `/pause-and-notify` | Pauses the heartbeat and alerts the team when stuck |
-| `/frontend-design` | Generates frontend design decisions for UI-heavy tickets |
+| `/write-a-prd` | Turns conversation context into a PRD published to GitHub |
+| `/plan-feature` | Decomposes a PRD into vertical-slice tickets with dependencies |
+| `/react-ui-engineering` | Provides React component engineering guidance for UI-heavy tickets |
 
 ## Key Files in the Workspace
 

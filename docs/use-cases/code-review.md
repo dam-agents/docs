@@ -58,7 +58,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ## Setup
 
-1. **Create a Claude Code agent** — use the standard Claude Code template from the Web UI or CLI
+1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — provide a PAT with repo access to the repository you want reviewed
 4. **Clone the Code Guardian repo** — in your agent session, clone [github.com/dam-agents/code-guardian](https://github.com/dam-agents/code-guardian) into the workspace
