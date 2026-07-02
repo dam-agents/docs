@@ -110,6 +110,16 @@ To reattach later:
 dam chat my-agent --continue
 ```
 
+### Step 5: Open in Your IDE (optional)
+
+Prefer to work in your editor? Open the agent's workspace in **VS Code** or **Zed** over SSH:
+
+```bash
+dam ssh connect my-agent -x code    # or: -x zed
+```
+
+This gives you a Remote-SSH window into the running agent — edit files, run the terminal, and debug with the agent's full environment behind it. See the [IDE (SSH) guide](../guides/ide-ssh.md) for prerequisites and details.
+
 ### Other Useful Commands
 
 ```bash
