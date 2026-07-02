@@ -82,7 +82,7 @@ nav:
   - Integrations:
     - Slack: integrations/slack.md
     - Telegram: integrations/telegram.md
-    - VS Code (SSH): guides/vs-code-ssh.md
+    - IDE (SSH): guides/ide-ssh.md
   - Guides:
     - How to Create a LiteLLM Key: guides/litellm-key.md
     - Building a Custom Image: guides/custom-image.md
