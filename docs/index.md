@@ -88,6 +88,12 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Run agents on a recurring timer — daily code reviews, nightly audits, continuous monitoring.
 
+-   :material-flask-outline:{ .lg .middle } **[Experiments](core-concepts/experiments.md)**
+
+    ---
+
+    Race several agents toward one shared goal and compare their scored runs.
+
 </div>
 
 ---
