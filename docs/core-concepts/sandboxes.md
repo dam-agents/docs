@@ -66,7 +66,9 @@ Want to bring your own? See the [Building a Custom Image](../guides/custom-image
 
 ### Create
 
-Click **"Create a sandbox"** → name it, choose a provider, and set network permissions → create. The sandbox starts immediately.
+Click **"Create a sandbox"** → choose a starting image, name it, choose a provider, and set network permissions → create. The sandbox starts immediately.
+
+The image step groups options into **Coding agents**, **Custom images**, and **Pre-configured images**. Each catalog entry shows a display name and tags (e.g. the providers it supports), and some include a **Learn more** link to their docs. A pre-configured image may surface a setup note callout on the setup step (e.g. a recommended model).
 
 ### Configure
 
