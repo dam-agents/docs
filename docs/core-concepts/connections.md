@@ -18,6 +18,8 @@ The rest of this page covers **Connections**. Providers are set when you create 
 
 Connection credentials (OAuth tokens and API keys) are stored in a secure vault and injected on the network wire by a paired gateway pod. The agent never has access to raw tokens — even if compromised, it can't leak your keys.
 
+All credentials — including provider API keys and GitHub personal access tokens — are modeled and managed as Connections. There is no separate "secrets" concept; if you used one previously, it is migrated to a Connection automatically.
+
 ## OAuth Connections
 
 OAuth connections auto-refresh and require no manual rotation.
