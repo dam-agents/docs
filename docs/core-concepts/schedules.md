@@ -33,6 +33,8 @@ Schedules let you define automated tasks that fire on a timer:
 
 Use **fresh** for independent tasks (each PR review is standalone). Use **continuous** for cumulative work (tracking progress across days).
 
+**Fresh** is the default. Editing a schedule to clear its session mode reverts it to **fresh** — a previously set **continuous** mode does not persist through the edit.
+
 ## Quiet Hours
 
 Suppress schedule fires during specific time windows. Suppressed runs are **dropped, not deferred** — if a fire lands in quiet hours, it's skipped entirely (not queued for later).
