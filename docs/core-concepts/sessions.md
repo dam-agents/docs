@@ -13,6 +13,10 @@ Open your agent in the DAM UI and type a message. A new session is created autom
 
 Sessions are stored as files on the agent's persistent volume (PVC) — not in a central database — and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
 
+### Model settings
+
+The **Model** settings panel sets per-agent harness defaults — model, mode, and reasoning effort. These are written to the harness's own config file and apply to **new sessions only**; sessions already underway keep the settings they started with.
+
 ## Terminal Sessions
 
 Terminal sessions give you PTY-based shell access to the agent's environment — the same interactive TUI you'd get running the harness locally.
