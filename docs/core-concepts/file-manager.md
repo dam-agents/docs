@@ -44,3 +44,4 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 - Files modified in chat sessions appear immediately in the File Manager (and vice versa)
 - The workspace is shared across all sessions for an agent
 - Uploaded files are extracted to the workspace root (`/home/agent/work`), replacing any existing top-level entry with the same name — regardless of which directory you're currently browsing
+- Files attached to a chat are staged into the session's workspace and passed to the agent as a path it can read. The Bob agent accepts chat file attachments this way
