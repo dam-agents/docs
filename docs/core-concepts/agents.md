@@ -71,6 +71,8 @@ Want to bring your own? See the [Building a Custom Image](../guides/custom-image
 
 Click **"New Agent"** → pick a template → name it → create. The agent starts immediately.
 
+Templates in the picker are grouped into **Harness Images** (the base coding harnesses — Claude Code, Pi Agent, etc.) and **Pre-configured Images** (curated, task-specific agents), with a **Custom Image** option for your own image URL. Experimental templates are marked with an **Alpha** badge.
+
 ### Configure
 
 From the agent's settings panel:
