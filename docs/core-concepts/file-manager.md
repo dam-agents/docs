@@ -34,7 +34,8 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 
 | Limit | Value |
 |-------|-------|
-| Max viewable file size | 10 MB |
+| Max viewable file size | 50 MB |
+| Max upload file size | 50 MB |
 | Max import bundle size | 5 GB |
 | Supported formats | All text files; binary files are downloadable but not viewable |
 
