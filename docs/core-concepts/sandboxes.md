@@ -39,6 +39,31 @@ Sandboxes automatically hibernate after a period of inactivity (no active sessio
 
 A sandbox that is **busy** — actively working a turn, or running a session — is never hibernated by the idle checker; it only scales down once it goes idle.
 
+### Keep Awake
+
+Some work keeps running with **no** active chat or terminal session — a long
+background job, for example — and the idle checker would otherwise hibernate the
+sandbox out from under it. **Keep awake** prevents that.
+
+- **Manual toggle.** In the sandbox's settings, under **Lifecycle**, switch
+  **Keep awake** on and the sandbox **never hibernates** — it keeps running, and
+  consuming resources, until you turn the toggle off or stop the sandbox.
+- **Agent-held leases.** Your agent can hold the sandbox awake for the duration of
+  a background workload using built-in tools — no manual toggle needed:
+
+    | Tool | What it does |
+    |------|--------------|
+    | `keep_awake_acquire` | Take a keep-awake lease under an `id` you choose (typically a job/run id). Optional `value` = minutes of idleness to tolerate while held (`0`/omitted = never hibernate). |
+    | `keep_awake_release` | Release a lease by `id`. Idempotent. When the last lease is released, normal idle-hibernation resumes. |
+    | `keep_awake_purge` | Drop all leases at once. |
+
+    !!! warning "Leases don't expire on their own"
+        A lease keeps the sandbox awake until it is explicitly released (or purged).
+        Always release a lease when its work finishes, or the sandbox may run
+        indefinitely. While any lease is held, turning the manual toggle off may let
+        the sandbox hibernate and interrupt that work — the UI warns you before
+        doing so.
+
 ### What Survives Hibernation
 
 | Persists | Lost |
