@@ -13,6 +13,10 @@ Open your agent in the DAM UI and type a message. A new session is created autom
 
 Sessions are stored as files on the agent's persistent volume (PVC) — not in a central database — and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
 
+### Environment variables
+
+Environment variables you set in the agent's Environment editor are persisted separately and delivered to the running agent over the runtime channel, applied on its **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections or secrets when the names collide. Because the change lands on the next turn rather than at startup, an in-flight turn keeps the values it began with.
+
 ### Model settings
 
 The **Model** settings panel sets per-agent harness defaults — model, mode, and reasoning effort. These are written to the harness's own config file and apply to **new sessions only**; sessions already underway keep the settings they started with.
