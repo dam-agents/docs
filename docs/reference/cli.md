@@ -162,6 +162,37 @@ dam approval deny <id>                                  # Deny a pending request
 - `list` flags: `--status pending|resolved|expired|all` (default `pending`), `--limit <n>` (1–500).
 - `approve`/`deny` take `--once` to allow/deny only this specific held call (the same request shape re-prompts next time). `approve --entire-host` allows any method and path on the host (network requests only).
 
+### Schedules
+
+Manage time-triggered tasks (schedules) attached to an agent — the CLI equivalent of the agent's **Schedules** panel.
+
+```bash
+dam schedule list <agent>              # List the schedules attached to an agent
+dam schedule get <schedule-id>         # Show one schedule, expanded
+dam schedule create <agent> --name <name> --task <task> --daily 22:00   # Create an RRULE schedule
+dam schedule update <schedule-id> --task "New prompt"   # Update name/task/recurrence/timezone/etc.
+dam schedule enable <schedule-id>      # Enable a schedule (idempotent)
+dam schedule disable <schedule-id>     # Disable a schedule (idempotent)
+dam schedule delete <schedule-id>      # Delete a schedule (idempotent — unknown ids exit 0)
+dam schedule reset-session <schedule-id>   # Reset the session a continuous schedule reuses
+```
+
+**`create`** requires `--name <name>` and `--task <task>` (the prompt run each tick), plus one recurrence. Choose the recurrence with exactly one of:
+
+- `--daily <HH:MM>` — run daily at a 24-hour time
+- `--every <interval>` — run every N minutes (`Nm`) or hours (`Nh`)
+- `--rrule <body>` — a raw RFC 5545 RRULE body (e.g. `FREQ=WEEKLY;BYDAY=MO;BYHOUR=7;BYMINUTE=0`)
+
+Additional flags (on both `create` and `update`):
+
+- `--weekdays <days>` — limit `--daily`/`--every` to specific days, e.g. `MO,WE,FR`
+- `--timezone <tz>` — IANA timezone (defaults to the host's zone)
+- `--quiet-window <HH:MM-HH:MM>` — suppress fires inside a window (repeatable)
+- `--session-mode <fresh|continuous>` — new session per fire, or one shared session
+- `--json` — emit the schedule as JSON (available on every subcommand)
+
+`delete` also takes `-y, --yes` to skip the confirmation prompt. Schedule ids come from `dam schedule list`.
+
 ### Terminal Sessions
 
 ```bash
