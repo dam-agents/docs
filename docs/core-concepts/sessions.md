@@ -13,6 +13,18 @@ Open your agent in the DAM UI and type a message. A new session is created autom
 
 Sessions are stored as files on the agent's persistent volume (PVC) — not in a central database — and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
 
+### Status Indicators
+
+Each session in the sidebar shows a status dot so you can tell at a glance which
+sessions need you and which are working on their own:
+
+| Indicator | Meaning |
+|-----------|---------|
+| **Working** | The agent is actively working the turn. |
+| **Needs your approval** | The agent is blocked waiting for you to approve an action. This takes priority over any other state. |
+| **Waiting for you** | The agent is idle, waiting for your next message. |
+| **Terminal** | A terminal (PTY) session, which has no agent turn of its own. |
+
 ### Environment variables
 
 Environment variables you set in the agent's Environment editor are persisted separately and delivered to the running agent over the runtime channel, applied on its **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections or secrets when the names collide. Because the change lands on the next turn rather than at startup, an in-flight turn keeps the values it began with.
