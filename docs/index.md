@@ -126,6 +126,12 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Execution-first system for end-to-end coding tasks.
 
+-   :material-flask-outline:{ .lg .middle } **Nous** <small>Alpha</small>
+
+    ---
+
+    Hypothesis-driven experimentation campaigns. Experimental.
+
 </div>
 
 ---
