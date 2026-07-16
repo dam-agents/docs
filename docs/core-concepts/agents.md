@@ -61,6 +61,7 @@ While keep-awake is enabled the agent always reports itself as busy, so it stays
 | Bob | General-purpose AI shell with tenant scoping |
 | Codex | Coding with OpenAI models or compatible endpoints |
 | Nous | Hypothesis-driven experimentation campaigns (experimental — Alpha) |
+| K-Search | LLM-driven GPU kernel optimization; evaluates candidate kernels on Modal (experimental — Alpha) |
 | OpenEvolve | Evolutionary code optimization — runs the OpenEvolve loop on the Claude Code base (experimental — Alpha) |
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
