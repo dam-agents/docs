@@ -41,6 +41,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 
 ## Key Notes
 
+- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: Edit, Download, Rename, Delete; for a folder: New file, New folder, Upload here, Rename, Delete
 - Files persist across sessions, restarts, and hibernation
 - Files modified in chat sessions appear immediately in the File Manager (and vice versa)
 - The workspace is shared across all sessions for an agent
