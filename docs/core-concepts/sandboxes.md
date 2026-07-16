@@ -62,6 +62,21 @@ A sandbox runs one **coding agent** — the AI software inside the pod:
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
+## Ephemeral Runs (`dam-run`)
+
+From inside a sandbox — a web terminal, an SSH session, or the agent itself — you can run a single command in a **fresh, separate pod** with `dam-run`:
+
+```bash
+dam-run <command> [args...]
+```
+
+The executor pod is a throwaway copy of your sandbox: it uses the **same image, configuration, and persistent `~/home/agent` workspace**, so the command sees your files and credentials exactly as the main pod does. Its input and output are streamed back over a PTY, so it behaves like a local invocation (including interactive TTY programs). The executor pod exists only for that one command — it is **torn down as soon as `dam-run` exits**, and disconnecting reaps it automatically.
+
+Use it to run something heavy, long, or risky off to the side without tying up — or disturbing — your main sandbox.
+
+!!! note "Limits"
+    Each sandbox may have up to **16 concurrent `dam-run` executors** at once; beyond that, new runs are rejected until one finishes. A single run is also capped at roughly **one hour** — for longer-lived work, use a dedicated sandbox instead.
+
 ## Managing Sandboxes
 
 ### Create
