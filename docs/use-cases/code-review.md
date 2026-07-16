@@ -1,6 +1,6 @@
 # Code Review
 
-Get automated PR reviews on every pull request — posted to GitHub, and optionally summarized in Slack.
+Get automated PR reviews on every pull request — posted to GitHub, with optional Slack nudging when PRs wait too long for a human review.
 
 This guide walks through setting up the [code-guardian](https://github.com/dam-agents/code-guardian) agent on DAM to do it yourself.
 
@@ -12,11 +12,12 @@ Once configured, the agent runs on a schedule and for each open PR:
 
 1. **Fetches the diff** — reads the PR's changes, body, comments, and prior reviews
 2. **Clones the branch** — pulls the code locally for deeper analysis
-3. **Runs skill-based checks** — documentation drift, TypeScript engineering, and React UI engineering
+3. **Runs configurable skill-based checks** — the skill set lives in `work/CONFIG.md` (each skill with its own source repo, trigger, and output section); the default set covers documentation drift, TypeScript engineering, and React UI engineering
 4. **Posts a structured review** — findings with severity levels, inline comments on specific lines
-5. **Sends a Slack summary** (if Slack is connected) — the full review lands in your team's channel
-6. **Tracks state** — knows which PRs it already reviewed at which commit, only re-reviews when new commits are pushed
-7. **Learns your preferences** — remembers what to ignore, what to emphasize, and adapts over time
+5. **Shepherds PRs toward human review** (optional, Slack) — watches how long each PR waits for an independent review and nudges the right reviewers (or the author, when changes are requested) in your team channel, escalating over time
+6. **Generates visual PR artifacts on demand** — assign the bot account to a PR and the next heartbeat publishes a self-contained HTML review artifact and links it in a comment
+7. **Tracks state** — knows which PRs it already reviewed at which commit, only re-reviews when new commits are pushed
+8. **Learns your preferences** — remembers what to ignore, what to emphasize, and adapts over time
 
 Reviews are posted as proper GitHub PR reviews (with inline comments), not just top-level comments.
 
@@ -25,6 +26,7 @@ Reviews are posted as proper GitHub PR reviews (with inline comments), not just 
 ```
 Scheduled Heartbeat (every 10 min by default; configurable)
          │
+         ├── Load work/CONFIG.md + install/refresh configured skills
          ├── Fetch open PRs
          ├── Skip already-reviewed (same HEAD commit)
          │
@@ -32,13 +34,16 @@ Scheduled Heartbeat (every 10 min by default; configurable)
          │
          ├── Fetch diff + PR context (body, comments, prior reviews)
          ├── Clone branch locally
-         ├── Run doc-drift skill
-         ├── Run typescript-engineering skill
-         ├── Run react-ui-engineering skill
+         ├── Run every configured review skill
+         │   (default: doc-drift, typescript-engineering, react-ui-engineering)
          ├── Generate structured review with findings
          ├── Post GitHub PR review (summary + inline comments)
-         ├── Send full review to Slack (if connected)
          └── Update local tracking (REVIEWS.md)
+         │
+         ├── Artifact sweep — publish visual HTML artifact
+         │   for every PR the bot account is assigned to
+         └── PR Shepherd sweep (only when Slack is enabled) —
+             nudge reviewers/authors on PRs waiting for review
 ```
 
 Deduplication is built in — the agent embeds a SHA marker in every review and checks both local state and GitHub before posting. No duplicate reviews, even across restarts.
@@ -47,12 +52,12 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Provider
 
-- **IBM LiteLLM ETE Proxy** — the agent needs model access to function
+- **Any model provider** — the agent just needs model access; any harness-supported provider works (e.g., IBM LiteLLM ETE Proxy, Anthropic, …)
 
 ### Connections
 
 - **GitHub** (Enterprise or Public) — the agent reads PRs, posts reviews, and clones branches
-- **Slack** (optional but recommended) — sends review summaries to your team channel
+- **Slack** (optional, **opt-in at onboarding**) — powers the PR Shepherd: escalating reminders in your team channel for PRs that sit unreviewed. The agent asks during onboarding whether to enable it and, on yes, walks you through importing your team (GitHub org team or top contributors) plus their Slack member IDs into a reviewer roster — the only people it may ever @-mention. With Slack disabled the agent never touches it; reviews still land in the chat UI and on GitHub.
 
 !!! warning "Use a dedicated bot account for the GitHub connection"
     Reviews are posted as whatever identity the GitHub connection resolves to. Connect a **dedicated machine/bot account** — **not your personal account** — that is a collaborator on the target repo with permission to review PRs.
@@ -71,11 +76,11 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 ## Setup
 
 1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
-2. **Add your provider** — configure IBM LiteLLM with your API key
+2. **Add your provider** — configure any supported model provider with your API key (e.g., IBM LiteLLM)
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
-4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`). Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
+4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`); if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
 5. **Onboard the agent** — send it the onboarding runbook as your **first message** and let it set itself up (see below)
-6. **Connect Slack** (optional) — link a Slack channel to receive review notifications
+6. **Connect Slack** (optional) — only needed if you want the PR Shepherd nudging; you opt in during onboarding
 
 ### Onboarding the agent
 
@@ -86,20 +91,13 @@ Here is a file — read it and set yourself up according to it:
 https://github.com/dam-agents/code-guardian/blob/main/ONBOARDING.md
 ```
 
-The agent then checks out its own definition, wires up the `work/` directory, reconstructs review state, creates the recurring review schedule (it asks for the cadence, defaulting to **every 10 minutes**), and writes the `$HOME/.code-guardian-onboarded` sentinel so it won't repeat the process.
-
-!!! info "\"This pod is not onboarded…\" is expected before you send that message"
-    On a fresh sandbox the agent reports that it hasn't been onboarded yet (no `work/` runtime state, no scheduled heartbeat). That's normal — it's waiting for you to point it at `ONBOARDING.md`. **You** kick off onboarding by sending the message above; the agent does the actual work autonomously from there. You do not run the runbook yourself.
+Onboarding is a short **interactive dialog** — the agent checks out its own definition (derived from the URL you send, so forks stay pinned to the fork), wires up the `work/` directory, and asks a handful of configuration questions: the display name it signs reviews with, the dedup-marker prefix, which review skills to run (defaults offered, each skill with its own source repo), whether to enable Slack notifications (and if so, it imports your team into the reviewer roster), and the review cadence (default **every 10 minutes**). Everything lands in `work/CONFIG.md`; it then reconstructs review state, creates the recurring schedule, writes the `$HOME/.code-guardian-onboarded` sentinel, and finishes with a summary of what it configured and how to use it day-to-day.
 
 !!! tip "Files live in `work/`, not a subfolder"
     The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh sandbox rather than moving files by hand.
 
 !!! tip "Customizing the agent"
     To change the agent's behavior, **fork** [dam-agents/code-guardian](https://github.com/dam-agents/code-guardian) and onboard from your fork's `ONBOARDING.md` URL instead.
-
-!!! warning "IBM Enterprise GitHub (`github.ibm.com`)"
-    Reachability of `github.ibm.com` from the DAM cluster isn't guaranteed for every install. If your target repo is on Enterprise GitHub, confirm the agent can reach it (and that the bot account is a collaborator there) before relying on the schedule.
-
 
 ## Review Output
 
@@ -151,11 +149,12 @@ Preferences are stored in `MEMORY.md` (global) and per-PR files (PR-specific ove
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Agent operating instructions — the full review playbook |
-| `work/CONFIG.md` | Instance configuration filled in at onboarding (target repo, options) |
+| `work/CONFIG.md` | Instance configuration filled in at onboarding — bot identity, dedup marker, the review-skills table (each skill with its own source repo and trigger), artifact skill, Slack opt-in. Change any value later just by asking the agent in chat. |
 | `work/MEMORY.md` | Review preferences and learned feedback |
 | `work/REVIEWS.md` | Tracking index — one row per PR with latest review state |
 | `work/reviews/pr-<n>.md` | Per-PR review history (append-only log) |
-| `work/DEVELOPERS.md` | Reviewer roster — only present when Slack is enabled |
+| `work/DEVELOPERS.md` | Reviewer roster — the only people the agent may @-mention; only present when Slack is enabled |
+| `work/SHEPHERD.md` | PR Shepherd nudge ledger — only present when Slack is enabled |
 
 ## Reference Implementation
 
