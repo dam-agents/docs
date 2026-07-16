@@ -13,6 +13,8 @@ Open your agent in the DAM UI and type a message. A new session is created autom
 
 Sessions are stored as files on the agent's persistent volume (PVC) — not in a central database — and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
 
+The sessions list is ordered by last activity: each session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time.
+
 ### Status Indicators
 
 Each session in the sidebar shows a status dot so you can tell at a glance which
