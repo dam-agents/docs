@@ -32,6 +32,18 @@ DAM integrates with both GitHub.com and GitHub Enterprise (`github.ibm.com`):
 2. Click **"Connect GitHub"** or **"Connect GitHub Enterprise"**
 3. Complete the OAuth flow and authorize repository access
 
+Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
+
+Commits the agent makes are **attributed to your connected GitHub account**: DAM writes your GitHub display name and email into the agent's `~/.gitconfig` (`user.name` / `user.email`) when you connect. If your GitHub profile email is private, a `users.noreply.github.com` address is used instead, so your primary email never lands in commit history.
+
+### Google Workspace
+
+Connect Google services (Gmail, Calendar, Drive, Sheets, Docs, and more):
+
+1. Navigate to **Connections**
+2. Click **"Connect Google"**
+3. Sign in and grant the requested scopes
+
 Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set). The connection also seeds the agent's git identity (`~/.gitconfig` `user.name`/`user.email`) from your GitHub account, so commits the agent makes are attributed to you. If your GitHub email is private, a `@users.noreply.github.com` address is used instead.
 
 ## API Key Connections
