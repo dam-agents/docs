@@ -72,7 +72,7 @@ nav:
     - Code Review: use-cases/code-review.md
     - Broken Link Monitor: use-cases/broken-link-monitor.md
   - Core Concepts:
-    - Sandboxes: core-concepts/sandboxes.md
+    - Agents: core-concepts/agents.md
     - Sessions: core-concepts/sessions.md
     - Connections: core-concepts/connections.md
     - Network & Approvals: core-concepts/network-access.md
@@ -82,7 +82,7 @@ nav:
   - Integrations:
     - Slack: integrations/slack.md
     - Telegram: integrations/telegram.md
-    - IDE (SSH): guides/ide-ssh.md
+    - VS Code/Zed (SSH): guides/vs-code-zed-ssh.md
   - Guides:
     - How to Create a LiteLLM Key: guides/litellm-key.md
     - Building a Custom Image: guides/custom-image.md

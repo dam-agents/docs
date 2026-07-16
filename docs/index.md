@@ -74,9 +74,9 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     ---
 
-    Connect a per-agent bot and chat with your agent from a Telegram DM or group.
+    Add the platform's Telegram bot to a chat, send `/login` to pick an agent, and chat from a DM or group.
 
--   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code**
+-   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code/Zed**
 
     ---
 
@@ -87,12 +87,6 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
     ---
 
     Run agents on a recurring timer — daily code reviews, nightly audits, continuous monitoring.
-
--   :material-flask-outline:{ .lg .middle } **[Experiments](core-concepts/experiments.md)**
-
-    ---
-
-    Race several agents toward one shared goal and compare their scored runs.
 
 </div>
 
@@ -126,11 +120,37 @@ Run agent harnesses like Claude Code headless in the cloud, on a schedule, conne
 
     Execution-first system for end-to-end coding tasks.
 
+</div>
+
+## Available Workloads
+
+Ready-to-use agents built on top of the coding harnesses. Pick one in the sandbox create wizard and launch — no setup required.
+
+<div class="grid cards" markdown>
+
 -   :material-flask-outline:{ .lg .middle } **Nous** <small>Alpha</small>
 
     ---
 
-    Hypothesis-driven experimentation campaigns. Experimental.
+    Hypothesis-driven experimentation agent for long-running research campaigns.
+
+-   :material-dna:{ .lg .middle } **OpenEvolve** <small>Alpha</small>
+
+    ---
+
+    Evolutionary agent that iteratively optimizes your code.
+
+-   :material-chip:{ .lg .middle } **K-Search** <small>Alpha</small>
+
+    ---
+
+    LLM-driven agent for optimizing GPU kernels.
+
+-   :material-creation:{ .lg .middle } **More soon…**
+
+    ---
+
+    More ready-to-use workloads are on the way.
 
 </div>
 

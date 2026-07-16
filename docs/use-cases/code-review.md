@@ -1,8 +1,10 @@
 # Code Review
 
-Get automated PR reviews on every pull request — posted to GitHub and summarized in Slack.
+Get automated PR reviews on every pull request — posted to GitHub, and optionally summarized in Slack.
 
-This Claude Code configuration runs on a schedule, continuously watching for new or updated PRs and reviewing them for correctness, security, performance, architecture issues, and documentation drift. No one needs to trigger it — DAM's scheduled execution keeps the reviewer running around the clock with no human in the loop.
+This guide walks through setting up the [code-guardian](https://github.com/dam-agents/code-guardian) agent on DAM to do it yourself.
+
+Once running, the agent works on a schedule, continuously watching for new or updated PRs and reviewing them for correctness, security, performance, architecture issues, and documentation drift. No one needs to trigger it — DAM's scheduled execution keeps the reviewer running around the clock with no human in the loop.
 
 ## What It Does
 
@@ -12,7 +14,7 @@ Once configured, the agent runs on a schedule and for each open PR:
 2. **Clones the branch** — pulls the code locally for deeper analysis
 3. **Runs skill-based checks** — documentation drift, TypeScript engineering, and React UI engineering
 4. **Posts a structured review** — findings with severity levels, inline comments on specific lines
-5. **Sends a Slack summary** — the full review lands in your team's channel
+5. **Sends a Slack summary** (if Slack is connected) — the full review lands in your team's channel
 6. **Tracks state** — knows which PRs it already reviewed at which commit, only re-reviews when new commits are pushed
 7. **Learns your preferences** — remembers what to ignore, what to emphasize, and adapts over time
 
@@ -21,7 +23,7 @@ Reviews are posted as proper GitHub PR reviews (with inline comments), not just 
 ## How It Works
 
 ```
-Scheduled Heartbeat (configurable interval)
+Scheduled Heartbeat (every 10 min by default; configurable)
          │
          ├── Fetch open PRs
          ├── Skip already-reviewed (same HEAD commit)
@@ -35,7 +37,7 @@ Scheduled Heartbeat (configurable interval)
          ├── Run react-ui-engineering skill
          ├── Generate structured review with findings
          ├── Post GitHub PR review (summary + inline comments)
-         ├── Send full review to Slack
+         ├── Send full review to Slack (if connected)
          └── Update local tracking (REVIEWS.md)
 ```
 
@@ -52,6 +54,16 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 - **GitHub** (Enterprise or Public) — the agent reads PRs, posts reviews, and clones branches
 - **Slack** (optional but recommended) — sends review summaries to your team channel
 
+!!! warning "Use a dedicated bot account for the GitHub connection"
+    Reviews are posted as whatever identity the GitHub connection resolves to. Connect a **dedicated machine/bot account** — **not your personal account** — that is a collaborator on the target repo with permission to review PRs.
+
+    This matters for two reasons:
+
+    - **GitHub ignores self-reviews.** The reviewing account must not be the one that opens the PRs it reviews, or the reviews are dropped.
+    - **Reviews are signed as that account.** If you connect a human developer's account, every automated review will appear to come from that person — on their colleagues' PRs and their own. This is the most common setup mistake.
+
+    A dedicated account can also be shared across a team's agents. If you don't have one, create a new GitHub account for the bot and add it as a collaborator on the target repo before onboarding.
+
 ### Network Access
 
 **Trusted defaults** (recommended) — covers GitHub and common package registries. Slack API access will surface in your inbox for approval on first use.
@@ -60,11 +72,33 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
-3. **Add a GitHub connection** — provide a PAT with repo access to the repository you want reviewed
-4. **Clone the Code Guardian repo** — in your agent session, clone [github.com/dam-agents/code-guardian](https://github.com/dam-agents/code-guardian) into the workspace
-5. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`)
-6. **Create a schedule** — set a heartbeat interval (e.g., every 5 minutes) so the agent checks for new PRs automatically
-7. **Connect Slack** (optional) — link a Slack channel to receive review notifications
+3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
+4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`). Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
+5. **Onboard the agent** — send it the onboarding runbook as your **first message** and let it set itself up (see below)
+6. **Connect Slack** (optional) — link a Slack channel to receive review notifications
+
+### Onboarding the agent
+
+You don't clone the repo or run any setup by hand — **the agent onboards itself.** Send it the link to `ONBOARDING.md` as your first message:
+
+```
+Here is a file — read it and set yourself up according to it:
+https://github.com/dam-agents/code-guardian/blob/main/ONBOARDING.md
+```
+
+The agent then checks out its own definition, wires up the `work/` directory, reconstructs review state, creates the recurring review schedule (it asks for the cadence, defaulting to **every 10 minutes**), and writes the `$HOME/.code-guardian-onboarded` sentinel so it won't repeat the process.
+
+!!! info "\"This pod is not onboarded…\" is expected before you send that message"
+    On a fresh sandbox the agent reports that it hasn't been onboarded yet (no `work/` runtime state, no scheduled heartbeat). That's normal — it's waiting for you to point it at `ONBOARDING.md`. **You** kick off onboarding by sending the message above; the agent does the actual work autonomously from there. You do not run the runbook yourself.
+
+!!! tip "Files live in `work/`, not a subfolder"
+    The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh sandbox rather than moving files by hand.
+
+!!! tip "Customizing the agent"
+    To change the agent's behavior, **fork** [dam-agents/code-guardian](https://github.com/dam-agents/code-guardian) and onboard from your fork's `ONBOARDING.md` URL instead.
+
+!!! warning "IBM Enterprise GitHub (`github.ibm.com`)"
+    Reachability of `github.ibm.com` from the DAM cluster isn't guaranteed for every install. If your target repo is on Enterprise GitHub, confirm the agent can reach it (and that the bot account is a collaborator there) before relying on the schedule.
 
 
 ## Review Output
@@ -117,9 +151,11 @@ Preferences are stored in `MEMORY.md` (global) and per-PR files (PR-specific ove
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Agent operating instructions — the full review playbook |
+| `work/CONFIG.md` | Instance configuration filled in at onboarding (target repo, options) |
 | `work/MEMORY.md` | Review preferences and learned feedback |
 | `work/REVIEWS.md` | Tracking index — one row per PR with latest review state |
 | `work/reviews/pr-<n>.md` | Per-PR review history (append-only log) |
+| `work/DEVELOPERS.md` | Reviewer roster — only present when Slack is enabled |
 
 ## Reference Implementation
 

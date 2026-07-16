@@ -19,6 +19,7 @@ The File Manager gives you direct access to your agent's filesystem:
 | Edit | Modify files directly in the browser |
 | Upload | Add files from your local machine to the workspace |
 | Download | Save workspace files to your local machine |
+| Move | Drag a file or folder onto a folder in the tree to move it there |
 
 ## Editor Features
 
@@ -42,6 +43,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 ## Key Notes
 
 - Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: Edit, Download, Rename, Delete; for a folder: New file, New folder, Upload here, Rename, Delete
+- **Move by drag and drop** — drag a file or folder onto a destination folder in the tree to move it there (a folder can't be moved into itself or its own subtree)
 - Files persist across sessions, restarts, and hibernation
 - Files modified in chat sessions appear immediately in the File Manager (and vice versa)
 - The workspace is shared across all sessions for an agent

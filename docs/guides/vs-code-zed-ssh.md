@@ -1,4 +1,4 @@
-# IDE (SSH)
+# VS Code/Zed (SSH)
 
 You can open a running agent's workspace directly in **VS Code** (or **Zed**) and work in it like any other remote folder — editing files, running the terminal, debugging — with the agent's full environment behind it.
 

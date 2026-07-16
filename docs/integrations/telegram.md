@@ -2,51 +2,48 @@
 
 Chat with your agent directly from Telegram.
 
-Unlike Slack — where one DAM app serves the whole workspace — Telegram works **one bot per agent**. You create a bot with Telegram's `@BotFather`, paste its token into DAM, and that bot becomes the front door to that one agent.
+DAM uses a **single, platform-wide Telegram bot** for the whole installation — you don't create a bot or manage any tokens. You add the shared bot to a chat, then connect that chat to one of your agents from inside the chat with `/login`. Each chat is bound to a single agent.
 
 ## Overview
 
-Connect an agent to Telegram so you can:
+Connect a chat to an agent so you can:
 
 - Message your agent from a Telegram DM or group
 - Get proactive notifications (e.g., results after a scheduled run)
 - Keep a persistent session per chat — come back later and the agent remembers
 
-## Create Your Bot
+## Find the Bot
 
-Telegram bots are created through Telegram's own bot, **@BotFather**:
+There's nothing to create. Every DAM installation exposes one shared Telegram bot, and its handle is shown in the DAM UI:
 
-1. Open Telegram and start a chat with [`@BotFather`](https://t.me/BotFather).
-2. Send `/newbot` and follow the prompts (pick a name and a username ending in `bot`).
-3. BotFather replies with a **bot token** that looks like `123456:ABC-DEF...`. Copy it.
+1. Open an agent in the DAM UI.
+2. Open the **Configuration** panel (right sidebar) and expand the **Channels** section.
+3. Under **Telegram**, click the bot's `@handle` link to open it in Telegram — or search for that handle in Telegram directly.
 
-!!! info "One bot per agent"
-    Each agent has its own Telegram bot. If you want two agents on Telegram, create two bots with `@BotFather`.
+Start a DM with the bot, or add it to a group.
 
-## Connect It in DAM
+## Connect a Chat (`/login`)
 
-1. Open your agent in the DAM UI.
-2. Open the **Configuration** panel (right sidebar).
-3. Expand the **Channels** section.
-4. Under **Telegram**, check **Enabled**.
-5. Paste your bot token into the **Bot token** field.
-6. Click **Save**.
+A chat does nothing until you bind it to one of your agents. Binding happens **per conversation**, from inside the chat:
 
-!!! tip "Changing the token later"
-    Once saved, the token is hidden behind a **Change** button. Click it to paste a new token (for example, if you regenerated it with `@BotFather`).
+1. In the chat (DM or group), send **`/login`**.
+2. The bot replies with a link. Open it — it lands on a DAM page in your browser, signed in as you.
+3. The page lists **your agents**. Pick the one this chat should talk to.
+4. The bot posts a confirmation in the chat. It's now connected.
 
-## Authorize a Chat (`/login`)
+Everyone in the chat can then talk to the agent you picked, using **the agent's own credentials**.
 
-Telegram has no shared workspace to tie accounts to, so authorization happens **per conversation** rather than per user. A chat stays unauthorized — the bot won't act — until someone logs in from inside it:
+Send **`/logout`** in a chat to disconnect it.
 
-1. Start a chat with your bot (a direct message, or add it to a group).
-2. Send `/login` in that chat.
-3. Follow the link to complete the sign-in flow. The chat is now authorized.
-
-Send `/logout` in a chat to revoke its access.
+!!! info "One chat, one agent"
+    A chat binds to exactly one agent. If you try to `/login` a chat that's already connected elsewhere, you'll be told the chat is already connected — send `/logout` first, then `/login` again to rebind.
 
 !!! warning "Groups: only admins can log in"
-    In a group chat, only **group admins** can run `/login`. Until an admin does, the bot stays silent — so it won't spam every group it's added to. Once authorized, anyone in the group can talk to the agent in that chat.
+    In a group chat, only **group admins** can run `/login`. Until an admin does, the bot stays silent — so it won't spam every group it's added to. Once connected, anyone in the group can talk to the agent in that chat.
+
+## Manage Connected Chats
+
+The agent's **Channels** panel (Configuration → Channels → Telegram) lists the chats currently connected to that agent. You can **Disconnect** any of them from there — the same effect as sending `/logout` in the chat.
 
 ## What to Expect
 
@@ -55,14 +52,16 @@ Send `/logout` in a chat to revoke its access.
 - **Agents can message you first.** A connected agent can post to Telegram on its own — for example, posting results when a scheduled run finishes.
 
 !!! tip "How the agent posts"
-    This works through two built-in tools the agent calls itself: `describe_channel` (list the chats it can post to) and `send_channel_message` (post text, optionally with a file attached). They're available automatically whenever a channel is connected — no per-session setup.
+    This works through two built-in tools the agent calls itself: `describe_channel` (list the chats it can post to) and `send_channel_message` (post text, optionally with a file attached). They're available automatically whenever a chat is connected — no per-session setup.
 
 ## Troubleshooting
 
 | Problem | Solution |
 |---------|----------|
-| Bot doesn't respond in a DM | Send `/login` in the chat to authorize it |
-| Bot silent in a group | A **group admin** must send `/login` — non-admins can't authorize a group |
+| Bot doesn't respond in a DM | Send `/login` in the chat to connect it to an agent |
+| Bot silent in a group | A **group admin** must send `/login` — non-admins can't connect a group |
+| "This chat is already connected to another agent" | Send `/logout` in the chat, then `/login` again to rebind |
+| Login link says it expired | Send `/login` again for a fresh link |
+| "You don't own any agents yet" on the login page | Create an agent first, then send `/login` in the chat again |
 | Slow to respond | It may be waking from hibernation — can take up to a minute |
 | "Unauthorized" after it worked before | Someone may have run `/logout` — send `/login` again |
-| Nothing works after connecting | Re-check the **Bot token** in the UI — paste a fresh token from `@BotFather` if needed |
