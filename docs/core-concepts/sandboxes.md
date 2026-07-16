@@ -39,6 +39,10 @@ Sandboxes automatically hibernate after a period of inactivity (no active sessio
 
 A sandbox that is **busy** — actively working a turn, or running a session — is never hibernated by the idle checker; it only scales down once it goes idle.
 
+By default a sandbox hibernates after the platform-wide idle timeout. You can **override this per sandbox** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the sandbox is used, or set it to **0 to never hibernate** so the sandbox stays running. Leaving the override unset inherits the platform default.
+
+!!! warning "A sandbox that never hibernates keeps consuming compute (and billing) even while idle. Use `0` only when you genuinely need an always-on sandbox."
+
 ### Keep Awake
 
 Some work keeps running with **no** active chat or terminal session — a long
@@ -119,6 +123,7 @@ From the sandbox's settings panel:
 - **Egress rules** — control which external services the sandbox can reach
 - **Skills** — install or remove capabilities
 - **Channels** — connect Slack or Telegram, and control who's allowed to interact
+- **Hibernation timeout** — override how long this sandbox stays idle before hibernating (in minutes; `0` = never), or inherit the platform default
 
 ### Delete
 
