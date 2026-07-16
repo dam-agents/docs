@@ -147,6 +147,24 @@ dam skill uninstall <agent> --source <id-or-url> --name <skill>   # Remove a ski
 dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--body <b>]   # Publish a skill as a PR (--name/--source required; --title/--body optional)
 ```
 
+### Channels
+
+Bind an agent to a messenger channel (Slack, Telegram) and manage who is allowed to talk to it.
+
+```bash
+dam channel available                                       # List enabled messenger providers
+dam channel list <agent>                                    # Channels bound to an agent (+ Slack allow-list)
+dam channel slack connect <agent> --channel-id <C0…>        # Bind a Slack channel to the agent
+dam channel slack disconnect <agent>                        # Unbind the Slack channel
+dam channel telegram connect <agent> [--bot-token <token>]  # Bind a Telegram chat/bot
+dam channel telegram disconnect <agent>                     # Unbind Telegram
+dam channel allow <agent> --user <email>                    # Add allowed Slack user(s) (repeatable)
+dam channel disallow <agent> --user <email>                 # Remove allowed Slack user(s) (repeatable)
+```
+
+- A Slack channel binds to **exactly one** agent. After connecting, allowed users run `/platform login` in Slack to link their own credentials.
+- `--user <email>` is repeatable; `allow`/`disallow` rewrite the agent's allowed-user list.
+
 ### Approvals
 
 The human-in-the-loop inbox — requests your agents are waiting on (held tool calls, network prompts).
