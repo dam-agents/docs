@@ -5,9 +5,9 @@ hide:
 
 <div class="hero" markdown>
 
-# Deploy Agents Massively
+# IBM Research DAM
 
-Run agent harnesses like Claude Code headless in the cloud, on a schedule, connected to your tools — without exposing your tokens.
+Shared infrastructure for accelerating AI-native engineering & research. Take the agent harnesses driving your work off the laptop and into shared, secure infrastructure — running continuously, connected to your tools, without exposing your tokens.
 
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
