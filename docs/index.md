@@ -7,7 +7,7 @@ hide:
 
 # IBM Research DAM
 
-Shared infrastructure for accelerating AI-native engineering & research. Take the agent harnesses driving your work off the laptop and into shared, secure infrastructure — running continuously, connected to your tools, without exposing your tokens.
+Shared infrastructure for accelerating AI-native research — run agents continuously, connect them to your tools, and scale securely without exposing credentials.
 
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
