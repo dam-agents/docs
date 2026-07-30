@@ -1,126 +1,210 @@
 # Slack
 
-!!! warning "IBM Enterprise Slack — not yet available"
-    DAM is currently going through the IBM Slack enterprise approval process. For now, Slack integration only works with **non-enterprise Slack workspaces**. Enterprise workspace support will be available once org-level approval is granted.
-
-Chat with your agent directly from Slack.
+Chat with your agent directly from Slack — in a channel, a group DM, or a 1:1 DM with the bot.
 
 ## Overview
 
-DAM integrates with Slack so you can:
+Connecting a Slack conversation to an agent lets you:
 
-- Message your agent from any connected Slack channel
-- Get proactive notifications (e.g., Code Guardian review results)
-- Collaborate with teammates in shared agent threads
-- Maintain persistent sessions per Slack thread
+- Talk to your agent from Slack instead of the DAM UI
+- Let a whole channel work with the same agent, with no per-person setup
+- Share screenshots and images the agent can actually read
+- Get proactive posts — results after a scheduled run, alerts when a long task finishes
+- Keep a persistent session per thread
 
-## Link Your Slack Identity
+## Connect a channel (`/dam bind`)
 
-Before you can interact with any agent from Slack, link your Slack account to DAM:
+A conversation does nothing until it's **bound** to an agent. Binding happens from inside Slack:
 
-1. In any Slack channel where the DAM bot is present, type `/dam login`
-2. Follow the link to complete the identity linking
-3. Your Slack user is now associated with your DAM account
+1. Invite the **DAM** bot to the channel.
+2. Send **`/dam bind`**.
+3. Follow the link to authenticate, then pick one of **your own** agents from the picker.
+4. You're done — `@mention` the agent and it answers in a thread.
 
-!!! info "One-time setup"
-    You only need to link your identity once. It persists across all channels and agents.
+The same command binds a group DM or a 1:1 DM with the bot; see
+[how the agent is triggered](#how-the-agent-is-triggered) for what each surface needs.
 
----
+| Command | What it does |
+|---------|--------------|
+| `/dam bind` | Connect one of your agents to this conversation |
+| `/dam unbind` | Release the binding — allowed for whoever bound it, or the agent's owner |
+| `/dam ambient on\|off` | Turn ambient mode on or off |
+| `/dam ambient` | Report whether ambient mode is currently on |
+| `/dam login` | Link your Slack account to DAM — needed before `unbind` or `ambient on\|off` |
 
-## As an Agent Owner
+!!! warning "`/dam unbind` and `/dam ambient on|off` need a linked account"
+    These two check that your Slack account is linked to DAM, and answer *"Link your account first —
+    run `/dam login`"* if it isn't. Binding through `/dam bind` links you automatically, so if that's
+    how you connected the conversation, you're already set.
 
-You own an agent and want to make it available in Slack.
+    **If you bound from the CLI or the DAM UI instead, you were never linked** — run `/dam login`
+    once in the channel and the commands work from then on. Reading the current state with a bare
+    `/dam ambient` never needs a link.
 
-### Connect Your Agent to a Channel
+!!! warning "Anyone in the conversation drives the agent — under the agent's credentials"
+    Binding **is** the access control. Everyone Slack admits to that conversation can drive the
+    bound agent, and every turn runs with the **agent's own** credentials and connections — not
+    the credentials of the person typing. There's no allow-list and no per-person setup.
 
-1. Create or pick a Slack channel for your agent
-2. Invite the DAM bot to the channel (if not already present)
-3. Open your agent in the DAM UI
-4. Open the **Configuration** panel (right sidebar)
-5. Expand the **Channels** section
-6. Check **Enabled** under Slack
-7. Paste the Slack **Channel ID** (starts with `C0...`)
-8. Click **Save**
+    Bind only where you're comfortable with that, and manage access the way you'd manage any
+    Slack membership. If a colleague needs to act as themselves, they need their own agent.
 
-!!! tip "Finding a Slack Channel ID"
-    Right-click a channel name in Slack → **View channel details** → scroll to the bottom to find the Channel ID.
+Turns are attributed in the security log by Slack user id. In channels and group DMs the agent
+sees each message prefixed with the sender's id, and can look that up to get the person behind it,
+so a busy channel stays readable — a 1:1 DM isn't labelled, since there's only one human in the
+room. The binding owner's Terms of Use acceptance covers every turn.
 
-!!! warning "One agent per channel"
-    A Slack channel can only be connected to **one** agent. If you need multiple agents, use separate channels.
+!!! info "One conversation, one agent"
+    A conversation binds to at most one agent, and an agent to at most one Slack conversation
+    (channel **or** group DM **or** DM). `/dam bind` in an already-connected conversation is
+    refused, even for the same agent — run `/dam unbind` first, then bind again.
 
-### Control Who Can Use Your Agent
+## How the agent is triggered
 
-In the **Channels** section you can add an **Allowed users** list (by email address):
+| Surface | What triggers a reply |
+|---------|----------------------|
+| **Channel** | An `@mention` of the bot |
+| **Group DM** | An `@mention` of the bot |
+| **1:1 DM** | **Every message** — a DM is already addressed to the bot, so no mention is needed |
 
-- **List is empty** — any user who has linked their Slack identity (`/dam login`) can message your agent in that channel.
-- **List has entries** — only those users can interact. Everyone else gets an ephemeral "not authorized" message.
+Editing an earlier message doesn't re-trigger a reply. Replies land in a thread, unless the agent
+chooses Slack's *also send to channel*, which surfaces the post in both places.
 
-### What to Expect
+Mentioning or DMing an **unbound** conversation gets you a private, sender-only note — in a DM or
+group DM it points you at `/dam bind`; in a channel it just says no agent is connected. A plain,
+un-addressed channel message gets no notice at all.
 
-- Mention your agent (`@DAM`) in the channel to start a conversation — it replies in a thread.
-- Each thread is its own persistent session. Come back days later and the agent remembers.
-- You can have multiple threads (sessions) running at the same time.
-- If your agent is hibernated, the first message wakes it (takes up to a minute).
+## Ambient mode
 
-### Inviting Colleagues
+Normally the agent only answers when tagged. In **ambient mode** it reads along with the whole
+channel and decides for itself when to speak up — answering a question it can answer, picking up
+a task someone described, flagging a clear mistake — and stays quiet otherwise. Mentions still
+work exactly as before; ambient only adds a second, quieter path in.
 
-When colleagues reply in a thread with your agent:
+**Ambient is off by default** on every connect path, and turning it on is a deliberate choice: an
+ambient agent reads *every* message in the channel, not just the ones aimed at it.
 
-1. They must have linked their identity (`/dam login`) — this is a one-time step.
-2. They must be on your allowed users list (or the list must be empty).
-3. DAM spins up an **isolated paired pod set** (a fork agent Job + fork gateway Pod) using the colleague's own credentials — your tokens are never shared.
-4. The fork pods are torn down after each response.
+```
+/dam ambient on      # the agent starts reading along
+/dam ambient off     # back to mentions-only
+/dam ambient         # report the current state
+```
 
-This means teammates can safely interact with your agent without ever seeing or using your credentials.
+Changing it is allowed for whoever bound the channel, or the agent's owner — the same permission
+as `/dam unbind`, and like `unbind` it needs your account
+[linked](#connect-a-channel-dam-bind). You can flip it any time.
 
----
+What to expect when it's on:
 
-## As an Invited User
+- **It's asked to open with an emoji reaction** when it picks a message up — a quiet signal that
+  notifies nobody. That's the agent's own judgement rather than an automatic acknowledgement, so
+  a missing reaction doesn't reliably mean it passed on the message.
+- **It replies in a thread** under the message it's answering. The follow-up conversation runs as
+  an ordinary thread from there.
+- **It follows the channel**, rather than starting cold on each message, so it can pick up on
+  something described across several messages.
+- **The change isn't announced in the channel.** Whoever flips it sees the confirmation privately;
+  other members get no status post either way.
+- **Nothing is ever posted about attachment problems.** Ambient turns stay out of the channel's
+  way, so an oversized or unfetchable image is dropped silently and the agent answers on the text.
 
-Someone else set up an agent in a Slack channel and invited you (or you joined the channel).
+!!! tip "Tell the channel"
+    Since ambient isn't announced, let the channel know when you enable it — people generally
+    want to know an agent is reading along.
 
-### What You Need to Do
+## Sharing images and screenshots
 
-1. **Link your identity** (once) — type `/dam login` in any channel where the DAM bot is present and complete the OAuth flow.
-2. **Make sure you're on the allowed list** — if you get a "not authorized" error, ask the agent owner to add your email in the DAM UI.
-3. **Start chatting** — mention the agent (`@DAM`) in the channel or reply in an existing thread.
+Paste or drop an **image** into a message and the agent reads it directly — screenshots of a
+failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns alike.
 
-### What to Expect
+- **Images only.** Non-image attachments (PDFs, CSVs, logs, `.txt`) are **ignored**, with no
+  notice in the channel — the message relays as ordinary text. If you need the contents of a
+  document, paste the relevant text into the message instead.
+- **Up to 30 MB of images per message.** Go over on a mention or DM and the **whole message is
+  dropped** — the agent never sees your text either — and you get a private note asking for fewer
+  or smaller images.
+- If an individual image can't be fetched, you get a private note naming it, and the agent still
+  gets your text plus whichever images did load.
+- If the agent's harness doesn't support images at all, you get a private note and it answers on
+  the text alone.
 
-- The agent responds in a thread. Each thread is a separate conversation.
-- Your messages run using **your own credentials** (GitHub tokens, API keys, etc.) via an isolated paired fork pod set — the agent owner's credentials are never involved in your turns.
-- If the agent is asleep, your first message wakes it (can take up to a minute).
-- You can have multiple concurrent threads with the same agent.
+!!! note "On ambient turns, nothing is reported"
+    The notes above are for mentions and DMs. On an [ambient](#ambient-mode) turn nothing is ever
+    posted about attachments — over-cap or unfetchable images are dropped silently and the agent
+    answers on the text.
 
----
+## How sessions work
 
-## How Sessions Work
+- **One thread = one session.** Each Slack thread maps to its own persistent DAM session.
+- **Sessions resume.** Come back to a thread days later and the agent normally picks up where it
+  left off. If the session can't be restored, the thread starts fresh with recent messages injected
+  as context — so the conversation continues, but the earlier reasoning is gone.
+- **Threads run in parallel.** Several conversations with the same agent at once is fine. Within
+  one thread, messages are handled in order rather than concurrently.
+- **Fresh sessions get context.** A new top-level thread is given the channel's last 10 messages;
+  picking up inside an existing thread injects up to 50 of that thread's replies. The window is
+  deliberately short, and a resumed session isn't re-injected.
+- **Ambient adds a channel-level session** for top-level messages, alongside the per-thread ones.
 
-- **One thread = one session** — each Slack thread maps to a persistent DAM session
-- **Sessions resume automatically** — if you come back to a thread days later, the agent picks up where you left off
-- **Multiple threads** — you can have multiple concurrent conversations with the same agent across different threads
+## What else to expect
 
-
-## Proactive Notifications
-
-Agents can post messages to Slack without being prompted:
-
-- Results posted after a scheduled run completes
-- Alerts when a scheduled task finishes
-- Status updates on long-running operations
+- **A working status while it thinks.** On a mention or DM you'll usually see the agent's live
+  status — thinking, the tool it's currently running, or waking. It rides Slack's assistant-status
+  surface and shows nothing where the workspace can't display it. Ambient turns show no status,
+  since nobody summoned it.
+- **The first message wakes a sleeping agent.** If it's hibernated, expect a delay of up to a
+  minute or two. The initial heads-up is private to whoever sent the message; if the wake takes
+  longer or fails, that's posted in the thread for everyone.
+- **Agents can post first.** A bound agent can post on its own — results when a scheduled run
+  finishes, or an alert.
 
 !!! tip "How the agent posts"
-    This works through two built-in tools the agent calls itself: `describe_channel` (list the chats it can post to) and `send_channel_message` (post text, optionally with a file attached). They're available automatically whenever a channel is connected — no per-session setup.
+    Proactive posts work through two built-in tools the agent calls itself: `describe_channel`
+    (list the chats it can post to) and `send_channel_message` (post text, optionally with a
+    file attached). Nothing to configure — but the agent can only post where the DAM bot is
+    already a member, so a channel it hasn't been invited to is refused.
 
-## Wake-on-Message
+    A reply from a Slack user to one of these posts is routed by that conversation's own binding.
+    An agent can also open a DM with someone, but that DM isn't bound by the post — for their
+    replies to reach the agent, the DM needs its own `/dam bind`.
 
-If your agent is hibernated and someone messages it in Slack, the platform automatically wakes the agent. There's a brief delay while the pod starts (typically under a minute), then the agent responds normally.
+## Other ways to bind
+
+You can also bind from the **CLI**:
+
+```bash
+dam channel slack connect <agent> --channel-id <C0…>             # ambient off
+dam channel slack connect <agent> --channel-id <C0…> --ambient   # ambient on
+```
+
+Unlike `/dam bind`, re-running `connect` for the **same** agent updates that binding in place —
+which is how you change ambient mode from the CLI, with no unbind needed. Pointing a channel at a
+*different* agent is still refused until the current binding is released.
+
+See the [CLI reference](../reference/cli.md#channels).
+
+The agent's **Channels** section in the DAM UI does the same job, and lists what's currently bound.
+It's behind the **Advanced connections** toggle, which is off by default — if you don't see the
+section, that's why. `/dam bind` needs no toggle.
 
 ## Troubleshooting
 
 | Problem | Solution |
 |---------|----------|
-| Bot not responding | Check that you've linked your identity (`/dam login`) |
-| "Not authorized" error | Ask the agent owner to add you to the allowed users list |
-| Agent slow to respond | It may be waking from hibernation — can take up to a minute |
-| Messages not appearing | Verify the agent is connected to this specific channel |
+| Bot doesn't respond in a channel | Make sure you **`@mention`** it, and that the conversation is bound (`/dam bind`) |
+| "This conversation isn't connected" / "No instance connected to this channel" | Run `/dam bind` to connect one of your agents |
+| Binding refused as already connected | The conversation, or that agent, is already bound. `/dam unbind` first |
+| "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI or the UI |
+| Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
+| Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
+| An attached file was ignored | Only images are read. Paste document contents as text instead |
+| "Attached images total … over the cap" | 30 MB of images per message — send fewer or smaller |
+| Slow first reply | It's likely waking from hibernation — up to a minute or two |
+| It answered without the image | The agent's harness may not support images; you'll have had a private note |
+
+!!! info "Binding after an upgrade"
+    Slack previously offered a per-person access mode with identity linking and an allowed-users
+    list. That mode has been removed, and bindings that used it were **deleted** rather than
+    converted — so the agent's owner re-binds deliberately instead of the change silently
+    widening who can drive it. If a channel stopped working after an upgrade, run `/dam bind`
+    again.

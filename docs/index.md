@@ -68,13 +68,7 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     ---
 
-    Message your agent from Slack threads. Teammates interact with their own credentials.
-
--   :material-send:{ .lg .middle } **Telegram**
-
-    ---
-
-    Add the platform's Telegram bot to a chat, send `/login` to pick an agent, and chat from a DM or group.
+    Invite the DAM bot to a channel or DM, send `/dam bind`, and the whole channel can work with your agent.
 
 -   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code/Zed**
 

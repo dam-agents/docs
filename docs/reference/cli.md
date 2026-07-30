@@ -149,20 +149,21 @@ dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--b
 
 ### Channels
 
-Bind an agent to a messenger channel (Slack, Telegram) and manage who is allowed to talk to it.
+Bind an agent to a Slack conversation.
 
 ```bash
 dam channel available                                       # List enabled messenger providers
-dam channel list <agent>                                    # Channels bound to an agent (+ Slack allow-list)
+dam channel list <agent>                                    # Channels bound to an agent (+ ambient state)
 dam channel slack connect <agent> --channel-id <C0…>        # Bind a Slack channel to the agent
+dam channel slack connect <agent> --channel-id <C0…> --ambient   # …with ambient mode on
 dam channel slack disconnect <agent>                        # Unbind the Slack channel
-dam channel allow <agent> --user <email>                    # Add allowed Slack user(s) (repeatable)
-dam channel disallow <agent> --user <email>                 # Remove allowed Slack user(s) (repeatable)
 ```
 
-- A Slack channel binds to **exactly one** agent. After connecting, allowed users run `/platform login` in Slack to link their own credentials.
-- `--user <email>` is repeatable; `allow`/`disallow` rewrite the agent's allowed-user list.
-- **Telegram has no CLI connect/disconnect.** It uses a single platform-wide bot; a chat binds to an agent in-chat by sending `/login` (and `/logout` to disconnect). See the [Telegram guide](../integrations/telegram.md).
+- A Slack conversation binds to **exactly one** agent, and an agent to at most one Slack conversation. Binding is the access control: everyone in the conversation drives the agent under the **agent's own** credentials. There is no allow-list.
+- `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**.
+- **Re-running `connect` for the same agent updates that binding in place**, so re-running it with or without `--ambient` is how you change ambient mode from the CLI — no disconnect needed. Pointing the channel at a *different* agent fails with `Slack channel already bound to another agent`; `disconnect` first. (The in-chat `/dam bind` is stricter — it refuses any already-connected conversation, even for the same agent.)
+- `dam channel list` shows the ambient state per channel; add `--json` for machine-readable output.
+- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind` and `/dam ambient on|off` require. Run `/dam login` once in the channel if you want to manage the binding from Slack as well — or just use `disconnect` and `connect` here.
 
 ### Approvals
 

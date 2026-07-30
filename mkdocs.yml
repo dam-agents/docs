@@ -81,7 +81,6 @@ nav:
     - File Manager: core-concepts/file-manager.md
   - Integrations:
     - Slack: integrations/slack.md
-    - Telegram: integrations/telegram.md
     - VS Code/Zed (SSH): guides/vs-code-zed-ssh.md
   - Guides:
     - How to Create a LiteLLM Key: guides/litellm-key.md

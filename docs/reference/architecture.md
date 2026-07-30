@@ -83,34 +83,40 @@ When your agent tries to reach a service for the first time:
 
 ---
 
-## Multiplayer Security
+## Shared Agents in a Channel
 
-When colleagues interact with your agent, they act as themselves — with their own credentials and identity.
+When you bind an agent to a Slack conversation, **the binding is the authorization**: anyone Slack admits to that conversation can drive the agent, and every turn runs on the agent's own pod under the **agent's own** credentials.
 
 ### How It Works
 
-When a colleague messages your agent in a shared Slack channel:
+When someone messages an agent in a bound conversation:
 
-1. The platform identifies the colleague by their linked identity
-2. A short-lived **paired pod set** — a fork agent Job and a fork gateway Pod, each with its own NetworkPolicy — is spawned for that colleague's turn
-3. The fork gateway mounts the **colleague's** credentials (not yours)
-4. The fork reads/writes the same workspace files (shared context)
-5. When the turn completes, the fork pods terminate
+1. The conversation resolves to exactly one agent
+2. The turn runs on that agent's main pod, using the credentials and connections the agent already has
+3. The sender is recorded by their Slack user id, so a multi-person conversation stays attributable. Each message is labelled in the prompt with who sent it (a 1:1 DM isn't labelled — there's only one human in it)
+4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-This foreign-replier fork is a Slack-specific mechanism (Slack has a workspace identity to fork under). Telegram authorizes per conversation and has no foreign fork — every turn runs on the main pod.
+There is no per-person access mode, no identity linking required to send a message, and no allow-list. Identity linking exists only to authorize the in-chat `unbind` and `ambient on|off` commands (and is established during `bind` so the binder can later release it) — never to admit a turn.
 
-### What's Shared vs. Private
+A conversation and an agent are strictly one-to-one: a conversation binds to exactly one agent, and an agent to at most one conversation.
 
-| Shared (workspace) | Private (per-user) |
-|-------------------|-------------------|
-| Files in `/home/agent/work` | API tokens and credentials |
-| Conversation history | OAuth connections |
-| Installed skills | Egress rule approvals |
-| Agent memory | |
+### What This Means for Access
 
-### Guarantees
+| Governed by the messenger | Governed by the agent |
+|---------------------------|----------------------|
+| Who can see and post in the conversation | Which credentials and connections the turn uses |
+| Adding or removing participants | Which files and skills are available |
+| — | Approval and egress rules |
 
-- **Your credentials are never exposed** to other users, even when they interact with your agent
-- **Their actions use their identity** — if a colleague pushes to GitHub via your agent, the commit is attributed to them
-- **Workspace access is full** — colleagues can read all files in the shared workspace (this is by design for collaboration)
+### Consequences
+
+- **Everyone in the conversation acts with the agent's authority.** A colleague who pushes to GitHub through a bound agent does so with the agent's token, attributed to the agent's identity — not their own.
+- **Channel membership is the access control.** Excluding someone means removing them from the conversation, or unbinding it. Bind deliberately, and treat a bound channel as equivalent to sharing the agent's credentials with the room.
+- **Someone who needs to act as themselves needs their own agent.** There is no per-person credential switching within a shared one.
+- **Attribution within a binding is messenger-id based.** The security log records each turn's sender id; there is no per-turn platform identity.
+
+!!! note "This replaces the earlier per-person model"
+    Slack previously supported a person-scoped mode — identity linking, an allowed-users list, and a per-turn forked pod pair running under the replier's own credentials. It was removed for two reasons: the isolation it offered was incomplete (credentials were split per person, but the workspace was not, so any member could leave instructions the agent later ran under the owner's credentials), and supporting a second concurrent writer forced every agent's storage onto a shared-writable volume — a cost the whole platform paid for a mode almost nobody used.
+
+    Bindings that used it were **deleted** rather than converted: silently switching them to the open model would have widened who could drive an agent without the owner deciding that. Re-binding is the owner's consent. If a channel stopped working after the upgrade, bind it again.
 

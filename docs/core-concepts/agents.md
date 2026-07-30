@@ -137,9 +137,15 @@ From the agent's settings panel:
 - **Connections** — link GitHub, API keys, and other credentials
 - **Egress rules** — control which external services the agent can reach
 - **Skills** — install or remove capabilities
-- **Channels** — connect Slack or Telegram, and control who's allowed to interact
+- **Channels** — connect the agent to a [Slack](../integrations/slack.md) conversation
 - **Size** — adjust the CPU/memory this agent uses while running (within your [compute budget](#compute-budget-and-size)); changing it restarts a running agent on save
 - **Hibernation timeout** — override how long this agent stays idle before hibernating (in minutes; `0` = never), or inherit the platform default
+
+!!! info "Channels is pre-release"
+    **Channels** only appears if the **Advanced connections** toggle is on for your account — it's
+    off by default. Ask an administrator to enable it if you don't see the section. Connecting from
+    inside Slack with `/dam bind` works either way, so you don't need the toggle to use an agent
+    from Slack — only to manage the binding from the DAM UI.
 
 ### Open in
 
