@@ -48,7 +48,7 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ### Connections
 
-- **GitHub** (Enterprise or Public) — the agent clones repos (read) and manages issues (write). The default GitHub connection uses OAuth (scopes `repo`, `read:user`, `user:email`). If you'd rather use a Personal Access Token, pick the separate **GitHub (Personal Access Token)** option instead.
+- **GitHub** or **GitHub Enterprise** — the agent clones repos (read) and manages issues (write). The default GitHub connection uses OAuth (scopes `repo`, `read:user`, `user:email`). If you'd rather use a Personal Access Token, pick the separate **GitHub (Personal Access Token)** option instead.
 
 ### Network Access
 
@@ -56,12 +56,12 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ## Setup
 
-1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
+1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — connect GitHub via OAuth (default), or use the **GitHub (Personal Access Token)** option if you prefer a PAT
 4. **Clone the Link Guardian repo** — in your agent session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into the workspace
 5. **Run the first session** — the agent will ask you which org/repos to watch and save the configuration
-6. **Create a schedule** — set a daily heartbeat so the agent checks links automatically
+6. **Create a schedule** — set it to run daily so the agent checks links automatically
 
 
 ## First Run
@@ -96,14 +96,15 @@ The agent picks up these comments on the next run and adds them to its ignore li
 | `CLAUDE.md` | Agent operating instructions |
 | `state/MEMORY.md` | Target repo list, configuration, and learned ignore rules |
 | `state/repos/<owner>-<repo>.json` | Per-repo state (broken links, issue numbers) |
-| `.claude/skills/check-broken-links/` | The scanning skill and TypeScript helpers |
+| `.agents/skills/check-broken-links/` | The scanning skill and TypeScript helpers (symlinked as `.claude/skills/…`) |
+| `state/skip-patterns.txt` | Learned ignore rules, appended from tracking-issue comments |
 
 ## Security
 
-The agent has minimal permissions by design:
-
-- **Read-only** access to target repo code (clones markdown, never pushes)
-- **Issues-only** write access (opens/updates/closes tracking issues, never creates PRs or branches)
+- **Reads code, writes only issues** — it clones markdown and opens, updates, or closes tracking
+  issues; it never pushes branches or PRs. Note this is the agent's own discipline rather than a
+  platform-enforced scope: a GitHub connection carries the standard `repo` scope, so a modified
+  agent definition *could* write code.
 - **No token visibility** — credentials are injected at the network layer, never exposed to the agent
 
 ## Reference Implementation

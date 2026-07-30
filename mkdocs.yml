@@ -79,8 +79,12 @@ nav:
     - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md
     - File Manager: core-concepts/file-manager.md
+    - Experiments: core-concepts/experiments.md
+    - Knowledge Bases: core-concepts/knowledge-bases.md
+    - Artifacts: core-concepts/artifacts.md
   - Integrations:
     - Slack: integrations/slack.md
+    - Telegram: integrations/telegram.md
     - VS Code/Zed (SSH): guides/vs-code-zed-ssh.md
   - Guides:
     - How to Create a LiteLLM Key: guides/litellm-key.md

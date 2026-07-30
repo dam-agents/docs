@@ -16,13 +16,23 @@ The session inherits the agent's full pod environment: the egress proxy, injecte
 - A running agent. (An open SSH connection keeps the agent awake — see [Keeping agents awake](#keeping-agents-awake-billing) below.)
 - For the editor modes: `code` (or `code-insiders`) / `zed` on your `PATH`.
 
+!!! note "Custom images need `sshd`"
+    SSH only works on images that ship an SSH server. Every stock agent image does, because the
+    platform base image includes one — but if you [build a custom image](custom-image.md) from
+    something else, or strip `openssh-server` out, `dam ssh` has nothing to connect to.
+
 ## Open a shell
 
 ```bash
 dam ssh connect my-agent
 ```
 
-This drops you into a login shell on the agent (the agent's workspace lives under `~/work`). Exit with `exit` or `Ctrl-D`.
+This drops you into a login shell on the agent, starting in the home directory `/home/agent`. The
+workspace the agent works in is `~/work` — `cd ~/work` to get there; the editor modes below open it
+directly. Exit with `exit` or `Ctrl-D`.
+
+Unlike the web terminal, SSH has no one-viewer limit: a shell and an editor window can be connected
+to the same agent at once, each with its own session.
 
 You can reference the agent by **name** or by **ID** (`agent-…`), the same as every other `dam` command.
 

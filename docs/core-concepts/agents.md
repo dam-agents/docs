@@ -1,6 +1,10 @@
 # Agents
 
-An **agent** is a running AI assistant with its own persistent workspace, credential access, and configuration. It's the core thing you create and work with on the platform. Each agent runs in its own isolated **sandbox** — the dedicated environment (compute pod, workspace, and network boundary) that keeps it separate from every other agent.
+A **sandbox** is a running AI agent with its own persistent workspace, credential access, and configuration. It's the core thing you create and work with on the platform, and it's isolated from every other sandbox — its own compute pod, workspace, and network boundary.
+
+!!! note "Sandbox and agent are the same thing"
+    **Sandbox** is the name you'll see in the UI. **Agent** is the same object's name in the API and
+    the CLI (`dam agent …`), and this page uses both.
 
 ## What You Get
 
@@ -33,55 +37,57 @@ Starting → Preparing workspace → Running → Hibernating → Hibernated → 
 | **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
 | **Paused** | You put it to sleep now instead of waiting for the idle timeout. Frees its budget immediately, and wakes automatically on next use — like an on-demand hibernate. |
 | **Stopped** | A hard stop. Stays down and **does not wake on its own** — you must **Start** it (a scheduled run will also start it). Frees its budget. |
-| **Parked** | Can't start yet because your compute budget is full. It waits; **Start** is its retry once other agents free up room. See [Compute budget](#compute-budget-and-size). |
+| **Parked** (shown as **Over budget**) | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the sandbox, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-size). |
 | **Error** | Pod failed to start or encountered a fatal issue. |
 
-**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly Start it or a schedule fires.
+!!! note "The status pill collapses some of these"
+    Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and a parked sandbox
+    shows as **Over budget** (with the CPU/memory figures in its tooltip). The states above are the
+    underlying model, not nine distinct badges.
+
+**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires.
 
 ### Automatic Hibernation
 
 Agents automatically hibernate after a period of inactivity (no active sessions, no pending triggers). When you open a chat or send a message from a connected channel, the agent wakes automatically.
 
-An agent that is **busy** — actively working a turn, or running a session — is never hibernated by the idle checker; it only scales down once it goes idle.
+An agent stays awake while it's **busy** — working a turn, with prompts queued, or waiting on an
+approval — and also while any chat, terminal, or SSH connection is simply **open**, even with nothing
+running. It only scales down once it's both idle and unconnected, so closing the tab, terminal, or
+editor is what lets it idle down.
 
-By default an agent hibernates after the platform-wide idle timeout. You can **override this per agent** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the agent is used, or set it to **0 to never hibernate** so the agent stays running. Leaving the override unset inherits the platform default.
+By default an agent hibernates after the platform-wide idle timeout. You can **override this per agent** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the agent is used, or set it to **0 to never hibernate** so the agent stays running. The field always shows the value in force, so an agent with no override displays the inherited platform default rather than a blank.
 
 !!! warning "An agent that never hibernates keeps consuming compute (and billing) even while idle. Use `0` only when you genuinely need an always-on agent."
 
-### Keep Awake
+### Background work and hibernation
 
-Some work keeps running with **no** active chat or terminal session — a long
-background job, for example — and the idle checker would otherwise hibernate the
-agent out from under it. **Keep awake** prevents that.
+The idle checker only sees **sessions and connections** — chat, terminal, and SSH. Work detached
+from a session (a background job that outlives the terminal which started it, an async task) is
+invisible to it, so an agent can hibernate mid-job and kill that work.
 
-- **Manual toggle.** In the agent's settings, under **Lifecycle**, switch
-  **Keep awake** on and the agent **never hibernates** — it keeps running, and
-  consuming resources, until you turn the toggle off or stop the agent.
-- **Agent-held leases.** Your agent can hold itself awake for the duration of
-  a background workload using built-in tools — no manual toggle needed:
+Two things keep such work alive:
 
-    | Tool | What it does |
-    |------|--------------|
-    | `keep_awake_acquire` | Take a keep-awake lease under an `id` you choose (typically a job/run id). Optional `value` = minutes of idleness to tolerate while held (`0`/omitted = never hibernate). |
-    | `keep_awake_release` | Release a lease by `id`. Idempotent. When the last lease is released, normal idle-hibernation resumes. |
-    | `keep_awake_purge` | Drop all leases at once. |
+- **Keep a terminal or SSH session open** to the sandbox for the duration — an open connection
+  pins it awake.
+- **Raise the hibernation timeout**, or set it to `0` to never hibernate, before starting the job.
 
-    !!! warning "Leases don't expire on their own"
-        A lease keeps the agent awake until it is explicitly released (or purged).
-        Always release a lease when its work finishes, or the agent may run
-        indefinitely. While any lease is held, turning the manual toggle off may let
-        the agent hibernate and interrupt that work — the UI warns you before
-        doing so.
+Crossing the `0` boundary asks you to confirm in both directions, since it's the difference between
+an always-on sandbox and one that may be interrupted.
 
 ### What Survives Hibernation
 
 | Persists | Lost |
 |----------|------|
 | Workspace files (`~/work`) | Running processes |
-| Home directory (`$HOME`) | In-memory state |
+| Home directory (`$HOME`, except `~/.cache`) | In-memory state |
 | Installed skills | Open terminal sessions |
-| Session history | Temporary files outside the workspace |
-| Connections and egress rules | |
+| Session history | Files outside the persisted mounts (e.g. `/tmp`) |
+| Connections and egress rules | Packages installed outside `$HOME` (apt, system-level) |
+
+!!! tip "Bake long-term dependencies into an image"
+    Anything your agent needs permanently — system packages, tools installed at runtime — should go
+    into a [custom image](../guides/custom-image.md), or it will vanish on the next hibernation.
 
 ## Compute budget and Size
 
@@ -99,10 +105,10 @@ An agent runs one **coding harness** — the AI software inside the pod:
 
 | Harness | Best For |
 |---------|----------|
-| Claude Code | General-purpose coding, debugging, refactoring |
-| Pi Agent | Multi-model coding (GPT, Mistral, Gemini, etc.) |
-| Bob | General-purpose AI shell with tenant scoping |
-| Codex | Coding with OpenAI models or compatible endpoints |
+| Claude Code | General-purpose coding, debugging, refactoring (Anthropic) |
+| Codex | OpenAI Codex coding agent |
+| PI Agent | Pi coding agent with multi-LLM support |
+| IBM Bob | Bob shell agent (Anthropic, Mistral, Granite) |
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
@@ -114,38 +120,77 @@ From inside an agent — a web terminal, an SSH session, or the agent itself —
 dam-run <command> [args...]
 ```
 
-The executor pod is a throwaway copy of your agent: it uses the **same image, configuration, and persistent `~/home/agent` workspace**, so the command sees your files and credentials exactly as the main pod does. Its input and output are streamed back over a PTY, so it behaves like a local invocation (including interactive TTY programs). The executor pod exists only for that one command — it is **torn down as soon as `dam-run` exits**, and disconnecting reaps it automatically.
+The executor pod is a throwaway copy of your agent: it uses the **same image, configuration, and persistent `~/work` workspace**, which it shares read-write with the main pod, so the command sees your files exactly as the main pod does. It holds no credentials itself — it borrows the parent's gateway, so the same tokens are injected on the wire and the same approval rules apply. Its input and output are streamed back over a PTY, so it behaves like a local invocation (including interactive TTY programs). The executor pod exists only for that one command — it is **torn down as soon as `dam-run` exits**, and disconnecting reaps it automatically.
 
 Use it to run something heavy, long, or risky off to the side without tying up — or disturbing — your main agent.
 
 !!! note "Limits"
-    Each agent may have up to **16 concurrent `dam-run` executors** at once; beyond that, new runs are rejected until one finishes. A single run is also capped at roughly **one hour** — for longer-lived work, use a dedicated agent instead.
+    Each agent may have up to **16 concurrent `dam-run` executors** at once; beyond that, new runs are rejected until one finishes. Nested runs (a `dam-run` that itself calls `dam-run`) draw from the same 16 slots. A single run is also capped at roughly **one hour** — for longer-lived work, use a dedicated agent instead.
+
+## Virtual machines (`dam-vm`)
+
+`dam-run`'s counterpart for work a pod simply can't do — systemd, Docker or k3s, nested containers,
+kernel-adjacent tooling:
+
+```bash
+dam-vm <command> [args...]
+```
+
+Where a `dam-run` executor shares your image, credentials, and workspace, the VM is the opposite: a
+**root-capable machine with its own filesystem that shares nothing** with the pod — no workspace, no
+credentials. Copy results back out before you finish. Run it with no command for an interactive
+login shell.
+
+!!! note "Depends on your deployment"
+    The VM host sits outside the cluster and is operator-managed, so `dam-vm` is only available if
+    your install has one configured.
 
 ## Managing Agents
 
 ### Create
 
-Click **"Create a sandbox"** → choose a starting image, name it, choose a provider, pick a **Size** (CPU/memory, within your budget), and set network permissions → create. The agent starts immediately.
+Click **Create sandbox**. Step 1 asks what the sandbox is *for* rather than which image to boot:
 
-The image step groups options into **Coding agents**, **Custom images**, and **Pre-configured images**. Each catalog entry shows a display name and tags (e.g. the providers it supports), and some include a **Learn more** link to their docs. A pre-configured image may surface a setup note callout on the setup step (e.g. a recommended model).
+| Starting point | What it gives you |
+|----------------|-------------------|
+| **Experiment sandbox** | Claude Code with the experiment authoring skill — runs one goal across several variants and charts each result live |
+| **Knowledge base sandbox** | Claude Code that builds and maintains a body of knowledge you can chat with |
+| **Specialized sandbox** | An image already set up for one task |
+| **General-purpose sandbox** | Pick a coding harness and customize it yourself |
+| **Custom image** (*Advanced*) | Bring your own image address |
+
+Experiment and knowledge-base sandboxes need an image your operator has to enable — the wizard says
+so if it's missing. Step 2 (**Setup your sandbox**) names it, picks a provider and a **Size**
+(CPU/memory, within your budget), and sets network permissions; step 3 grants connections.
+
+Catalog entries show a display name and tags (e.g. the providers they support); some carry a
+**Learn more** link, and some surface a setup note on the next step (e.g. a recommended model).
+
+!!! note "The Alpha badge"
+    Some images are marked **Alpha** — early and evolving, and sorted to the bottom of the list.
+    Expect rough edges.
 
 ### Configure
 
-From the agent's settings panel:
+From the sandbox's page, the left nav has six sections:
 
-- **Environment variables** — set `GITHUB_REPO`, model preferences, etc.
+- **Sandbox Setup** — name, image, provider, **Network access** (which external services it may
+  reach), **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables,
+  and **Size** (CPU/memory while running, within your [compute budget](#compute-budget-and-size);
+  changing it restarts a running sandbox on save)
 - **Connections** — link GitHub, API keys, and other credentials
-- **Egress rules** — control which external services the agent can reach
+- **Channels** — connect the sandbox to a [Slack](../integrations/slack.md) conversation or
+  [Telegram](../integrations/telegram.md) chat, and control who's allowed to interact
 - **Skills** — install or remove capabilities
-- **Channels** — connect the agent to a [Slack](../integrations/slack.md) conversation
-- **Size** — adjust the CPU/memory this agent uses while running (within your [compute budget](#compute-budget-and-size)); changing it restarts a running agent on save
-- **Hibernation timeout** — override how long this agent stays idle before hibernating (in minutes; `0` = never), or inherit the platform default
+- **Schedules** — run recurring tasks
+- **Artifacts** — files the sandbox has published
 
 !!! info "Channels is pre-release"
     **Channels** only appears if the **Advanced connections** toggle is on for your account — it's
-    off by default. Ask an administrator to enable it if you don't see the section. Connecting from
-    inside Slack with `/dam bind` works either way, so you don't need the toggle to use an agent
-    from Slack — only to manage the binding from the DAM UI.
+    off by default. It's a per-user setting you can turn on yourself, under **Experimental
+    features** in settings (the tab is hidden — tap the version string five times to reveal it).
+    Connecting from inside Slack with `/dam bind` works either way, so you don't need the toggle to
+    use an agent from Slack — only to manage the binding from the DAM UI.
 
 ### Open in
 
@@ -162,9 +207,9 @@ Configure an agent once, then launch it however you like from the **Open in** me
 
 From the agent's actions menu you can take it down without deleting it:
 
-- **Pause** — puts it to sleep now and frees its budget; it wakes automatically the next time you use it.
-- **Stop** — a hard stop; it stays down until you **Start** it (or a scheduled run fires). Use this to reliably free budget for other work.
-- **Start** — brings a stopped or parked agent back up.
+- **Pause — wakes on next use** — puts it to sleep now and frees its budget.
+- **Stop — until started again** — a hard stop; it stays down until you bring it back up (or a scheduled run fires). Use this to reliably free budget for other work.
+- **Wake** / **Start** — brings a sandbox back up. The menu says *Wake* for a hibernated or paused sandbox, and *Start* for a parked one, where it retries the budget gate.
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).
 

@@ -7,52 +7,96 @@ Chat with your agent directly from Slack — in a channel, a group DM, or a 1:1 
 Connecting a Slack conversation to an agent lets you:
 
 - Talk to your agent from Slack instead of the DAM UI
-- Let a whole channel work with the same agent, with no per-person setup
+- Either give each teammate their own credentials in the channel, or let the whole channel share one agent
 - Share screenshots and images the agent can actually read
 - Get proactive posts — results after a scheduled run, alerts when a long task finishes
 - Keep a persistent session per thread
 
+## Access modes
+
+A Slack binding carries an **access mode**, chosen when the conversation is connected:
+
+| Mode | Who can drive the agent | Whose credentials run the turn |
+|------|-------------------------|--------------------------------|
+| **Person-scoped** (default) | The agent's owner, plus anyone on the **allowed users** list. Each person links their own Slack account first. | Each person's **own** credentials |
+| **Shared** | Anyone Slack admits to the conversation — no login | The **agent's own** credentials |
+
+!!! warning "The mode is fixed for the binding's lifetime"
+    You can't switch a binding between modes. Changing it means **disconnect, then reconnect** in
+    the new mode — re-running `connect` with a different `--mode` is refused. (Ambient mode, by
+    contrast, *can* be flipped in place.)
+
+!!! warning "What a shared binding delegates"
+    In **shared** mode the binding itself is the authorization: everyone Slack admits to that
+    conversation drives the agent under the **agent's** credentials and connections, not their own.
+    Bind shared only where you're comfortable with that, and manage access the way you'd manage any
+    Slack membership. The binding owner's Terms of Use acceptance covers every shared turn.
+
+Turns are attributed in the security log by Slack user id. On shared turns in channels and group
+DMs the agent sees each message prefixed with the sender's id, and can look that up to get the
+person behind it, so a busy channel stays readable — a 1:1 DM isn't labelled, since there's only
+one human in the room.
+
 ## Connect a channel (`/dam bind`)
 
-A conversation does nothing until it's **bound** to an agent. Binding happens from inside Slack:
+A conversation does nothing until it's **bound** to an agent. The quickest path is from inside Slack:
 
 1. Invite the **DAM** bot to the channel.
 2. Send **`/dam bind`**.
 3. Follow the link to authenticate, then pick one of **your own** agents from the picker.
 4. You're done — `@mention` the agent and it answers in a thread.
 
+!!! warning "`/dam bind` always creates a *shared* binding"
+    In-chat binding lends the agent to the whole conversation under the agent's own credentials.
+    Slack tells you as much before you confirm. For a **person-scoped** binding, connect from the
+    [DAM UI or the CLI](#other-ways-to-bind) instead.
+
 The same command binds a group DM or a 1:1 DM with the bot; see
 [how the agent is triggered](#how-the-agent-is-triggered) for what each surface needs.
 
 | Command | What it does |
 |---------|--------------|
-| `/dam bind` | Connect one of your agents to this conversation |
+| `/dam bind` | Connect one of your agents to this conversation (shared mode) |
 | `/dam unbind` | Release the binding — allowed for whoever bound it, or the agent's owner |
-| `/dam ambient on\|off` | Turn ambient mode on or off |
+| `/dam ambient on\|off` | Turn ambient mode on or off (shared bindings only) |
 | `/dam ambient` | Report whether ambient mode is currently on |
-| `/dam login` | Link your Slack account to DAM — needed before `unbind` or `ambient on\|off` |
+| `/dam login` | Link your Slack account to DAM |
+| `/dam logout` | Unlink your Slack account |
 
-!!! warning "`/dam unbind` and `/dam ambient on|off` need a linked account"
-    These two check that your Slack account is linked to DAM, and answer *"Link your account first —
-    run `/dam login`"* if it isn't. Binding through `/dam bind` links you automatically, so if that's
-    how you connected the conversation, you're already set.
+!!! warning "When `/dam login` is required"
+    On a **person-scoped** binding, linking is required before you can talk to the agent **at all** —
+    an unlinked message gets a private *"You need to link your account first. Use `/dam login` to
+    get started."* and no turn runs.
 
-    **If you bound from the CLI or the DAM UI instead, you were never linked** — run `/dam login`
-    once in the channel and the commands work from then on. Reading the current state with a bare
-    `/dam ambient` never needs a link.
+    On any binding, `/dam unbind` and `/dam ambient on|off` also check for a linked account.
+    `/dam bind` links you automatically, so if that's how you connected the conversation you're
+    already set — but **if you bound from the CLI or the DAM UI, you were never linked**. Reading
+    the current state with a bare `/dam ambient` never needs a link.
 
-!!! warning "Anyone in the conversation drives the agent — under the agent's credentials"
-    Binding **is** the access control. Everyone Slack admits to that conversation can drive the
-    bound agent, and every turn runs with the **agent's own** credentials and connections — not
-    the credentials of the person typing. There's no allow-list and no per-person setup.
+## Control who can use your agent
 
-    Bind only where you're comfortable with that, and manage access the way you'd manage any
-    Slack membership. If a colleague needs to act as themselves, they need their own agent.
+On a **person-scoped** binding, an **allowed users** list gates who may drive the agent:
 
-Turns are attributed in the security log by Slack user id. In channels and group DMs the agent
-sees each message prefixed with the sender's id, and can look that up to get the person behind it,
-so a busy channel stays readable — a 1:1 DM isn't labelled, since there's only one human in the
-room. The binding owner's Terms of Use acceptance covers every turn.
+- **Empty list** — any linked Slack user in the conversation can drive it.
+- **Non-empty list** — only the owner and the listed people can. Everyone else still sees the
+  agent's replies but gets *"You don't have access to this instance. Contact the instance owner to
+  be added to the allowed users list."* when they try.
+
+Manage it in the agent's **Channels** section in the UI, or from the CLI:
+
+```bash
+dam channel allow <agent> --user someone@example.com      # add (repeatable)
+dam channel disallow <agent> --user someone@example.com   # remove
+dam channel list <agent>                                  # bindings, modes, and the allow-list
+```
+
+Shared bindings never consult the list — Slack channel membership is the only gate.
+
+!!! info "An allowed teammate acts as themselves"
+    On a person-scoped binding, a reply from someone other than the owner runs in an isolated
+    per-turn pod under **that person's own** credentials, torn down once the turn finishes. The
+    owner's tokens are never shared. If that provisioning times out you'll see *"Could not run turn
+    as you: fork provisioning timed out."*
 
 !!! info "One conversation, one agent"
     A conversation binds to at most one agent, and an agent to at most one Slack conversation
@@ -74,12 +118,18 @@ Mentioning or DMing an **unbound** conversation gets you a private, sender-only 
 group DM it points you at `/dam bind`; in a channel it just says no agent is connected. A plain,
 un-addressed channel message gets no notice at all.
 
-## Ambient mode
+## Ambient mode (shared bindings only)
 
 Normally the agent only answers when tagged. In **ambient mode** it reads along with the whole
 channel and decides for itself when to speak up — answering a question it can answer, picking up
 a task someone described, flagging a clear mistake — and stays quiet otherwise. Mentions still
 work exactly as before; ambient only adds a second, quieter path in.
+
+!!! warning "Ambient requires a shared binding"
+    Ambient is unavailable on person-scoped bindings — the agent would be reading messages from
+    people it can't run turns for. Asking for it there answers *"Ambient mode needs a shared
+    connection — this channel is person-scoped. Disconnect the channel and reconnect it in shared
+    mode first."* From the CLI, `--ambient` requires `--mode shared`.
 
 **Ambient is off by default** on every connect path, and turning it on is a deliberate choice: an
 ambient agent reads *every* message in the channel, not just the ones aimed at it.
@@ -92,7 +142,7 @@ ambient agent reads *every* message in the channel, not just the ones aimed at i
 
 Changing it is allowed for whoever bound the channel, or the agent's owner — the same permission
 as `/dam unbind`, and like `unbind` it needs your account
-[linked](#connect-a-channel-dam-bind). You can flip it any time.
+[linked](#connect-a-channel-dam-bind). Unlike the access mode, ambient can be flipped any time.
 
 What to expect when it's on:
 
@@ -170,22 +220,30 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 
 ## Other ways to bind
 
-You can also bind from the **CLI**:
+Unlike `/dam bind`, the CLI and UI paths let you choose the access mode.
+
+From the **CLI**:
 
 ```bash
-dam channel slack connect <agent> --channel-id <C0…>             # ambient off
-dam channel slack connect <agent> --channel-id <C0…> --ambient   # ambient on
+dam channel slack connect <agent> --channel-id <C0…>                       # person-scoped (default)
+dam channel slack connect <agent> --channel-id <C0…> --mode shared         # shared
+dam channel slack connect <agent> --channel-id <C0…> --mode shared --ambient
 ```
 
-Unlike `/dam bind`, re-running `connect` for the **same** agent updates that binding in place —
-which is how you change ambient mode from the CLI, with no unbind needed. Pointing a channel at a
-*different* agent is still refused until the current binding is released.
+Re-running `connect` for the **same** agent in the **same** mode updates the binding in place —
+which is how you change ambient mode from the CLI, with no unbind needed. Requesting a *different*
+mode is refused (disconnect first), and pointing a channel at a *different* agent is refused until
+the current binding is released.
 
 See the [CLI reference](../reference/cli.md#channels).
 
 The agent's **Channels** section in the DAM UI does the same job, and lists what's currently bound.
-It's behind the **Advanced connections** toggle, which is off by default — if you don't see the
-section, that's why. `/dam bind` needs no toggle.
+Open **Connect a Slack channel**, paste the **Channel ID** (starts with `C0…`), pick an **Access
+mode**, and set **Allowed users** (person-scoped) or **Ambient mode** (shared). Each card shows the
+binding's mode at a glance — e.g. *Shared · ambient* or *Person-scoped · 3 allowed users*.
+
+The section sits behind the **Advanced connections** toggle, which is off by default — if you don't
+see it, that's why. `/dam bind` needs no toggle.
 
 ## Troubleshooting
 
@@ -194,17 +252,14 @@ section, that's why. `/dam bind` needs no toggle.
 | Bot doesn't respond in a channel | Make sure you **`@mention`** it, and that the conversation is bound (`/dam bind`) |
 | "This conversation isn't connected" / "No instance connected to this channel" | Run `/dam bind` to connect one of your agents |
 | Binding refused as already connected | The conversation, or that agent, is already bound. `/dam unbind` first |
+| "You need to link your account first" | A person-scoped binding requires a linked account before any turn — run `/dam login` |
+| "You don't have access to this instance" | Person-scoped binding with an allow-list — ask the owner to add you (`dam channel allow`) |
 | "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI or the UI |
+| "Ambient mode needs a shared connection" | Ambient is shared-only. Disconnect and reconnect the channel in shared mode |
+| Mode change refused on `connect` | The access mode is fixed per binding — `disconnect`, then connect again in the new mode |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
 | An attached file was ignored | Only images are read. Paste document contents as text instead |
 | "Attached images total … over the cap" | 30 MB of images per message — send fewer or smaller |
 | Slow first reply | It's likely waking from hibernation — up to a minute or two |
 | It answered without the image | The agent's harness may not support images; you'll have had a private note |
-
-!!! info "Binding after an upgrade"
-    Slack previously offered a per-person access mode with identity linking and an allowed-users
-    list. That mode has been removed, and bindings that used it were **deleted** rather than
-    converted — so the agent's owner re-binds deliberately instead of the change silently
-    widening who can drive it. If a channel stopped working after an upgrade, run `/dam bind`
-    again.

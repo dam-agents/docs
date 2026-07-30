@@ -1,14 +1,14 @@
 # Building a Custom Image
 
-A custom image is a layer you build on top of DAM's base platform image, giving your agents access to your own tools, scripts, and environment. You build it, push it to a container registry, and point an agent at it by pasting the image URL into the **Custom Image** field of the Add Agent dialog.
+A custom image is a layer you build on top of DAM's base platform image, giving your sandboxes access to your own tools, scripts, and environment. You build it, push it to a container registry, and point a sandbox at it by pasting the image address into the **Custom image** starting point of the create wizard.
 
-This guide is **agent-neutral**: the platform supports any agent — Claude Code, Codex, Gemini, or your own command-line program — and relies only on a small contract (covered in Step 3). The examples below use **Claude Code**.
+This guide is **agent-neutral**: the platform supports any agent — Claude Code, Codex, PI Agent, IBM Bob, or your own command-line program — and relies only on a small contract (covered in Step 3). The examples below use **Claude Code**.
 
 The base image handles the platform plumbing:
 
-- It runs the **agent-runtime** process — an ACP WebSocket server, file service, and trigger watcher — that connects your agent to the platform. You never modify it.
+- It runs the **agent-runtime** process — the ACP server for chat, the terminal and SSH relays, the file service, and the runtime channel — that connects your agent to the platform. You never modify it.
 - It controls *when* your agent is launched (a chat session vs. a terminal session). You define *what* gets launched.
-- It includes common tools: `git`, `gh`, `ssh`, and `npm`.
+- It includes common tools: Node, Python, `git`, and `curl`, with `gh`, `jq`, and `uv` a call away.
 
 Customizing the image is mostly a few lines in the Dockerfile. Options, used alone or in combination:
 
@@ -42,12 +42,22 @@ Every agent Dockerfile follows the same shape: start `FROM` the published base i
 
 The base image provides:
 
-- A Node runtime, plus `git`, `gh`, `ssh`, `npm`, `node`, `uv` (a Python installer), `curl`, and `jq`
-- The **agent-runtime** process (ACP WebSocket server, file service, trigger watcher)
-- Default harness scripts (placeholders you'll override in Step 3)
+- **Node 24** and `npm`, **Python 3.12**, plus `git`, `curl`, `tar`, `gzip`, and `mise`
+- `gh`, `jq`, `rg`, `fd`, `uv`/`uvx`, `kubectl`, and `oc` as lazy `mise` shims — on `PATH`, but the
+  first call installs them through the egress gateway
+- The **agent-runtime** process (the ACP server for chat, the terminal and SSH relays, the file
+  service, and the runtime channel that delivers env, files, MCP entries, skills, and triggers)
+- Default harness scripts you'll override in Step 3
+- An SSH server, so [`dam ssh` and the editor modes](vs-code-zed-ssh.md) work — keep it if you want
+  them; removing `openssh-server` disables SSH for the image
 - A non-root user (UID 65532)
 
-The base is a RHEL image: install system packages with **`dnf`** (there is no `apt`). It has **no preinstalled Python** — use the bundled `uv`.
+The base is a RHEL image, but the final layer is built from a sysroot, so **it has no package
+manager** — neither `dnf` nor `apt` is available at build time. Install with `npm`, `uv`, or by
+downloading a binary; for an OS package, use the two-stage pattern shown below.
+
+`PYTHONPATH` is preset to the platform's Python library directory. Append to it rather than
+replacing it, or you'll break the experiment SDK.
 
 The annotated skeleton follows. Most of it is fixed boilerplate; the parts you change are called out.
 
@@ -85,14 +95,14 @@ COPY harness-chat.sh /usr/local/bin/harness-chat
 COPY harness-terminal.sh /usr/local/bin/harness-terminal
 RUN chmod +x /usr/local/bin/harness-chat /usr/local/bin/harness-terminal
 
-# (7) CUSTOMIZE: seed files into the agent's home directory. Anything you put
-#     in your local workspace/ folder is copied into the agent's persistent
-#     home (/home/agent), which is where the agent starts and what survives
+# (7) CUSTOMIZE: seed files for the agent. Stage them at /app/working-dir/ --
+#     NOT /home/agent. On first boot the platform copies this directory into the
+#     agent's persistent home, which is where it starts and what survives
 #     hibernation. This is how you give the agent instructions and files to
 #     work from, e.g.:
 #       workspace/<instructions-file> -> instructions the agent reads on startup
 #       workspace/data/prices.csv     -> a dataset it can open
-COPY --chown=65532:0 workspace/ /home/agent/
+COPY --chown=65532:0 workspace/ /app/working-dir/
 
 # (8) OPTIONAL: declare placeholder env vars for any external credentials.
 #     Real values are injected on the wire by the platform — never bake a real
@@ -105,8 +115,19 @@ USER 65532                            # (9) ALWAYS switch back to the agent user
 Rules enforced by the skeleton:
 
 - **Always end as the agent user.** Make changes as `root`, but the last line must be `USER 65532`. After writing files as root, run `chown -R 65532:0 /app` so the agent can read them. (`65532` is the ID of the non-root user the agent runs as.)
-- **The base is RHEL, with no Python out of the box.** Install system packages with `dnf` (there is no `apt`), npm packages with `npm`, Python packages with the bundled `uv`, or add a downloaded program. Already present: `git`, `gh`, `ssh`, `npm`, `node`, `uv`, `curl`, and `jq`.
-- **`workspace/` ships files to the agent.** Its contents are copied in when the agent first starts. The copy happens *once*, without overwriting — it seeds initial files and does not push updates to an agent that has already run.
+- **Never `COPY` into `/home/agent`.** That path is a persistent volume at runtime, so anything baked there is hidden by the volume. Stage seed files at **`/app/working-dir/`** instead.
+- **`workspace/` ships files to the agent.** The contents of `/app/working-dir/` are copied into the agent's home when it first starts. The copy happens *once*, without overwriting — it seeds initial files and does not push updates to an agent that has already run.
+- **There is no package manager in the final image.** The base is built from a sysroot, so neither `dnf` nor `apt` exists at runtime. `npm`, `uv`, and downloading a binary all work directly. To add an OS package, install it in a separate builder stage and copy it in:
+
+    ```dockerfile
+    FROM registry.access.redhat.com/hi/core-runtime:latest-builder AS extra
+    USER root
+    RUN dnf install -y --installroot=/extra --use-host-config \
+        --releasever="$(. /etc/os-release; echo "$VERSION_ID")" \
+        --setopt=install_weak_deps=0 sqlite && dnf clean all
+    # ...then, in your main stage:
+    # COPY --from=extra /extra/usr/bin/sqlite3 /usr/bin/sqlite3
+    ```
 
 ## Step 3 — Provide the session launchers
 
@@ -117,7 +138,13 @@ This is the entire contract between your image and the platform. When you open a
 | `/usr/local/bin/harness-chat` | Chat | A program that speaks the [**Agent Client Protocol (ACP)**](https://agentclientprotocol.com/get-started/introduction) over stdio — the standard the chat window uses to exchange messages with an agent. By convention these programs are named `<agent>-acp`. |
 | `/usr/local/bin/harness-terminal` | Terminal | Anything interactive attached to a PTY: your agent's command-line tool, or just a plain shell. |
 
-Ship **both**. The base image includes placeholder versions for a different setup; override them with your own. (Every built-in agent — Claude Code, Codex, Gemini — ships these same two scripts; only the program each one execs differs.)
+Ship **both**, and override both. The base's `harness-chat` is a stub that exits with *"this agent
+image does not provide a chat harness"*, and its `harness-terminal` execs `claude`, which the base
+doesn't install — so neither works unmodified. (Every built-in image — Claude Code, Codex, PI Agent,
+IBM Bob — ships these same two scripts; only the program each one execs differs.)
+
+Both scripts are launched with their working directory set to **`/home/agent/work`**, so relative
+paths resolve there.
 
 The pattern, for any agent, is:
 
@@ -192,28 +219,49 @@ docker login quay.io
 docker push quay.io/<user-or-org>/my-agent:0.1.0
 ```
 
-**Make the package public.** Otherwise the agent will be stuck trying to start from an inaccessible image.
+**You can keep it private** — see [private registries](#private-registries) below. Making it public
+also works, and is simpler if the image holds nothing sensitive.
 
 Notes:
 
 - **Match the node architecture.** Most clusters run `linux/amd64`. Building on an Apple-silicon Mac without `--platform` produces an `arm64` image the cluster cannot run. To support both, use `docker buildx build --platform linux/amd64,linux/arm64 ... --push`.
 - **Use immutable tags** (`:0.1.0`, a git SHA) rather than `:latest`, so a re-push does not change what running agents pull.
 
-## Step 5 — Add the agent via the Custom Image field
+## Step 5 — Create a sandbox from your image
 
-In the UI, open **Add Agent**. Under **Custom Image**, paste your full image reference and click **Use**:
+Open the create-sandbox wizard. On step 1, **Choose your starting point**, pick **Custom image**
+(tagged *Advanced*), then paste your full reference under **Image address** and click **Continue**:
 
 ```
 ghcr.io/<your-org>/my-agent:0.1.0
 ```
 
-Then finish the configure step:
+On step 2, **Setup your sandbox**: give it a **Name**, pick a **Size**, choose a **Provider**, and
+set a **Network access** preset. Every sandbox needs a provider to power its model — the presets are
+**IBM LiteLLM ETE Proxy**, **Bob Shell**, **Anthropic**, and **OpenAI**. Match it to your agent: an
+OpenAI-compatible harness needs an OpenAI-compatible provider.
 
-- Give the agent a **name**.
-- **Connections → Provider:** attach an LLM provider to power the agent's model. Pick an existing preset (Anthropic, IBM LiteLLM); it supplies the model endpoint and token. Every agent needs this. Match the preset to your agent — for example, an OpenAI-compatible agent needs an OpenAI-compatible provider.
-- If your agent calls an external service, attach a credential and allow its host here — see [how to call an external service](external.md).
+On step 3, **Connections**, attach any credentials your agent needs, then click **Create sandbox**.
+If it calls an external service, that's where you attach the credential and allow its host — see
+[how to call an external service](external.md).
 
-No template registration, Helm edit, or platform redeploy is needed; the agent is created directly from the image URL.
+No template registration, Helm edit, or platform redeploy is needed; the sandbox is created directly
+from the image address.
+
+### Private registries
+
+You don't have to publish the image publicly. In the **Custom image** card, expand **Private
+registry** and fill in **Server** (e.g. `ghcr.io`), **Username**, and **Password** — a PAT, robot
+account, or access token. All three or none.
+
+DAM stores these as a pull secret scoped to that one sandbox, used only by the cluster to fetch the
+image. The agent never sees it, and it's deleted with the sandbox.
+
+!!! note "Two things to know"
+    Credentials are only checked when the image is pulled, so a wrong one shows up as an
+    image-pull failure on a sandbox that won't start — not as an error when you create it. And only
+    long-lived credentials work; dynamically minted registry tokens (such as AWS ECR's) aren't
+    supported.
 
 ## Calling an external service
 
@@ -231,5 +279,5 @@ For the full walkthrough — declaring the placeholder, creating the credential,
 
 ## Troubleshooting
 
-- **Stuck on "Starting…"** — the pod can't pull the image. Usually the registry package is **private** (make it public, or have an operator add a pull secret), or it was built for the wrong **architecture**.
+- **Stuck on "Starting…"** — the pod can't pull the image. Usually the registry package is **private** and no [private-registry credentials](#private-registries) were entered (or they're wrong — they're only validated at pull time), or the image was built for the wrong **architecture**.
 - **"Send failed" in chat** — the chat (ACP) server didn't start or couldn't reach the model. Confirm your `harness-chat` execs your agent's ACP server (the base's placeholder won't), and that an **LLM provider** is attached.

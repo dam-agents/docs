@@ -18,7 +18,7 @@ Once configured, this agent runs an end-to-end product loop:
 6. **Stops when done** — detects when all tickets are closed, then disables itself
 7. **Pauses when stuck** — if something fails repeatedly, it stops and asks for help
 
-All of this runs on a 1-minute heartbeat schedule — no human in the loop after the initial interview.
+All of this runs on a schedule firing every minute — no human in the loop after the initial interview.
 
 ## How It Works
 
@@ -30,7 +30,7 @@ You ←→ Agent (interactive session)
          └── /to-issues  → decomposes into tickets
                               │
                               ▼
-                    Scheduled Heartbeat (every 1 min)
+                    Scheduled run (every 1 min)
                               │
                     ┌─────────┼─────────┐
                     ▼         ▼         ▼
@@ -51,7 +51,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ### Connections
 
-- **GitHub** (Enterprise or Public) — the agent creates issues, opens PRs, and merges code. Choose based on where your target repo lives.
+- **GitHub** or **GitHub Enterprise** — the agent creates issues, opens PRs, and merges code. Choose based on where your target repo lives.
 
 ### Network Access
 
@@ -59,7 +59,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ## Setup
 
-1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
+1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — provide a PAT with repo access to your target repository, so `gh` can authenticate
 4. **Start a chat session** — tell the agent what you want to build. On first run it reads its `work/config.json`; if that's missing it asks you for the configuration (the target `owner/repo`), then verifies the repo's default branch and required labels before starting.
@@ -95,7 +95,7 @@ Next, `/to-issues` breaks the PRD into independently-implementable tickets, each
 
 ### Autonomous Execution
 
-After decomposition, the agent creates a heartbeat schedule. Every minute, it wakes up and:
+After decomposition, the agent creates a schedule that fires every minute. On each wake it:
 
 - Checks if there's a ticket labeled `working` → continues implementing
 - Checks for `needs review` → reviews and merges the PR

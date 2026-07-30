@@ -9,7 +9,6 @@ This guide walks through both steps. A key from any other IBM LiteLLM proxy won'
 These are the models available through the `rits-restricted-agentic` group:
 
 ```
-rits/zai-org/glm-5-1-fp8-agentic
 rits/deepseek-ai/DeepSeek-V3.2
 rits/moonshotai/Kimi-K2.5
 aws/claude-opus-4-8
@@ -21,9 +20,6 @@ Azure/text-embedding-3-small-1
 Azure/text-embedding-3-large-1
 azure/gpt-5.3-codex
 ```
-
-!!! warning "`rits/zai-org/glm-5-1-fp8-agentic` unavailable"
-    Following a [recent RITS GPU change](https://ibm-research.slack.com/archives/C07PNSBQMQW/p1782849277807129), the **GLM** endpoint `rits/zai-org/glm-5-1-fp8-agentic` may be unavailable. DeepSeek (`rits/deepseek-ai/DeepSeek-V3.2`) and Kimi (`rits/moonshotai/Kimi-K2.5`) are **not** affected. The Anthropic and other frontier models (`aws/`, `azure/`, `gcp/`) are also unaffected.
 
 ## Video Walkthrough
 

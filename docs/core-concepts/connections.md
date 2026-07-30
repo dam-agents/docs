@@ -4,7 +4,7 @@ Connect your accounts so your agent can act on your behalf — without ever seei
 
 ## Providers, Connections & API Keys
 
-DAM **Settings** has three separate tabs that are easy to confuse. They do different things:
+Three of the tabs in DAM **Settings** are easy to confuse. They do different things:
 
 | Tab | What it's for | Example |
 |-----|---------------|---------|
@@ -12,11 +12,13 @@ DAM **Settings** has three separate tabs that are easy to confuse. They do diffe
 | **Connections** | Credentials and tools that let the agent **act on external services** on your behalf. | GitHub, a custom-header API, an MCP server |
 | **API keys** | Tokens that let **you or your automation** drive the DAM platform itself via the API/CLI. | A scoped key for a CI pipeline |
 
+(Settings also has **Account**, **Appearance**, and **Usage** tabs.)
+
 The rest of this page covers **Connections**. Providers are set when you create a sandbox (see [the LiteLLM key guide](../guides/litellm-key.md)); API keys are covered in [the CLI reference](../reference/cli.md).
 
 ## How It Works
 
-Connection credentials (OAuth tokens and API keys) are stored in a secure vault and injected on the network wire by a paired gateway pod. The agent never has access to raw tokens — even if compromised, it can't leak your keys.
+Connection credentials (OAuth tokens and API keys) are stored outside your sandbox and injected onto outbound requests by a paired gateway that sits between the sandbox and the internet. The sandbox never holds the raw token — even if compromised, it can't leak your keys.
 
 All credentials — including provider API keys and GitHub personal access tokens — are modeled and managed as Connections. There is no separate "secrets" concept; if you used one previously, it is migrated to a Connection automatically.
 
@@ -38,13 +40,17 @@ Commits the agent makes are **attributed to your connected GitHub account**: DAM
 
 ### Google Workspace
 
-Connect Google services (Gmail, Calendar, Drive, Sheets, Docs, and more):
+Google services ship as **separate connections per service** — Gmail, Google Calendar, Google Drive,
+Google Docs, Google Admin, Google Analytics, Google Classroom, and others — so each grants only the
+scopes it needs.
 
-1. Navigate to **Connections**
-2. Click **"Connect Google"**
-3. Sign in and grant the requested scopes
+!!! info "Not enabled by default"
+    Google connections aren't offered to regular users yet. They appear in the catalog only once the
+    **Advanced connections** experimental feature is on for your account (see
+    [Sandboxes](agents.md#configure) for how to enable it).
 
-Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set). The connection also seeds the agent's git identity (`~/.gitconfig` `user.name`/`user.email`) from your GitHub account, so commits the agent makes are attributed to you. If your GitHub email is private, a `@users.noreply.github.com` address is used instead.
+Once connected, your agent can read and write the Google services whose scopes you approved. Connect
+several if it needs more than one; each is granted to a sandbox independently.
 
 ## API Key Connections
 
@@ -53,11 +59,11 @@ For services that use a static API key rather than OAuth, connect a prebuilt tem
 1. Navigate to **Connections** → under **Apps**, pick the service (e.g. **Anthropic (API Key)**)
 2. Click **Connect** and paste your key
 
-For a service without a prebuilt template, use **Other** → **Custom header credential** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
+For a service without a prebuilt template, use the **Custom Headers** tab → **Custom header credential** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
 
 ## MCP Servers
 
-Connect an external MCP server to give your agent **additional tools** beyond the built-in ones. Once a server is connected and granted to an agent, its tools are exposed to the agent automatically — no per-session setup.
+Connect an external MCP server to give your agent **additional tools** beyond the built-in ones. Once a server is connected and granted to a sandbox, its tools are exposed to the agent automatically — no per-session setup.
 
 Under **Connections → MCP servers**:
 
@@ -74,7 +80,8 @@ Provide the server's URL (e.g. `https://mcp.acme.internal/sse`); the OAuth varia
 - **View** — the Connections panel shows all your connections; **Connect** / **Disconnect** toggles each one.
 - **Revoke** — **Disconnect** immediately removes access.
 - **Per-user** — your connections are yours alone, never shared with teammates.
-- **All agents** — your connected credentials are available to all your agents.
+- **Granted per sandbox** — a connection you own reaches a sandbox only once you grant it there. Connect once under Settings, then grant it to each sandbox that should use it.
+- **Rotating a key** — when an API key rotates upstream, update the connection's value in place (`dam connection update`) rather than disconnecting and reconnecting. The connection keeps its name and all its sandbox grants, and nothing restarts. OAuth connections refresh themselves and need no rotation.
 
 ## Security
 

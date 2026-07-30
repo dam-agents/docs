@@ -24,7 +24,7 @@ Reviews are posted as proper GitHub PR reviews (with inline comments), not just 
 ## How It Works
 
 ```
-Scheduled Heartbeat (every 10 min by default; configurable)
+Scheduled run (every 10 min by default; configurable)
          │
          ├── Load work/CONFIG.md + install/refresh configured skills
          ├── Fetch open PRs
@@ -56,8 +56,15 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Connections
 
-- **GitHub** (Enterprise or Public) — the agent reads PRs, posts reviews, and clones branches
-- **Slack** (optional, **opt-in at onboarding**) — powers the PR Shepherd: escalating reminders in your team channel for PRs that sit unreviewed. The agent asks during onboarding whether to enable it and, on yes, walks you through importing your team (GitHub org team or top contributors) plus their Slack member IDs into a reviewer roster — the only people it may ever @-mention. With Slack disabled the agent never touches it; reviews still land in the chat UI and on GitHub.
+- **GitHub** or **GitHub Enterprise** — the agent reads PRs, posts reviews, and clones branches
+- **A Slack channel binding** (optional, **opt-in at onboarding**) — powers the PR Shepherd: escalating reminders in your team channel for PRs that sit unreviewed. The agent asks during onboarding whether to enable it and, on yes, walks you through importing your team (GitHub org team or top contributors) plus their Slack member IDs into a reviewer roster — the only people it may ever @-mention. With Slack disabled the agent never touches it; reviews still land in the chat UI and on GitHub.
+
+    This is a **channel binding**, not a Slack connection — nudges go out through the platform to the conversation bound to this sandbox. Bind it from the sandbox's **Channels** tab or with `/dam bind` in Slack.
+
+!!! warning "The Channels tab is behind an experimental flag"
+    At this release, binding a channel from the DAM UI requires the **Advanced connections**
+    experimental feature to be on for your account (it's off by default). `/dam bind` from inside
+    Slack works either way. Turn the flag on, or skip Slack at onboarding and add it later.
 
 !!! warning "Use a dedicated bot account for the GitHub connection"
     Reviews are posted as whatever identity the GitHub connection resolves to. Connect a **dedicated machine/bot account** — **not your personal account** — that is a collaborator on the target repo with permission to review PRs.
@@ -71,11 +78,11 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Network Access
 
-**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack API access will surface in your inbox for approval on first use.
+**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears in your inbox for them.
 
 ## Setup
 
-1. **Create a Claude Code sandbox** — choose Claude Code as the coding agent in the Web UI, or `dam agent create --template claude-code` from the CLI
+1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure any supported model provider with your API key (e.g., IBM LiteLLM)
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
 4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`); if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
@@ -92,6 +99,12 @@ https://github.com/dam-agents/code-guardian/blob/main/ONBOARDING.md
 ```
 
 Onboarding is a short **interactive dialog** — the agent checks out its own definition (derived from the URL you send, so forks stay pinned to the fork), wires up the `work/` directory, and asks a handful of configuration questions: the display name it signs reviews with, the dedup-marker prefix, which review skills to run (defaults offered, each skill with its own source repo), whether to enable Slack notifications (and if so, it imports your team into the reviewer roster), and the review cadence (default **every 10 minutes**). Everything lands in `work/CONFIG.md`; it then reconstructs review state, creates the recurring schedule, writes the `$HOME/.code-guardian-onboarded` sentinel, and finishes with a summary of what it configured and how to use it day-to-day.
+
+!!! note "Its schedules run in UTC"
+    The agent creates its schedules as cron expressions, and cron schedules run in **UTC** — so a
+    weekly audit or a workday-windowed sweep won't follow your local clock. To get local wall-clock
+    times (and quiet hours), open the sandbox's **Schedules** tab and re-create the schedule with a
+    frequency and timezone. See [Schedules](../core-concepts/schedules.md).
 
 !!! tip "Files live in `work/`, not a subfolder"
     The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh sandbox rather than moving files by hand.

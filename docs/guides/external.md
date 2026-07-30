@@ -18,7 +18,7 @@ The platform installs its CA into the image's system trust store at startup, so 
 
 ### 2. A credential, created in the UI
 
-Under **Connections → Other → Custom header credential**, create the credential:
+Under **Connections → Custom Headers → Custom header credential**, create the credential:
 
 - **Name:** any label, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`

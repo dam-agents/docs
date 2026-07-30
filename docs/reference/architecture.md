@@ -39,7 +39,7 @@ Every agent has a **paired gateway pod** — a separate, hardened container that
 
 ### Credential Scoping
 
-- **Per-user:** Your credentials are yours alone. No other team member can use or see them.
+- **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel in **shared** mode lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
 - **All your agents:** Any agent you own can use your connected credentials.
 
@@ -79,26 +79,36 @@ When your agent tries to reach a service for the first time:
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
 3. If no rule exists, the request is **held** and you see an approval prompt
-4. You decide: **Allow once** (releases just this call), **Allow permanently** (a lasting rule for that host/method/path), **Allow `<host>`** (a host-level rule), or **Deny forever**. You can also **Dismiss** (block this request; future ones prompt again) or **Customize** the rule directly.
+4. You decide: **Allow once** (releases just this call), **Always allow this request** (a lasting rule for that host/method/path), **Always allow this host** (a host-level rule), **Deny once**, or **Always deny this request**. **Customize…** opens the sandbox's settings to write the rule yourself.
+
+From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#network-access-and-approvals).
 
 ---
 
-## Shared Agents in a Channel
+## Agents in a Channel
 
-When you bind an agent to a Slack conversation, **the binding is the authorization**: anyone Slack admits to that conversation can drive the agent, and every turn runs on the agent's own pod under the **agent's own** credentials.
+A Slack binding carries an **access mode**, chosen when the conversation is connected and **fixed for the binding's lifetime**. The mode decides who may drive the agent and whose credentials run each turn.
 
-### How It Works
+### Person-scoped (the default)
 
-When someone messages an agent in a bound conversation:
+1. Each Slack user links their platform identity (`/dam login`); an unlinked message never runs a turn
+2. A per-agent **allowed users** list gates who may trigger work. Empty means any linked user in the conversation; non-empty admits only those people
+3. The **owner's** turns relay to the agent's main pod
+4. An allowed non-owner's turn runs in an isolated per-turn pod pair under **that person's own** credentials, torn down when the turn ends
+5. Terms of Use acceptance is checked against the person driving the turn
 
-1. The conversation resolves to exactly one agent
-2. The turn runs on that agent's main pod, using the credentials and connections the agent already has
-3. The sender is recorded by their Slack user id, so a multi-person conversation stays attributable. Each message is labelled in the prompt with who sent it (a 1:1 DM isn't labelled — there's only one human in it)
+This is what lets several teammates share one conversation while each acts as themselves.
+
+### Shared
+
+1. The binding itself is the authorization — anyone Slack admits to the conversation drives the agent, with no login and no allow-list
+2. Every turn relays to the agent's main pod under the **agent's own** credentials
+3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-There is no per-person access mode, no identity linking required to send a message, and no allow-list. Identity linking exists only to authorize the in-chat `unbind` and `ambient on|off` commands (and is established during `bind` so the binder can later release it) — never to admit a turn.
+Telegram is structurally shared-only: with no workspace to anchor per-user identity, consent attaches to the conversation.
 
-A conversation and an agent are strictly one-to-one: a conversation binds to exactly one agent, and an agent to at most one conversation.
+A Slack conversation and an agent are strictly one-to-one: a conversation binds to exactly one agent, and an agent to at most one Slack conversation.
 
 ### What This Means for Access
 
@@ -110,13 +120,8 @@ A conversation and an agent are strictly one-to-one: a conversation binds to exa
 
 ### Consequences
 
-- **Everyone in the conversation acts with the agent's authority.** A colleague who pushes to GitHub through a bound agent does so with the agent's token, attributed to the agent's identity — not their own.
-- **Channel membership is the access control.** Excluding someone means removing them from the conversation, or unbinding it. Bind deliberately, and treat a bound channel as equivalent to sharing the agent's credentials with the room.
-- **Someone who needs to act as themselves needs their own agent.** There is no per-person credential switching within a shared one.
-- **Attribution within a binding is messenger-id based.** The security log records each turn's sender id; there is no per-turn platform identity.
-
-!!! note "This replaces the earlier per-person model"
-    Slack previously supported a person-scoped mode — identity linking, an allowed-users list, and a per-turn forked pod pair running under the replier's own credentials. It was removed for two reasons: the isolation it offered was incomplete (credentials were split per person, but the workspace was not, so any member could leave instructions the agent later ran under the owner's credentials), and supporting a second concurrent writer forced every agent's storage onto a shared-writable volume — a cost the whole platform paid for a mode almost nobody used.
-
-    Bindings that used it were **deleted** rather than converted: silently switching them to the open model would have widened who could drive an agent without the owner deciding that. Re-binding is the owner's consent. If a channel stopped working after the upgrade, bind it again.
+- **On a shared binding, everyone in the conversation acts with the agent's authority.** A colleague who pushes to GitHub through it does so with the agent's token, attributed to the agent's identity — not their own. Treat a shared channel as equivalent to sharing the agent's credentials with the room.
+- **On a person-scoped binding, membership alone isn't enough.** A linked identity plus the allow-list admits a driver, and their work lands under their own identity.
+- **Changing mode is deliberate.** Re-connecting with a different mode is refused; the owner must disconnect and reconnect, so the change is never a side effect.
+- **Ambient mode is shared-only** — it would otherwise have the agent read messages from people it cannot run turns for.
 
