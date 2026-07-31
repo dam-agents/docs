@@ -173,22 +173,18 @@ Bind an agent to a Slack conversation.
 
 ```bash
 dam channel available                                       # List enabled messenger providers
-dam channel list <agent>                                    # Bindings (with mode + ambient) and the allow-list
-dam channel slack connect <agent> --channel-id <C0…>        # Bind person-scoped (the default)
-dam channel slack connect <agent> --channel-id <C0…> --mode shared
-dam channel slack connect <agent> --channel-id <C0…> --mode shared --ambient
+dam channel list <agent>                                    # Bindings, with each Slack binding's ambient state
+dam channel slack connect <agent> --channel-id <C0…>            # Bind the channel (mentions-only)
+dam channel slack connect <agent> --channel-id <C0…> --ambient  # Bind with ambient mode on
 dam channel slack disconnect <agent>                        # Unbind the Slack channel
-dam channel allow <agent> --user someone@example.com        # Add to the allowed-user list (repeatable)
-dam channel disallow <agent> --user someone@example.com     # Remove from it (idempotent)
 ```
 
 - A Slack conversation binds to **exactly one** agent, and an agent to at most one Slack conversation.
-- `--mode` is `person-scoped` (default) or `shared`, and is **fixed for the binding's lifetime** — requesting a different mode for an existing binding is refused, so `disconnect` first. Person-scoped requires each driver to link their Slack identity and gates them on the allowed-user list, each running under their **own** credentials; shared makes the binding itself the authorization, with every turn under the **agent's own** credentials. See [Access modes](../integrations/slack.md#access-modes).
-- `--ambient` requires `--mode shared` and starts the binding in [ambient mode](../integrations/slack.md#ambient-mode-shared-bindings-only) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**.
-- **Re-running `connect` for the same agent in the same mode updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Pointing the channel at a *different* agent fails with `Slack channel already bound to another agent`; `disconnect` first. (The in-chat `/dam bind` is stricter — it refuses any already-connected conversation, even for the same agent, and always creates a *shared* binding.)
-- `dam channel allow`/`disallow` manage the allowed-user list, which gates Slack drivers on **person-scoped** bindings only — shared bindings never consult it. An empty list admits any linked user in the conversation.
-- `dam channel list` shows each binding's mode and ambient state; `--json` emits `{ channels, allowedUserEmails }`.
-- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind` and `/dam ambient on|off` require — and which a person-scoped binding requires before *any* turn runs. Run `/dam login` once in the channel.
+- **The binding is the authorization**: anyone Slack admits to the conversation drives the agent, and every turn runs under the **agent's own** credentials. There is no per-person mode and no allow-list. See [Who can drive the agent](../integrations/slack.md#who-can-drive-the-agent).
+- `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**. Against a server too old to understand ambient, the connect **fails loudly** rather than silently landing mentions-only.
+- **Re-running `connect` for the same agent updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Pointing the channel at a *different* agent fails with `Slack channel already bound to another agent`; `disconnect` first. (The in-chat `/dam bind` is stricter — it refuses any already-connected conversation, even for the same agent.)
+- `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
+- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind` and `/dam ambient on|off` require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/dam bind` rather than through this command group.
 
 ### Approvals

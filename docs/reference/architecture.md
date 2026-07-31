@@ -87,26 +87,16 @@ From the CLI the same choices are `dam approval approve` / `deny` — note that 
 
 ## Agents in a Channel
 
-A Slack binding carries an **access mode**, chosen when the conversation is connected and **fixed for the binding's lifetime**. The mode decides who may drive the agent and whose credentials run each turn.
+Binding a conversation to an agent is what authorizes it. There is one access model, and it is the same on both messengers:
 
-### Person-scoped (the default)
-
-1. Each Slack user links their platform identity (`/dam login`); an unlinked message never runs a turn
-2. A per-agent **allowed users** list gates who may trigger work. Empty means any linked user in the conversation; non-empty admits only those people
-3. The **owner's** turns relay to the agent's main pod
-4. An allowed non-owner's turn runs in an isolated per-turn pod pair under **that person's own** credentials, torn down when the turn ends
-5. Terms of Use acceptance is checked against the person driving the turn
-
-This is what lets several teammates share one conversation while each acts as themselves.
-
-### Shared
-
-1. The binding itself is the authorization — anyone Slack admits to the conversation drives the agent, with no login and no allow-list
+1. The binding itself is the authorization — anyone the messenger admits to the conversation drives the agent, with no login and no allow-list
 2. Every turn relays to the agent's main pod under the **agent's own** credentials
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-Telegram is structurally shared-only: with no workspace to anchor per-user identity, consent attaches to the conversation.
+Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `bind`, `unbind`, and `ambient`.
+
+Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 
 A Slack conversation and an agent are strictly one-to-one: a conversation binds to exactly one agent, and an agent to at most one Slack conversation.
 
@@ -120,8 +110,7 @@ A Slack conversation and an agent are strictly one-to-one: a conversation binds 
 
 ### Consequences
 
-- **On a shared binding, everyone in the conversation acts with the agent's authority.** A colleague who pushes to GitHub through it does so with the agent's token, attributed to the agent's identity — not their own. Treat a shared channel as equivalent to sharing the agent's credentials with the room.
-- **On a person-scoped binding, membership alone isn't enough.** A linked identity plus the allow-list admits a driver, and their work lands under their own identity.
-- **Changing mode is deliberate.** Re-connecting with a different mode is refused; the owner must disconnect and reconnect, so the change is never a side effect.
-- **Ambient mode is shared-only** — it would otherwise have the agent read messages from people it cannot run turns for.
+- **Everyone in the conversation acts with the agent's authority.** A colleague who pushes to GitHub through it does so with the agent's token, attributed to the agent's identity — not their own. Treat a bound channel as equivalent to sharing the agent's credentials with the room.
+- **Conversation membership is the access control.** The messenger owns who is in the room; the platform never resolves who is typing to decide whether a turn may run.
+- **Ambient mode is a deliberate opt-in**, off by default on every connect path, because it has the agent read every message in the channel rather than only the ones aimed at it.
 

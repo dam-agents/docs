@@ -54,6 +54,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 - Files you attach to a chat message are saved under your home directory, grouped by session, and handed to the agent as a path it can read — they don't land in your working directory
 
 !!! note "What survives hibernation"
-    Everything under `/home/agent` — your work, `$HOME`, caches, installed language packages —
-    comes back after a sleep. Software installed *outside* your home directory (system packages,
-    `/usr/local`) does not. Bake those into a [custom image](../guides/custom-image.md) instead.
+    Everything under `/home/agent` — your work, `$HOME`, installed language packages — comes back
+    after a sleep, **except `~/.cache`**, which is cleared on every wake. Software installed
+    *outside* your home directory (system packages, `/usr/local`) does not survive either. Bake
+    those into a [custom image](../guides/custom-image.md) instead.

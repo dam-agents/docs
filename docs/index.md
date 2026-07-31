@@ -68,7 +68,7 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     ---
 
-    Invite the DAM bot to a channel or DM, send `/dam bind`, and the whole channel can work with your agent — or connect it person-scoped so each teammate uses their own credentials.
+    Invite the DAM bot to a channel or DM, send `/dam bind`, and the whole channel can work with your agent — under the agent's own credentials.
 
 -   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code/Zed**
 

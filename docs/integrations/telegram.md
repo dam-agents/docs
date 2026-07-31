@@ -6,8 +6,8 @@ Chat with your agent from a Telegram DM or group.
 
 Telegram has no workspace to anchor per-person identity against, so consent attaches to the
 **conversation**: whoever binds a chat lends their agent to everyone in it. Every turn runs under the
-**agent's own** credentials, and members never log in. That makes Telegram equivalent to a
-[shared Slack binding](slack.md#access-modes) — there is no person-scoped option and no allow-list.
+**agent's own** credentials, and members never log in — the same
+[access model Slack uses](slack.md#who-can-drive-the-agent).
 
 ## Connect a chat
 

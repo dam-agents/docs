@@ -112,38 +112,21 @@ An agent runs one **coding harness** — the AI software inside the pod:
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
-## Ephemeral Runs (`dam-run`)
+## VM sandboxes
 
-From inside an agent — a web terminal, an SSH session, or the agent itself — you can run a single command in a **fresh, separate pod** with `dam-run`:
+Some work a container simply can't do — systemd, Docker or k3s, nested containers, kernel-adjacent
+tooling. For that, a sandbox can boot as a **full virtual machine** instead of a container, with
+those tools available inside it.
 
-```bash
-dam-run <command> [args...]
-```
+This is a choice you make when you create the sandbox, not a command you run inside one: turn on
+**Run as a virtual machine** in the create-sandbox wizard and pick one of the images it reveals —
+for example **Claude Code VM**, tagged **VM**.
 
-The executor pod is a throwaway copy of your agent: it uses the **same image, configuration, and persistent `~/work` workspace**, which it shares read-write with the main pod, so the command sees your files exactly as the main pod does. It holds no credentials itself — it borrows the parent's gateway, so the same tokens are injected on the wire and the same approval rules apply. Its input and output are streamed back over a PTY, so it behaves like a local invocation (including interactive TTY programs). The executor pod exists only for that one command — it is **torn down as soon as `dam-run` exits**, and disconnecting reaps it automatically.
-
-Use it to run something heavy, long, or risky off to the side without tying up — or disturbing — your main agent.
-
-!!! note "Limits"
-    Each agent may have up to **16 concurrent `dam-run` executors** at once; beyond that, new runs are rejected until one finishes. Nested runs (a `dam-run` that itself calls `dam-run`) draw from the same 16 slots. A single run is also capped at roughly **one hour** — for longer-lived work, use a dedicated agent instead.
-
-## Virtual machines (`dam-vm`)
-
-`dam-run`'s counterpart for work a pod simply can't do — systemd, Docker or k3s, nested containers,
-kernel-adjacent tooling:
-
-```bash
-dam-vm <command> [args...]
-```
-
-Where a `dam-run` executor shares your image, credentials, and workspace, the VM is the opposite: a
-**root-capable machine with its own filesystem that shares nothing** with the pod — no workspace, no
-credentials. Copy results back out before you finish. Run it with no command for an interactive
-login shell.
-
-!!! note "Depends on your deployment"
-    The VM host sits outside the cluster and is operator-managed, so `dam-vm` is only available if
-    your install has one configured.
+!!! note "Off until you opt in"
+    VM sandboxes ride the **VM sandboxes** toggle under **Experimental features** (see
+    [Configure](#configure)), which is off by default — until you enable it, the wizard switch and
+    the VM images stay hidden entirely. Your operator must also enable virtualization on the
+    install, so the option can be unavailable even with the toggle on. These images are **Alpha**.
 
 ## Managing Agents
 
@@ -180,17 +163,10 @@ From the sandbox's page, the left nav has six sections:
   changing it restarts a running sandbox on save)
 - **Connections** — link GitHub, API keys, and other credentials
 - **Channels** — connect the sandbox to a [Slack](../integrations/slack.md) conversation or
-  [Telegram](../integrations/telegram.md) chat, and control who's allowed to interact
+  [Telegram](../integrations/telegram.md) chat, and set ambient mode
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the sandbox has published
-
-!!! info "Channels is pre-release"
-    **Channels** only appears if the **Advanced connections** toggle is on for your account — it's
-    a per-user pre-release setting, off by default. To have it turned on, ask in
-    [#dam-community](../reference/contact.md). Connecting from inside Slack with `/dam bind` works
-    either way, so you don't need the toggle to use an agent from Slack — only to manage the binding
-    from the DAM UI.
 
 ### Open in
 
