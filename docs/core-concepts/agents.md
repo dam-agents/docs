@@ -187,10 +187,10 @@ From the sandbox's page, the left nav has six sections:
 
 !!! info "Channels is pre-release"
     **Channels** only appears if the **Advanced connections** toggle is on for your account — it's
-    off by default. It's a per-user setting you can turn on yourself, under **Experimental
-    features** in settings (the tab is hidden — tap the version string five times to reveal it).
-    Connecting from inside Slack with `/dam bind` works either way, so you don't need the toggle to
-    use an agent from Slack — only to manage the binding from the DAM UI.
+    a per-user pre-release setting, off by default. To have it turned on, ask in
+    [#dam-community](../reference/contact.md). Connecting from inside Slack with `/dam bind` works
+    either way, so you don't need the toggle to use an agent from Slack — only to manage the binding
+    from the DAM UI.
 
 ### Open in
 

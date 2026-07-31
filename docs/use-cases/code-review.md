@@ -64,7 +64,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 !!! warning "The Channels tab is behind an experimental flag"
     At this release, binding a channel from the DAM UI requires the **Advanced connections**
     experimental feature to be on for your account (it's off by default). `/dam bind` from inside
-    Slack works either way. Turn the flag on, or skip Slack at onboarding and add it later.
+    Slack works either way, so bind from there — or skip Slack at onboarding and add it later.
 
 !!! warning "Use a dedicated bot account for the GitHub connection"
     Reviews are posted as whatever identity the GitHub connection resolves to. Connect a **dedicated machine/bot account** — **not your personal account** — that is a collaborator on the target repo with permission to review PRs.

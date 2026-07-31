@@ -46,8 +46,8 @@ scopes it needs.
 
 !!! info "Not enabled by default"
     Google connections aren't offered to regular users yet. They appear in the catalog only once the
-    **Advanced connections** experimental feature is on for your account (see
-    [Sandboxes](agents.md#configure) for how to enable it).
+    **Advanced connections** experimental feature is on for your account — ask in
+    [#dam-community](../reference/contact.md) to have it turned on.
 
 Once connected, your agent can read and write the Google services whose scopes you approved. Connect
 several if it needs more than one; each is granted to a sandbox independently.
