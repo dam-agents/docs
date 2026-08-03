@@ -22,7 +22,7 @@ Each sandbox has an allowlist of external services it can reach.
 
 1. **From connections** — connecting GitHub automatically allows `api.github.com`, `github.com`, and `raw.githubusercontent.com`. Connecting GitHub Enterprise allows the host you specify plus its `api.<host>`.
 2. **From approvals** — clicking "Allow permanently" on an approval prompt creates a rule
-3. **Manually** — add rules directly in the Egress Rules panel
+3. **Manually** — add rules directly under **Network access** in the sandbox's settings
 
 ### Presets
 

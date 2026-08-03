@@ -28,7 +28,7 @@ Two names under the working directory are reserved by the platform and won't app
 
 The built-in editor supports:
 
-- Syntax highlighting for common languages (Python, TypeScript, Go, YAML, JSON, Markdown, etc.)
+- Syntax highlighting for common languages (Python, TypeScript, Go, YAML, JSON, Bash, SQL, etc.)
 - Line numbers
 - Direct in-browser editing with save
 
@@ -38,7 +38,8 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 
 | Limit | Value |
 |-------|-------|
-| Max viewable file size | 50 MB |
+| Max previewable file size | 10 MB |
+| Max download / transfer size | 50 MB |
 | Max upload file size | 50 MB |
 | Max import bundle size | 5 GB (your operator can lower this) |
 | Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews; other binary files open as a hex dump |

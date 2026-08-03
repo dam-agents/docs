@@ -16,18 +16,18 @@ Each agent is independent. You can run multiple agents at once, each with a diff
 ## Lifecycle
 
 ```
-Starting → Preparing workspace → Running → Hibernating → Hibernated → Starting → ...
-                                     │                                     ↑
-                          Pause ─────┤                                     │
-                          Stop ──────┴──────────────→ Stopped ─── Start ───┘
-                                                                           ↓
-                                                                         Error
+Starting → Running → Hibernating → Hibernated → Starting → ...
+               │                                     ↑
+    Pause ─────┤                                     │
+    Stop ──────┴──────────────→ Stopped ─── Start ───┘
+                                                     ↓
+                                                   Error
 ```
 
 | State | What's happening |
 |-------|-----------------|
 | **Starting** | Pod is scaling up from hibernated, stopped, or newly created. |
-| **Preparing workspace** | Pod is setting up its persistent storage and workspace (typically on first start). |
+| **Preparing workspace** | The sandbox was created from a git repo and is cloning it into the workspace. The pod is already up — it just isn't usable until the clone lands. |
 | **Running** | Pod is active, ready to chat. Reserves compute against your budget. |
 | **Hibernating** | Pod is scaling down after inactivity. |
 | **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
@@ -39,7 +39,8 @@ Starting → Preparing workspace → Running → Hibernating → Hibernated → 
 !!! note "The status pill collapses some of these"
     Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and a parked sandbox
     shows as **Over budget** (with the CPU/memory figures in its tooltip). The states above are the
-    underlying model, not nine distinct badges.
+    underlying model, not nine distinct badges. **Preparing workspace** sits inside Running rather
+    than before it, which is why it isn't a step in the diagram above.
 
 **Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires.
 
