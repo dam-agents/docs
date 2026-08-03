@@ -1,15 +1,76 @@
 # Skills
 
-Skills are packaged instructions from git repos that teach your agent new capabilities. Examples:
+A **skill** is a folder of packaged instructions that teaches your agent a capability — how to plan a
+feature, draft an ADR, write a PRD, file a GitHub issue. Your sandbox's **Skills** panel is where you
+see and manage them.
 
-- **plan-feature** — plan a feature before building it
-- **adr** — create architecture decision records
-- **write-a-prd** — draft a product requirements document
-- **file-issue** — draft and file GitHub issues
+## The three kinds of skill
 
-Which skills you see depends on the sources your platform team set up and the ones you add yourself.
+Every skill in the panel arrived one of three ways, and the panel groups them accordingly. Which
+group a skill is in decides what you can do with it, so this is the first thing to get straight:
 
-### Skill Sources
+| Group in the panel | Where it came from | Who manages it |
+|---|---|---|
+| **Created in this sandbox** | You authored it here — wrote the files in the workspace, or uploaded Markdown | Yours: edit, download, delete, publish |
+| **Included with sandbox image** | Baked into the image your sandbox boots from | Read-only — comes and goes with the image |
+| **Sourced from GitHub** | A git repo connected as a **skill source**; you install individual skills from it | Toggle each skill on or off; the repo is the source of truth |
+
+The rest of this page takes them in that order.
+
+## Created in this sandbox
+
+Two ways to make your own:
+
+- **Write it in the workspace.** A skill is a directory containing a `SKILL.md` — YAML frontmatter
+  with `name` and `description`, then the instructions — plus any supporting files (templates,
+  examples, scripts). Create it with the [file manager](file-manager.md) or just ask your agent to.
+- **Upload Markdown.** The Add-source dialog has an **Upload .md files** tab that turns each file you
+  give it into its own skill.
+
+Either way it lands under **Created in this sandbox**. Each one's **⋯** menu offers:
+
+- **Download skill** — a single-file skill comes down as `<name>.md`, ready to re-upload as-is;
+  anything with extra files comes down as a `.zip` of the skill's folder.
+- **Delete skill** — removes it from this sandbox.
+
+### Publishing one
+
+**Publish** opens a pull request against a connected GitHub source — it never commits directly. The
+skill shows **In review** until the PR merges. Only GitHub-hosted sources can be published to, so
+you need at least one connected before the button does anything.
+
+Publishing shares a skill; it doesn't move it. If you delete a skill you published, the pull request
+stays open upstream — withdraw it yourself if you don't want it.
+
+## Included with sandbox image
+
+Some images ship with skills already inside them, so a fresh sandbox is useful immediately. Which
+ones you get depends on the image you picked in the create wizard — a specialized image usually
+carries the skills its job needs.
+
+These are **read-only**. You can't publish them, and editing one only earns it a **Modified** badge,
+meaning the files on disk now differ from the copy the image shipped. They aren't yours to delete
+either — they arrive with the image and change when you
+[update the image](agents.md#updating-the-image).
+
+## Sourced from GitHub
+
+A **skill source** is a git repo full of skills. Connecting one doesn't install anything; it makes
+that repo's skills available to install individually.
+
+1. Open your sandbox's **Skills** panel
+2. Browse the skills in an existing source, or **Add source** with a git repo URL
+3. Flip a skill's toggle on — it installs right away; flip it off to uninstall
+
+Installed skills are downloaded into your sandbox and become available on the **next session** — the
+harness picks them up when it next starts, not mid-session. Installing always takes the source's
+**current HEAD**, so re-installing is how you update. When a source moves ahead of what you have, the
+skill shows an **Update** pill; click it to reinstall at the latest version.
+
+To remove one of these, turn it off in its source card — the **Delete skill** action is only for
+skills you created here.
+
+### Which sources you have
 
 | Source | Can you remove it? |
 |--------|--------------------|
@@ -20,58 +81,24 @@ Which skills you see depends on the sources your platform team set up and the on
 If you add your own source pointing at a repo the platform already provides, yours takes over the
 listing; remove yours and the platform entry reappears.
 
-### Installing a Skill
-
-1. Open your sandbox's **Skills** panel
-2. Browse available skills or add a new source (git repo URL)
-3. Flip a skill's toggle on — it installs right away; flip it off to uninstall
-
-Skills are downloaded to your sandbox's workspace and become available on the next session — the harness picks them up when it next starts, not mid-session. Installing always takes the source's **current HEAD**; re-running install is how you update. When a source moves ahead of what you installed, the skill shows an **Update** pill — click it to reinstall at the latest version.
-
-!!! tip "Your agent can manage skills itself"
-    Beyond the panel, the agent has built-in tools to discover and install skills mid-task — `list_skill_sources`, `list_skills_in_source`, `install_skill`, `uninstall_skill`, and `publish_skill` (open a PR adding a skill it authored to a source). These are always available; nothing to configure.
-
-### Authoring Custom Skills
-
-1. Create a directory with a `SKILL.md` file (YAML frontmatter with `name` and `description`)
-2. Add supporting files (instructions, templates, examples)
-3. Use the **Publish** button to submit as a PR to a connected git repo
-
-You can also **upload Markdown files** directly — the Add-source dialog has an *Upload .md files* tab
-that turns each file into its own skill. Skills you create or upload this way appear under
-**Created in this sandbox**, separate from image-included skills and your git sources.
-
-**Publish** opens a pull request against the source repo — it never commits directly. Only
-GitHub-hosted sources can be published to, and the skill shows **In review** until the PR merges.
-
-### Downloading or deleting a skill you made
-
-Each skill under **Created in this sandbox** has a **⋯** menu:
-
-- **Download skill** — a single-file skill comes down as `<name>.md`, which you can re-upload as-is;
-  anything with extra files comes down as a `.zip` containing the skill's folder.
-- **Delete skill** — removes it from the sandbox. If you had published it, the pull request stays
-  open upstream; withdraw it yourself if you don't want it.
-
-Skills installed from a git source aren't deleted this way — turn them off in their source card
-instead.
-
-### Skills that came with the image
-
-Skills baked into your sandbox's image are listed separately under **Included with sandbox image**.
-They're read-only: you can't publish them, and editing one only earns it a **Modified** badge, which
-means the files on disk now differ from the copy the image shipped.
-
 ### Where skills live in a source repo
 
-When a git repo is scanned as a skill source, each skill is a directory containing a `SKILL.md`. The scanner looks under these source roots, in order:
+When a repo is scanned as a source, each skill is a directory containing a `SKILL.md`. The scanner
+looks under these roots, in order:
 
 1. `skills/`
 2. `.claude/skills/`
 3. `.agents/skills/`
 
-Skills found across these roots are combined. If none of them contain skills, the scanner falls back to the repo's top-level directories. When the same skill `name` appears under more than one root, the first match wins (in the order above) and the later duplicate is dropped.
+Skills found across these roots are combined. If none of them contain skills, the scanner falls back
+to the repo's top-level directories. When the same skill `name` appears under more than one root, the
+first match wins and the later duplicate is dropped.
 
 If you point a source at a specific **subdirectory** when you add it, only that directory is scanned
 and the roots above are skipped. Changing the subdirectory means removing the source and adding it
 again.
+
+!!! tip "Your agent can manage skills itself"
+    Beyond the panel, the agent has built-in tools to discover and install skills mid-task — list
+    sources, list a source's skills, install, uninstall, and publish a skill it authored as a pull
+    request. These are always available; nothing to configure.

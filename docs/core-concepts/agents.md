@@ -2,10 +2,6 @@
 
 A **sandbox** is a running AI agent with its own persistent workspace, credential access, and configuration. It's the core thing you create and work with on the platform, and it's isolated from every other sandbox — its own compute pod, workspace, and network boundary.
 
-!!! note "Sandbox and agent are the same thing"
-    **Sandbox** is the name you'll see in the UI. **Agent** is the same object's name in the API and
-    the CLI (`dam agent …`), and this page uses both.
-
 ## What You Get
 
 When you create an agent, the platform provisions:

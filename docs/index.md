@@ -24,25 +24,25 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     ---
 
-    Sandboxes execute continuously in the cloud and keep running after you close your laptop or go offline. An idle one hibernates to save compute and wakes on your next message or scheduled run — its workspace is on a persistent volume, so nothing is lost.
+    Sandboxes run continuously in the cloud, so work carries on after you close your laptop or go offline.
 
 -   :material-shield-lock:{ .lg .middle } **Isolated execution**
 
     ---
 
-    Each sandbox runs in an isolated container with all access routed through a policy-enforced gateway.
+    Each sandbox runs in an isolated container, with all access routed through a policy-enforced gateway.
 
 -   :material-key-variant:{ .lg .middle } **Zero trust credentials**
 
     ---
 
-    Connect agents to your tools without exposing credentials to the runtime.
+    Connect agents to your tools through a gateway that adds your credentials without ever revealing them.
 
 -   :material-account-group:{ .lg .middle } **Built for teams**
 
     ---
 
-    Run sandboxes on schedules for recurring workflows, and share work in Slack.
+    Run sandboxes on schedules for recurring work, and share what they produce in a Slack channel.
 
 </div>
 
@@ -68,7 +68,7 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     ---
 
-    Invite the DAM bot to a channel or DM, send `/dam bind`, and the whole channel can work with your agent — under the agent's own credentials.
+    Invite the DAM bot to a channel or DM, and the whole channel can work with your agent.
 
 -   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code/Zed**
 
@@ -80,7 +80,7 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     ---
 
-    Run sandboxes on a recurring timer — daily code reviews, nightly audits, continuous monitoring. A schedule wakes a hibernated sandbox, can skip quiet hours, and either starts fresh or resumes one long-lived session.
+    Run sandboxes on a recurring timer — daily code reviews, nightly audits, continuous monitoring.
 
 </div>
 
@@ -114,12 +114,11 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     Execution-first system for end-to-end coding tasks.
 
--   :material-server:{ .lg .middle } **Claude Code VM**
+-   :material-server:{ .lg .middle } **[Claude Code VM](core-concepts/agents.md#vm-sandboxes)** <small>Alpha</small>
 
     ---
 
-    Claude Code in a sandbox that boots as a full VM — docker and k3s inside it.
-    Alpha — see [VM sandboxes](core-concepts/agents.md#vm-sandboxes).
+    Claude Code in a sandbox that boots as a full VM.
 
 </div>
 
@@ -133,7 +132,7 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     ---
 
-    Hypothesis-driven experimentation agent for long-running research campaigns.
+    Hypothesis-driven agent for long-running research.
 
 -   :material-dna:{ .lg .middle } **OpenEvolve** <small>Alpha</small>
 
@@ -145,7 +144,7 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     ---
 
-    LLM-driven agent for optimizing GPU kernels.
+    LLM-driven agent that optimizes GPU kernels.
 
 -   :material-dna:{ .lg .middle } **ShinkaEvolve** <small>Alpha</small>
 
@@ -163,7 +162,7 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     ---
 
-    More ready-to-use workloads are on the way.
+    More ready-to-use agents are on the way.
 
 </div>
 
@@ -203,12 +202,12 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     ---
 
-    Create a Claude Code agent and start chatting in 5 minutes.
+    Create a Claude Code agent and start chatting in five minutes.
 
 -   **[Use Cases →](use-cases/code-review.md)**
 
     ---
 
-    See what teams are building — autonomous code review, app development, and more.
+    See what teams are building — code review, app development, and more.
 
 </div>

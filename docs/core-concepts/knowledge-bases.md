@@ -7,15 +7,6 @@ The platform deliberately owns very little here — there's no ingestion pipelin
 no fixed schema. The knowledge lives as files in the sandbox's workspace, and the agent does the
 organizing. That means you shape it by talking to it, and you can always open the files yourself.
 
-!!! info "A knowledge base *is* a sandbox"
-    It's a normal sandbox carrying a marker, so everything you know about sandboxes still applies:
-    it has sessions, connections, schedules, a Size, and a workspace; it hibernates when idle and
-    wakes when you open it; it counts against your budget while running. It appears in your
-    **Sandboxes** list badged as a knowledge base, and **Knowledge Bases** is a filtered view of the
-    same sandboxes — not a separate place things hide.
-
-    The marker is set when you create it and can't be changed afterwards.
-
 ## Templates
 
 Pick a template at create time. It decides what tooling gets installed in the workspace:

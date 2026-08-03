@@ -40,19 +40,6 @@ Once connected, your agent can clone private repos, push branches, create PRs, a
 
 When you sign in with **GitHub.com**, commits the agent makes are attributed to that account — DAM writes your GitHub display name and email into the agent's git config (`user.name` / `user.email`). If your GitHub profile email is private, a `users.noreply.github.com` address is used instead, so your primary email never lands in commit history. Other GitHub connection types, including GitHub Enterprise, don't set this — configure git yourself there.
 
-### Google Workspace
-
-Google services ship as **separate connections per service** — Gmail, Google Calendar, Google Drive,
-Google Docs, Google Admin, Google Analytics, Google Classroom, and others — so each grants only the
-scopes it needs.
-
-!!! info "Availability"
-    Google connections aren't in every account's catalog yet. If you don't see them, ask in
-    [#dam-community](../reference/contact.md).
-
-Once connected, your agent can read and write the Google services whose scopes you approved. Connect
-several if it needs more than one; each is granted to a sandbox independently.
-
 ## API Key Connections
 
 For services that use a static API key rather than OAuth, connect a prebuilt template:
