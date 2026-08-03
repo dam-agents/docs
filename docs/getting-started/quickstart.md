@@ -28,7 +28,8 @@ Connections let your agent access your repositories — clone, push branches, an
 2. Choose the GitHub connection that matches where your project lives:
     - **GitHub** — for repos on `github.com`
     - **GitHub Enterprise** — for repos on your company's GitHub Enterprise instance (e.g., `github.ibm.com`)
-3. Complete the OAuth flow, or use **GitHub (Personal Access Token)** and paste a PAT with the repo permissions you need
+3. Click **New**, then pick how to authenticate: **Sign in with Github** walks you through the OAuth
+   flow, or **Personal access token** lets you paste a fine-grained token scoped to the repos you need
 
 Connecting doesn't yet give a sandbox access — **grant** the connection to each sandbox that should use it.
 

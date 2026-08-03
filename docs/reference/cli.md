@@ -30,7 +30,7 @@ Precedence: CLI flag > environment variable > config file.
 **Global flags:**
 
 - `--server <url>` — override the configured server URL for a single call. Available on every networked command **except `dam auth status` and the `dam auth token` subcommands**, which use the configured active host.
-- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `version`, or `dam ssh`.
+- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `version`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, or `agent create-interactive`. (`file list` does have it.)
 
 Precedence for the server URL is flag > `DAM_SERVER` > config file > **error** — there is no default server.
 
@@ -102,7 +102,7 @@ Connections are reusable OAuth/credential bindings (GitHub, MCP servers, custom-
 
 ```bash
 dam connection templates                          # List provider templates you can create from
-dam connection list                               # List team connections
+dam connection list                               # List your connections
 dam connection list <agent>                       # List the connections granted to one agent
 dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
 dam connection update <id-or-name>                # Rotate the stored credential (prompts securely)
@@ -133,7 +133,7 @@ dam network create <agent> --host api.example.com      # Add a rule (default met
 dam network update <rule-id>                           # Update an existing rule
 dam network revoke <rule-id>                           # Remove a rule
 dam network preset <agent>                             # Show the agent's effective preset
-dam network apply-preset <agent> --preset <none|trusted|all>   # Apply a network preset
+dam network apply-preset <agent> --preset <none|trusted|all> [-y]  # Apply a network preset ('all' needs -y when scripting)
 dam network trusted-hosts                              # Platform-wide hosts seeded by the 'trusted' preset
 ```
 
@@ -151,7 +151,7 @@ Browse skill sources and manage the skills installed on an agent.
 ```bash
 dam skill source list                                  # List connected skill sources
 dam skill source add <git-url>                         # Register a skill source from a git URL
-dam skill source remove <id>                           # Remove a source (installed skills remain)
+dam skill source remove <id>                           # Remove a source you added (installed skills remain)
 dam skill source refresh <id>                          # Refresh a source
 dam skill catalog <source>                             # Scan a source's available skills
 dam skill catalog <source> --agent <ref>               # Annotate install status against an agent
