@@ -42,7 +42,7 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     ---
 
-    Run sandboxes on schedules for recurring workflows, and share work in Slack (binding a channel from the UI is currently behind an experimental flag).
+    Run sandboxes on schedules for recurring workflows, and share work in Slack.
 
 </div>
 
@@ -119,7 +119,7 @@ Shared infrastructure for accelerating AI-native research — run agents continu
     ---
 
     Claude Code in a sandbox that boots as a full VM — docker and k3s inside it.
-    Alpha, and off until you enable [VM sandboxes](core-concepts/agents.md#vm-sandboxes).
+    Alpha — see [VM sandboxes](core-concepts/agents.md#vm-sandboxes).
 
 </div>
 

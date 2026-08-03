@@ -122,11 +122,10 @@ This is a choice you make when you create the sandbox, not a command you run ins
 wizard's image lists include VM-backed images alongside the container ones — for example
 **Claude Code VM**, tagged **VM**. Picking one is the whole decision.
 
-!!! note "Off until you opt in"
-    VM sandboxes ride the **VM sandboxes** toggle under **Experimental features** (see
-    [Configure](#configure)), which is off by default — until you enable it, the VM images stay
-    hidden from the wizard entirely. Your operator must also enable virtualization on the install,
-    so the images can be unavailable even with the toggle on. They are **Alpha**.
+!!! note "Availability"
+    VM-backed images are **Alpha**, and they depend on your operator having enabled virtualization
+    on the install — so they may not appear in the wizard. If you don't see them and you need one,
+    ask in [#dam-community](../reference/contact.md).
 
 ## Managing Agents
 
@@ -163,8 +162,7 @@ From the sandbox's page, the left nav has these sections:
   changing it restarts a running sandbox on save)
 - **Connections** — link GitHub, API keys, and other credentials
 - **Channels** — connect the sandbox to a [Slack](../integrations/slack.md) conversation or
-  [Telegram](../integrations/telegram.md) chat, and set ambient mode — pre-release, and only
-  present if the **Advanced connections** toggle is on for your account
+  [Telegram](../integrations/telegram.md) chat, and set ambient mode
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the sandbox has published

@@ -46,10 +46,9 @@ Google services ship as **separate connections per service** — Gmail, Google C
 Google Docs, Google Admin, Google Analytics, Google Classroom, and others — so each grants only the
 scopes it needs.
 
-!!! info "Not enabled by default"
-    Google connections aren't offered to regular users yet. They appear in the catalog only once the
-    **Advanced connections** experimental feature is on for your account — ask in
-    [#dam-community](../reference/contact.md) to have it turned on.
+!!! info "Availability"
+    Google connections aren't in every account's catalog yet. If you don't see them, ask in
+    [#dam-community](../reference/contact.md).
 
 Once connected, your agent can read and write the Google services whose scopes you approved. Connect
 several if it needs more than one; each is granted to a sandbox independently.

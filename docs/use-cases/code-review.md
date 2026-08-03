@@ -59,12 +59,11 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 - **GitHub** or **GitHub Enterprise** — the agent reads PRs, posts reviews, and clones branches
 - **A Slack channel binding** (optional, **opt-in at onboarding**) — powers the PR Shepherd: escalating reminders in your team channel for PRs that sit unreviewed. The agent asks during onboarding whether to enable it and, on yes, walks you through importing your team (GitHub org team or top contributors) plus their Slack member IDs into a reviewer roster — the only people it may ever @-mention. With Slack disabled the agent never touches it; reviews still land in the chat UI and on GitHub.
 
-    This is a **channel binding**, not a Slack connection — nudges go out through the platform to the conversation bound to this sandbox. Bind it from the sandbox's **Channels** tab or with `/dam bind` in Slack.
+    This is a **channel binding**, not a Slack connection — nudges go out through the platform to the conversation bound to this sandbox. Bind it with `/dam bind` in Slack, or from the sandbox's **Channels** section if your account has one.
 
-!!! warning "The Channels tab is behind an experimental flag"
-    At this release, binding a channel from the DAM UI requires the **Advanced connections**
-    experimental feature to be on for your account (it's off by default). `/dam bind` from inside
-    Slack works either way, so bind from there — or skip Slack at onboarding and add it later.
+!!! tip "Binding from Slack is the surest path"
+    `/dam bind` from inside Slack is available to everyone, so bind from there — or skip Slack at
+    onboarding and add it later.
 
 !!! warning "Use a dedicated bot account for the GitHub connection"
     Reviews are posted as whatever identity the GitHub connection resolves to. Connect a **dedicated machine/bot account** — **not your personal account** — that is a collaborator on the target repo with permission to review PRs.

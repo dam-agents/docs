@@ -205,8 +205,8 @@ The sandbox's **Channels** section in the DAM UI does the same job, and lists wh
 Click **Connect channel**, paste the **Channel ID** (starts with `C0…`), and set **Ambient
 mode**. Each card shows the binding's ambient state at a glance — *Ambient on* or *Ambient off*.
 
-The section sits behind the **Advanced connections** toggle, which is off by default — if you don't
-see it, that's why. `/dam bind` needs no toggle.
+If your sandbox doesn't show a **Channels** section, use `/dam bind` from inside Slack — it does the
+same job and is available to everyone.
 
 ## Troubleshooting
 
