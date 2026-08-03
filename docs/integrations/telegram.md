@@ -4,10 +4,13 @@ Chat with your agent from a Telegram DM or group.
 
 ## How Telegram differs from Slack
 
-Telegram has no workspace to anchor per-person identity against, so consent attaches to the
-**conversation**: whoever binds a chat lends their agent to everyone in it. Every turn runs under the
-**agent's own** credentials, and members never log in — the same
-[access model Slack uses](slack.md#who-can-drive-the-agent).
+Telegram uses the same access model as Slack: the binding is the authorization, so anyone in a bound
+chat drives the agent under the **agent's own** credentials, with no login needed. See
+[who can drive the agent](slack.md#who-can-drive-the-agent).
+
+What differs is everything around it — Telegram has no identity linking, so **group admin** is the
+gate on the in-chat commands; messages relay as text only; there's no ambient mode; and one agent can
+be bound to several chats.
 
 ## Connect a chat
 
@@ -22,7 +25,7 @@ Telegram has no workspace to anchor per-person identity against, so consent atta
 | Command | What it does |
 |---------|--------------|
 | `/dam bind` | Connect one of your agents to this chat (group admins only) |
-| `/dam unbind` | Release the binding |
+| `/dam unbind` | Release the binding (group admins only) |
 | `/dam` | Show the available commands |
 
 !!! note "One agent per chat"
@@ -58,10 +61,11 @@ Each thread maps to its own persistent session, the same as Slack. Ambient mode 
 
 | Problem | Solution |
 |---------|----------|
-| "Only group admins can `/dam bind`" | Ask a chat admin to run it, or bind from the DAM UI |
+| "Only group admins can `/dam bind`" | Only a chat admin can connect a group. Ask one to run it — a Telegram chat can't be bound from the DAM UI |
+| "Only group admins can `/dam unbind`" | Ask a chat admin to run it, or release the chat from the DAM UI |
 | "This chat is already connected to an agent" | Send `/dam unbind` first, then bind again |
 | "This chat isn't connected to an agent" | Run `/dam bind` to connect one of your agents |
 | Bot silent in a group | Make sure you `@mention` it, and that the chat is bound |
 | The login link didn't work | It expires after ~10 minutes — send `/dam bind` again |
 | An attached image was ignored | Telegram relays text only. Paste the content instead |
-| Asked to accept Terms of Use | The agent's owner must accept the terms in the DAM UI before turns run |
+| Asked to accept Terms of Use, or silence in a group | Whoever bound the chat must accept the terms in the DAM UI before turns run. In a group nothing is posted — the bot just stays quiet |

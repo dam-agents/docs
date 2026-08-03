@@ -12,11 +12,10 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 
 ### Step 2: Add a Model Provider
 
-1. Go to **Providers**
-2. Click **"Add Provider"**
-3. Select **IBM LiteLLM ETE Proxy**
-4. Paste your LiteLLM API key
-5. Click **Save**
+1. Go to **Settings → Providers**
+2. Find **IBM LiteLLM ETE Proxy** and click **Connect**
+3. Paste your LiteLLM API key
+4. Click **Save**
 
 !!! note
     Don't have a LiteLLM key yet? See [How to Create a LiteLLM Key](../guides/litellm-key.md) for a walkthrough.
@@ -51,7 +50,7 @@ Clone github.ibm.com/my-org/my-project and give me a summary
 of the codebase architecture.
 ```
 
-Or click **"Terminal"** to launch the full Claude Code interactive TUI.
+Or use **Open in → Terminal (browser)** to launch the full Claude Code interactive TUI.
 
 ---
 
@@ -72,7 +71,8 @@ dam config set server https://dam-prod.apps.dam-cl.fmaas.res.ibm.com/
 dam auth login
 ```
 
-A browser window will open for IBM SSO authentication. Confirm the device code to complete login.
+A browser window opens to authenticate. The CLI prints a user code — confirm it in the browser to
+complete login. Pass `--no-browser` if you'd rather open the URL yourself.
 
 ### Step 3: Create a Claude Code Agent
 

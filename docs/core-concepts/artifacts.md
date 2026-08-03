@@ -65,8 +65,8 @@ nesting. Deleting a folder does **not** delete the artifacts inside it; they bec
 
 ## Sharing
 
-Artifacts start **private**. Use **Sharing…** on an artifact to publish it; the link is served from a
-separate share domain, so a shared artifact can never reach your DAM session.
+Artifacts start **private**. Use **Share** in an artifact's **⋯** menu to publish it; the link is
+served from a separate share domain, so a shared artifact can never reach your DAM session.
 
 !!! warning "The link is the access control"
     The share URL contains an unguessable random token, and **that token is the only thing
@@ -78,8 +78,9 @@ separate share domain, so a shared artifact can never reach your DAM session.
 
 Turning visibility back to private disables the link immediately.
 
-Folders can be shared too — a folder page lists the artifacts inside it **that are themselves
-shared**, so check what's public before sharing the folder.
+Folders get a public page automatically once something inside them is shared — it lists only the
+artifacts that are **themselves shared**. **Copy folder link** in the folder's **⋯** menu gives you
+the URL, and stays disabled until at least one artifact inside is public.
 
 Each artifact records **who published it** (which sandbox, or you if you uploaded it) and a **view
 count** of public renders. The count is a bare number — no viewer identity or timestamps — and
@@ -101,8 +102,10 @@ An expiry is **retention, not link lifetime**. This is the one thing worth readi
     Once the expiry passes, the link reports itself as expired and you can still renew it. After a
     **7-day grace period** the content is permanently deleted, every version with it.
 
-The Sharing dialog offers **Never expires**, 1 hour, 1 day, 7 days, or 30 days. Leave it at *never*
-to keep the artifact indefinitely; set one when you want the content gone on a schedule.
+The Share dialog offers **Never expires**, 1 hour, 1 day, 7 days, or 30 days — plus **Keep current
+expiry** once the artifact already has one. Leave it at *never* to keep the artifact indefinitely; set
+one when you want the content gone on a schedule. The expiry control appears only while the public
+link is on.
 
 Deleting an artifact is also permanent — all versions go, and the share link dies with them.
 

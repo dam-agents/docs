@@ -39,7 +39,7 @@ Every agent has a **paired gateway pod** — a separate, hardened container that
 
 ### Credential Scoping
 
-- **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel in **shared** mode lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
+- **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
 - **All your agents:** Any agent you own can use your connected credentials.
 
@@ -81,7 +81,7 @@ When your agent tries to reach a service for the first time:
 3. If no rule exists, the request is **held** and you see an approval prompt
 4. You decide: **Allow once** (releases just this call), **Always allow this request** (a lasting rule for that host/method/path), **Always allow this host** (a host-level rule), **Deny once**, or **Always deny this request**. **Customize…** opens the sandbox's settings to write the rule yourself.
 
-From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#network-access-and-approvals).
+From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#approvals).
 
 ---
 

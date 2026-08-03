@@ -114,6 +114,13 @@ Shared infrastructure for accelerating AI-native research — run agents continu
 
     Execution-first system for end-to-end coding tasks.
 
+-   :material-server:{ .lg .middle } **Claude Code VM**
+
+    ---
+
+    Claude Code in a sandbox that boots as a full VM — docker and k3s inside it.
+    Alpha, and off until you enable [VM sandboxes](core-concepts/agents.md#vm-sandboxes).
+
 </div>
 
 ## Available Specialized Images

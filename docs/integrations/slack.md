@@ -31,6 +31,12 @@ Turns are attributed in the security log by Slack user id. In channels and group
 each message labelled with the sender's Slack mention, so a busy multi-speaker channel stays
 readable and attributable — a 1:1 DM isn't labelled, since there's only one human in the room.
 
+!!! warning "Connections from before this release were removed"
+    Earlier versions let you connect a channel for named people only. That mode is gone, and those
+    connections were **removed** on upgrade rather than widened to the whole channel — that's a
+    decision only you can make. If a channel went quiet after the upgrade, run `/dam bind` again to
+    reconnect it.
+
 ## Connect a channel (`/dam bind`)
 
 A conversation does nothing until it's **bound** to an agent. The quickest path is from inside Slack:
@@ -179,8 +185,8 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 
 ## Other ways to bind
 
-You can also connect a conversation from the CLI or the DAM UI — useful when you want ambient on
-from the start.
+You can also connect a **channel** from the CLI or the DAM UI — useful when you want ambient on
+from the start. DMs and group DMs bind in-chat with `/dam bind`.
 
 From the **CLI**:
 
@@ -195,8 +201,8 @@ refused until the current binding is released.
 
 See the [CLI reference](../reference/cli.md#channels).
 
-The agent's **Channels** section in the DAM UI does the same job, and lists what's currently bound.
-Open **Connect a Slack channel**, paste the **Channel ID** (starts with `C0…`), and set **Ambient
+The sandbox's **Channels** section in the DAM UI does the same job, and lists what's currently bound.
+Click **Connect channel**, paste the **Channel ID** (starts with `C0…`), and set **Ambient
 mode**. Each card shows the binding's ambient state at a glance — *Ambient on* or *Ambient off*.
 
 The section sits behind the **Advanced connections** toggle, which is off by default — if you don't

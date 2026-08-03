@@ -37,12 +37,15 @@ Any sandbox can drive an experiment, though — the SDK (`experiment_sdk`, Pytho
 only) ships in the platform base image. Declaring a skeleton takes a handful of lines around code you
 would write anyway.
 
-### Framework starting points
+### Optimization framework images
 
-If you'd rather begin from an established optimization framework than write the loop yourself, the
-wizard also offers preconfigured starting points for **NOUS**, **OpenEvolve**, **ShinkaEvolve**, and
-**GEPA**. Each is marked experimental and, like the experiment sandbox, depends on an image your
-operator has enabled.
+If you'd rather work in an established optimization framework than write the loop yourself, pick
+**Specialized sandbox** → **Choose an image** in the wizard, which offers preconfigured images such as
+**NOUS**, **OpenEvolve**, **ShinkaEvolve**, **GEPA**, and **K-Search**. Each is marked experimental and
+depends on an image your operator has enabled.
+
+These run their own campaigns in their own terms — they don't register a plan or appear under
+Experiments.
 
 ## Lifecycle
 
@@ -68,13 +71,16 @@ Every experiment gets a dashboard published to your [artifact library](artifacts
 supply its own bespoke HTML instead of the stock one. Dashboards render sealed off from the network
 and from credentials — they visualize the data the run reported, nothing more.
 
-Because it's an artifact, a dashboard can be [shared with a public link](artifacts.md#sharing) — which
-is what makes an experiment's results shareable outside DAM.
+The live dashboard only works inside DAM, where it can receive the run's data. When a run finishes,
+the platform publishes a self-contained **results** artifact — the same view with the finished run's
+data baked in. That's the one to
+[share with a public link](artifacts.md#sharing) outside DAM.
 
 ## Managing experiments
 
-Experiments have their own destination in the DAM UI, listing yours newest-first. Open one for its
-skeleton, its runs, and the live trace of the current run. Deleting an experiment removes its runs with
-it.
+Experiments have their own destination in the DAM UI, grouped under the sandbox running them — one
+sandbox can hold several, so the sandbox is the container. From there you reach an experiment's runs,
+its live invocations, and its per-run artifacts, and open the sandbox's chat where the dashboard docks.
+Deleting an experiment removes its runs with it; the artifacts it published survive.
 
 Experiments are owner-scoped: you only see and act on your own.

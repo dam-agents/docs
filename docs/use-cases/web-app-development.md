@@ -64,8 +64,8 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 3. **Add a GitHub connection** — provide a PAT with repo access to your target repository, so `gh` can authenticate
 4. **Start a chat session** — tell the agent what you want to build. On first run it reads its `work/config.json`; if that's missing it asks you for the configuration (the target `owner/repo`), then verifies the repo's default branch and required labels before starting.
 
-!!! note "Deployed as a Custom Image"
-    Software Factory isn't one of the ready-made images in the agent picker. Deploy it from the image published in [dam-agents/software-factory](https://github.com/dam-agents/software-factory) (see the repo's README) via the **Custom Image** option. Once running, the agent operates from the `work/CLAUDE.md` playbook and its bundled skills — you don't clone anything by hand.
+!!! note "Deployed as a Custom image"
+    Software Factory isn't one of the ready-made images in the agent picker. Deploy it from the image published in [dam-agents/software-factory](https://github.com/dam-agents/software-factory) (see the repo's README) via the **Custom image** option. Once running, the agent operates from the `work/CLAUDE.md` playbook and its bundled skills — you don't clone anything by hand.
 
 
 ## Using the Agent

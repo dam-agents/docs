@@ -8,7 +8,7 @@ The base image handles the platform plumbing:
 
 - It runs the **agent-runtime** process — the ACP server for chat, the terminal and SSH relays, the file service, and the runtime channel — that connects your agent to the platform. You never modify it.
 - It controls *when* your agent is launched (a chat session vs. a terminal session). You define *what* gets launched.
-- It includes common tools: Node, Python, `git`, and `curl`, with `gh`, `jq`, and `uv` a call away.
+- It includes common tools: Node, Python, `git`, and `curl` ready to use, with `gh`, `jq`, and `uv` a call away.
 
 Customizing the image is mostly a few lines in the Dockerfile. Options, used alone or in combination:
 
@@ -67,9 +67,9 @@ FROM quay.io/dam-agents/platform-base:latest  # (1) always build on the base ima
 USER root                                     # (2) switch to root to make changes
 
 # (3) CUSTOMIZE: install any tools or libraries your agent should have.
-#     The base is RHEL with node/npm and uv (a Python installer); there is no
-#     preinstalled Python. Install one of these ways:
-#       - a system package: RUN dnf install -y <package>
+#     The base ships node/npm, Python 3.12 and uv — but no package manager,
+#     so dnf/apt are unavailable here. Install one of these ways:
+#       - an OS package:    use the two-stage pattern below
 #       - an npm package:   RUN npm install -g <package>
 #       - a Python package: RUN uv venv --python 3.12 /opt/venv \
 #                               && uv pip install --python /opt/venv/bin/python <package>
@@ -140,8 +140,8 @@ This is the entire contract between your image and the platform. When you open a
 
 Ship **both**, and override both. The base's `harness-chat` is a stub that exits with *"this agent
 image does not provide a chat harness"*, and its `harness-terminal` execs `claude`, which the base
-doesn't install — so neither works unmodified. (Every built-in image — Claude Code, Codex, PI Agent,
-IBM Bob — ships these same two scripts; only the program each one execs differs.)
+doesn't install — so neither works unmodified. (Every built-in image ships these same two scripts;
+only the program each one execs differs.)
 
 Both scripts are launched with their working directory set to **`/home/agent/work`**, so relative
 paths resolve there.
@@ -241,7 +241,7 @@ set a **Network access** preset. Every sandbox needs a provider to power its mod
 **IBM LiteLLM ETE Proxy**, **Bob Shell**, **Anthropic**, and **OpenAI**. Match it to your agent: an
 OpenAI-compatible harness needs an OpenAI-compatible provider.
 
-On step 3, **Connections**, attach any credentials your agent needs, then click **Create sandbox**.
+On step 3, **Grant connections**, attach any credentials your agent needs, then click **Create sandbox**.
 If it calls an external service, that's where you attach the credential and allow its host — see
 [how to call an external service](external.md).
 

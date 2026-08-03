@@ -13,12 +13,13 @@ Schedules let you define automated tasks that fire on a timer:
 ## Creating a Schedule
 
 1. Open your sandbox's **Schedules** panel
-2. Click **"Add Schedule"**
+2. Click **Create Schedule**
 3. Configure:
+    - **Name** — what the schedule is called in the panel
+    - **Run** — Daily, Hourly, Every N minutes, or Custom (RRULE). Hourly and Every-N-minutes ask for the interval; Daily asks for a time, picked in half-hour steps. For all but Custom you also pick which days of the week apply (e.g. weekdays only).
+    - **Timezone** — defaults to your browser's and can be any IANA zone. Schedules fire at that local wall-clock time year-round, adjusting across daylight saving.
+    - **Quiet hours** — time windows when the schedule is suppressed. Each window has its own switch, so you can turn one off without deleting it.
     - **Prompt** — what the agent should do when it wakes
-    - **Frequency** — every N minutes, hourly, daily, or custom (RRULE). For all but custom you also pick which days of the week apply (e.g. weekdays only).
-    - **Time and timezone** — time is picked in half-hour steps; the timezone defaults to your browser's and can be any IANA zone. Schedules fire at that local wall-clock time year-round, adjusting across daylight saving.
-    - **Quiet hours** — time windows when the schedule is suppressed
 4. Click **Create**
 
 !!! tip "Your agent can manage schedules itself"
@@ -27,8 +28,8 @@ Schedules let you define automated tasks that fire on a timer:
 !!! note "Older cron schedules run in UTC"
     Schedules you create in the panel always carry a timezone. Schedules defined with a raw cron
     expression (which an agent may do) run in **UTC** and ignore quiet hours — so a 9am-local cron
-    drifts by an hour when daylight saving changes. They're also read-only once created: recreate
-    them as a regular schedule to edit.
+    drifts by an hour when daylight saving changes. Cron schedules **and any schedule your agent
+    created for itself** are read-only in the panel — recreate one yourself if you need to change it.
 
 ## Session Modes
 
@@ -43,13 +44,19 @@ Use **fresh** for independent tasks (each PR review is standalone). Use **contin
 
 Fresh runs can overlap if one is still going when the next fires; continuous runs queue behind each other.
 
-**Starting over** — you can reset a continuous schedule so its next run begins a fresh session. The reset only lands while the sandbox is running: if it stays asleep, the reset lapses and the next run resumes the old session as before.
+**Starting over** — **Reset session** in a continuous schedule's **⋯** menu makes its next run begin a fresh session. The reset only lands while the sandbox is running: if it stays asleep, the reset lapses and the next run resumes the old session as before.
+
+## Pausing, editing, deleting
+
+Each schedule has a toggle — flip it off to pause it without deleting; its next run then reads
+**Paused**. The **⋯** menu holds **Edit schedule**, **Delete schedule**, and, for a continuous
+schedule, **Reset session**.
 
 ## Quiet Hours
 
 Suppress schedule fires during specific time windows. Suppressed runs are **dropped, not deferred** — if a fire lands in quiet hours, it's skipped entirely (not queued for later).
 
-**Example:** You have an hourly schedule that checks for new Slack messages. You set quiet hours from 10pm–7am. The 11pm, 12am, ... 6am runs simply don't happen. The next run fires at 7am as usual.
+**Example:** You have an hourly schedule that checks for new Slack messages. You set quiet hours from 10pm–7am. The 10pm, 11pm, 12am, ... 6am runs simply don't happen. The next run fires at 7am as usual — the start time is inside the quiet window, the end time is outside it.
 
 !!! warning "Dropped, not deferred"
     If you need every run to eventually execute, quiet hours is not the right tool. Use it for polling tasks where skipping off-hours runs is acceptable.

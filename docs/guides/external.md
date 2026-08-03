@@ -14,7 +14,7 @@ Add an `ENV` line for whatever environment variable your tool reads its key from
 ENV MY_TOOL_API_KEY=dummy-placeholder
 ```
 
-The platform installs its CA into the image's system trust store at startup, so tools that read the system store — Python's `requests`/`httpx`, Go, Node — trust the platform's network automatically. No extra certificate configuration is needed.
+The platform makes its CA available to your tools at startup, so common HTTP clients — Python's `requests`/`httpx`, Go, Node — trust the platform's network automatically. No extra certificate configuration is needed.
 
 ### 2. A credential, created in the UI
 
@@ -22,10 +22,12 @@ Under **Connections → Custom Headers → Custom header credential**, create th
 
 - **Name:** any label, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`
-- **Header name:** the header the API expects the key in (e.g. `Authorization` or `X-API-KEY`)
-- **Value format:** `{value}` for the raw key, or `Bearer {value}` if the API wants that prefix
+- **Header name:** the header the API expects the key in — pre-filled with `Authorization`; change it if the API wants something else (e.g. `X-API-KEY`)
+- **Value format:** pre-filled with `Bearer {value}`; use plain `{value}` if the API wants the raw key
 - **Secret value:** the real key
-- **Environment variable:** the same variable name from your Dockerfile, e.g. `MY_TOOL_API_KEY`
+- **Environment variable:** the same variable name from your Dockerfile, e.g. `MY_TOOL_API_KEY`. This
+  field is **optional in the form but required for this pattern** — leave it blank and the placeholder
+  in your image is never substituted, with no error to tell you why
 
 Then grant it to the agent from the agent's **Connections** panel. (You can add it to an existing agent — no need to recreate it.) Granting the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**.
 

@@ -79,13 +79,15 @@ If you lose connection (close tab, network drop), the terminal isn't killed just
 
 ```bash
 dam chat my-agent               # New terminal session
-dam chat my-agent --continue    # Reattach to the most recent terminal session
+dam chat my-agent --continue    # Reattach to your open terminal session
 dam chat my-agent --resume <id> # Resume a specific session by id
 dam chat my-agent --reset       # Kill the PTY and start it fresh
 ```
 
-`--continue` matches the single most-recent **terminal** session, and errors if several are open —
-name one with `--resume`. On disconnect the CLI prints a ready-to-paste resume command.
+`--continue` needs exactly one open **terminal** session. With none it tells you to start one; with
+several it lists their ids and asks you to name one with `--resume`. Resuming a *chat* session in the
+terminal switches its mode, so the CLI confirms before it does — declining leaves the session alone.
+On disconnect the CLI prints a ready-to-paste resume command.
 
 ## When to Use Which
 

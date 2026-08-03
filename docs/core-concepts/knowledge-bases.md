@@ -43,13 +43,13 @@ came from.
 
 ## Creating one
 
-From **Knowledge bases**, click **New knowledge base** — that's the sandbox wizard with the
+From **Knowledge bases**, click **Create knowledge base** — that's the sandbox wizard with the
 **Knowledge base sandbox** starting point already selected.
 
 You'll pick the template, then name it, choose a **Size** and network access preset, a provider, and
 any connections to grant. Two things are decided for you: the harness is pinned to Claude Code (no
-image to choose), and the provider list is limited to the two that reach Claude — **IBM LiteLLM**
-(recommended) or **Anthropic**.
+image to choose), and the provider list is limited to the two that reach Claude — **IBM LiteLLM ETE
+Proxy** (recommended) or **Anthropic**.
 
 After it's created, the platform runs the template's setup command **once** in the workspace and
 wakes the sandbox, so the tooling is in place before you say anything. No conversation happens during
@@ -65,9 +65,10 @@ feed it, rather than dropping you into an empty chat.
 
 !!! warning "Setup needs network access"
     The template's setup step downloads its toolkit from GitHub, through the sandbox's egress
-    gateway. If you pick a **strict default-deny** network preset, that download can be blocked and
-    the knowledge base comes up without its tooling. **Trusted defaults** is the safer choice here;
-    if setup seems not to have run, check [network access](network-access.md) first.
+    gateway. If you switch to the **Strict default-deny** network preset, that download can be blocked
+    and the knowledge base comes up without its tooling. **Trusted defaults** — the default — is the
+    safer choice here; if setup seems not to have run, check
+    [network access](network-access.md) first.
 
 ## Adding sources and building knowledge
 

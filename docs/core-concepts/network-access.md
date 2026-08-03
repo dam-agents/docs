@@ -8,10 +8,10 @@ Each sandbox has an allowlist of external services it can reach.
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| Host | Domain the sandbox can reach; `*.` wildcards allowed | `api.github.com`, `*.example.com` |
+| Host | Domain the sandbox can reach; `*.` wildcards allowed. Add `:port` for a service that isn't on 443 | `api.github.com`, `*.example.com`, `api.prod.example:6443` |
 | Method | HTTP method (defaults to `*`, meaning all) | `GET`, `POST` |
 | Path | URL path pattern (defaults to `*`) | `/repos/*` |
-| Port | Upstream port, when the service isn't on 443 | `6443` |
+| Verdict | `allow` or `deny`. The most specific rule wins, so a deny rule can carve an exception out of a broad allow | `allow` |
 
 !!! note "Narrowing a rule restarts the gateway"
     A host-only rule is cheap. Adding a method, path, or port means the sandbox's network gateway has
@@ -24,6 +24,19 @@ Each sandbox has an allowlist of external services it can reach.
 2. **From approvals** — clicking "Allow permanently" on an approval prompt creates a rule
 3. **Manually** — add rules directly in the Egress Rules panel
 
+### Presets
+
+Rather than writing rules one at a time, pick a preset:
+
+| Preset | What it does |
+|--------|--------------|
+| **Trusted defaults** | Allows GitHub, npm, PyPI, Anthropic and other common hosts. The usual starting point. |
+| **Strict default-deny** | Adds nothing — every request surfaces in your Inbox until you allow it. |
+| **Allow everything** | A development escape hatch. Narrow it back with deny rules. |
+
+Switching presets replaces the previous preset's rules. Rules you added by hand, and rules that came
+from a connection, are left alone.
+
 ## Approvals
 
 When a sandbox tries to reach a service not in its allowlist:
@@ -35,10 +48,10 @@ When a sandbox tries to reach a service not in its allowlist:
 | Verdict | Effect |
 |---------|--------|
 | **Allow once** | This request proceeds; future requests prompt again |
-| **Always allow this request** | Creates a lasting egress rule for that host/method/path |
-| **Always allow this host** | Creates a host-level rule (all methods/paths on that host). Offered when the prompt suits a host-level rule |
+| **Always allow this request** (**Allow permanently** in the Inbox) | Creates a lasting egress rule for that host/method/path |
+| **Always allow this host** (**Allow &lt;host&gt;** in the Inbox) | Creates a host-level rule (all methods/paths on that host). Offered on network prompts only — tool-call prompts have no host |
 | **Deny once** (**Dismiss** in the Inbox) | Blocks just this request; future requests prompt again |
-| **Always deny this request** | Creates a lasting deny rule; this and every future matching request fail |
+| **Always deny this request** (**Deny forever** in the Inbox) | Creates a lasting deny rule; this and every future matching request fail |
 
 **Customize…** opens the sandbox's settings so you can write the rule yourself.
 
@@ -60,7 +73,8 @@ If no one responds within **30 minutes** (your operator can change this), the re
 
 The default is always deny:
 
-- A host that isn't allowed fails immediately — name resolution happens in the gateway, so it doesn't hang.
+- A host you've explicitly denied fails right away. A host with no rule at all doesn't fail — it
+  waits for you (see [Approvals](#approvals)).
 - If the approval system itself is unreachable, the request is refused **without** raising a prompt.
 - An expired hold is denied, not allowed.
 

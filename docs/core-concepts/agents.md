@@ -118,15 +118,15 @@ Some work a container simply can't do — systemd, Docker or k3s, nested contain
 tooling. For that, a sandbox can boot as a **full virtual machine** instead of a container, with
 those tools available inside it.
 
-This is a choice you make when you create the sandbox, not a command you run inside one: turn on
-**Run as a virtual machine** in the create-sandbox wizard and pick one of the images it reveals —
-for example **Claude Code VM**, tagged **VM**.
+This is a choice you make when you create the sandbox, not a command you run inside one: the
+wizard's image lists include VM-backed images alongside the container ones — for example
+**Claude Code VM**, tagged **VM**. Picking one is the whole decision.
 
 !!! note "Off until you opt in"
     VM sandboxes ride the **VM sandboxes** toggle under **Experimental features** (see
-    [Configure](#configure)), which is off by default — until you enable it, the wizard switch and
-    the VM images stay hidden entirely. Your operator must also enable virtualization on the
-    install, so the option can be unavailable even with the toggle on. These images are **Alpha**.
+    [Configure](#configure)), which is off by default — until you enable it, the VM images stay
+    hidden from the wizard entirely. Your operator must also enable virtualization on the install,
+    so the images can be unavailable even with the toggle on. They are **Alpha**.
 
 ## Managing Agents
 
@@ -155,7 +155,7 @@ Catalog entries show a display name and tags (e.g. the providers they support); 
 
 ### Configure
 
-From the sandbox's page, the left nav has six sections:
+From the sandbox's page, the left nav has these sections:
 
 - **Sandbox Setup** — name, image, provider, **Network access** (which external services it may
   reach), **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables,
@@ -163,7 +163,8 @@ From the sandbox's page, the left nav has six sections:
   changing it restarts a running sandbox on save)
 - **Connections** — link GitHub, API keys, and other credentials
 - **Channels** — connect the sandbox to a [Slack](../integrations/slack.md) conversation or
-  [Telegram](../integrations/telegram.md) chat, and set ambient mode
+  [Telegram](../integrations/telegram.md) chat, and set ambient mode — pre-release, and only
+  present if the **Advanced connections** toggle is on for your account
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the sandbox has published
@@ -185,9 +186,16 @@ From the agent's actions menu you can take it down without deleting it:
 
 - **Pause — wakes on next use** — puts it to sleep now and frees its budget.
 - **Stop — until started again** — a hard stop; it stays down until you bring it back up (or a scheduled run fires). Use this to reliably free budget for other work.
-- **Wake** / **Start** — brings a sandbox back up. The menu says *Wake* for a hibernated or paused sandbox, and *Start* for a parked one, where it retries the budget gate.
+- **Wake** / **Start** — brings a sandbox back up. In the sandboxes list a parked sandbox offers *Start*, which retries the budget gate; elsewhere the action reads *Wake*.
+- **Restart** — offered for a running or errored sandbox, and the only power action for those states. It recreates the sandbox on its current settings; the workspace survives. Reach for it when one is wedged.
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).
+
+### Updating the image
+
+When the template a sandbox was created from moves on, its page shows an **Update available** badge
+and an **Upgrade** button under the Image field. Applying it is always explicit, changes only the
+image, and restarts the sandbox if it's running.
 
 ### Delete
 
