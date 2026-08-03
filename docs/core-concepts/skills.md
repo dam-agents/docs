@@ -36,8 +36,10 @@ Either way it lands under **Created in this sandbox**. Each one's **⋯** menu o
 ### Publishing one
 
 **Publish** opens a pull request against a connected GitHub source — it never commits directly. The
-skill shows **In review** until the PR merges. Only GitHub-hosted sources can be published to, so
-you need at least one connected before the button does anything.
+skill then shows **In review** with a link to the pull request. That pill records that you published
+and isn't checked against GitHub afterwards, so it stays put once the PR is merged or closed — follow
+the link for the real state. Only GitHub-hosted sources can be published to, so you need at least one
+connected before the button does anything.
 
 Publishing shares a skill; it doesn't move it. If you delete a skill you published, the pull request
 stays open upstream — withdraw it yourself if you don't want it.

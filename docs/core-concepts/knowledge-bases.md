@@ -14,11 +14,12 @@ Pick a template at create time. It decides what tooling gets installed in the wo
 | Template | What it does |
 |----------|-------------|
 | **LLM Wiki** (default) | Installs the LLM Wiki toolkit and keeps an interlinked, self-maintaining knowledge wiki as you feed it sources. |
-| **Plain Wiki** | No toolkit — the agent reads your files as knowledge and keeps what it learns as plain markdown notes. Works offline. |
+| **Plain Wiki** | No toolkit — the agent reads your files as knowledge and keeps what it learns as plain markdown notes. |
 
 Choose **Plain Wiki** if you want something durable and dependency-free that you could read straight
-out of the workspace, or if the sandbox won't have the network access the toolkit installer needs.
-Choose **LLM Wiki** for a richer, cross-linked wiki.
+out of the workspace. Choose **LLM Wiki** for a richer, cross-linked wiki. Both templates fetch their
+setup from GitHub when the knowledge base is created, so neither avoids the network requirement below
+— the difference is what you're left with afterwards.
 
 The template is recorded on the knowledge base and shown in the list, so you can see which one it
 came from.

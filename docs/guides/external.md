@@ -25,9 +25,10 @@ Under **Connections → Custom Headers → Custom header credential**, create th
 - **Header name:** the header the API expects the key in — pre-filled with `Authorization`; change it if the API wants something else (e.g. `X-API-KEY`)
 - **Value format:** pre-filled with `Bearer {value}`; use plain `{value}` if the API wants the raw key
 - **Secret value:** the real key
-- **Environment variable:** the same variable name from your Dockerfile, e.g. `MY_TOOL_API_KEY`. This
-  field is **optional in the form but required for this pattern** — leave it blank and the placeholder
-  in your image is never substituted, with no error to tell you why
+- **Environment variable:** the same variable name from your Dockerfile, e.g. `MY_TOOL_API_KEY`. The
+  form treats this as optional, and leaving it blank does **not** stop the header swap — the host is
+  still allowed and the real key still injected on the wire. What you lose is the variable your tool
+  reads to know what to send, so fill it in whenever your tool gets its key from the environment
 
 Then grant it to the agent from the agent's **Connections** panel. (You can add it to an existing agent — no need to recreate it.) Granting the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**.
 

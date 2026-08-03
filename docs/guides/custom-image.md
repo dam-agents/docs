@@ -43,8 +43,8 @@ Every agent Dockerfile follows the same shape: start `FROM` the published base i
 The base image provides:
 
 - **Node 24** and `npm`, **Python 3.12**, plus `git`, `curl`, `tar`, `gzip`, and `mise`
-- `gh`, `jq`, `rg`, `fd`, `uv`/`uvx`, `kubectl`, and `oc` as lazy `mise` shims — on `PATH`, but the
-  first call installs them through the egress gateway
+- `gh`, `jq`, `rg`, `fd`, `uv`/`uvx`, `kubectl`, `oc`, and `gws` as lazy `mise` shims — on `PATH`, but
+  the first call installs them through the egress gateway
 - The **agent-runtime** process (the ACP server for chat, the terminal and SSH relays, the file
   service, and the runtime channel that delivers env, files, MCP entries, skills, and triggers)
 - Default harness scripts you'll override in Step 3
