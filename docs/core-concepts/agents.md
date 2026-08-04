@@ -109,21 +109,6 @@ An agent runs one **coding harness** — the AI software inside the pod:
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
-## VM sandboxes
-
-Some work a container simply can't do — systemd, Docker or k3s, nested containers, kernel-adjacent
-tooling. For that, a sandbox can boot as a **full virtual machine** instead of a container, with
-those tools available inside it.
-
-This is a choice you make when you create the sandbox, not a command you run inside one: the
-wizard's image lists include VM-backed images alongside the container ones — for example
-**Claude Code VM**, tagged **VM**. Picking one is the whole decision.
-
-!!! note "Availability"
-    VM-backed images are **Alpha**, and they depend on your operator having enabled virtualization
-    on the install — so they may not appear in the wizard. If you don't see them and you need one,
-    ask in [#dam-community](../reference/contact.md).
-
 ## Managing Agents
 
 ### Create
