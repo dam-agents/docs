@@ -68,7 +68,7 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 
     ---
 
-    Invite the DAM bot to a channel or DM, and the whole channel can work with your agent.
+    Invite the DAM bot, run `/dam bind`, and the whole channel can work with your agent.
 
 -   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code/Zed**
 
@@ -118,7 +118,7 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 
 ## Available Specialized Images
 
-Ready-to-use agents built on top of the coding harnesses. Pick one under **Specialized sandbox** in the create wizard, connect a model provider, and launch. A couple need a little more — GEPA's optimization loop requires an API-key-style provider connection (an Anthropic OAuth token drives only its chat), and K-Search evaluates on Modal by default.
+Ready-to-use agents built on top of the coding harnesses. Pick one under **Specialized sandbox** in the create wizard, connect a model provider, and launch. A couple need a little more — GEPA's optimization loop requires an API-key-style provider connection (an Anthropic OAuth token drives only its chat), and k-search evaluates on Modal by default.
 
 <div class="grid cards" markdown>
 
@@ -134,7 +134,7 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     Evolutionary agent that iteratively optimizes your code.
 
--   :material-chip:{ .lg .middle } **K-Search** <small>Alpha</small>
+-   :material-chip:{ .lg .middle } **k-search** <small>Alpha</small>
 
     ---
 

@@ -28,8 +28,9 @@ Connections let your agent access your repositories — clone, push branches, an
 2. Choose the GitHub connection that matches where your project lives:
     - **GitHub** — for repos on `github.com`
     - **GitHub Enterprise** — for repos on your company's GitHub Enterprise instance (e.g., `github.ibm.com`)
-3. Click **New**, then pick how to authenticate: **Sign in with Github** walks you through the OAuth
-   flow, or **Personal access token** lets you paste a fine-grained token scoped to the repos you need
+3. Click **New**. On the **GitHub** card, pick how to authenticate: **Sign in with Github** walks you
+   through the OAuth flow, or **Personal access token** lets you paste a fine-grained token scoped to
+   the repos you need. **GitHub Enterprise** goes straight to **Sign in with Github Enterprise**.
 
 Connecting doesn't yet give a sandbox access — **grant** the connection to each sandbox that should use it.
 
@@ -37,14 +38,16 @@ Connecting doesn't yet give a sandbox access — **grant** the connection to eac
 
 1. Click **"Create sandbox"**
 2. Choose **General-purpose sandbox**, then **Claude Code**
-3. Name it (e.g., `my-agent`), pick your provider and a **Size**
+3. Name it (e.g., `my-agent`), pick your provider and a **Size**, and leave **Network access** on
+   **Trusted defaults (recommended)** — anything it isn't allowed to reach surfaces in your **Inbox**
+   for approval
 4. Grant the connections it should use, then create
 
 Your sandbox will provision in a few seconds — you'll see the status change to "Running."
 
 ### Step 5: Start Working
 
-Open your agent and type your first message:
+Open your sandbox and type your first message:
 
 ```
 Clone github.ibm.com/my-org/my-project and give me a summary

@@ -55,7 +55,7 @@ editor is what lets it idle down.
 
 By default an agent hibernates after the platform-wide idle timeout. You can **override this per agent** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the agent is used, or set it to **0 to never hibernate** so the agent stays running. The field always shows the value in force, so an agent with no override displays the inherited platform default rather than a blank.
 
-!!! warning "An agent that never hibernates keeps consuming compute (and billing) even while idle. Use `0` only when you genuinely need an always-on agent."
+!!! warning "An agent that never hibernates holds its reserved compute even while idle, keeping that room away from your other sandboxes. Use `0` only when you genuinely need an always-on agent."
 
 ### Background work and hibernation
 
@@ -90,7 +90,7 @@ an always-on sandbox and one that may be interrupted.
 
 Each agent has a **Size** — how much CPU and memory it can use while it's running. You choose the Size when you create an agent and can change it later in settings; each catalog image starts from a sensible default.
 
-Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* agents can reserve at once. An agent reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. As you pick a Size, the create wizard shows how much of your budget is still free.
+Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* agents can reserve at once. An agent reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the sandbox still saves, it just waits parked until room frees.
 
 - If a new or resized agent would exceed your budget, it can't start and shows as **Parked** — it waits until other agents free up room, and **Start** is its retry.
 - To make room, **pause** or **stop** an agent you aren't using, then start the parked one.
@@ -143,8 +143,6 @@ From the sandbox's page, the left nav has these sections:
   and **Size** (CPU/memory while running, within your [compute budget](#compute-budget-and-size);
   changing it restarts a running sandbox on save)
 - **Connections** — link GitHub, API keys, and other credentials
-- **Channels** — connect the sandbox to a [Slack](../integrations/slack.md) conversation or
-  [Telegram](../integrations/telegram.md) chat, and set ambient mode
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the sandbox has published

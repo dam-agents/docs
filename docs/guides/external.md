@@ -18,7 +18,7 @@ The platform makes its CA available to your tools at startup, so common HTTP cli
 
 ### 2. A credential, created in the UI
 
-Under **Connections → Custom Headers → Custom header credential**, create the credential:
+Under **Connections → Custom Headers**, click **New** and create the credential:
 
 - **Name:** any label, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`

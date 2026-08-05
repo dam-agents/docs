@@ -86,8 +86,8 @@ closing it returns you to the list rather than to Sandboxes.
 Its settings page covers the harness (read-only), network access, and connections. **Size isn't
 editable there** — a knowledge base runs on its defaults to keep the surface conversational.
 
-There's no CLI command for creating a knowledge base. Since it's an agent underneath, `dam agent
-list` / `get` / `delete` still work on it.
+There's no CLI command for creating a knowledge base, but `dam agent list` / `get` / `delete` all
+work on one.
 
 **Deleting a knowledge base deletes the sandbox and its workspace** — the knowledge with it. Export
 anything you want to keep first.

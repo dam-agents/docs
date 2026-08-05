@@ -62,7 +62,7 @@ replacing it, or you'll break the experiment SDK.
 The annotated skeleton follows. Most of it is fixed boilerplate; the parts you change are called out.
 
 ```dockerfile
-FROM quay.io/dam-agents/platform-base:latest  # (1) always build on the base image
+FROM quay.io/dam-agents/platform-base:<version>  # (1) build on the base image; pin a version, not `latest`
 
 USER root                                     # (2) switch to root to make changes
 

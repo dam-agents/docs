@@ -45,7 +45,7 @@ When you sign in with **GitHub.com**, commits the agent makes are attributed to 
 For services that use a static API key rather than OAuth, connect a prebuilt template:
 
 1. Navigate to **Connections** → **New** → under **Apps**, pick the service (e.g. **Modal**)
-2. Click **Connect** and paste your key
+2. Paste your key and click **Create**
 
 Model providers aren't here — they live on the **Providers** tab (see above).
 
@@ -55,7 +55,7 @@ Connect a cluster with its API endpoint and a service-account token (plus the cl
 certificate isn't publicly trusted). Your agent gets a working `kubectl` / `oc` — the token itself
 never reaches the sandbox, so it can't leak from there. Connect several clusters and they compose.
 
-For a service without a prebuilt template, use the **Custom Headers** tab → **Custom header credential** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
+For a service without a prebuilt template, use the **Custom Headers** tab → **New** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
 
 ## MCP Servers
 

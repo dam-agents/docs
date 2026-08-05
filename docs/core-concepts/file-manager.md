@@ -38,7 +38,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 
 | Limit | Value |
 |-------|-------|
-| Max previewable file size | 10 MB |
+| Max previewable file size | 50 MB |
 | Max download / transfer size | 50 MB |
 | Max upload file size | 50 MB |
 | Max import bundle size | 5 GB (your operator can lower this) |

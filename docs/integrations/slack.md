@@ -185,8 +185,8 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 
 ## Other ways to bind
 
-You can also connect a **channel** from the CLI or the DAM UI — useful when you want ambient on
-from the start. DMs and group DMs bind in-chat with `/dam bind`.
+You can also connect a **channel** from the CLI — useful when you want ambient on from the start.
+DMs and group DMs bind in-chat with `/dam bind`.
 
 From the **CLI**:
 
@@ -201,12 +201,8 @@ refused until the current binding is released.
 
 See the [CLI reference](../reference/cli.md#channels).
 
-The sandbox's **Channels** section in the DAM UI does the same job, and lists what's currently bound.
-Click **Connect channel**, paste the **Channel ID** (starts with `C0…`), and set **Ambient
-mode**. Each card shows the binding's ambient state at a glance — *Ambient on* or *Ambient off*.
-
-If your sandbox doesn't show a **Channels** section, use `/dam bind` from inside Slack — it does the
-same job and is available to everyone.
+`/dam bind` from inside Slack does the same job, and is the quickest route for a channel you're
+already in.
 
 ## Troubleshooting
 
@@ -214,7 +210,7 @@ same job and is available to everyone.
 |---------|----------|
 | Bot doesn't respond in a channel | Make sure you **`@mention`** it, and that the conversation is bound (`/dam bind`) |
 | "This conversation isn't connected" / "No instance connected to this channel" | Run `/dam bind` to connect one of your agents |
-| Binding refused as already connected | The conversation, or that agent, is already bound. `/dam unbind` first |
+| Binding refused as already connected | The conversation is already bound. `/dam unbind` first |
 | "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI or the UI |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |

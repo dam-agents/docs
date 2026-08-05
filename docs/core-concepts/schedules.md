@@ -44,7 +44,7 @@ Use **fresh** for independent tasks (each PR review is standalone). Use **contin
 
 Fresh runs can overlap if one is still going when the next fires; continuous runs queue behind each other.
 
-**Starting over** — **Reset session** in a continuous schedule's **⋯** menu makes its next run begin a fresh session. The reset only lands while the sandbox is running: if it stays asleep, the reset lapses and the next run resumes the old session as before.
+**Starting over** — **Reset session** in a continuous schedule's **⋯** menu makes its next run begin a fresh session. Unlike a fire, a reset doesn't wake the sandbox — it waits for the next time the sandbox is up. If the sandbox stays down for about an hour, the reset lapses and the next run resumes the old session as before.
 
 ## Pausing, editing, deleting
 

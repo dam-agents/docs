@@ -13,7 +13,7 @@ The session inherits the agent's full pod environment: the egress proxy, injecte
 
 - The `dam` CLI installed and logged in — see the [CLI reference](../reference/cli.md) (`dam auth login`).
 - The OpenSSH client (`ssh`, `ssh-keygen`) on your machine. Present by default on macOS and Linux.
-- A running agent. (An open SSH connection keeps the agent awake — see [Keeping agents awake](#keeping-agents-awake-billing) below.)
+- A running agent. (An open SSH connection keeps the agent awake — see [Keeping agents awake](#keeping-agents-awake) below.)
 - For the editor modes: `code` (or `code-insiders`) / `zed` on your `PATH`.
 
 !!! note "Custom images need `sshd`"
@@ -104,12 +104,12 @@ dam ssh configure --clear     # remove every dam-managed host entry
 
 `--all` is a reconcile: it adds entries for your current agents and removes entries whose agent no longer exists. `--clear` removes all of `dam`'s managed entries (and its `Include` line once empty).
 
-## Keeping agents awake (billing)
+## Keeping agents awake
 
 An open SSH connection counts as activity — like `dam chat` or the web terminal, it pins the agent so it **won't hibernate while you're connected**.
 
 !!! warning "A forgotten editor window keeps the agent running"
-    The SSH stream is opaque to the platform, so it can't tell a real keystroke from a VS Code Remote-SSH keepalive. A connected-but-idle editor window therefore keeps the agent awake (and billing). **Close the window to let the agent hibernate.** If your connection half-dies, the platform detects it and releases the pin automatically.
+    The SSH stream is opaque to the platform, so it can't tell a real keystroke from a VS Code Remote-SSH keepalive. A connected-but-idle editor window therefore keeps the agent awake, holding its reserved compute. **Close the window to let the agent hibernate.** If your connection half-dies, the platform detects it and releases the pin automatically.
 
 ## Troubleshooting
 

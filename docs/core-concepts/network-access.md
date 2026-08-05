@@ -8,7 +8,7 @@ Each sandbox has an allowlist of external services it can reach.
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| Host | Domain the sandbox can reach; `*.` wildcards allowed. Add `:port` for a service that isn't on 443 | `api.github.com`, `*.example.com`, `api.prod.example:6443` |
+| Host | Domain the sandbox can reach, matched exactly — a subdomain needs its own rule. Add `:port` for a service that isn't on 443 | `api.github.com`, `api.prod.example:6443` |
 | Method | HTTP method (defaults to `*`, meaning all) | `GET`, `POST` |
 | Path | URL path pattern (defaults to `*`) | `/repos/*` |
 | Verdict | `allow` or `deny`. The most specific rule wins, so a deny rule can carve an exception out of a broad allow | `allow` |

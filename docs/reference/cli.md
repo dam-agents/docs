@@ -106,7 +106,7 @@ dam connection list                               # List your connections
 dam connection list <agent>                       # List the connections granted to one agent
 dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
 dam connection update <id-or-name>                # Rotate the stored credential (prompts securely)
-dam connection disconnect <id-or-name>            # Remove a team connection (deletes the credential)
+dam connection disconnect <id-or-name>            # Remove a connection (deletes the stored credential)
 dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable)
 dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; idempotent)
 ```
@@ -125,7 +125,7 @@ Provider templates also declare their own required inputs, each exposed as its o
 
 ### Network access
 
-Per-agent rules that pre-approve the external hosts an agent may reach. (The command is `network`; the underlying module is the egress controller.)
+Per-agent rules that pre-approve the external hosts an agent may reach.
 
 ```bash
 dam network list <agent>                               # List network access rules

@@ -1,6 +1,6 @@
 # Architecture
 
-DAM is designed so that even a fully compromised agent cannot leak your credentials or exfiltrate your data.
+DAM is designed so that even a fully compromised agent cannot leak your credentials or reach services you haven't approved.
 
 ## Credential Isolation
 

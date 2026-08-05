@@ -31,7 +31,7 @@ aren't separate kinds, just things you author as HTML, JSX, or markdown.
     online.
 
 Artifacts over **10 MB** don't preview or render; they're offered as a download instead. Of the
-binary kinds, only images preview inline.
+binary kinds, only images preview inline. Publishing itself is capped at **50 MB** per artifact.
 
 ## Publishing one
 
