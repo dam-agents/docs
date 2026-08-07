@@ -30,8 +30,8 @@ The quickest path is an **experiment sandbox** — pick it as your starting poin
 already installed, so you can just describe the loop you want and let the agent write it.
 
 !!! info "Needs an image your operator enables"
-    The experiment starting point only appears if your operator has enabled its image. The wizard
-    tells you if it's missing.
+    The experiment and knowledge-base starting points both need the `claude-code` agent image. If it
+    isn't installed, the wizard hides them and tells you to ask your operator to enable it.
 
 Any sandbox can drive an experiment, though — the SDK (`experiment_sdk`, Python, standard library
 only) ships in the platform base image. Declaring a skeleton takes a handful of lines around code you
@@ -41,7 +41,7 @@ would write anyway.
 
 If you'd rather work in an established optimization framework than write the loop yourself, pick
 **Specialized sandbox** → **Choose an image** in the wizard, which offers preconfigured images such as
-**NOUS**, **OpenEvolve**, **ShinkaEvolve**, **GEPA**, and **K-Search**. Each is marked experimental and
+**NOUS**, **OpenEvolve**, **ShinkaEvolve**, **GEPA**, and **k-search**. Each is badged **Alpha** and
 depends on an image your operator has enabled.
 
 These run their own campaigns in their own terms — they don't register a plan or appear under
@@ -81,6 +81,7 @@ data baked in. That's the one to
 Experiments have their own destination in the DAM UI, grouped under the sandbox running them — one
 sandbox can hold several, so the sandbox is the container. From there you reach an experiment's runs,
 its live invocations, and its per-run artifacts, and open the sandbox's chat where the dashboard docks.
-Deleting an experiment removes its runs with it; the artifacts it published survive.
+Deleting an experiment removes its runs with it; the artifacts it published survive. Stop a running
+experiment before deleting it — the platform refuses while a run is live.
 
 Experiments are owner-scoped: you only see and act on your own.

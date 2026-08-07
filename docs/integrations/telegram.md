@@ -9,8 +9,9 @@ chat drives the agent under the **agent's own** credentials, with no login neede
 [who can drive the agent](slack.md#who-can-drive-the-agent).
 
 What differs is everything around it — Telegram has no identity linking, so **group admin** is the
-gate on the in-chat commands; messages relay as text only; there's no ambient mode; and one agent can
-be bound to several chats.
+gate on the in-chat commands; messages relay as text only; there's no ambient mode; one agent can be
+bound to several chats; and a first message to a sleeping agent gets no heads-up — Telegram just goes
+quiet until the agent is up, where Slack tells you it's waking.
 
 ## Connect a chat
 
@@ -35,8 +36,8 @@ be bound to several chats.
 
 The login link expires after about 10 minutes — send `/dam bind` again if you miss the window.
 
-You can also release a bound chat from the DAM UI; the bot posts a farewell in the chat before the
-binding goes away.
+Send `/dam unbind` in the chat to release the binding; the bot posts a farewell in the chat before it
+goes away.
 
 ## How the agent is triggered
 
@@ -55,14 +56,19 @@ Unbound **groups stay silent**, so the bot doesn't spam every chat it's been add
 
 ## Sessions
 
-Each thread maps to its own persistent session, the same as Slack. Ambient mode is Slack-only.
+**One chat, one session.** A Telegram chat maps to a single persistent session, so a group
+conversation continues in one place rather than splitting per reply — unlike
+[Slack](slack.md#how-sessions-work), where each thread gets its own session. Ambient mode is Slack-only.
+
+A Telegram agent can post on its own — a scheduled result, an alert — but only into chats bound to
+it. Unlike Slack, it can't reach a chat it isn't connected to.
 
 ## Troubleshooting
 
 | Problem | Solution |
 |---------|----------|
-| "Only group admins can `/dam bind`" | Only a chat admin can connect a group. Ask one to run it — a Telegram chat can't be bound from the DAM UI |
-| "Only group admins can `/dam unbind`" | Ask a chat admin to run it, or release the chat from the DAM UI |
+| "Only group admins can `/dam bind`" | Only a chat admin can connect a group. Ask one to run it |
+| "Only group admins can `/dam unbind`" | Ask a chat admin to run `/dam unbind` in the chat |
 | "This chat is already connected to an agent" | Send `/dam unbind` first, then bind again |
 | "This chat isn't connected to an agent" | Run `/dam bind` to connect one of your agents |
 | Bot silent in a group | Make sure you `@mention` it, and that the chat is bound |

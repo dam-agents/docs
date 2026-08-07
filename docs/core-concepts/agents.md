@@ -4,14 +4,14 @@ A **sandbox** is a running AI agent with its own persistent workspace, credentia
 
 ## What You Get
 
-When you create an agent, the platform provisions:
+When you create a sandbox, DAM provisions:
 
 - **A compute pod** — an isolated Linux environment running the AI harness
 - **A persistent workspace** — a `~/work` directory that survives restarts and hibernation
 - **A credential gateway** — a paired security pod that injects your tokens on the wire
 - **Network isolation** — the agent can only reach services you explicitly allow
 
-Each agent is independent. You can run multiple agents at once, each with a different coding harness and configuration.
+Each sandbox is independent. You can run several at once, each with a different coding harness and configuration.
 
 ## Lifecycle
 
@@ -42,20 +42,20 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
     underlying model, not nine distinct badges. **Preparing workspace** sits inside Running rather
     than before it, which is why it isn't a step in the diagram above.
 
-**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires.
+**Pause vs. Stop vs. Hibernate.** All three take a sandbox down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** sandbox wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** sandbox stays down until you explicitly start it or a schedule fires.
 
 ### Automatic Hibernation
 
-Agents automatically hibernate after a period of inactivity (no active sessions, no pending triggers). When you open a chat or send a message from a connected channel, the agent wakes automatically.
+Sandboxes automatically hibernate after a period of inactivity (no active sessions, no pending triggers). When you open a chat or send a message from a connected channel, the sandbox wakes automatically.
 
-An agent stays awake while it's **busy** — working a turn, with prompts queued, or waiting on an
-approval — and also while any chat, terminal, or SSH connection is simply **open**, even with nothing
-running. It only scales down once it's both idle and unconnected, so closing the tab, terminal, or
-editor is what lets it idle down.
+A sandbox stays awake while the agent is **busy** — working a turn, with prompts queued, or waiting on
+an approval — and also while any chat, terminal, or SSH connection is simply **open**, even with
+nothing running. It only scales down once it's both idle and unconnected, so closing the tab, terminal,
+or editor is what lets it idle down.
 
-By default an agent hibernates after the platform-wide idle timeout. You can **override this per agent** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the agent is used, or set it to **0 to never hibernate** so the agent stays running. The field always shows the value in force, so an agent with no override displays the inherited platform default rather than a blank.
+By default a sandbox hibernates after the DAM-wide idle timeout. You can **override this per sandbox** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the sandbox is used, or set it to **0 to never hibernate** so it stays running. The field always shows the value in force, so a sandbox with no override displays the inherited default rather than a blank.
 
-!!! warning "An agent that never hibernates holds its reserved compute even while idle, keeping that room away from your other sandboxes. Use `0` only when you genuinely need an always-on agent."
+!!! warning "A sandbox that never hibernates holds its reserved compute even while idle, keeping that room away from your other sandboxes. Use `0` only when you genuinely need one always on."
 
 ### Background work and hibernation
 
@@ -88,17 +88,17 @@ an always-on sandbox and one that may be interrupted.
 
 ## Compute budget and Size
 
-Each agent has a **Size** — how much CPU and memory it can use while it's running. You choose the Size when you create an agent and can change it later in settings; each catalog image starts from a sensible default.
+Each sandbox has a **Size** — how much CPU and memory it can use while it's running. You choose the Size when you create a sandbox and can change it later in settings; each catalog image starts from a sensible default.
 
-Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* agents can reserve at once. An agent reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the sandbox still saves, it just waits parked until room frees.
+Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* sandboxes can reserve at once. A sandbox reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the sandbox still saves, it just waits parked until room frees.
 
-- If a new or resized agent would exceed your budget, it can't start and shows as **Parked** — it waits until other agents free up room, and **Start** is its retry.
-- To make room, **pause** or **stop** an agent you aren't using, then start the parked one.
-- Changing the Size of a running agent restarts it on save; if it's down, the new Size applies the next time it starts.
+- If a new or resized sandbox would exceed your budget, it can't start and shows as **Parked** — it waits until other sandboxes free up room, and **Start** is its retry.
+- To make room, **pause** or **stop** a sandbox you aren't using, then start the parked one.
+- Changing the Size of a running sandbox restarts it on save; if it's down, the new Size applies the next time it starts.
 
 ## Available Coding Harnesses
 
-An agent runs one **coding harness** — the AI software inside the pod:
+Each sandbox runs one **coding harness** — the AI software inside the pod:
 
 | Harness | Best For |
 |---------|----------|
@@ -109,7 +109,7 @@ An agent runs one **coding harness** — the AI software inside the pod:
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
-## Managing Agents
+## Managing sandboxes
 
 ### Create
 
@@ -149,7 +149,7 @@ From the sandbox's page, the left nav has these sections:
 
 ### Open in
 
-Configure an agent once, then launch it however you like from the **Open in** menu on the agent's page:
+Configure a sandbox once, then launch it however you like from the **Open in** menu on its page:
 
 | Option | What it does |
 |--------|--------------|
@@ -160,7 +160,7 @@ Configure an agent once, then launch it however you like from the **Open in** me
 
 ### Pause, Stop & Start
 
-From the agent's actions menu you can take it down without deleting it:
+From the sandbox's actions menu you can take it down without deleting it:
 
 - **Pause — wakes on next use** — puts it to sleep now and frees its budget.
 - **Stop — until started again** — a hard stop; it stays down until you bring it back up (or a scheduled run fires). Use this to reliably free budget for other work.
@@ -177,6 +177,6 @@ image, and restarts the sandbox if it's running.
 
 ### Delete
 
-Deleting an agent permanently removes its workspace, sessions, and configuration. This cannot be undone.
+Deleting a sandbox permanently removes its workspace, sessions, and configuration. This cannot be undone.
 
-!!! warning "Deleting an agent destroys all workspace files. If you have important work, download it or push it to a remote repository first."
+!!! warning "Deleting a sandbox destroys all workspace files. If you have important work, download it or push it to a remote repository first."

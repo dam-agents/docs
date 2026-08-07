@@ -20,6 +20,7 @@ Schedules let you define automated tasks that fire on a timer:
     - **Timezone** — defaults to your browser's and can be any IANA zone. Schedules fire at that local wall-clock time year-round, adjusting across daylight saving.
     - **Quiet hours** — time windows when the schedule is suppressed. Each window has its own switch, so you can turn one off without deleting it.
     - **Prompt** — what the agent should do when it wakes
+    - **Session type** — Fresh or Continuous (see [Session Modes](#session-modes) below)
 4. Click **Create**
 
 !!! tip "Your agent can manage schedules itself"
@@ -29,7 +30,8 @@ Schedules let you define automated tasks that fire on a timer:
     Schedules you create in the panel always carry a timezone. Schedules defined with a raw cron
     expression (which an agent may do) run in **UTC** and ignore quiet hours — so a 9am-local cron
     drifts by an hour when daylight saving changes. Cron schedules **and any schedule your agent
-    created for itself** are read-only in the panel — recreate one yourself if you need to change it.
+    created for itself** can't be *edited* in the panel — **Edit schedule** is greyed out. You can
+    still pause, reset, and delete them; recreate one yourself to change its cadence or prompt.
 
 ## Session Modes
 
@@ -69,11 +71,13 @@ A schedule fire **wakes a hibernated sandbox** automatically — you don't need 
 also restarts a sandbox you stopped by hand: stopping a sandbox does not pause its schedules, and the
 UI warns you about this at stop time.
 
-If a sandbox stays down past a run's window, that run is **dropped** rather than queued, so you won't
-get a burst of catch-up runs when it eventually wakes.
+A fire that can't reach the sandbox right away — it's erroring, or over budget — waits about an hour
+for it to come back, then lapses. So a brief outage still gets its run, but a sandbox that stays down
+longer won't hand you a burst of catch-up runs when it finally wakes.
 
 ## Viewing History
 
-Each schedule lists the sessions it has produced — open one to see what happened on that run. A
-**fresh** schedule accumulates one session per run; a **continuous** schedule has a single session you
-can revisit. The panel also shows when the schedule last ran and whether that run succeeded.
+**View results** on a schedule lists the sessions it has produced — open one to see what happened on
+that run. A **fresh** schedule accumulates one session per run; a **continuous** schedule has a single
+session you can revisit. **View details** expands the schedule to show its next and last run, and
+whether that last run succeeded.

@@ -65,8 +65,8 @@ A bare `/dam` prints the usage help for those three commands.
 !!! note "When `/dam login` is required"
     Talking to the agent never needs a linked account. Linking only authorizes the *management*
     commands — `/dam unbind` and `/dam ambient on|off`. `/dam bind` links you automatically, so if
-    that's how you connected the conversation you're already set; **if you bound from the CLI or the
-    DAM UI, you were never linked**, and those two commands will ask you to run `/dam login` first.
+    that's how you connected the conversation you're already set; **if you bound from the CLI, you
+    were never linked**, and those two commands will ask you to run `/dam login` first.
     Reading the current state with a bare `/dam ambient` never needs a link. `/dam logout` unlinks.
 
 !!! info "One conversation, one agent"
@@ -211,7 +211,7 @@ already in.
 | Bot doesn't respond in a channel | Make sure you **`@mention`** it, and that the conversation is bound (`/dam bind`) |
 | "This conversation isn't connected" / "No instance connected to this channel" | Run `/dam bind` to connect one of your agents |
 | Binding refused as already connected | The conversation is already bound. `/dam unbind` first |
-| "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI or the UI |
+| "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
 | An attached file was ignored | Only images are read. Paste document contents as text instead |

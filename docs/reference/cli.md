@@ -64,7 +64,7 @@ dam auth token list                                 # list your keys (plaintext 
 dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
 ```
 
-- `--name <name>` is required; `--scope <scope...>` and `--agent <agent-id...>` are repeatable. `--scope` defaults to `agents:operate`.
+- `--name <name>` is required; `--scope <scope...>` and `--agent <agent-id...>` are repeatable. `--scope` defaults to `agents:operate`; the valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`.
 - `--expires <iso>` takes an ISO 8601 timestamp.
 - The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 - Minted keys carry a **`pk_`** prefix and can be used directly as `DAM_TOKEN`. API-key principals cannot mint further keys.
@@ -105,7 +105,7 @@ dam connection templates                          # List provider templates you 
 dam connection list                               # List your connections
 dam connection list <agent>                       # List the connections granted to one agent
 dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
-dam connection update <id-or-name>                # Rotate the stored credential (prompts securely)
+dam connection update <id-or-name>                # Rotate a header connection's stored secret (prompts securely)
 dam connection disconnect <id-or-name>            # Remove a connection (deletes the stored credential)
 dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable)
 dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; idempotent)
@@ -119,9 +119,9 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 - `--timeout <seconds>` — MCP OAuth timeout (default 300)
 - `-c, --config <key=value>` — set an optional template config input (repeatable), e.g. `--config model=premium-shell`; values are validated against the template's declared inputs.
 
-Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`, `--client-id`/`--client-secret`, `--issuer-url`/`--scopes`/`--audience`, `--app-id`/`--installation-id`/`--private-key`, `--header-name`/`--value`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
+Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--issuer-url`/`--scopes`/`--audience`, `--app-id`/`--app-slug`/`--installation-id`/`--private-key`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
 
-`connection update` replaces a connection's stored credential in place — the rotation path. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively.
+`connection update` replaces the stored secret of a **header-credential** connection (API keys and custom-header integrations) in place. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively. OAuth and GitHub App connections don't rotate this way — they refresh on their own; disconnect and reconnect to change the underlying account.
 
 ### Network access
 
@@ -152,7 +152,7 @@ Browse skill sources and manage the skills installed on an agent.
 dam skill source list                                  # List connected skill sources
 dam skill source add <git-url>                         # Register a skill source from a git URL
 dam skill source remove <id>                           # Remove a source you added (installed skills remain)
-dam skill source refresh <id>                          # Refresh a source
+dam skill source refresh <id>                          # Drop a source's scan cache so the next catalog re-scans upstream
 dam skill catalog <source>                             # Scan a source's available skills
 dam skill catalog <source> --agent <ref>               # Annotate install status against an agent
 dam skill list <agent>                                 # List the skills on an agent

@@ -127,7 +127,12 @@ Rules enforced by the skeleton:
         --setopt=install_weak_deps=0 sqlite && dnf clean all
     # ...then, in your main stage:
     # COPY --from=extra /extra/usr/bin/sqlite3 /usr/bin/sqlite3
+    # COPY --from=extra /extra/usr/lib64/libsqlite3.so.* /usr/lib64/
+    # RUN sqlite3 -version   # fail the build if a shared library is missing
     ```
+
+    A copied binary usually needs its shared libraries copied too, so run it once during the
+    build — that turns a silent runtime failure into a build failure.
 
 ## Step 3 — Provide the session launchers
 
@@ -279,5 +284,5 @@ For the full walkthrough — declaring the placeholder, creating the credential,
 
 ## Troubleshooting
 
-- **Stuck on "Starting…"** — the pod can't pull the image. Usually the registry package is **private** and no [private-registry credentials](#private-registries) were entered (or they're wrong — they're only validated at pull time), or the image was built for the wrong **architecture**.
+- **Stuck on "Starting"** — the pod can't pull the image. Usually the registry package is **private** and no [private-registry credentials](#private-registries) were entered (or they're wrong — they're only validated at pull time), or the image was built for the wrong **architecture**.
 - **"Send failed" in chat** — the chat (ACP) server didn't start or couldn't reach the model. Confirm your `harness-chat` execs your agent's ACP server (the base's placeholder won't), and that an **LLM provider** is attached.

@@ -1,10 +1,10 @@
 # VS Code/Zed (SSH)
 
-You can open a running agent's workspace directly in **VS Code** (or **Zed**) and work in it like any other remote folder — editing files, running the terminal, debugging — with the agent's full environment behind it.
+You can open a running sandbox's workspace directly in **VS Code** (or **Zed**) and work in it like any other remote folder — editing files, running the terminal, debugging — with the sandbox's full environment behind it.
 
 This works because `dam ssh` gives you a **real SSH session** into the agent: not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell. Because it's standard SSH, everything that rides on SSH works too — `scp`, `sftp`, and port-forwarding — but opening the workspace in your editor is the part most people want.
 
-The session inherits the agent's full pod environment: the egress proxy, injected credentials, and `PATH`. So `git`, `gh`, and the AI CLIs behave exactly as they do for the harness itself.
+The session inherits the sandbox's full environment: the egress proxy, injected credentials, and `PATH`. So `git`, `gh`, and the AI CLIs behave exactly as they do for the harness itself.
 
 !!! info "How it works (you don't need to set any of this up)"
     There's no SSH port exposed on the agent. The connection is tunneled over the same authenticated WebSocket that `dam chat` uses, and SSH terminates at a small `sshd` running *inside* the agent pod. Your platform login is the real trust boundary; `dam` manages a dedicated SSH keypair for the transport so it never touches your personal `~/.ssh` keys.
@@ -13,12 +13,12 @@ The session inherits the agent's full pod environment: the egress proxy, injecte
 
 - The `dam` CLI installed and logged in — see the [CLI reference](../reference/cli.md) (`dam auth login`).
 - The OpenSSH client (`ssh`, `ssh-keygen`) on your machine. Present by default on macOS and Linux.
-- A running agent. (An open SSH connection keeps the agent awake — see [Keeping agents awake](#keeping-agents-awake) below.)
+- A sandbox that isn't stopped. Connecting wakes a hibernated sandbox automatically; a **stopped** one has to be started first. (An open SSH connection then keeps it awake — see [Keeping sandboxes awake](#keeping-sandboxes-awake) below.)
 - For the editor modes: `code` (or `code-insiders`) / `zed` on your `PATH`.
 
 !!! note "Custom images need `sshd`"
-    SSH only works on images that ship an SSH server. Every stock agent image does, because the
-    platform base image includes one — but if you [build a custom image](custom-image.md) from
+    SSH only works on images that ship an SSH server. Every stock image does, because the
+    base image includes one — but if you [build a custom image](custom-image.md) from
     something else, or strip `openssh-server` out, `dam ssh` has nothing to connect to.
 
 ## Open a shell
@@ -32,7 +32,7 @@ workspace the agent works in is `~/work` — `cd ~/work` to get there; the edito
 directly. Exit with `exit` or `Ctrl-D`.
 
 Unlike the web terminal, SSH has no one-viewer limit: a shell and an editor window can be connected
-to the same agent at once, each with its own session.
+to the same sandbox at once, each with its own session.
 
 You can reference the agent by **name** or by **ID** (`agent-…`), the same as every other `dam` command.
 
@@ -104,12 +104,12 @@ dam ssh configure --clear     # remove every dam-managed host entry
 
 `--all` is a reconcile: it adds entries for your current agents and removes entries whose agent no longer exists. `--clear` removes all of `dam`'s managed entries (and its `Include` line once empty).
 
-## Keeping agents awake
+## Keeping sandboxes awake
 
-An open SSH connection counts as activity — like `dam chat` or the web terminal, it pins the agent so it **won't hibernate while you're connected**.
+An open SSH connection counts as activity — like `dam chat` or the web terminal, it pins the sandbox so it **won't hibernate while you're connected**.
 
-!!! warning "A forgotten editor window keeps the agent running"
-    The SSH stream is opaque to the platform, so it can't tell a real keystroke from a VS Code Remote-SSH keepalive. A connected-but-idle editor window therefore keeps the agent awake, holding its reserved compute. **Close the window to let the agent hibernate.** If your connection half-dies, the platform detects it and releases the pin automatically.
+!!! warning "A forgotten editor window keeps the sandbox running"
+    The SSH stream is opaque to DAM, so it can't tell a real keystroke from a VS Code Remote-SSH keepalive. A connected-but-idle editor window therefore keeps the sandbox awake, holding its reserved compute. **Close the window to let the sandbox hibernate.** If your connection half-dies, DAM detects it and releases the pin automatically.
 
 ## Troubleshooting
 
@@ -117,13 +117,13 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
     `dam ssh connect` hands off to the client you selected. Install the client (OpenSSH for `ssh`, VS Code for `-x code`, Zed for `-x zed`) and make sure it's on your `PATH`.
 
 ??? question "VS Code pops a network-approval prompt on first connect"
-    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in the web UI's inbox, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
+    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in the web UI's inbox, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the sandbox's **Network access**.
 
 ??? question "Host key warnings"
     `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, and the in-pod host key is regenerated whenever the agent's storage is recreated — pinning it would only cause spurious "host identification changed" failures. You won't see `known_hosts` prompts.
 
 ??? question "The shell starts but `git` / network calls fail"
-    The agent's environment is replayed into each SSH session on connect. If you added a connection or credential *after* opening the session, reconnect to pick it up — the environment is refreshed per connection, not live within one.
+    The sandbox's environment is replayed into each SSH session on connect. If you added a connection or credential *after* opening the session, reconnect to pick it up — the environment is refreshed per connection, not live within one.
 
 ## See also
 

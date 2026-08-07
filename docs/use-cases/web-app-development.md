@@ -59,13 +59,15 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ## Setup
 
-1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
+1. **Create a sandbox from the Software Factory image** — on **Choose your starting point** pick
+   **Custom image** and paste the image address published by
+   [dam-agents/software-factory](https://github.com/dam-agents/software-factory) (see that repo's
+   README for the current tag). Software Factory ships its own image rather than being one of the
+   ready-made ones, because it runs extra processes alongside the harness. Once it starts, the agent
+   operates from its bundled playbook and skills — you don't clone anything by hand.
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — provide a PAT with repo access to your target repository, so `gh` can authenticate
 4. **Start a chat session** — tell the agent what you want to build. On first run it reads its `work/config.json`; if that's missing it asks you for the configuration (the target `owner/repo`), then verifies the repo's default branch and required labels before starting.
-
-!!! note "Deployed as a Custom image"
-    Software Factory isn't one of the ready-made images in the agent picker. Deploy it from the image published in [dam-agents/software-factory](https://github.com/dam-agents/software-factory) (see the repo's README) via the **Custom image** option. Once running, the agent operates from the `work/CLAUDE.md` playbook and its bundled skills — you don't clone anything by hand.
 
 
 ## Using the Agent

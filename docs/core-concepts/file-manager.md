@@ -41,7 +41,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 | Max previewable file size | 50 MB |
 | Max download / transfer size | 50 MB |
 | Max upload file size | 50 MB |
-| Max import bundle size | 5 GB (your operator can lower this) |
+| Max import bundle size | 5 GiB (your operator can lower this — and should, if your sandbox's disk is smaller) |
 | Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews; other binary files open as a hex dump |
 
 ## Key Notes

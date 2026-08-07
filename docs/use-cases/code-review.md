@@ -12,7 +12,7 @@ Once configured, the agent runs on a schedule and for each open PR:
 
 1. **Fetches the diff** — reads the PR's changes, body, comments, and prior reviews
 2. **Clones the branch** — pulls the code locally for deeper analysis
-3. **Runs configurable skill-based checks** — the skill set lives in `work/CONFIG.md` (each skill with its own source repo, trigger, and output section); the default set covers documentation drift, TypeScript engineering, and React UI engineering
+3. **Runs configurable skill-based checks** — the skill set lives in `work/CONFIG.md` (each skill with its own source repo, trigger, and output section); the default set covers issue fit, documentation drift, TypeScript engineering, and React UI engineering
 4. **Posts a structured review** — findings with severity levels, inline comments on specific lines
 5. **Shepherds PRs toward human review** (optional, Slack) — watches how long each PR waits for an independent review and nudges the right reviewers (or the author, when changes are requested) in your team channel, escalating over time
 6. **Generates visual PR artifacts on demand** — assign the bot account to a PR and the next heartbeat publishes a self-contained HTML review artifact and links it in a comment
@@ -35,7 +35,7 @@ Scheduled run (every 10 min by default; configurable)
          ├── Fetch diff + PR context (body, comments, prior reviews)
          ├── Clone branch locally
          ├── Run every configured review skill
-         │   (default: doc-drift, typescript-engineering, react-ui-engineering)
+         │   (default: issue-fit, doc-drift, typescript-engineering, react-ui-engineering)
          ├── Generate structured review with findings
          ├── Post GitHub PR review (summary + inline comments)
          └── Update local tracking (REVIEWS.md)
@@ -102,7 +102,7 @@ Onboarding is a short **interactive dialog** — the agent checks out its own de
 !!! note "Its schedules run in UTC"
     The agent creates its schedules as cron expressions, and cron schedules run in **UTC** — so a
     weekly audit or a workday-windowed sweep won't follow your local clock. To get local wall-clock
-    times (and quiet hours), open the sandbox's **Schedules** tab and re-create the schedule with a
+    times (and quiet hours), open the sandbox's **Schedules** section and re-create the schedule with a
     frequency and timezone. See [Schedules](../core-concepts/schedules.md).
 
 !!! tip "Files live in `work/`, not a subfolder"

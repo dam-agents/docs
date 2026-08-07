@@ -13,13 +13,14 @@ Pick a template at create time. It decides what tooling gets installed in the wo
 
 | Template | What it does |
 |----------|-------------|
-| **LLM Wiki** (default) | Installs the LLM Wiki toolkit and keeps an interlinked, self-maintaining knowledge wiki as you feed it sources. |
+| **LLM Wiki** (default) | Installs the llm-wiki toolkit and builds a structured wiki with a knowledge graph as you feed it sources. |
 | **Plain Wiki** | No toolkit — the agent reads your files as knowledge and keeps what it learns as plain markdown notes. |
 
 Choose **Plain Wiki** if you want something durable and dependency-free that you could read straight
-out of the workspace. Choose **LLM Wiki** for a richer, cross-linked wiki. Both templates fetch their
-setup from GitHub when the knowledge base is created, so neither avoids the network requirement below
-— the difference is what you're left with afterwards.
+out of the workspace — once it's set up, it works offline. Choose **LLM Wiki** for a structured wiki
+with a knowledge graph over what it has learned. Both templates fetch their setup from GitHub when the
+knowledge base is created, so neither avoids the network requirement below; the difference is whether
+you still need the network afterwards.
 
 The template is recorded on the knowledge base and shown in the list, so you can see which one it
 came from.
@@ -30,8 +31,8 @@ came from.
     its workspace.
 
 !!! info "Needs an image your operator enables"
-    The knowledge-base starting point only appears if the `claude-code` agent image is installed on
-    your platform. The wizard tells you if it's missing.
+    The knowledge-base starting point needs the `claude-code` agent image. If it isn't installed, the
+    wizard hides it and tells you to ask your operator to enable it.
 
 ## Creating one
 

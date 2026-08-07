@@ -8,11 +8,11 @@ Your tokens and API keys are never visible to your agent — they're injected on
 
 ### The Gateway Model
 
-Every agent has a **paired gateway pod** — a separate, hardened container that handles credential injection:
+Every sandbox is paired with its own **credential gateway** — a separate, hardened environment that handles credential injection:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│ Your Agent Pod                                      │
+│ Your sandbox                                        │
 │                                                     │
 │  Agent makes HTTPS request to api.github.com  ──────┼──┐
 │  (no credentials attached)                          │  │
@@ -22,7 +22,7 @@ Every agent has a **paired gateway pod** — a separate, hardened container that
     │
     ▼
 ┌─────────────────────────────────────────────────────┐
-│ Gateway Pod (Envoy Proxy)                           │
+│ Credential gateway                                  │
 │                                                     │
 │  1. Intercepts the request                          │
 │  2. Looks up your stored GitHub token               │
@@ -33,36 +33,36 @@ Every agent has a **paired gateway pod** — a separate, hardened container that
 
 **Key properties:**
 
-- The agent pod has **no access** to the raw token — it's not in environment variables, not on disk, not in memory
-- Kubernetes NetworkPolicy enforces that the agent can **only** reach the internet through the gateway — it cannot bypass this
+- Your sandbox has **no access** to the raw token — it's not in environment variables, not on disk, not in memory
+- Your sandbox has no route to the internet except through the gateway, and that's enforced by the platform rather than by the agent's own good behavior
 - Even if an agent is fully compromised (prompt injection, malicious code), it cannot exfiltrate your credentials
 
 ### Credential Scoping
 
 - **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
-- **All your agents:** Any agent you own can use your connected credentials.
+- **All your sandboxes:** Any sandbox you own can use your connected credentials.
 
 ### Token Management
 
 | Type | Storage | Refresh |
 |------|---------|---------|
-| **OAuth** (GitHub, etc.) | Kubernetes Secret in gateway pod | Auto-refreshed by the platform |
-| **API Key** (Anthropic, etc.) | Kubernetes Secret in gateway pod | No expiry unless you rotate manually |
+| **OAuth** (GitHub, etc.) | Held by the gateway, never by your sandbox | Auto-refreshed for you |
+| **API Key** (Anthropic, etc.) | Held by the gateway, never by your sandbox | No expiry unless you rotate manually |
 
 ---
 
 ## Network Isolation
 
-Each agent is network-isolated by default and can only reach external services you explicitly permit.
+Each sandbox is network-isolated by default and can only reach external services you explicitly permit.
 
 ### How It Works
 
-Every agent pod runs with a Kubernetes NetworkPolicy that blocks **all** outbound traffic except to its paired gateway pod. The gateway acts as the sole exit point to the internet.
+Every sandbox has **all** outbound traffic blocked except to its own credential gateway, which is the sole exit point to the internet.
 
 This means:
 
-- An agent cannot reach arbitrary internet endpoints
+- A sandbox cannot reach arbitrary internet endpoints
 - All outbound requests are mediated by the credential gateway
 - New destinations require explicit approval (via [Network & Approvals](../core-concepts/network-access.md))
 
@@ -70,7 +70,7 @@ This means:
 
 - **Data exfiltration** — a compromised agent cannot send your code or data to arbitrary servers
 - **Unauthorized API calls** — the agent can't use services you haven't approved
-- **Lateral movement** — agents are isolated from each other and from internal infrastructure
+- **Lateral movement** — sandboxes are isolated from each other and from internal infrastructure
 
 ### The Approval Flow
 
@@ -94,7 +94,7 @@ Binding a conversation to an agent is what authorizes it. There is one access mo
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `bind`, `unbind`, and `ambient`.
+Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `/dam unbind` and `/dam ambient on|off`. (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
 
 Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 

@@ -24,7 +24,7 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 
     ---
 
-    Sandboxes run continuously in the cloud, so work carries on after you close your laptop or go offline.
+    Sandboxes live in the cloud, not on your laptop — schedules and channel messages keep them working while you're away.
 
 -   :material-shield-lock:{ .lg .middle } **Isolated execution**
 
@@ -74,7 +74,7 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 
     ---
 
-    Open your agent's workspace in VS Code or Zed via the CLI's `dam ssh` editor modes.
+    Open your sandbox's workspace in VS Code or Zed via the CLI's `dam ssh` editor modes.
 
 -   :material-calendar-clock:{ .lg .middle } **Schedules**
 
@@ -196,7 +196,7 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     ---
 
-    Create a Claude Code agent and start chatting in five minutes.
+    Create a Claude Code sandbox and start chatting in five minutes.
 
 -   **[Use Cases →](use-cases/code-review.md)**
 

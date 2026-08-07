@@ -81,3 +81,7 @@ The default is always deny:
 ## The Inbox
 
 The Inbox shows all pending approval requests across your sandboxes. Check it when a sandbox seems stuck — it may be waiting for your approval.
+
+!!! note
+    In the left sidebar this is currently the **Email** icon — the badge on it counts pending
+    approvals.

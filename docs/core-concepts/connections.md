@@ -30,8 +30,8 @@ OAuth connections auto-refresh and require no manual rotation.
 
 DAM integrates with both GitHub.com and GitHub Enterprise (`github.ibm.com`):
 
-1. Navigate to **Connections** in the DAM UI
-2. Click **New** on the **GitHub** (or **GitHub Enterprise**) card
+1. Go to **Settings → Connections** and click **New** to open the **Connection catalogue**
+2. On the **Apps** tab, click **New** on the **GitHub** (or **GitHub Enterprise**) card
 3. Choose **Sign in with Github** and complete the OAuth flow, or **Personal access token** and paste
    a token you create on GitHub — the token path is the one to pick when you want finer-grained repo
    access
@@ -44,7 +44,7 @@ When you sign in with **GitHub.com**, commits the agent makes are attributed to 
 
 For services that use a static API key rather than OAuth, connect a prebuilt template:
 
-1. Navigate to **Connections** → **New** → under **Apps**, pick the service (e.g. **Modal**)
+1. Go to **Settings → Connections** → **New** to open the **Connection catalogue**, then on the **Apps** tab pick the service (e.g. **Modal**)
 2. Paste your key and click **Create**
 
 Model providers aren't here — they live on the **Providers** tab (see above).

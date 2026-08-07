@@ -9,14 +9,14 @@ and no harness involvement — just a login shell. See the
 
 ## Chat Sessions
 
-Open your agent in the DAM UI and type a message. A new session is created automatically.
+Open your sandbox in the DAM UI and type a message. A new session is created automatically.
 
 - **Resume** — click any previous session in the sidebar to continue
 - **New Session** — start fresh conversation context (workspace files are unchanged)
 - **History** — scroll up to see full conversation including tool calls and file changes
 - **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
 
-Sessions are stored as files on the agent's persistent volume (PVC) — not in a central database — and survive pod restarts, hibernation, and updates. All sessions share the same workspace files.
+Sessions live with the sandbox's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
 
 The sessions list is ordered by last activity: each session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. (Terminal sessions are the exception — theirs does track the file's mtime, which is why they carry no unread state.)
 
@@ -41,11 +41,11 @@ behind a confirm.
 
 ### Environment variables
 
-Environment variables you set in the agent's Environment editor are persisted separately and delivered to the running agent over the runtime channel, applied on its **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections or secrets when the names collide. Because the change lands on the next turn rather than at startup, an in-flight turn keeps the values it began with.
+Environment variables you set in the sandbox's Environment editor are persisted separately and delivered to the running sandbox, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections or secrets when the names collide. Because the change lands on the next turn rather than at startup, an in-flight turn keeps the values it began with.
 
 ### Model settings
 
-The **Model** settings panel sets per-agent harness defaults — **Model**, **Mode**, and **Effort** (reasoning effort). These are written to the harness's own config file and apply to **new sessions only**; sessions already underway keep the settings they started with.
+The **Model** settings panel sets per-sandbox harness defaults — **Model**, **Mode**, and **Effort** (reasoning effort). These are written to the harness's own config file and apply to **new sessions only**; sessions already underway keep the settings they started with.
 
 The panel lives in the chat rail and on the sandbox's home page. Which options appear depends on the harness — Claude Code offers all three — and some choices are hidden for models that don't support them. While the sandbox is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
 
