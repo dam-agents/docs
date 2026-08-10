@@ -52,7 +52,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Provider
 
-- **Any model provider** — the agent just needs model access; any harness-supported provider works (e.g., IBM LiteLLM ETE Proxy, Anthropic, …)
+- **IBM LiteLLM ETE Proxy** or **Anthropic** — the agent runs on Claude Code, so it needs a provider that reaches Claude
 
 ### Connections
 
@@ -82,9 +82,9 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 ## Setup
 
 1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
-2. **Add your provider** — configure any supported model provider with your API key (e.g., IBM LiteLLM)
+2. **Add your provider** — configure IBM LiteLLM ETE Proxy or Anthropic with your API key
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
-4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`); if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
+4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the sandbox's **Sandbox Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
 5. **Onboard the agent** — send it the onboarding runbook as your **first message** and let it set itself up (see below)
 6. **Connect Slack** (optional) — only needed if you want the PR Shepherd nudging; you opt in during onboarding
 
@@ -97,7 +97,7 @@ Here is a file — read it and set yourself up according to it:
 https://github.com/dam-agents/code-guardian/blob/main/ONBOARDING.md
 ```
 
-Onboarding is a short **interactive dialog** — the agent checks out its own definition (derived from the URL you send, so forks stay pinned to the fork), wires up the `work/` directory, and asks a handful of configuration questions: the display name it signs reviews with, the dedup-marker prefix, which review skills to run (defaults offered, each skill with its own source repo), whether to enable Slack notifications (and if so, it imports your team into the reviewer roster), and the review cadence (default **every 10 minutes**). Everything lands in `work/CONFIG.md`; it then reconstructs review state, creates the recurring schedule, writes the `$HOME/.code-guardian-onboarded` sentinel, and finishes with a summary of what it configured and how to use it day-to-day.
+Onboarding is a short **interactive dialog** — the agent checks out its own definition (derived from the URL you send, so forks stay pinned to the fork), wires up the `work/` directory, and asks a handful of configuration questions: the display name it signs reviews with, the dedup-marker prefix, which review skills to run (defaults offered, each skill with its own source repo), whether to enable Slack notifications (and if so, it imports your team into the reviewer roster), and the review cadence (default **every 10 minutes**). Everything lands in `work/CONFIG.md`; it then reconstructs review state, creates its recurring schedules (the review heartbeat, plus a Slack nudge sweep and a weekly audit where those apply), writes the `$HOME/.code-guardian-onboarded` sentinel, and finishes with a summary of what it configured and how to use it day-to-day.
 
 !!! note "Its schedules run in UTC"
     The agent creates its schedules as cron expressions, and cron schedules run in **UTC** — so a

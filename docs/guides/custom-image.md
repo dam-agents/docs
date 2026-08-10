@@ -255,9 +255,9 @@ from the image address.
 
 ### Private registries
 
-You don't have to publish the image publicly. In the **Custom image** card, expand **Private
-registry** and fill in **Server** (e.g. `ghcr.io`), **Username**, and **Password** — a PAT, robot
-account, or access token. All three or none.
+You don't have to publish the image publicly. In the **Custom** card under **Image address**, expand
+**Private registry** and fill in **Server** (e.g. `ghcr.io`), **Username**, and **Password** — a PAT,
+robot account, or access token. All three or none.
 
 DAM stores these as a pull secret scoped to that one sandbox, used only by the cluster to fetch the
 image. The agent never sees it, and it's deleted with the sandbox.

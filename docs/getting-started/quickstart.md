@@ -40,7 +40,7 @@ Connecting doesn't yet give a sandbox access — **grant** the connection to eac
 2. Choose **General-purpose sandbox**, then **Claude Code**
 3. Name it (e.g., `my-agent`), pick your provider and a **Size**, and leave **Network access** on
    **Trusted defaults (recommended)** — anything it isn't allowed to reach surfaces for approval under
-   **Email** in the left sidebar (the page itself is titled *Inbox*)
+   **Email** in the left sidebar
 4. Grant the connections it should use, then create
 
 Your sandbox will provision in a few seconds — you'll see the status change to "Running."

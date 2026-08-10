@@ -36,15 +36,14 @@ quiet until the agent is up, where Slack tells you it's waking.
 
 The login link expires after about 10 minutes — send `/dam bind` again if you miss the window.
 
-Send `/dam unbind` in the chat to release the binding; the bot posts a farewell in the chat before it
-goes away.
+Send `/dam unbind` in the chat to release the binding; the bot confirms in the chat.
 
 ## How the agent is triggered
 
 | Surface | What triggers a reply |
 |---------|----------------------|
 | **DM** | Every message |
-| **Group** | An `@mention` — after the first one, follow-ups in that thread are picked up too |
+| **Group** | An `@mention` — after the first one, follow-ups in that chat are picked up too (the agent decides whether to answer) |
 
 Unbound **groups stay silent**, so the bot doesn't spam every chat it's been added to. In an unbound
 **DM** it replies *"This chat isn't connected to an agent. An admin needs to send `/dam bind`."*
@@ -58,7 +57,8 @@ Unbound **groups stay silent**, so the bot doesn't spam every chat it's been add
 
 **One chat, one session.** A Telegram chat maps to a single persistent session, so a group
 conversation continues in one place rather than splitting per reply — unlike
-[Slack](slack.md#how-sessions-work), where each thread gets its own session. Ambient mode is Slack-only.
+[Slack](slack.md#how-sessions-work), where each thread gets its own session. (In a forum group each
+topic counts as its own chat, so it binds and sessions separately.) Ambient mode is Slack-only.
 
 A Telegram agent can post on its own — a scheduled result, an alert — but only into chats bound to
 it. Unlike Slack, it can't reach a chat it isn't connected to.

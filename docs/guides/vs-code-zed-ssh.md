@@ -31,6 +31,9 @@ This drops you into a login shell on the agent, starting in the home directory `
 workspace the agent works in is `~/work` — `cd ~/work` to get there; the editor modes below open it
 directly. Exit with `exit` or `Ctrl-D`.
 
+The sandbox header's **Open in → VS Code / Zed (local)** gives you the same commands, pre-filled with
+the sandbox's ID.
+
 Unlike the web terminal, SSH has no one-viewer limit: a shell and an editor window can be connected
 to the same sandbox at once, each with its own session.
 

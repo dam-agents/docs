@@ -41,13 +41,13 @@ behind a confirm.
 
 ### Environment variables
 
-Environment variables you set in the sandbox's Environment editor are persisted separately and delivered to the running sandbox, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections or secrets when the names collide. Because the change lands on the next turn rather than at startup, an in-flight turn keeps the values it began with.
+Environment variables you set in the sandbox's Environment editor are persisted separately and delivered to the running sandbox, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections when the names collide. The pod isn't restarted, but a turn still running about a minute after you save is interrupted so the new values can apply.
 
 ### Model settings
 
 The **Model** settings panel sets per-sandbox harness defaults — **Model**, **Mode**, and **Effort** (reasoning effort). These are written to the harness's own config file and apply to **new sessions only**; sessions already underway keep the settings they started with.
 
-The panel lives in the chat rail and on the sandbox's home page. Which options appear depends on the harness — Claude Code offers all three — and some choices are hidden for models that don't support them. While the sandbox is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
+The panel lives on the sandbox's home page, under **Sandbox Setup**; chat shows the model in use and a gear that opens that page. Which options appear depends on the harness — Claude Code offers all three, and some harnesses expose no model settings at all — and some choices are hidden for models that don't support them. While the sandbox is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
 
 ## Terminal Sessions
 

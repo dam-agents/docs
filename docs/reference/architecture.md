@@ -34,14 +34,14 @@ Every sandbox is paired with its own **credential gateway** — a separate, hard
 **Key properties:**
 
 - Your sandbox has **no access** to the raw token — it's not in environment variables, not on disk, not in memory
-- Your sandbox has no route to the internet except through the gateway, and that's enforced by the platform rather than by the agent's own good behavior
+- Your sandbox has no route to the internet except through the gateway, and that's enforced at the network layer rather than by the agent's own good behavior
 - Even if an agent is fully compromised (prompt injection, malicious code), it cannot exfiltrate your credentials
 
 ### Credential Scoping
 
 - **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
-- **All your sandboxes:** Any sandbox you own can use your connected credentials.
+- **All your sandboxes:** Any sandbox you own can be granted your connected credentials.
 
 ### Token Management
 
@@ -90,7 +90,7 @@ From the CLI the same choices are `dam approval approve` / `deny` — note that 
 Binding a conversation to an agent is what authorizes it. There is one access model, and it is the same on both messengers:
 
 1. The binding itself is the authorization — anyone the messenger admits to the conversation drives the agent, with no login and no allow-list
-2. Every turn relays to the agent's main pod under the **agent's own** credentials
+2. Every turn runs on the sandbox under the **agent's own** credentials
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
@@ -111,6 +111,6 @@ A Slack conversation and an agent are strictly one-to-one: a conversation binds 
 ### Consequences
 
 - **Everyone in the conversation acts with the agent's authority.** A colleague who pushes to GitHub through it does so with the agent's token, attributed to the agent's identity — not their own. Treat a bound channel as equivalent to sharing the agent's credentials with the room.
-- **Conversation membership is the access control.** The messenger owns who is in the room; the platform never resolves who is typing to decide whether a turn may run.
+- **Conversation membership is the access control.** The messenger owns who is in the room; DAM never resolves who is typing to decide whether a turn may run.
 - **Ambient mode is a deliberate opt-in**, off by default on every connect path, because it has the agent read every message in the channel rather than only the ones aimed at it.
 

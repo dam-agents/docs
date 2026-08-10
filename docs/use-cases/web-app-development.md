@@ -15,7 +15,7 @@ Once configured, this agent runs an end-to-end product loop:
 3. **Decomposes into issues** — splits the PRD into vertical-slice tickets with dependency ordering
 4. **Implements autonomously** — picks up unblocked tickets, writes code, opens PRs, reviews, and merges
 5. **Deploys continuously** — sets up CI/CD (tracked under the `area:ci` label) so every merge ships
-6. **Stops when done** — detects when all tickets are closed, then disables itself
+6. **Stops when done** — detects when all tickets are closed, then deletes its own schedule
 7. **Pauses when stuck** — if something fails repeatedly, it stops and asks for help
 
 All of this runs on a schedule firing every minute — no human in the loop after the initial interview.
@@ -60,13 +60,13 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 ## Setup
 
 1. **Create a sandbox from the Software Factory image** — on **Choose your starting point** pick
-   **Custom image** and paste the image address published by
-   [dam-agents/software-factory](https://github.com/dam-agents/software-factory) (see that repo's
-   README for the current tag). Software Factory ships its own image rather than being one of the
+   **Custom image** and paste the Software Factory image address,
+   `quay.io/dam-agents/software-factory:<tag>`, with the tag from the latest release of
+   [dam-agents/software-factory](https://github.com/dam-agents/software-factory). It ships its own image rather than being one of the
    ready-made ones, because it runs extra processes alongside the harness. Once it starts, the agent
    operates from its bundled playbook and skills — you don't clone anything by hand.
 2. **Add your provider** — configure IBM LiteLLM with your API key
-3. **Add a GitHub connection** — provide a PAT with repo access to your target repository, so `gh` can authenticate
+3. **Add a GitHub connection** — OAuth or a personal access token with access to your target repository, so `gh` can authenticate
 4. **Start a chat session** — tell the agent what you want to build. On first run it reads its `work/config.json`; if that's missing it asks you for the configuration (the target `owner/repo`), then verifies the repo's default branch and required labels before starting.
 
 

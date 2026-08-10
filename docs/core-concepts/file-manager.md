@@ -6,11 +6,12 @@ Browse, edit, and upload files in your sandbox's persistent workspace.
 
 The File Manager gives you direct access to your sandbox's filesystem:
 
-- `/home/agent/work` — your main working directory (repos, project files)
-- `/home/agent` — home directory (configuration, memory, skills)
+- `/home/agent` — the root of the tree (configuration, memory, skills)
+- `/home/agent/work` — your main working directory (repos, project files), a folder inside it
 
-Two names under the working directory are reserved by the platform and won't appear: `.triggers` and
-`.initialized`. Ordinary repo noise like `.git` and `node_modules` is browsable as usual.
+Two names are reserved by the platform and won't appear: `.triggers` and `.initialized`. Per-import
+staging folders (`.import-staging-…`) are hidden too. Ordinary repo noise like `.git` and
+`node_modules` is browsable as usual.
 
 ## Capabilities
 
@@ -28,7 +29,8 @@ Two names under the working directory are reserved by the platform and won't app
 
 The built-in editor supports:
 
-- Syntax highlighting for common languages (Python, TypeScript, Go, YAML, JSON, Bash, SQL, etc.)
+- Syntax highlighting when viewing a file (Python, TypeScript, Go, YAML, JSON, Bash, SQL, etc.); the
+  editor itself highlights JavaScript/TypeScript, JSON, Markdown and YAML
 - Line numbers
 - Direct in-browser editing with save
 

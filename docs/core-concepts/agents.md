@@ -27,20 +27,20 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
 | State | What's happening |
 |-------|-----------------|
 | **Starting** | Pod is scaling up from hibernated, stopped, or newly created. |
-| **Preparing workspace** | The sandbox was created from a git repo and is cloning it into the workspace. The pod is already up — it just isn't usable until the clone lands. |
+| **Preparing workspace** | A one-time workspace setup step is still running. The pod is already up — it just isn't usable until that finishes. |
 | **Running** | Pod is active, ready to chat. Reserves compute against your budget. |
-| **Hibernating** | Pod is scaling down after inactivity. |
+| **Hibernating** | Pod is scaling down — the short window after you pause or stop it, before it reports down. |
 | **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
 | **Paused** | You put it to sleep now instead of waiting for the idle timeout. Frees its budget immediately, and wakes automatically on next use — like an on-demand hibernate. |
 | **Stopped** | A hard stop. Stays down and **does not wake on its own** — you must **Start** it (a scheduled run will also start it). Frees its budget. |
-| **Parked** (shown as **Over budget**) | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the sandbox, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-size). |
+| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the sandbox, or a schedule fire — retries the gate once other sandboxes free up room. A never-hibernate sandbox (timeout `0`) is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-size). |
 | **Error** | Pod failed to start or encountered a fatal issue. |
 
 !!! note "The status pill collapses some of these"
-    Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and a parked sandbox
-    shows as **Over budget** (with the CPU/memory figures in its tooltip). The states above are the
-    underlying model, not nine distinct badges. **Preparing workspace** sits inside Running rather
-    than before it, which is why it isn't a step in the diagram above.
+    Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and a sandbox waiting
+    on budget shows as **Over budget** (with the CPU/memory figures in its tooltip). The states above
+    are the underlying model, not nine distinct badges. **Preparing workspace** sits inside Running
+    rather than before it, which is why it isn't a step in the diagram above.
 
 **Pause vs. Stop vs. Hibernate.** All three take a sandbox down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** sandbox wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** sandbox stays down until you explicitly start it or a schedule fires.
 
@@ -69,6 +69,10 @@ Two things keep such work alive:
   pins it awake.
 - **Raise the hibernation timeout**, or set it to `0` to never hibernate, before starting the job.
 
+Raising the timeout only defers hibernation. A job the agent started for you in a chat is also
+stopped shortly after you close the last tab on that session, so start long jobs from a terminal you
+keep open, or detach them (`setsid`, `nohup`) so they outlive the session.
+
 Crossing the `0` boundary asks you to confirm in both directions, since it's the difference between
 an always-on sandbox and one that may be interrupted.
 
@@ -92,9 +96,9 @@ Each sandbox has a **Size** — how much CPU and memory it can use while it's ru
 
 Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* sandboxes can reserve at once. A sandbox reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the sandbox still saves, it just waits parked until room frees.
 
-- If a new or resized sandbox would exceed your budget, it can't start and shows as **Parked** — it waits until other sandboxes free up room, and **Start** is its retry.
-- To make room, **pause** or **stop** a sandbox you aren't using, then start the parked one.
-- Changing the Size of a running sandbox restarts it on save; if it's down, the new Size applies the next time it starts.
+- If a new or resized sandbox would exceed your budget, it can't start and shows as **Over budget** — it waits until other sandboxes free up room, and **Start** is its retry.
+- To make room, **pause** or **stop** a sandbox you aren't using, then start the waiting one.
+- Changing the Size of a running sandbox restarts it on save; if it's down, the new Size applies the next time it starts. Growing a **running** sandbox past your budget is refused when you save — free room first.
 
 ## Available Coding Harnesses
 
@@ -128,7 +132,7 @@ so if it's missing. Step 2 (**Setup your sandbox**) names it, picks a provider a
 (CPU/memory, within your budget), and sets network permissions; step 3 grants connections.
 
 Catalog entries show a display name and tags (e.g. the providers they support); some carry a
-**Learn more** link, and some surface a setup note on the next step (e.g. a recommended model).
+**Learn more** link, and some surface a setup note on the next step (e.g. a connection they need).
 
 !!! note "The Alpha badge"
     Some images are marked **Alpha** — early and evolving, and sorted to the bottom of the list.
@@ -138,10 +142,12 @@ Catalog entries show a display name and tags (e.g. the providers they support); 
 
 From the sandbox's page, the left nav has these sections:
 
-- **Sandbox Setup** — name, image, provider, **Network access** (which external services it may
-  reach), **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables,
-  and **Size** (CPU/memory while running, within your [compute budget](#compute-budget-and-size);
-  changing it restarts a running sandbox on save)
+- **Sandbox Setup** — name, provider, **Model settings** (see
+  [Sessions](sessions.md#model-settings)), **Network access** (which external services it may reach),
+  **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables, and
+  **Size** (CPU/memory while running, within your [compute budget](#compute-budget-and-size);
+  changing it restarts a running sandbox on save). The image is fixed at creation — the only change
+  to it is the upgrade below.
 - **Connections** — link GitHub, API keys, and other credentials
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks

@@ -86,7 +86,7 @@ dam agent restart <name-or-id>                    # Restart the pod (persistent 
 
 - `create` flags: `--template <id>` (required), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
 - `--wait` is available on `create` and `restart`; pair with `--timeout` to change the 120s default.
-- `--json` on `list`/`get` for machine-readable output.
+- `--json` on `list`, `get`, `delete`, and `restart` for machine-readable output.
 
 ### Templates
 
@@ -138,6 +138,8 @@ dam network trusted-hosts                              # Platform-wide hosts see
 ```
 
 `network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`.
+
+`network update` flags: `--method <m>`, `--path <p>`, `--verdict allow|deny`, `-y, --yes`, `--json` — partial, so pass only the fields you want to change. Updating a rule marks it manual.
 
 !!! note "A narrowed rule restarts the agent"
     A rule that specifies a non-wildcard method or path needs path-level enforcement, which
