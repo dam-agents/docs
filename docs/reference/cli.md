@@ -1,6 +1,6 @@
 # CLI
 
-The `dam` CLI lets you manage agents, attach to terminal sessions, transfer files, wire up connections, and more — all from your local machine.
+The `dam` CLI lets you manage sandboxes, attach to terminal sessions, transfer files, wire up connections, and more — all from your local machine.
 
 ## Installation
 
@@ -64,7 +64,7 @@ dam auth token list                                 # list your keys (plaintext 
 dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
 ```
 
-- `--name <name>` is required; `--scope <scope...>` and `--agent <agent-id...>` are repeatable. `--scope` defaults to `agents:operate`; the valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`.
+- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` are **variadic** — pass several values after one flag (`--scope agents:read agents:operate`) rather than repeating the flag, which replaces rather than accumulates. `--scope` defaults to `agents:operate`; the valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every sandbox you own.
 - `--expires <iso>` takes an ISO 8601 timestamp.
 - The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 - Minted keys carry a **`pk_`** prefix and can be used directly as `DAM_TOKEN`. API-key principals cannot mint further keys.
@@ -111,12 +111,12 @@ dam connection grant <agent> --connection <id>    # Grant one or more connection
 dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; idempotent)
 ```
 
-`connection connect` takes either a provider template id (see `dam connection templates`) or an MCP server URL (`https://…`). Useful flags:
+`connection connect` takes either a provider template id (see `dam connection templates`) or an MCP server URL (`https://…`). `dam connection templates` lists only the ids `connect` accepts directly — MCP-category templates are left out on purpose, since MCP servers are added by URL instead. Useful flags:
 
 - `--name <name>` — connection name (defaults to a slug of the template name or the MCP host)
 - `--auth oauth|none` — MCP auth mode (auto-detected by default)
-- `--no-browser` — for MCP OAuth, print the consent URL instead of opening a browser
-- `--timeout <seconds>` — MCP OAuth timeout (default 300)
+- `--no-browser` — for any OAuth connection, print the consent URL instead of opening a browser
+- `--timeout <seconds>` — how long to wait for OAuth authorization (default 300)
 - `-c, --config <key=value>` — set an optional template config input (repeatable), e.g. `--config model=premium-shell`; values are validated against the template's declared inputs.
 
 Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--issuer-url`/`--scopes`/`--audience`, `--app-id`/`--app-slug`/`--installation-id`/`--private-key`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
@@ -141,6 +141,8 @@ dam network trusted-hosts                              # Platform-wide hosts see
 
 `network update` flags: `--method <m>`, `--path <p>`, `--verdict allow|deny`, `-y, --yes`, `--json` — partial, so pass only the fields you want to change. Updating a rule marks it manual.
 
+`apply-preset` replaces only the rules the **preset** put there — rules you created by hand and rules derived from connections are preserved. The CLI prints that reminder before applying.
+
 !!! note "A narrowed rule restarts the agent"
     A rule that specifies a non-wildcard method or path needs path-level enforcement, which
     **restarts the agent** (~5–15s). The CLI confirms first; `-y` skips the prompt. Host-only rules
@@ -158,16 +160,16 @@ dam skill source refresh <id>                          # Drop a source's scan ca
 dam skill catalog <source>                             # Scan a source's available skills
 dam skill catalog <source> --agent <ref>               # Annotate install status against an agent
 dam skill list <agent>                                 # List the skills on an agent
-dam skill install <agent> --source <id-or-url> --name <skill>   # Install (or update) a skill
+dam skill install <agent> --source <id-or-url> --name <skill>   # Install (or update) a skill (both flags required)
 dam skill uninstall <agent> --source <id-or-url> --name <skill>   # Remove a skill (both flags required)
 dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--body <b>]   # Publish a skill as a PR (--name/--source required; --title/--body optional)
 ```
 
-- `source add` also takes `--name <name>` (defaults to a slug of the git URL) and `--path <subdir>` to scan only a subdirectory of the repo.
+- `source add` also takes `--name <name>` and `--path <subdir>` to scan only a subdirectory of the repo. The name defaults to the git URL's path with any leading or trailing `/` and a trailing `.git` removed — `https://github.com/acme/skills` becomes `acme/skills`. Slashes are kept; unlike connection names, skill-source names aren't slugified. On a TTY you're prompted with that value pre-filled.
 - `source list --agent <ref>` additionally includes sources declared by the agent's template. `source remove` confirms on a TTY — pass `-y, --yes` non-interactively.
 - `catalog --agent <ref>` annotates each skill as not-installed / installed / update-available **and** scans private sources through that agent's pod.
 - `install` always installs the source's **current HEAD** — there is no `--version` flag and no separate `update` verb; re-running `install` updates in place.
-- `publish` works only on **standalone** (locally-authored) skills, and only against **GitHub** sources.
+- `publish` works only on **standalone** (locally-authored) skills, and only against **GitHub** sources. Its `--source` is the repo to open the pull request *against* — not where the skill came from, as it means on `install`/`uninstall`, since a standalone skill has no origin source.
 
 ### Channels
 
@@ -239,15 +241,15 @@ dam schedule reset-session <schedule-id>   # Reset the session a continuous sche
 
 Additional flags (on both `create` and `update`):
 
-- `--weekdays <days>` — limit `--daily`/`--every` to specific days, e.g. `MO,WE,FR`. Can't combine with `--rrule`, whose body carries its own `BYDAY`
+- `--weekdays <days>` — limit `--daily`/`--every` to specific days, e.g. `MO,WE,FR`. Can't combine with `--rrule`, whose body carries its own `BYDAY`. On `update` it only applies while you're rebuilding the recurrence, so pass it together with `--daily` or `--every` — you can't narrow the days of an existing schedule on its own
 - `--timezone <tz>` — IANA timezone (defaults to the host's zone)
 - `--quiet-window <HH:MM-HH:MM>` — suppress fires inside a window (repeatable)
-- `--session-mode <fresh|continuous>` — new session per fire, or one shared session
+- `--session-mode <fresh|continuous>` — new session per fire, or one shared session. Defaults to `fresh` on `create`; on `update`, omitting it leaves the stored value unchanged
 - `--json` — emit the schedule as JSON (available on every subcommand)
 
 On **`update`**, `--quiet-window` **replaces all** existing windows rather than adding to them, and at least one field must be passed. Legacy cron schedules are **read-only** — recreate them as RRULE schedules to edit.
 
-`delete` also takes `-y, --yes` to skip the confirmation prompt, and is idempotent. `enable`/`disable` are idempotent too. Schedule ids come from `dam schedule list`.
+`delete` takes `-y, --yes` to skip the confirmation prompt and **requires it on a non-TTY** — without it the command refuses and exits non-zero whatever the id. Past the confirmation it's idempotent: an unknown id exits 0. `enable`/`disable` are idempotent too and need no confirmation. Schedule ids come from `dam schedule list`.
 
 ### Terminal Sessions
 
@@ -283,7 +285,7 @@ dam file get <agent> <remote-path>     # Download a single file from the agent
 dam file put <agent> <local> <remote>  # Upload a single file to the agent
 ```
 
-**Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded by basename at every level: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. Symlinks anywhere in the tree are **skipped, not followed**. Use `-y, --yes` to skip the confirm (required on non-TTY).
+**Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded by basename at every level: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. A symlink passed **as a `<path>` argument** is rejected and the import fails; symlinks found **inside** an imported directory are **skipped, not followed**. Use `-y, --yes` to skip the confirm (required on non-TTY).
 
 **File list** shows a directory's immediate children (files and directories) and is **not recursive**; the path defaults to the workspace root.
 

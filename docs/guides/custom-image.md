@@ -145,8 +145,10 @@ This is the entire contract between your image and the platform. When you open a
 
 Ship **both**, and override both. The base's `harness-chat` is a stub that exits with *"this agent
 image does not provide a chat harness"*, and its `harness-terminal` execs `claude`, which the base
-doesn't install — so neither works unmodified. (Every built-in image ships these same two scripts;
-only the program each one execs differs.)
+doesn't install — so neither works unmodified. (The built-in images' scripts also source a small
+model-gateway shim before the exec. Your image doesn't need it — the platform sets the provider
+environment variables directly — which is why the shipped scripts are longer than the two lines
+below.)
 
 Both scripts are launched with their working directory set to **`/home/agent/work`**, so relative
 paths resolve there.

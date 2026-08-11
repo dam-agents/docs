@@ -31,7 +31,8 @@ Schedules let you define automated tasks that fire on a timer:
     expression (which an agent may do) run in **UTC** and ignore quiet hours — so a 9am-local cron
     drifts by an hour when daylight saving changes. Cron schedules **and any schedule your agent
     created for itself** can't be *edited* in the panel — **Edit schedule** is greyed out. You can
-    still pause, reset, and delete them; recreate one yourself to change its cadence or prompt.
+    still pause and delete them — and reset the session on a continuous one; recreate one yourself to
+    change its cadence or prompt.
 
 ## Session Modes
 
@@ -63,7 +64,7 @@ Suppress schedule fires during specific time windows. Suppressed runs are **drop
 !!! warning "Dropped, not deferred"
     If you need every run to eventually execute, quiet hours is not the right tool. Use it for polling tasks where skipping off-hours runs is acceptable.
 
-A window may cross midnight (10pm–7am works as written). If your quiet hours would swallow *every* run, the schedule won't save.
+A window may cross midnight (10pm–7am works as written), and it uses the same timezone as the schedule, so it holds across daylight saving. If your quiet hours would swallow *every* run, the schedule won't save.
 
 ## Sleeping and stopped sandboxes
 

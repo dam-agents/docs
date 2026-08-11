@@ -30,8 +30,9 @@ aren't separate kinds, just things you author as HTML, JSX, or markdown.
     charting libraries from public CDNs in the viewer's browser — so it needs the viewer to be
     online.
 
-Artifacts over **10 MB** don't preview or render; they're offered as a download instead. Of the
-binary kinds, only images preview inline. Publishing itself is capped at **50 MB** per artifact.
+Text, markdown, HTML and JSX artifacts over **10 MB** aren't rendered; they're offered as a download
+instead. Of the binary kinds, only images preview inline, and a shared image streams at any size.
+Publishing itself is capped at **50 MB** per artifact.
 
 ## Publishing one
 

@@ -33,7 +33,7 @@ Every sandbox is paired with its own **credential gateway** — a separate, hard
 
 **Key properties:**
 
-- Your sandbox has **no access** to the raw token — it's not in environment variables, not on disk, not in memory
+- Your sandbox has **no access** to the raw token — it never reaches the sandbox's disk, and where a tool expects an env var the sandbox gets a placeholder, not the real value
 - Your sandbox has no route to the internet except through the gateway, and that's enforced at the network layer rather than by the agent's own good behavior
 - Even if an agent is fully compromised (prompt injection, malicious code), it cannot exfiltrate your credentials
 
@@ -94,7 +94,7 @@ Binding a conversation to an agent is what authorizes it. There is one access mo
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `/dam unbind` and `/dam ambient on|off`. (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
+Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `/dam unbind` and `/dam ambient` (bare to check the current setting, `on|off` to change it). (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
 
 Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 

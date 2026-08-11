@@ -19,7 +19,7 @@ staging folders (`.import-staging-…`) are hidden too. Ordinary repo noise like
 |--------|-------------|
 | Browse | Navigate the directory tree |
 | View | Read file contents with syntax highlighting, or as a rendered preview (images, PDF, SVG, Markdown, HTML) |
-| Fullscreen | Open a rendered preview at full size in a dialog via the **Fullscreen** button |
+| Fullscreen | Open a rendered preview at full size in a dialog via the **Open fullscreen** button |
 | Edit | Modify files directly in the browser |
 | Upload | Add files from your local machine to the workspace |
 | Download | Save workspace files to your local machine |
@@ -34,7 +34,7 @@ The built-in editor supports:
 - Line numbers
 - Direct in-browser editing with save
 
-When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fullscreen** button opens the rendered preview at full size in a dialog. Press **Escape** or the close button to leave it; switching to another file also returns you to the side panel.
+When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open fullscreen** button opens the rendered preview at full size in a dialog. Press **Escape** or the close button to leave it; switching to another file also returns you to the side panel.
 
 ## Limits
 
@@ -48,7 +48,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), a **Fulls
 
 ## Key Notes
 
-- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: Edit, Download, Rename, Delete; for a folder: New file, New folder, Upload here, Rename, Delete
+- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: Edit, Download, Rename, Delete; for a folder: New file, New folder, Upload files here, Rename, Delete
 - **Move by drag and drop** — drag a file or folder onto a destination folder in the tree to move it there (a folder can't be moved into itself or its own subtree)
 - **Uploading files** lands them in the folder you upload *into* — use a folder's **Upload files here…** action, or drag them onto it. If a file of that name already exists, you're asked before it's overwritten.
 - **Uploading a whole folder** (or using `dam import`) is a bulk import instead: each top-level folder you bring replaces any existing top-level entry of the same name under `/home/agent/work`, and other top-level entries are left alone. `node_modules`, `.venv`, `__pycache__` and `.DS_Store` are skipped automatically; `.git` is kept.

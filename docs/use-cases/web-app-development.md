@@ -63,7 +63,9 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
    **Custom image** and paste the Software Factory image address,
    `quay.io/dam-agents/software-factory:<tag>`, with the tag from the latest release of
    [dam-agents/software-factory](https://github.com/dam-agents/software-factory). It ships its own image rather than being one of the
-   ready-made ones, because it runs extra processes alongside the harness. Once it starts, the agent
+   ready-made ones, because it runs extra processes alongside the harness. If that registry repository
+   is private, expand **Private registry** in the same card and enter its **Server**, **Username**, and
+   **Password** — see [Building a Custom Image](../guides/custom-image.md). Once it starts, the agent
    operates from its bundled playbook and skills — you don't clone anything by hand.
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — OAuth or a personal access token with access to your target repository, so `gh` can authenticate

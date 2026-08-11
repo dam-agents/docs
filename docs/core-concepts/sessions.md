@@ -12,7 +12,8 @@ and no harness involvement — just a login shell. See the
 Open your sandbox in the DAM UI and type a message. A new session is created automatically.
 
 - **Resume** — click any previous session in the sidebar to continue
-- **New Session** — start fresh conversation context (workspace files are unchanged)
+- **New chat session** — from the **New** menu; starts fresh conversation context (workspace files
+  are unchanged)
 - **History** — scroll up to see full conversation including tool calls and file changes
 - **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
 
@@ -33,6 +34,9 @@ working on their own:
 | Terminal icon | A terminal (PTY) session, which has no agent turn of its own. |
 | Clock icon | A session created by a schedule. |
 | `#` icon | A channel (Slack/Telegram) session; a superscript **A** marks a channel's ambient reader. |
+
+An approval left unanswered with nobody attached expires after ten minutes, and the action it was
+blocking is cancelled.
 
 An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over
 **Chats**, **Experiment runs**, **Scheduled**, **Channels**, and **Terminal** (all on by default),
@@ -63,7 +67,7 @@ Use terminal for:
 |----------|--------|
 | Single viewer | One viewer at a time per terminal session — no fan-out, unlike chat |
 | Workspace access | Same filesystem as chat sessions (`/home/agent/work`) |
-| Scrollback | Full xterm buffer, replayed when you reattach |
+| Scrollback | The last ~1,000 lines, replayed when you reattach |
 
 ### Reconnection
 

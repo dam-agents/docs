@@ -59,8 +59,8 @@ feed it, rather than dropping you into an empty chat.
 !!! warning "Setup needs network access"
     The template's setup step downloads its toolkit from GitHub, through the sandbox's egress
     gateway. If you switch to the **Strict default-deny** network preset, that download can be blocked
-    and the knowledge base comes up without its tooling. **Trusted defaults** — the default — is the
-    safer choice here; if setup seems not to have run, check
+    and the knowledge base comes up without its tooling. **Trusted defaults (recommended)** — the preset
+    a new sandbox starts on — is the safer choice here; if setup seems not to have run, check
     [network access](network-access.md) first.
 
 ## Adding sources and building knowledge
@@ -82,9 +82,9 @@ any other sandbox content.
 
 Wake, restart, pause, stop, and delete behave exactly as they do for [any
 sandbox](agents.md#lifecycle). Opening a knowledge base from the list keeps you in that context, so
-closing it returns you to the list rather than to Sandboxes.
+closing it returns you to the knowledge-base list rather than to Home.
 
-Its settings page covers the harness (read-only), network access, and connections. **Size isn't
+Its settings page covers the name, the harness (read-only), network access, and connections. **Size isn't
 editable there** — a knowledge base runs on its defaults to keep the surface conversational.
 
 There's no CLI command for creating a knowledge base, but `dam agent list` / `get` / `delete` all

@@ -176,7 +176,7 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
 
     ---
 
-    Build an organized body of knowledge by conversation. Feed it sources; it keeps and cross-links what it learns.
+    Build an organized body of knowledge by conversation. Feed it sources; it keeps and organizes what it learns.
 
 -   :material-package-variant-closed:{ .lg .middle } **[Artifacts](core-concepts/artifacts.md)**
 

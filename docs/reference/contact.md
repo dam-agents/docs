@@ -10,7 +10,7 @@ Join [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24)
 
 ## Bugs and Feature Requests
 
-File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"} so they don't get lost in a channel scroll. For corrections to these docs, open an issue on the docs repo.
+File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"} so they don't get lost in a channel scroll. For corrections to these docs, open an issue on the [docs repo](https://github.ibm.com/dam-agents/docs/issues){:target="_blank"}.
 
 ## Request Access
 

@@ -20,7 +20,7 @@ The rest of this page covers **Connections**. Providers are set when you create 
 
 Connection credentials (OAuth tokens and API keys) are stored outside your sandbox and injected onto outbound requests by a paired gateway that sits between the sandbox and the internet. The sandbox never holds the raw token — even if compromised, it can't leak your keys.
 
-All credentials — including provider API keys and GitHub personal access tokens — are modeled and managed as Connections. There is no separate "secrets" concept.
+Every credential your agent uses on the wire — provider API keys, GitHub tokens, custom headers — is a Connection. (Private-registry credentials are the one exception; you set those on the sandbox itself.)
 
 ## OAuth Connections
 
@@ -28,7 +28,7 @@ OAuth connections auto-refresh and require no manual rotation.
 
 ### GitHub
 
-DAM integrates with both GitHub.com and GitHub Enterprise (`github.ibm.com`):
+DAM integrates with GitHub.com and with any GitHub Enterprise host you supply:
 
 1. Go to **Settings → Connections** and click **New** to open the **Connection catalogue**
 2. On the **Apps** tab, click **New** on the **GitHub** card, then choose **Sign in with Github** and
@@ -46,7 +46,7 @@ When you sign in with **GitHub.com**, commits the agent makes are attributed to 
 For services that use a static API key rather than OAuth, connect a prebuilt template:
 
 1. Go to **Settings → Connections** → **New** to open the **Connection catalogue**, then on the **Apps** tab pick the service (e.g. **Modal**)
-2. Paste your key and click **Create**
+2. Fill in the fields the service asks for — the key, plus anything else on the form (Modal also wants its **Token ID**) — and click **Create**
 
 Model providers aren't here — they live on the **Providers** tab (see above).
 
@@ -81,4 +81,4 @@ does, the button becomes **Create + Authorize** and walks you through the server
 
 ## Security
 
-Tokens live in a separate gateway pod that the agent cannot access. Network policy enforces this boundary at the cluster level. See [Architecture](../reference/architecture.md) for the full model.
+Tokens live in a separate gateway pod your sandbox cannot reach. Network policy enforces this boundary at the cluster level. See [Architecture](../reference/architecture.md) for the full model.

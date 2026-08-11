@@ -42,7 +42,7 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
     are the underlying model, not nine distinct badges. **Preparing workspace** sits inside Running
     rather than before it, which is why it isn't a step in the diagram above.
 
-**Pause vs. Stop vs. Hibernate.** All three take a sandbox down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** sandbox wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** sandbox stays down until you explicitly start it or a schedule fires.
+**Pause vs. Stop vs. Hibernate.** All three take a sandbox down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** sandbox wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** sandbox stays down until you explicitly start it or a schedule fires. One exception: pausing a sandbox set to never hibernate behaves like **Stop** — it stays down until you start it.
 
 ### Automatic Hibernation
 
@@ -69,9 +69,10 @@ Two things keep such work alive:
   pins it awake.
 - **Raise the hibernation timeout**, or set it to `0` to never hibernate, before starting the job.
 
-Raising the timeout only defers hibernation. A job the agent started for you in a chat is also
-stopped shortly after you close the last tab on that session, so start long jobs from a terminal you
-keep open, or detach them (`setsid`, `nohup`) so they outlive the session.
+Raising the timeout only defers hibernation. Closing a chat tab doesn't stop a turn — a running turn
+keeps the sandbox awake until it finishes. Detaching a job (`setsid`, `nohup`) is what puts it out of
+reach: nothing then holds the sandbox open, so raise the timeout or keep a connection open before
+starting one.
 
 Crossing the `0` boundary asks you to confirm in both directions, since it's the difference between
 an always-on sandbox and one that may be interrupted.

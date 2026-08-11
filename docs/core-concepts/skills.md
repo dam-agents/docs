@@ -17,6 +17,9 @@ group a skill is in decides what you can do with it, so this is the first thing 
 
 The rest of this page takes them in that order.
 
+The panel is read-only while your sandbox is stopped, and skills you created here only appear once
+it's running — start it to make changes.
+
 ## Created in this sandbox
 
 Two ways to make your own:
@@ -29,7 +32,7 @@ Two ways to make your own:
 
 Either way it lands under **Created in this sandbox**. Each one's **⋯** menu offers:
 
-- **Download skill** — a single-file skill comes down as `<name>.md`, ready to re-upload as-is;
+- **Download skill** — a single-file skill comes down as one `.md` file, ready to re-upload as-is;
   anything with extra files comes down as a `.zip` of the skill's folder.
 - **Delete skill** — removes it from this sandbox.
 
@@ -41,8 +44,8 @@ and isn't checked against GitHub afterwards, so it stays put once the PR is merg
 the link for the real state. Only GitHub-hosted sources can be published to, so you need at least one
 connected before the button does anything.
 
-Publishing shares a skill; it doesn't move it. If you delete a skill you published, the pull request
-stays open upstream — withdraw it yourself if you don't want it.
+Publishing shares a skill; it doesn't move it. Deleting a skill you published doesn't withdraw its
+pull request — follow the link if you want to close it yourself.
 
 ## Included with sandbox image
 
@@ -63,6 +66,9 @@ that repo's skills available to install individually.
 1. Open your sandbox's **Skills** panel
 2. Browse the skills in an existing source, or **Add source** with a git repo URL
 3. Flip a skill's toggle on — it installs right away; flip it off to uninstall
+
+Click a skill's name to read its instructions before you turn it on — for a public repo they render
+right in the panel, otherwise you get a link to the file on GitHub.
 
 Installed skills are downloaded into your sandbox and become available on the **next session** — the
 harness picks them up when it next starts, not mid-session. Installing always takes the source's
