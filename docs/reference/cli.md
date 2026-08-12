@@ -64,7 +64,7 @@ dam auth token list                                 # list your keys (plaintext 
 dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
 ```
 
-- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` are **variadic** — pass several values after one flag (`--scope agents:read agents:operate`) rather than repeating the flag, which replaces rather than accumulates. `--scope` defaults to `agents:operate`; the valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every sandbox you own.
+- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. `--scope` defaults to `agents:operate`; the valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every sandbox you own.
 - `--expires <iso>` takes an ISO 8601 timestamp.
 - The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 - Minted keys carry a **`pk_`** prefix and can be used directly as `DAM_TOKEN`. API-key principals cannot mint further keys.
