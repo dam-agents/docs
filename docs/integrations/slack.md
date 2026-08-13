@@ -7,7 +7,7 @@ Chat with your agent directly from Slack — in a channel, a group DM, or a 1:1 
 Connecting a Slack conversation to an agent lets you:
 
 - Talk to your agent from Slack instead of the DAM UI
-- Let a whole channel work with one agent
+- Let a whole channel work with one agent — and reach the same agent from several conversations
 - Share screenshots and images the agent can actually read
 - Get proactive posts — results after a scheduled run, alerts when a long task finishes
 - Keep a persistent session per thread
@@ -69,10 +69,19 @@ A bare `/dam` prints the usage help for those three commands.
     were never linked**, and those two commands will ask you to run `/dam login` first.
     Reading the current state with a bare `/dam ambient` never needs a link. `/dam logout` unlinks.
 
-!!! info "One conversation, one agent"
-    A conversation binds to at most one agent, and an agent to at most one Slack conversation
-    (channel **or** group DM **or** DM). `/dam bind` in an already-connected conversation is
-    refused, even for the same agent — run `/dam unbind` first, then bind again.
+!!! info "One conversation, one agent — but an agent can hold several"
+    A Slack conversation binds to at most one agent. The reverse is **not** true: one agent can be
+    connected to **several conversations at once** — channels, group DMs, and DMs in any mix — so the
+    same workspace, memory, and skills are reachable from all of them without duplicating the
+    sandbox. `/dam bind` in an already-connected conversation is refused, even for the same agent;
+    run `/dam unbind` there first.
+
+    Conversations never bleed into each other: threads and sessions belong to the conversation they
+    happened in, so a reply can't surface in another one. `/dam unbind` releases only the
+    conversation you run it in, leaving the agent's other bindings alone.
+
+    A binding is fixed to its conversation — nothing moves one. To reach the same agent from
+    somewhere else, bind that conversation too (and unbind this one if you no longer want it).
 
 ## How the agent is triggered
 
@@ -172,6 +181,10 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
   longer or fails, that's posted in the thread for everyone.
 - **Agents can post first.** A bound agent can post on its own — results when a scheduled run
   finishes, or an alert.
+- **A blocked network request won't stall the turn.** If the agent needs a host you haven't allowed,
+  it can't be approved from Slack — so instead of going quiet, the agent tells you which host it
+  needs. The request waits in your [Inbox](../core-concepts/network-access.md#approvals); allow it
+  there and the agent can pick up where it left off.
 
 !!! tip "How the agent posts"
     Proactive posts work through two built-in tools the agent calls itself: `describe_channel`
@@ -185,8 +198,17 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 
 ## Other ways to bind
 
-You can also connect a **channel** from the CLI — useful when you want ambient on from the start.
-DMs and group DMs bind in-chat with `/dam bind`.
+You can also connect a **channel** from the DAM UI or the CLI. DMs and group DMs bind in-chat with
+`/dam bind`.
+
+From the **UI**, open the sandbox and go to **Channels**. The Slack card lists the channels already
+connected — each with whether ambient is on — and **Connect channel** adds another by its channel id.
+A connected channel's **⋯** menu offers **Edit** (to flip ambient) and **Disconnect**. The channel
+itself can't be swapped for a different one: connect the channel you want and disconnect this one.
+
+!!! note "If the section says no messenger is set up"
+    Channels only lists what your operator has configured. Where no messenger is wired up, the
+    section says so and points you at them rather than showing an empty list.
 
 From the **CLI**:
 
@@ -195,9 +217,17 @@ dam channel slack connect <agent> --channel-id <C0…>              # mentions-o
 dam channel slack connect <agent> --channel-id <C0…> --ambient    # ambient on from the start
 ```
 
-Re-running `connect` for the **same** agent updates the binding in place — which is how you change
-ambient mode from the CLI, with no disconnect needed. Pointing a channel at a *different* agent is
-refused until the current binding is released.
+Re-running `connect` for the **same** agent and channel updates that binding in place — which is how
+you change ambient mode from the CLI, with no disconnect needed. Connecting a *further* channel to the
+same agent adds a binding rather than replacing one. Pointing a channel that's already bound at a
+*different* agent is refused until that binding is released.
+
+Because an agent can hold several channels, `disconnect` needs to know which one to release:
+
+```bash
+dam channel slack disconnect <agent>                          # only when one channel is connected
+dam channel slack disconnect <agent> --channel-id <C0…>       # required once there are several
+```
 
 See the [CLI reference](../reference/cli.md#channels).
 

@@ -35,8 +35,10 @@ working on their own:
 | Clock icon | A session created by a schedule. |
 | `#` icon | A channel (Slack/Telegram) session; a superscript **A** marks a channel's ambient reader. |
 
-An approval left unanswered with nobody attached expires after ten minutes, and the action it was
-blocking is cancelled.
+If the agent asks permission for a tool call and **no session is attached** to receive the prompt, the
+request expires after ten minutes and the agent is told it failed, so the tool call aborts cleanly.
+That's separate from the longer window on
+[network approvals](network-access.md#approvals), which keep waiting for you in the Inbox.
 
 An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over
 **Chats**, **Experiment runs**, **Scheduled**, **Channels**, and **Terminal** (all on by default),
@@ -45,7 +47,9 @@ behind a confirm.
 
 ### Environment variables
 
-Environment variables you set in the sandbox's Environment editor are persisted separately and delivered to the running sandbox, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections when the names collide. The pod isn't restarted, but a turn still running about a minute after you save is interrupted so the new values can apply.
+Environment variables you set in the sandbox's Environment editor are persisted separately and delivered to the running sandbox, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections when the names collide.
+
+Whether a turn already in flight is disturbed depends on what you changed. **Adding or removing a variable** interrupts a turn still running about a minute after you save, so the new set can take effect. **Changing only a value** never interrupts a running turn — it applies at the next turn boundary.
 
 ### Model settings
 

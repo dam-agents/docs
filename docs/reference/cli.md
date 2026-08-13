@@ -106,9 +106,10 @@ dam connection list                               # List your connections
 dam connection list <agent>                       # List the connections granted to one agent
 dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
 dam connection update <id-or-name>                # Rotate a header connection's stored secret (prompts securely)
+dam connection reauth <id-or-name>                # Re-run login and consent for an OAuth connection
 dam connection disconnect <id-or-name>            # Remove a connection (deletes the stored credential)
-dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable)
-dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; idempotent)
+dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable; at least one)
+dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; at least one; idempotent)
 ```
 
 `connection connect` takes either a provider template id (see `dam connection templates`) or an MCP server URL (`https://…`). `dam connection templates` lists only the ids `connect` accepts directly — MCP-category templates are left out on purpose, since MCP servers are added by URL instead. Useful flags:
@@ -121,7 +122,18 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 
 Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--issuer-url`/`--scopes`/`--audience`, `--app-id`/`--app-slug`/`--installation-id`/`--private-key`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
 
-`connection update` replaces the stored secret of a **header-credential** connection (API keys and custom-header integrations) in place. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively. OAuth and GitHub App connections don't rotate this way — they refresh on their own; disconnect and reconnect to change the underlying account.
+`connection update` replaces a connection's **stored secret** in place. What that means depends on the connection: the injected value for an API key or custom-header integration, a client secret for a client-credentials connection, the private key (PEM) for a GitHub App, or an OAuth connection's own client secret where it carries one. A connection that stores no credential has nothing to update. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively — a multi-line secret like a PEM can't be typed at the prompt, so use `--value "$(cat app.pem)"`.
+
+Use `update` to replace a *secret you hold*, and `reauth` to replace *expired OAuth tokens*.
+
+`connection reauth` re-runs login and consent for an **OAuth** connection, replacing only its tokens: the connection keeps its identity and every sandbox grant it already has, so nothing needs re-granting afterwards. Reach for it when a connection shows expired, or to re-consent after its template gained scopes. It opens a browser and waits for you to authorize:
+
+```bash
+dam connection reauth github
+dam connection reauth conn-61cc7b9137b0 --no-browser   # print the URL instead of opening it
+```
+
+Flags: `--no-browser`, `--timeout <seconds>` (default 300), `--json`, `--server <url>`. A connection that stores its own secret has no login flow — `reauth` refuses it and points you at `connection update` instead.
 
 ### Network access
 
@@ -165,7 +177,7 @@ dam skill uninstall <agent> --source <id-or-url> --name <skill>   # Remove a ski
 dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--body <b>]   # Publish a skill as a PR (--name/--source required; --title/--body optional)
 ```
 
-- `source add` also takes `--name <name>` and `--path <subdir>` to scan only a subdirectory of the repo. The name defaults to the git URL's path with any leading or trailing `/` and a trailing `.git` removed — `https://github.com/acme/skills` becomes `acme/skills`. Slashes are kept; unlike connection names, skill-source names aren't slugified. On a TTY you're prompted with that value pre-filled.
+- `source add` also takes `--name <name>` and `--path <subdir>` to scan only a subdirectory of the repo. The name defaults to the git URL's path with a leading `/`, a trailing `/`, and a trailing `.git` removed — `https://github.com/acme/skills` becomes `acme/skills`. Slashes are kept; unlike connection names, skill-source names aren't slugified. On a TTY you're prompted with that value pre-filled.
 - `source list --agent <ref>` additionally includes sources declared by the agent's template. `source remove` confirms on a TTY — pass `-y, --yes` non-interactively.
 - `catalog --agent <ref>` annotates each skill as not-installed / installed / update-available **and** scans private sources through that agent's pod.
 - `install` always installs the source's **current HEAD** — there is no `--version` flag and no separate `update` verb; re-running `install` updates in place.
@@ -180,13 +192,14 @@ dam channel available                                       # List enabled messe
 dam channel list <agent>                                    # Bindings, with each Slack binding's ambient state
 dam channel slack connect <agent> --channel-id <C0…>            # Bind the channel (mentions-only)
 dam channel slack connect <agent> --channel-id <C0…> --ambient  # Bind with ambient mode on
-dam channel slack disconnect <agent>                        # Unbind the Slack channel
+dam channel slack disconnect <agent>                        # Unbind (when only one channel is connected)
+dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of several connected channels
 ```
 
-- A Slack conversation binds to **exactly one** agent, and an agent to at most one Slack conversation.
+- A Slack conversation binds to **exactly one** agent, but an agent may hold **several** Slack bindings at once. `disconnect` takes `--channel-id` to say which to release; it is required once the agent has more than one connected, and optional when it has just one. `disconnect` is idempotent — an agent that isn't connected exits 0.
 - **The binding is the authorization**: anyone Slack admits to the conversation drives the agent, and every turn runs under the **agent's own** credentials. There is no per-person mode and no allow-list. See [Who can drive the agent](../integrations/slack.md#who-can-drive-the-agent).
 - `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**. Against a server too old to understand ambient, the connect **fails loudly** rather than silently landing mentions-only.
-- **Re-running `connect` for the same agent updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Pointing the channel at a *different* agent fails with `Slack channel already bound to another agent`; `disconnect` first. (The in-chat `/dam bind` is stricter — it refuses any already-connected conversation, even for the same agent.)
+- **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one. Pointing a bound channel at a *different* agent fails with `Slack channel already bound to another agent`; `disconnect` first. (The in-chat `/dam bind` is stricter — it refuses any already-connected conversation, even for the same agent.)
 - `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
 - **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind` and `/dam ambient on|off` require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/dam bind` rather than through this command group.
@@ -258,7 +271,7 @@ dam chat <agent>                       # New terminal session
 dam chat <agent> --continue            # Reattach to the most recent terminal session
 dam chat <agent> --resume <session-id> # Resume a specific session
 dam chat <agent> --reset               # Kill the existing PTY and start fresh
-dam session list <agent>               # List all sessions for an agent
+dam session list <agent>               # List all sessions for an agent (`dam session <agent>` works too)
 ```
 
 `dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness. On disconnect, the CLI prints a `dam chat --resume` command for easy reattach. Short flags: `-c` (`--continue`), `-r` (`--resume`).

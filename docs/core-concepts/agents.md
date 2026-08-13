@@ -59,20 +59,23 @@ By default a sandbox hibernates after the DAM-wide idle timeout. You can **overr
 
 ### Background work and hibernation
 
-The idle checker only sees **sessions and connections** — chat, terminal, and SSH. Work detached
-from a session (a background job that outlives the terminal which started it, an async task) is
-invisible to it, so an agent can hibernate mid-job and kill that work.
+**Background work the agent is running holds the sandbox awake by itself.** When an agent starts a
+job in the background, it reports that work, and while anything is outstanding the sandbox won't
+hibernate underneath it — so closing the tab no longer kills what it left running. Nothing times that
+hold out: a sandbox with reported work stays up until the work ends. A **Pause** or **Stop** still
+takes it down regardless, so those remain the way to reclaim one deliberately.
 
-Two things keep such work alive:
+That covers work the agent's harness supervises, which is the usual case. A job **detached** from the
+harness (`setsid`, `nohup`) is invisible to it, so it isn't holding the sandbox awake — hibernation is
+what will eventually end it. For those, either:
 
-- **Keep a terminal or SSH session open** to the sandbox for the duration — an open connection
-  pins it awake.
+- **Keep a terminal or SSH session open** for the duration — an open connection pins the sandbox
+  awake, and closing the tab or editor is what lets it idle down again.
 - **Raise the hibernation timeout**, or set it to `0` to never hibernate, before starting the job.
+  Raising it only defers hibernation rather than preventing it.
 
-Raising the timeout only defers hibernation. Closing a chat tab doesn't stop a turn — a running turn
-keeps the sandbox awake until it finishes. Detaching a job (`setsid`, `nohup`) is what puts it out of
-reach: nothing then holds the sandbox open, so raise the timeout or keep a connection open before
-starting one.
+Closing a chat tab doesn't stop a turn either — a running turn keeps the sandbox awake until it
+finishes.
 
 Crossing the `0` boundary asks you to confirm in both directions, since it's the difference between
 an always-on sandbox and one that may be interrupted.
@@ -150,9 +153,12 @@ From the sandbox's page, the left nav has these sections:
   changing it restarts a running sandbox on save). The image is fixed at creation — the only change
   to it is the upgrade below.
 - **Connections** — link GitHub, API keys, and other credentials
+- **Channels** — connect the sandbox to Slack channels or Telegram chats (see
+  [Slack](../integrations/slack.md) and [Telegram](../integrations/telegram.md))
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the sandbox has published
+- **Usage** — this sandbox's model spend for a calendar month, broken down by model and by day
 
 ### Open in
 

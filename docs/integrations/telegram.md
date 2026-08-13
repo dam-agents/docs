@@ -9,9 +9,9 @@ chat drives the agent under the **agent's own** credentials, with no login neede
 [who can drive the agent](slack.md#who-can-drive-the-agent).
 
 What differs is everything around it — Telegram has no identity linking, so **group admin** is the
-gate on the in-chat commands; messages relay as text only; there's no ambient mode; one agent can be
-bound to several chats; and a first message to a sleeping agent gets no heads-up — Telegram just goes
-quiet until the agent is up, where Slack tells you it's waking.
+gate on the in-chat commands; messages relay as text only; there's no ambient mode; and a first
+message to a sleeping agent gets no heads-up — Telegram just goes quiet until the agent is up, where
+Slack tells you it's waking.
 
 ## Connect a chat
 
@@ -31,8 +31,8 @@ quiet until the agent is up, where Slack tells you it's waking.
 
 !!! note "One agent per chat"
     A chat binds to one agent. Binding an already-connected chat is refused with *"This chat is
-    already connected to an agent. Send `/dam unbind` first to reconnect."* Unlike Slack, the same
-    agent **can** be bound to several Telegram chats.
+    already connected to an agent. Send `/dam unbind` first to reconnect."* The same agent **can** be
+    bound to several chats — as it can to several [Slack](slack.md) conversations.
 
 The login link expires after about 10 minutes — send `/dam bind` again if you miss the window.
 

@@ -48,7 +48,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open
 
 ## Key Notes
 
-- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: Edit, Download, Rename, Delete; for a folder: New file, New folder, Upload files here, Rename, Delete
+- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: **Edit**, **Download**, **Rename**, **Delete**; for a folder: **New file…**, **New folder…**, **Upload files here…**, **Rename**, **Delete**
 - **Move by drag and drop** — drag a file or folder onto a destination folder in the tree to move it there (a folder can't be moved into itself or its own subtree)
 - **Uploading files** lands them in the folder you upload *into* — use a folder's **Upload files here…** action, or drag them onto it. If a file of that name already exists, you're asked before it's overwritten.
 - **Uploading a whole folder** (or using `dam import`) is a bulk import instead: each top-level folder you bring replaces any existing top-level entry of the same name under `/home/agent/work`, and other top-level entries are left alone. `node_modules`, `.venv`, `__pycache__` and `.DS_Store` are skipped automatically; `.git` is kept.

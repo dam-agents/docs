@@ -15,8 +15,10 @@ Each sandbox has an allowlist of external services it can reach.
 
 !!! note "Narrowing a rule restarts the gateway"
     A host-only rule is cheap. Adding a method, path, or port means the sandbox's network gateway has
-    to inspect that host's traffic more closely, which briefly restarts the gateway **for that
-    sandbox only**. Removing the last narrowed rule for a host reverses it.
+    to inspect that host's traffic more closely, which restarts the gateway (**~5–15 seconds**) for
+    that **sandbox only**. The sandbox keeps running throughout — its outbound requests are briefly
+    interrupted. DAM asks you to confirm before saving such a rule. Removing the last narrowed rule
+    for a host reverses it.
 
 ### How Rules Are Created
 
@@ -53,7 +55,8 @@ When a sandbox tries to reach a service not in its allowlist:
 | **Deny once** (**Dismiss** in the Inbox) | Blocks just this request; future requests prompt again |
 | **Always deny this request** (**Deny forever** in the Inbox) | Creates a lasting deny rule; this and every future matching request fail |
 
-**Customize…** opens the sandbox's settings so you can write the rule yourself.
+**Customize…** opens the sandbox's settings so you can write the rule yourself. Like *Always allow
+this host*, it's offered on network prompts only — a tool-call prompt has no host to write a rule for.
 
 !!! warning "From the CLI, the bare verb is durable"
     `dam approval approve <id>` **writes a permanent allow rule** for a network request — the
@@ -65,6 +68,16 @@ When a sandbox tries to reach a service not in its allowlist:
 
 If no one responds within **30 minutes** (your operator can change this), the request is automatically denied. The agent can retry or take an alternative approach.
 
+!!! note "A turn driven from Slack or Telegram isn't held"
+    Nobody in a channel conversation can answer an approval — the members aren't the sandbox's owner,
+    and the owner may not be around. So when the request comes from a channel turn and **no** chat,
+    terminal, or SSH session is attached, it's refused straight away instead of waiting out the
+    window. The agent is told to name the host and point at you rather than retry into the same wall.
+
+    The request is still recorded, so it appears in your Inbox as usual and allowing it there
+    permanently writes the rule the sandbox picks up on its next attempt. If you *do* have a session
+    open on that sandbox, a channel turn holds and resolves normally.
+
 !!! tip "If a prompt timed out"
     The original request has already failed, so **Allow once** no longer does anything. Choosing
     **Always allow this request** still writes the rule, and the sandbox succeeds on its next attempt.
@@ -73,8 +86,9 @@ If no one responds within **30 minutes** (your operator can change this), the re
 
 The default is always deny:
 
-- A host you've explicitly denied fails right away. A host with no rule at all doesn't fail — it
-  waits for you (see [Approvals](#approvals)).
+- A host you've explicitly denied fails right away. A host with no rule at all normally doesn't fail —
+  it waits for you (see [Approvals](#approvals)). The exception is a channel turn with nobody
+  attached, which is refused immediately rather than held.
 - If the approval system itself is unreachable, the request is refused **without** raising a prompt.
 - An expired hold is denied, not allowed.
 

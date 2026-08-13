@@ -26,13 +26,21 @@ Schedules let you define automated tasks that fire on a timer:
 !!! tip "Your agent can manage schedules itself"
     The agent has built-in tools to manage its own schedules — `list_schedules`, `create_schedule`, `toggle_schedule`, and `delete_schedule`. These create **persistent** schedules that run on the platform, survive restarts, and show up in this panel — distinct from any in-session timers a harness sets for itself, which vanish when the session ends.
 
-!!! note "Older cron schedules run in UTC"
+!!! note "Some schedules can't be edited in the panel"
     Schedules you create in the panel always carry a timezone. Schedules defined with a raw cron
     expression (which an agent may do) run in **UTC** and ignore quiet hours — so a 9am-local cron
-    drifts by an hour when daylight saving changes. Cron schedules **and any schedule your agent
-    created for itself** can't be *edited* in the panel — **Edit schedule** is greyed out. You can
-    still pause and delete them — and reset the session on a continuous one; recreate one yourself to
-    change its cadence or prompt.
+    drifts by an hour when daylight saving changes.
+
+    Cron schedules **and any schedule your agent created for itself** can't be *edited* in the panel.
+    **Edit schedule** still opens; instead of the form it explains which of the two applies:
+
+    - **Managed by the sandbox** — the agent created it, so changes belong in chat, and the dialog
+      offers an **Open chat** button. Editing it here risks putting it out of step with the sandbox.
+    - **Older cron format** — the editor only works with the newer format and can't show this
+      schedule's timing without rewriting it, so delete it and create a new one to change its cadence.
+
+    Either way you can still pause and delete them from the panel, and reset the session on a
+    continuous one.
 
 ## Session Modes
 

@@ -1,8 +1,8 @@
 # Skills
 
 A **skill** is a folder of packaged instructions that teaches your agent a capability — how to plan a
-feature, draft an ADR, write a PRD, file a GitHub issue. Your sandbox's **Skills** panel is where you
-see and manage them.
+feature, draft a design doc, write a PRD, file a GitHub issue. Your sandbox's **Skills** panel is
+where you see and manage them.
 
 ## The three kinds of skill
 
@@ -35,14 +35,34 @@ Either way it lands under **Created in this sandbox**. Each one's **⋯** menu o
 - **Download skill** — a single-file skill comes down as one `.md` file, ready to re-upload as-is;
   anything with extra files comes down as a `.zip` of the skill's folder.
 - **Delete skill** — removes it from this sandbox.
+- **Track from &lt;source&gt;** — only once a skill you published has been merged; see
+  [Publishing one](#publishing-one).
 
 ### Publishing one
 
-**Publish** opens a pull request against a connected GitHub source — it never commits directly. The
-skill then shows **In review** with a link to the pull request. That pill records that you published
-and isn't checked against GitHub afterwards, so it stays put once the PR is merged or closed — follow
-the link for the real state. Only GitHub-hosted sources can be published to, so you need at least one
-connected before the button does anything.
+**Publish** opens a pull request against a connected GitHub source — it never commits directly. Only
+GitHub-hosted sources can be published to, so you need at least one connected before the button does
+anything.
+
+The skill then carries a pill naming the source, which links to the pull request. Its label tracks
+what the pull request has actually become, so you can read the state off the page:
+
+| Pill | What it means |
+|------|---------------|
+| **Draft** | The pull request is still a draft |
+| **In review** | Open and awaiting review |
+| **Published** | Merged — the skill is upstream |
+| **Closed** | Closed without merging |
+| **Submitted** | You published, but the pull request's state isn't known yet |
+
+**Publish again** comes back only in the **Closed** state, where nothing landed upstream. While a
+pull request is open or in draft there's already one to review, and once it's merged the next step is
+tracking rather than republishing.
+
+Once a skill shows **Published**, its **⋯** menu offers **Track from &lt;source&gt;** — this hands the
+skill over to that source, so it becomes an installed skill that follows the source from then on and
+gets the usual update prompts when the source moves. It **overwrites your local copy** (you'll be
+asked to confirm, and warned if yours has diverged), and it's one-way.
 
 Publishing shares a skill; it doesn't move it. Deleting a skill you published doesn't withdraw its
 pull request — follow the link if you want to close it yourself.
