@@ -34,8 +34,9 @@ DAM integrates with GitHub.com and with any GitHub Enterprise host you supply:
 2. On the **Apps** tab, click **New** on the **GitHub** card, then choose **Sign in with Github** and
    complete the OAuth flow, or **Personal access token** and paste a token you create on GitHub — the
    token path is the one to pick when you want finer-grained repo access
-3. For **GitHub Enterprise**, **New** goes straight to **Sign in with Github Enterprise** — supply
-   the host and complete the OAuth flow
+3. For **GitHub Enterprise**, **New** opens **Sign in with Github Enterprise** — supply the host
+   (plus an OAuth client id and secret, unless your operator registered one for everyone) and
+   complete the OAuth flow
 
 Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
 
@@ -78,6 +79,7 @@ does, the button becomes **Create + Authorize** and walks you through the server
 - **Per-user** — your connections are yours alone, never shared with teammates.
 - **Granted per sandbox** — a connection you own reaches a sandbox only once you grant it there. Connect once under Settings, then grant it to each sandbox that should use it.
 - **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place (`dam connection update`) rather than disconnecting and reconnecting. The connection keeps its name and all its sandbox grants, and nothing restarts. OAuth connections refresh themselves through their own flow and need no rotation.
+- **Re-authenticating** — a connection whose credential stopped working shows **Expired**, with a **Re-authenticate** button on the row. It re-runs login and consent and replaces only the tokens: the connection keeps its name and every sandbox grant. `dam connection reauth` does the same from the CLI.
 
 ## Security
 

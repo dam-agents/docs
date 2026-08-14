@@ -17,8 +17,9 @@ group a skill is in decides what you can do with it, so this is the first thing 
 
 The rest of this page takes them in that order.
 
-The panel is read-only while your sandbox is stopped, and skills you created here only appear once
-it's running — start it to make changes.
+The panel is read-only while your sandbox is stopped. What you see then is the list as it stood the
+last time it ran, dated in the notice at the top; start the sandbox for the live list and to make
+changes. Click any skill's name to read its instructions in the panel.
 
 ## Created in this sandbox
 
@@ -41,8 +42,9 @@ Either way it lands under **Created in this sandbox**. Each one's **⋯** menu o
 ### Publishing one
 
 **Publish** opens a pull request against a connected GitHub source — it never commits directly. Only
-GitHub-hosted sources can be published to, so you need at least one connected before the button does
-anything.
+sources on `github.com` can be published to — a repo on GitHub Enterprise installs fine but can't
+take a pull request this way — so you need at least one `github.com` source connected before the
+button does anything.
 
 The skill then carries a pill naming the source, which links to the pull request. Its label tracks
 what the pull request has actually become, so you can read the state off the page:
@@ -87,8 +89,9 @@ that repo's skills available to install individually.
 2. Browse the skills in an existing source, or **Add source** with a git repo URL
 3. Flip a skill's toggle on — it installs right away; flip it off to uninstall
 
-Click a skill's name to read its instructions before you turn it on — for a public repo they render
-right in the panel, otherwise you get a link to the file on GitHub.
+Click a skill's name to read its instructions before you turn it on — it renders right in the panel,
+private repos included, with a link out to the file on GitHub. Previewing works for `github.com`
+repos; a source on GitHub Enterprise or another host can't be previewed this way.
 
 Installed skills are downloaded into your sandbox and become available on the **next session** — the
 harness picks them up when it next starts, not mid-session. Installing always takes the source's
@@ -105,6 +108,9 @@ skills you created here.
 | Set up by the platform team for everyone | No |
 | Declared by your sandbox's template | No |
 | A git repo you added yourself | Yes |
+
+Each source card's **⋯** menu holds **Re-scan** (re-read the repo now — the card shows when its list
+was last scanned), **View repo**, and, for a source you added, **Remove source**.
 
 If you add your own source pointing at a repo the platform already provides, yours takes over the
 listing; remove yours and the platform entry reappears.

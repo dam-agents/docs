@@ -106,7 +106,7 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 
     ---
 
-    Enterprise coding assistant for IBM workflows.
+    Bob shell agent — Anthropic, Mistral, or Granite models.
 
 -   :material-code-tags:{ .lg .middle } **Codex**
 
@@ -151,6 +151,18 @@ Ready-to-use agents built on top of the coding harnesses. Pick one under **Speci
     ---
 
     Reflective prompt and text-optimization agent.
+
+-   :material-dna:{ .lg .middle } **AdaEvolve** <small>Alpha</small>
+
+    ---
+
+    Multi-island adaptive code and algorithm optimizer.
+
+-   :material-dna:{ .lg .middle } **EvoX** <small>Alpha</small>
+
+    ---
+
+    Self-evolving code and algorithm optimizer.
 
 -   :material-creation:{ .lg .middle } **More soon…**
 

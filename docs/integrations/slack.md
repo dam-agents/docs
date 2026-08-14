@@ -31,11 +31,11 @@ Turns are attributed in the security log by Slack user id. In channels and group
 each message labelled with the sender's Slack mention, so a busy multi-speaker channel stays
 readable and attributable — a 1:1 DM isn't labelled, since there's only one human in the room.
 
-!!! warning "Connections from before this release were removed"
-    Earlier versions let you connect a channel for named people only. That mode is gone, and those
-    connections were **removed** on upgrade rather than widened to the whole channel — that's a
-    decision only you can make. If a channel went quiet after the upgrade, run `/dam bind` again to
-    reconnect it.
+!!! warning "Channels bound for named people only are gone"
+    Earlier versions let you bind a channel for named people only. That mode was removed, and those
+    bindings were **deleted** on upgrade rather than widened to the whole channel — that's a decision
+    only you can make. If a channel went quiet after the upgrade, run `/dam bind` again to reconnect
+    it.
 
 ## Connect a channel (`/dam bind`)
 
@@ -144,6 +144,9 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 - **Images only.** Non-image attachments (PDFs, CSVs, logs, `.txt`) are **ignored**, with no
   notice in the channel — the message relays as ordinary text. If you need the contents of a
   document, paste the relevant text into the message instead.
+- **PNG, JPEG, GIF, and WebP.** Another picture format — an HEIC photo straight off a phone, an
+  SVG, a BMP — gets you a private note naming it, and the agent is told an attachment was withheld
+  rather than left to guess at it.
 - **Up to 30 MB of images per message.** Go over on a mention or DM and the **whole message is
   dropped** — the agent never sees your text either — and you get a private note asking for fewer
   or smaller images.
@@ -181,10 +184,12 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
   longer or fails, that's posted in the thread for everyone.
 - **Agents can post first.** A bound agent can post on its own — results when a scheduled run
   finishes, or an alert.
-- **A blocked network request won't stall the turn.** If the agent needs a host you haven't allowed,
-  it can't be approved from Slack — so instead of going quiet, the agent tells you which host it
-  needs. The request waits in your [Inbox](../core-concepts/network-access.md#approvals); allow it
-  there and the agent can pick up where it left off.
+- **A blocked network request won't stall the turn.** Nobody in the channel can answer an approval, so
+  with no chat, terminal, or SSH session of your own open on the sandbox, the request is refused
+  straight away — and instead of going quiet, the agent tells you which host it needed. It's still
+  recorded in your [Inbox](../core-concepts/network-access.md#approvals); allowing it there writes the
+  rule the agent picks up on its next attempt. With a session of your own open, the request holds and
+  resolves as usual.
 
 !!! tip "How the agent posts"
     Proactive posts work through two built-in tools the agent calls itself: `describe_channel`

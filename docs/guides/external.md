@@ -18,7 +18,7 @@ DAM makes its CA available to your tools at startup, so common HTTP clients — 
 
 ### 2. A credential, created in the UI
 
-Under **Connections → Custom Headers**, click **New** and create the credential:
+On the **Connections** page click **New**, open the **Custom Headers** tab, and click **New** on the card:
 
 - **Name:** any label, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`
@@ -30,7 +30,7 @@ Under **Connections → Custom Headers**, click **New** and create the credentia
   still allowed and the real key still injected on the wire. What you lose is the variable your tool
   reads to know what to send, so fill it in whenever your tool gets its key from the environment
 
-Then add it to the sandbox from its **My connections** panel. (You can add it to an existing sandbox — no need to recreate it.) Adding the connection **automatically allows its configured host** on the sandbox's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**.
+Then add it to the sandbox from its **My connections** panel. (You can add it to an existing sandbox — no need to recreate it.) Adding the connection **automatically allows its configured host** on the sandbox's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. Hosts match exactly, so a rule for one host never covers its subdomains — `files.example.com` needs its own rule even if `api.example.com` is already allowed.
 
 ### 3. How the key reaches your tool
 

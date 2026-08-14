@@ -64,7 +64,7 @@ dam auth token list                                 # list your keys (plaintext 
 dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
 ```
 
-- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. `--scope` defaults to `agents:operate`; the valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every sandbox you own.
+- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. Omit `--scope` and you get `agents:operate` alone; a key always carries at least one scope. The valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every sandbox you own.
 - `--expires <iso>` takes an ISO 8601 timestamp.
 - The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 - Minted keys carry a **`pk_`** prefix and can be used directly as `DAM_TOKEN`. API-key principals cannot mint further keys.
@@ -94,7 +94,7 @@ dam agent restart <name-or-id>                    # Restart the pod (persistent 
 dam template list    # List agent templates available on the active host
 ```
 
-Templates are read-only from the CLI — operators manage them via Helm.
+Templates are read-only from the CLI — your operator decides which ones the host offers.
 
 ### Connections
 
@@ -120,9 +120,9 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 - `--timeout <seconds>` — how long to wait for OAuth authorization (default 300)
 - `-c, --config <key=value>` — set an optional template config input (repeatable), e.g. `--config model=premium-shell`; values are validated against the template's declared inputs.
 
-Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--issuer-url`/`--scopes`/`--audience`, `--app-id`/`--app-slug`/`--installation-id`/`--private-key`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
+Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
 
-`connection update` replaces a connection's **stored secret** in place. What that means depends on the connection: the injected value for an API key or custom-header integration, a client secret for a client-credentials connection, the private key (PEM) for a GitHub App, or an OAuth connection's own client secret where it carries one. A connection that stores no credential has nothing to update. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively — a multi-line secret like a PEM can't be typed at the prompt, so use `--value "$(cat app.pem)"`.
+`connection update` replaces a connection's **stored secret** in place. What that means depends on the connection: the injected value for an API key or custom-header integration, or an OAuth connection's own client secret where it carries one. A connection that stores no credential has nothing to update. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively — a multi-line secret can't be typed at the prompt, so use `--value "$(cat secret.txt)"`.
 
 Use `update` to replace a *secret you hold*, and `reauth` to replace *expired OAuth tokens*.
 
@@ -149,16 +149,17 @@ dam network apply-preset <agent> --preset <none|trusted|all> [-y]  # Apply a net
 dam network trusted-hosts                              # Platform-wide hosts seeded by the 'trusted' preset
 ```
 
-`network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`.
+`network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`. A rule for a service that isn't on port 443 can't be created from the CLI — add it under **Network access** in the sandbox, where the host field takes `host:port`.
 
 `network update` flags: `--method <m>`, `--path <p>`, `--verdict allow|deny`, `-y, --yes`, `--json` — partial, so pass only the fields you want to change. Updating a rule marks it manual.
 
 `apply-preset` replaces only the rules the **preset** put there — rules you created by hand and rules derived from connections are preserved. The CLI prints that reminder before applying.
 
-!!! note "A narrowed rule restarts the agent"
+!!! note "A narrowed rule restarts the gateway"
     A rule that specifies a non-wildcard method or path needs path-level enforcement, which
-    **restarts the agent** (~5–15s). The CLI confirms first; `-y` skips the prompt. Host-only rules
-    don't restart anything.
+    **restarts the sandbox's network gateway** (~5–15s) — the sandbox keeps running, but its outbound
+    requests are briefly interrupted. The CLI confirms first; `-y` skips the prompt. Host-only rules
+    don't restart anything. See [Network & Approvals](../core-concepts/network-access.md).
 
 ### Skills
 

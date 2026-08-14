@@ -70,6 +70,11 @@ sftp dam-my-agent                          # interactive sftp
 ssh -L 8080:localhost:3000 dam-my-agent    # forward a port
 ```
 
+!!! note
+    `scp` and `sftp` need an `sftp-server` binary in the image. Every stock image has one; a
+    [custom image](custom-image.md) built from a slimmer base may not, in which case `ssh` and
+    port-forwarding still work but file transfer doesn't.
+
 ## Choosing the client (`-x` / `--exec`)
 
 `-x, --exec` picks which client `dam ssh connect` launches:
@@ -97,7 +102,7 @@ The mode suffix is one of `ssh`, `code`, or `zed`.
 dam ssh configure my-agent
 ```
 
-It prints the alias (e.g. `dam-my-agent`) and example `ssh` / `code` / `zed` invocations. Under the hood `dam` keeps its host entries in its own config file and adds a single `Include` line to your `~/.ssh/config` — it never rewrites your existing SSH config.
+It prints the alias — `dam-` plus the name or ID you passed, e.g. `dam-my-agent` — and example `ssh` / `code` / `zed` invocations. Under the hood `dam` keeps its host entries in its own config file and adds a single `Include` line to your `~/.ssh/config` — it never rewrites your existing SSH config.
 
 Configure or clean up in bulk:
 
@@ -124,7 +129,7 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
     That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in the web UI's inbox, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the sandbox's **Network access**.
 
 ??? question "Host key warnings"
-    `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, and the in-pod host key is regenerated whenever the sandbox's storage is recreated — pinning it would only cause spurious "host identification changed" failures. You won't see `known_hosts` prompts.
+    `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the in-pod host key authenticates nothing extra — and because it lives on the sandbox's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.
 
 ??? question "The shell starts but `git` / network calls fail"
     The sandbox's environment is replayed into each SSH session on connect. If you added a connection or credential *after* opening the session, reconnect to pick it up — the environment is refreshed per connection, not live within one.

@@ -34,10 +34,12 @@ Schedules let you define automated tasks that fire on a timer:
     Cron schedules **and any schedule your agent created for itself** can't be *edited* in the panel.
     **Edit schedule** still opens; instead of the form it explains which of the two applies:
 
-    - **Managed by the sandbox** — the agent created it, so changes belong in chat, and the dialog
-      offers an **Open chat** button. Editing it here risks putting it out of step with the sandbox.
-    - **Older cron format** — the editor only works with the newer format and can't show this
-      schedule's timing without rewriting it, so delete it and create a new one to change its cadence.
+    - **"This schedule is managed by the sandbox"** — the agent created it, so changes belong in chat,
+      and the dialog offers an **Open chat** button. Editing it here risks putting it out of step with
+      the sandbox.
+    - **"This schedule uses the older cron format"** — the editor only works with the newer format and
+      can't show this schedule's timing without rewriting it, so delete it and create a new one to
+      change its cadence.
 
     Either way you can still pause and delete them from the panel, and reset the session on a
     continuous one.
@@ -51,7 +53,7 @@ Schedules let you define automated tasks that fire on a timer:
 
 Use **fresh** for independent tasks (each PR review is standalone). Use **continuous** for cumulative work (tracking progress across days).
 
-**Fresh** is the default. Editing a schedule to clear its session mode reverts it to **fresh** — a previously set **continuous** mode does not persist through the edit. (This mainly affects edits made through the CLI or API; the panel always sends an explicit mode.)
+**Fresh** is the default. Editing a schedule to clear its session mode reverts it to **fresh** — a previously set **continuous** mode does not persist through the edit. (Only an edit that omits the mode outright does this — the panel and the CLI both send the current one.)
 
 Fresh runs can overlap if one is still going when the next fires; continuous runs queue behind each other.
 

@@ -98,7 +98,7 @@ Linking your messenger identity (`/dam login`) is never needed to drive a turn. 
 
 Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 
-A Slack conversation and an agent are strictly one-to-one: a conversation binds to exactly one agent, and an agent to at most one Slack conversation.
+A Slack conversation binds to at most one agent. The reverse isn't true: one agent can be connected to several conversations at once, in any mix of channels, group DMs, and DMs. Each conversation is its own binding, released on its own.
 
 ### What This Means for Access
 

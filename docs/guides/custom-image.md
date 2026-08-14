@@ -145,10 +145,11 @@ This is the entire contract between your image and the platform. When you open a
 
 Ship **both**, and override both. The base's `harness-chat` is a stub that exits with *"this agent
 image does not provide a chat harness"*, and its `harness-terminal` execs `claude`, which the base
-doesn't install — so neither works unmodified. (The built-in images' scripts also source a small
-model-gateway shim before the exec. Your image doesn't need it — the platform sets the provider
-environment variables directly — which is why the shipped scripts are longer than the two lines
-below.)
+doesn't install — so neither works unmodified. (The built-in Claude Code image's scripts also source a
+model-gateway shim before the exec. It only matters if your agent talks the Anthropic API and you
+attach a proxy provider such as IBM LiteLLM — the shim is what points the agent at the in-pod
+gateway. An agent that reads its provider settings straight from the environment needs nothing
+extra, which is why the two lines below suffice.)
 
 Both scripts are launched with their working directory set to **`/home/agent/work`**, so relative
 paths resolve there.
@@ -237,7 +238,8 @@ Notes:
 ## Step 5 — Create a sandbox from your image
 
 Open the create-sandbox wizard. On step 1, **Choose your starting point**, pick **Custom image**
-(tagged *Advanced*), then paste your full reference under **Image address** and click **Continue**:
+(tagged *Advanced*), then paste your full reference into the **Custom** card that appears under
+**Image address** and click **Continue**:
 
 ```
 ghcr.io/<your-org>/my-agent:0.1.0
@@ -257,7 +259,7 @@ from the image address.
 
 ### Private registries
 
-You don't have to publish the image publicly. In the **Custom** card under **Image address**, expand
+You don't have to publish the image publicly. Under **Image address**, in the **Custom** card, expand
 **Private registry** and fill in **Server** (e.g. `ghcr.io`), **Username**, and **Password** — a PAT,
 robot account, or access token. All three or none.
 
@@ -281,7 +283,7 @@ For the full walkthrough — declaring the placeholder, creating the credential,
 - **ACP is required** — chat-mode harnesses must speak ACP over stdio.
 - **Two scripts only** — the platform spawns exactly `harness-chat` or `harness-terminal`; wrap any multi-process setup inside one of these.
 - **Non-root** — the container runs as UID 65532; always end your Dockerfile with `USER 65532`.
-- **PVC survives hibernation** — `/home/agent/` (the agent's home directory) is persistent; the ephemeral filesystem is lost when the pod scales down.
+- **PVC survives hibernation** — `/home/agent/` (the agent's home directory) is persistent; the ephemeral filesystem is lost when the pod scales down. One exception: `~/.cache` is redirected to pod-local disk and starts empty on every wake, so don't stage anything there you need to keep.
 - **No direct network access** — egress is controlled by NetworkPolicy; outbound traffic routes through the credential gateway.
 
 ## Troubleshooting

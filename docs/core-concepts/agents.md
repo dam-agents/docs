@@ -101,7 +101,7 @@ Each sandbox has a **Size** — how much CPU and memory it can use while it's ru
 Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* sandboxes can reserve at once. A sandbox reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the sandbox still saves, it just waits parked until room frees.
 
 - If a new or resized sandbox would exceed your budget, it can't start and shows as **Over budget** — it waits until other sandboxes free up room, and **Start** is its retry.
-- To make room, **pause** or **stop** a sandbox you aren't using, then start the waiting one.
+- To make room, **pause** or **stop** a sandbox you aren't using, then start the waiting one. DAM will also free room for you where it can: starting a sandbox that doesn't fit hibernates your own idle, unattended sandboxes — longest-idle first, and only enough to fit — a few minutes ahead of their timeout. Sandboxes you have open, and any set to never hibernate, are never touched.
 - Changing the Size of a running sandbox restarts it on save; if it's down, the new Size applies the next time it starts. Growing a **running** sandbox past your budget is refused when you save — free room first.
 
 ## Available Coding Harnesses
@@ -139,8 +139,7 @@ Catalog entries show a display name and tags (e.g. the providers they support); 
 **Learn more** link, and some surface a setup note on the next step (e.g. a connection they need).
 
 !!! note "The Alpha badge"
-    Some images are marked **Alpha** — early and evolving, and sorted to the bottom of the list.
-    Expect rough edges.
+    Specialized images are early and evolving — each is badged **Alpha**. Expect rough edges.
 
 ### Configure
 

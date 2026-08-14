@@ -41,8 +41,8 @@ would write anyway.
 
 If you'd rather work in an established optimization framework than write the loop yourself, pick
 **Specialized sandbox** → **Choose an image** in the wizard, which offers preconfigured images such as
-**NOUS**, **OpenEvolve**, **ShinkaEvolve**, **GEPA**, and **k-search**. Each is badged **Alpha** and
-depends on an image your operator has enabled.
+**NOUS**, **OpenEvolve**, **ShinkaEvolve**, **GEPA**, **AdaEvolve**, and **EvoX**. Each is badged
+**Alpha** and depends on an image your operator has enabled.
 
 These run their own campaigns in their own terms — they don't register a plan or appear under
 Experiments.

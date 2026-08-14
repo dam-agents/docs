@@ -59,7 +59,7 @@ State is persisted on a volume between runs — the agent remembers what it foun
 1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — connect GitHub via OAuth (default), or pick **Personal access token** on the **GitHub** card if you prefer a token
-4. **Clone the Link Guardian repo** — in your sandbox session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into `work/`. Clone into an empty `work/` — the platform declines to seed a directory that already has files in it
+4. **Clone the Link Guardian repo** — in your sandbox session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into `work/`
 5. **Run the first session** — the agent will ask you which org/repos to watch and save the configuration
 6. **Create a schedule** — set it to run daily so the agent checks links automatically
 

@@ -38,6 +38,11 @@ The login link expires after about 10 minutes — send `/dam bind` again if you 
 
 Send `/dam unbind` in the chat to release the binding; the bot confirms in the chat.
 
+You can also disconnect from DAM: open the sandbox, go to **Channels**, and click **Disconnect** on
+the chat in the Telegram card. The bot posts a farewell note in the chat before the binding goes. The
+card lists the chats already connected and links the bot so you can add it somewhere new — but
+connecting itself always happens in the chat, with `/dam bind`.
+
 ## How the agent is triggered
 
 | Surface | What triggers a reply |
