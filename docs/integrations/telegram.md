@@ -43,6 +43,10 @@ the chat in the Telegram card. The bot posts a farewell note in the chat before 
 card lists the chats already connected and links the bot so you can add it somewhere new — but
 connecting itself always happens in the chat, with `/dam bind`.
 
+!!! note "If Telegram isn't listed"
+    Channels only shows what your operator has set up. Where Telegram isn't wired up, its card isn't
+    there — ask them.
+
 ## How the agent is triggered
 
 | Surface | What triggers a reply |
@@ -79,4 +83,4 @@ it. Unlike Slack, it can't reach a chat it isn't connected to.
 | Bot silent in a group | Make sure you `@mention` it, and that the chat is bound |
 | The login link didn't work | It expires after ~10 minutes — send `/dam bind` again |
 | An attached image was ignored | Telegram relays text only. Paste the content instead |
-| Asked to accept Terms of Use, or silence in a group | Whoever bound the chat must accept the terms in the DAM UI before turns run. In a group nothing is posted — the bot just stays quiet |
+| Asked to accept Terms of Use in a DM, or silence in a group | Whoever bound the chat must accept the terms in DAM before any turn runs — turns use that person's consent, not yours. A DM says so; in a group nothing is posted and the bot just stays quiet |

@@ -101,7 +101,7 @@ Each sandbox has a **Size** — how much CPU and memory it can use while it's ru
 Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* sandboxes can reserve at once. A sandbox reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the sandbox still saves, it just waits parked until room frees.
 
 - If a new or resized sandbox would exceed your budget, it can't start and shows as **Over budget** — it waits until other sandboxes free up room, and **Start** is its retry.
-- To make room, **pause** or **stop** a sandbox you aren't using, then start the waiting one. DAM will also free room for you where it can: starting a sandbox that doesn't fit hibernates your own idle, unattended sandboxes — longest-idle first, and only enough to fit — a few minutes ahead of their timeout. Sandboxes you have open, and any set to never hibernate, are never touched.
+- To make room, **pause** or **stop** a sandbox you aren't using, then start the waiting one. DAM will also free room for you where it can: starting a sandbox that doesn't fit hibernates your own idle, unattended sandboxes — longest-idle first, and only enough to fit — once they've been idle a few minutes, without waiting for their own timeout. Sandboxes you have open, and any set to never hibernate, are never touched.
 - Changing the Size of a running sandbox restarts it on save; if it's down, the new Size applies the next time it starts. Growing a **running** sandbox past your budget is refused when you save — free room first.
 
 ## Available Coding Harnesses
@@ -176,7 +176,7 @@ From the sandbox's actions menu you can take it down without deleting it:
 
 - **Pause — wakes on next use** — puts it to sleep now and frees its budget.
 - **Stop — until started again** — a hard stop; it stays down until you bring it back up (or a scheduled run fires). Use this to reliably free budget for other work.
-- **Wake** / **Start** — brings a sandbox back up. In the sandboxes list a parked sandbox offers *Start*, which retries the budget gate; elsewhere the action reads *Wake*.
+- **Wake** / **Start** — brings a sandbox back up; the label depends on where you are. Opening a sandbox that's down offers **Start agent**. In the sandboxes list a parked sandbox offers *Start* (which retries the budget gate) and any other sandbox that's down offers *Wake*; the sandbox's own actions menu always reads *Wake*.
 - **Restart** — offered for a running or errored sandbox, and the only power action for those states. It recreates the sandbox on its current settings; the workspace survives. Reach for it when one is wedged.
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).

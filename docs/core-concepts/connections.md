@@ -53,9 +53,10 @@ Model providers aren't here — they live on the **Providers** tab (see above).
 
 ### Kubernetes / OpenShift
 
-Connect a cluster with its API endpoint and a service-account token (plus the cluster's CA, if its
-certificate isn't publicly trusted). Your agent gets a working `kubectl` / `oc` — the token itself
-never reaches the sandbox, so it can't leak from there. Connect several clusters and they compose.
+Connect a cluster with its **API server URL** and a service-account token (plus the **Cluster CA
+certificate**, if its endpoint isn't publicly trusted). Your agent gets a working `kubectl` / `oc` —
+the token itself never reaches the sandbox, so it can't leak from there. Connect several clusters and
+they compose.
 
 For a service without a prebuilt template, use the **Custom Headers** tab → **New** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
 

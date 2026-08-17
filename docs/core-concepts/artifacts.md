@@ -42,6 +42,9 @@ lifecycle — creating, updating, organizing into folders, and setting sharing �
 configuring first. Text content up to **2 MB** is sent inline; anything larger or binary is uploaded
 directly, so big files never pass through the conversation.
 
+Agents can read the library back too — any artifact, at its current or a past version — so a report
+one sandbox published can be picked up by another without passing through the conversation.
+
 When an agent publishes something, it links it in chat — opening that link previews the artifact
 beside the conversation, so you can read a report or click through a dashboard without leaving the
 session.
@@ -59,6 +62,10 @@ Updating an artifact's content publishes a **new version** rather than overwriti
 keeps its identity: **the share link stays the same**, and viewers can switch between versions.
 
 Editing only metadata — title, file name, folder — changes it in place without a new version.
+
+An artifact's kind is settled when it's created. Renaming the file or publishing different content
+never changes it, because the share link outlives every version — publish a new artifact when the
+content is a different kind of file.
 
 ## Folders
 

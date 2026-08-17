@@ -60,7 +60,7 @@ The same command binds a group DM or a 1:1 DM with the bot; see
 | `/dam ambient on\|off` | Turn ambient mode on or off |
 | `/dam ambient` | Report whether ambient mode is currently on |
 
-A bare `/dam` prints the usage help for those three commands.
+A bare `/dam` prints the usage help: `/dam bind`, `/dam unbind`, or `/dam ambient on|off`.
 
 !!! note "When `/dam login` is required"
     Talking to the agent never needs a linked account. Linking only authorizes the *management*
@@ -181,7 +181,12 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
   since nobody summoned it.
 - **The first message wakes a sleeping agent.** If it's hibernated, expect a delay of up to a
   minute or two. The initial heads-up is private to whoever sent the message; if the wake takes
-  longer or fails, that's posted in the thread for everyone.
+  longer or fails, that's posted in the thread for everyone. A **stopped** sandbox is different — it
+  stays down, and the thread says so: someone has to start it from DAM, or wait for its next
+  scheduled run.
+- **Every post is signed.** Under each message the agent posts, Slack shows the sandbox's name as a
+  link into DAM. One bot posts for every sandbox, so the name is how you tell them apart — but only
+  the sandbox's owner can follow the link and read the conversation there.
 - **Agents can post first.** A bound agent can post on its own — results when a scheduled run
   finishes, or an alert.
 - **A blocked network request won't stall the turn.** Nobody in the channel can answer an approval, so
@@ -194,8 +199,8 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 !!! tip "How the agent posts"
     Proactive posts work through two built-in tools the agent calls itself: `describe_channel`
     (list the chats it can post to) and `send_channel_message` (post text, optionally with a
-    file attached). Nothing to configure — but the agent can only post where the DAM bot is
-    already a member, so a channel it hasn't been invited to is refused.
+    single file attached — a large file is refused). Nothing to configure — but the agent can only
+    post where the DAM bot is already a member, so a channel it hasn't been invited to is refused.
 
     A reply from a Slack user to one of these posts is routed by that conversation's own binding.
     An agent can also open a DM with someone, but that DM isn't bound by the post — for their

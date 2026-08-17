@@ -301,7 +301,7 @@ dam file put <agent> <local> <remote>  # Upload a single file to the agent
 
 **Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded by basename at every level: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. A symlink passed **as a `<path>` argument** is rejected and the import fails; symlinks found **inside** an imported directory are **skipped, not followed**. Use `-y, --yes` to skip the confirm (required on non-TTY).
 
-**File list** shows a directory's immediate children (files and directories) and is **not recursive**; the path defaults to the workspace root.
+**File list** shows a directory's immediate children and is **not recursive**; the path defaults to the workspace root. The default output lists only files — pass `--json` to include directories.
 
 **File get/put** operate on single files. `file get` writes to `basename(remote-path)` in the current directory by default; use `-o, --output <path>` to choose the local path, `--stdout` to stream to stdout instead of writing a file, and `--overwrite` to clobber an existing local file. If `-o` names an existing **directory**, the file lands inside it under its remote basename, and `--overwrite` is ignored with `--stdout`. `file put` takes `--overwrite` to clobber an existing remote file.
 

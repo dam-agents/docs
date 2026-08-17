@@ -82,6 +82,8 @@ Experiments have their own destination in the DAM UI, grouped under the sandbox 
 sandbox can hold several, so the sandbox is the container. From there you reach an experiment's runs,
 its live invocations, and its per-run artifacts, and open the sandbox's chat where the dashboard docks.
 Deleting an experiment removes its runs with it; the artifacts it published survive. Stop a running
-experiment before deleting it — the platform refuses while a run is live.
+experiment before deleting it — the platform refuses while a run is live. Deleting the *sandbox*
+doesn't delete its experiments: the runs stay listed, and their published results stay in your
+library.
 
 Experiments are owner-scoped: you only see and act on your own.
