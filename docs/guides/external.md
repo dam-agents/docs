@@ -20,7 +20,7 @@ DAM makes its CA available to your tools at startup, so common HTTP clients — 
 
 On the **Connections** page click **New**, open the **Custom Headers** tab, and click **New** on the card:
 
-- **Name:** any label, e.g. `my-tool-key`
+- **Name:** lowercase letters, digits and single hyphens, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`
 - **Header name:** the header the API expects the key in — pre-filled with `Authorization`; change it if the API wants something else (e.g. `X-API-KEY`)
 - **Value format:** pre-filled with `Bearer {value}`; use plain `{value}` if the API wants the raw key

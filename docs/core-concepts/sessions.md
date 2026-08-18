@@ -1,7 +1,8 @@
 # Sessions
 
 Sessions are persistent conversations with your agent. A session runs in one of two modes — **chat**
-or **terminal** — and you can switch an existing session between them.
+or **terminal**. Resuming a chat session from the CLI's terminal switches its mode — see
+[Terminal via CLI](#terminal-via-cli).
 
 **SSH** is a third way in, but it isn't a session: it has no history, no entry in the sessions list,
 and no harness involvement — just a login shell. See the

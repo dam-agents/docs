@@ -78,7 +78,7 @@ When your agent tries to reach a service for the first time:
 
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
-3. If no rule exists, the request is **held** and you see an approval prompt
+3. If no rule exists, the request is **held** and you see an approval prompt — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded in your Inbox instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
 4. You decide: **Allow once** (releases just this call), **Always allow this request** (a lasting rule for that host/method/path), **Always allow this host** (a host-level rule), **Deny once**, or **Always deny this request**. **Customize…** opens the sandbox's settings to write the rule yourself.
 
 From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#approvals).

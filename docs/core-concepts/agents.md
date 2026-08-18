@@ -176,7 +176,7 @@ From the sandbox's actions menu you can take it down without deleting it:
 
 - **Pause — wakes on next use** — puts it to sleep now and frees its budget.
 - **Stop — until started again** — a hard stop; it stays down until you bring it back up (or a scheduled run fires). Use this to reliably free budget for other work.
-- **Wake** / **Start** — brings a sandbox back up; the label depends on where you are. Opening a sandbox that's down offers **Start agent**. In the sandboxes list a parked sandbox offers *Start* (which retries the budget gate) and any other sandbox that's down offers *Wake*; the sandbox's own actions menu always reads *Wake*.
+- **Wake** / **Start** — brings a sandbox back up; the label depends on where you are. Opening a sandbox that's down offers **Start agent**. In the sandboxes list a parked sandbox offers *Start* (which retries the budget gate) and any other sandbox that's down offers *Wake*; on the sandbox's own actions menu a sandbox that's down reads *Wake* whatever the reason it went down.
 - **Restart** — offered for a running or errored sandbox, and the only power action for those states. It recreates the sandbox on its current settings; the workspace survives. Reach for it when one is wedged.
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).

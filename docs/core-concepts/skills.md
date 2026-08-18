@@ -29,7 +29,8 @@ Two ways to make your own:
   with `name` and `description`, then the instructions — plus any supporting files (templates,
   examples, scripts). Create it with the [file manager](file-manager.md) or just ask your agent to.
 - **Upload Markdown.** The Add-source dialog has an **Upload .md files** tab that turns each file you
-  give it into its own skill.
+  give it into its own skill. Dropping `.md` files straight onto the Skills panel opens that tab with
+  them already staged.
 
 Either way it lands under **Created in this sandbox**. Each one's **⋯** menu offers:
 
@@ -96,7 +97,8 @@ repos; a source on GitHub Enterprise or another host can't be previewed this way
 Installed skills are downloaded into your sandbox and become available on the **next session** — the
 harness picks them up when it next starts, not mid-session. Installing always takes the source's
 **current HEAD**, so re-installing is how you update. When a source moves ahead of what you have, the
-skill shows an **Update** pill; click it to reinstall at the latest version.
+skill shows an **Update** pill; click it to reinstall at the latest version, or follow the compare
+link beside it to see what changed upstream first.
 
 To remove one of these, turn it off in its source card — the **Delete skill** action is only for
 skills you created here.
@@ -108,6 +110,9 @@ skills you created here.
 | Set up by the platform team for everyone | No |
 | Declared by your sandbox's template | No |
 | A git repo you added yourself | Yes |
+
+Each source card's header shows how many of its skills are on and when the list was last scanned. A
+source with skills already installed opens showing just those; **Expand all** reveals the rest.
 
 Each source card's **⋯** menu holds **Re-scan** (re-read the repo now — the card shows when its list
 was last scanned), **View repo**, and, for a source you added, **Remove source**.

@@ -41,7 +41,7 @@ would write anyway.
 
 If you'd rather work in an established optimization framework than write the loop yourself, pick
 **Specialized sandbox** → **Choose an image** in the wizard, which offers preconfigured images such as
-**NOUS**, **OpenEvolve**, **ShinkaEvolve**, **GEPA**, **AdaEvolve**, and **EvoX**. Each is badged
+**NOUS**, **OpenEvolve**, **k-search**, **ShinkaEvolve**, **GEPA**, **AdaEvolve**, and **EvoX**. Each is badged
 **Alpha** and depends on an image your operator has enabled.
 
 These run their own campaigns in their own terms — they don't register a plan or appear under
@@ -80,7 +80,8 @@ data baked in. That's the one to
 
 Experiments have their own destination in the DAM UI, grouped under the sandbox running them — one
 sandbox can hold several, so the sandbox is the container. From there you reach an experiment's runs,
-its live invocations, and its per-run artifacts, and open the sandbox's chat where the dashboard docks.
+the subagents a run currently has working, and its per-run artifacts, and open the sandbox's chat
+where the dashboard docks.
 Deleting an experiment removes its runs with it; the artifacts it published survive. Stop a running
 experiment before deleting it — the platform refuses while a run is live. Deleting the *sandbox*
 doesn't delete its experiments: the runs stay listed, and their published results stay in your

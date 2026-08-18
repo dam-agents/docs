@@ -14,7 +14,7 @@ Three of the tabs in DAM **Settings** are easy to confuse. They do different thi
 
 (Settings also has **Account**, **Appearance**, and **Usage** tabs.)
 
-The rest of this page covers **Connections**. Providers are set when you create a sandbox (see [the LiteLLM key guide](../guides/litellm-key.md)); API keys are covered in [the CLI reference](../reference/cli.md).
+The rest of this page covers **Connections**. Providers live on the **Providers** tab, where you can also update or remove a saved key; you pick one for a sandbox while creating it (see [the LiteLLM key guide](../guides/litellm-key.md)). API keys are covered in [the CLI reference](../reference/cli.md).
 
 ## How It Works
 
@@ -79,8 +79,8 @@ does, the button becomes **Create + Authorize** and walks you through the server
 - **Delete everywhere** — **⋯** → **Delete this connection** removes it for every sandbox. DAM confirms first and lists the sandboxes that will lose it.
 - **Per-user** — your connections are yours alone, never shared with teammates.
 - **Granted per sandbox** — a connection you own reaches a sandbox only once you grant it there. Connect once under Settings, then grant it to each sandbox that should use it.
-- **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place (`dam connection update`) rather than disconnecting and reconnecting. The connection keeps its name and all its sandbox grants, and nothing restarts. OAuth connections refresh themselves through their own flow and need no rotation.
-- **Re-authenticating** — a connection whose credential stopped working shows **Expired**, with a **Re-authenticate** button on the row. It re-runs login and consent and replaces only the tokens: the connection keeps its name and every sandbox grant. `dam connection reauth` does the same from the CLI.
+- **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place rather than disconnecting and reconnecting: the connection's **⋯** menu → **Update credential**, or `dam connection update`. The connection keeps its name and all its sandbox grants, and nothing restarts. OAuth connections refresh themselves through their own flow and need no rotation.
+- **Re-authenticating** — a connection whose credential stopped working shows **Expired**, with a one-click fix offered as a button on the row: **Re-authenticate** where that applies, otherwise the same **Update credential** action. It re-runs login and consent and replaces only the tokens: the connection keeps its name and every sandbox grant. `dam connection reauth` does the same from the CLI.
 
 ## Security
 
