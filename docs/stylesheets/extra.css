@@ -294,16 +294,6 @@
   margin-top: 0.25rem;
 }
 
-.vpn-note a {
-  color: #8d8d8d !important;
-  font-weight: 400 !important;
-  text-decoration: underline;
-}
-
-.vpn-note a:hover {
-  color: #161616 !important;
-}
-
 /* Cards grid */
 .grid.cards {
   display: grid;

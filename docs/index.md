@@ -12,7 +12,7 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
 
-<small class="vpn-note">[Requires TUNNELALL VPN](https://w3.ibm.com/#/support/article/troubleshoot_secure/connect_issue){:target="_blank"}</small>
+<small class="vpn-note">If you're outside an IBM office, VPN is required</small>
 
 </div>
 
