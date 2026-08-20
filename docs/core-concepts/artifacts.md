@@ -69,13 +69,16 @@ content is a different kind of file.
 
 ## Folders
 
-Group artifacts into folders to keep a library browsable. Folders are a **single flat level** — no
-nesting. Deleting a folder does **not** delete the artifacts inside it; they become ungrouped.
+Group artifacts into folders to keep a library browsable. Create one with **New folder** in the
+Artifacts page header, beside **Upload artifact**. Folders are a **single flat level** — no nesting.
+Deleting a folder does **not** delete the artifacts inside it; they become ungrouped.
 
 ## Sharing
 
 Artifacts start **private**. Use **Share** in an artifact's **⋯** menu to publish it; the link is
-served from a separate share domain, so a shared artifact can never reach your DAM session.
+served from a separate share domain, so a shared artifact can never reach your DAM session. Every row
+also carries a link button: it copies the share link once the artifact is public, and opens the
+sharing dialog while it isn't.
 
 !!! warning "The link is the access control"
     The share URL contains an unguessable random token, and **that token is the only thing

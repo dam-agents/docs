@@ -30,7 +30,9 @@ Two ways to make your own:
   examples, scripts). Create it with the [file manager](file-manager.md) or just ask your agent to.
 - **Upload Markdown.** The Add-source dialog has an **Upload .md files** tab that turns each file you
   give it into its own skill. Dropping `.md` files straight onto the Skills panel opens that tab with
-  them already staged.
+  them already staged. A file over **2 MB**, or a batch over **5 MB** in total, is skipped with a
+  notice naming it; a name collision keeps the dialog open and marks the offending rows without
+  writing anything.
 
 Either way it lands under **Created in this sandbox**. Each one's **⋯** menu offers:
 

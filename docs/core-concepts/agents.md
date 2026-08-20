@@ -157,7 +157,7 @@ From the sandbox's page, the left nav has these sections:
 - **Skills** — install or remove capabilities
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the sandbox has published
-- **Usage** — this sandbox's model spend for a calendar month, broken down by model and by day
+- **Usage** — this sandbox's model spend for a calendar month, broken down by model and by day. It includes work the sandbox delegated to other agents.
 
 ### Open in
 

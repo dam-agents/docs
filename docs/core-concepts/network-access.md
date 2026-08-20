@@ -22,9 +22,9 @@ Each sandbox has an allowlist of external services it can reach.
 
 ### How Rules Are Created
 
-1. **From connections** — connecting GitHub automatically allows `api.github.com`, `github.com`, and `raw.githubusercontent.com`. Connecting GitHub Enterprise allows the host you specify plus its `api.<host>`.
+1. **From connections** — granting GitHub to a sandbox allows `api.github.com`, `github.com`, and `raw.githubusercontent.com` there. Granting GitHub Enterprise allows the host you specify plus its `api.<host>`. Creating the connection under Settings writes no rules on its own; they arrive with the grant, and are withdrawn when you remove it.
 2. **From approvals** — clicking "Allow permanently" on an approval prompt creates a rule
-3. **Manually** — add rules directly under **Network access** in the sandbox's settings
+3. **Manually** — add rules directly under **Network access** in the sandbox's **Sandbox Setup** section
 
 ### Presets
 
@@ -55,8 +55,12 @@ When a sandbox tries to reach a service not in its allowlist:
 | **Deny once** (**Dismiss** in the Inbox) | Blocks just this request; future requests prompt again |
 | **Always deny this request** (**Deny forever** in the Inbox) | Creates a lasting deny rule; this and every future matching request fail |
 
-**Customize…** opens the sandbox's settings so you can write the rule yourself. Like *Always allow
-this host*, it's offered on network prompts only — a tool-call prompt has no host to write a rule for.
+**Customize…** opens the sandbox's **Sandbox Setup** section so you can write the rule yourself. Like
+*Always allow this host*, it's offered on network prompts only — a tool-call prompt has no host to
+write a rule for.
+
+If an equivalent rule already exists with the opposite verdict, the verdict is refused rather than
+resolved, and you're pointed at the sandbox's network rules to change it there.
 
 !!! warning "From the CLI, the bare verb is durable"
     `dam approval approve <id>` **writes a permanent allow rule** for a network request — the

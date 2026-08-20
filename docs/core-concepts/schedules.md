@@ -74,7 +74,7 @@ Suppress schedule fires during specific time windows. Suppressed runs are **drop
 !!! warning "Dropped, not deferred"
     If you need every run to eventually execute, quiet hours is not the right tool. Use it for polling tasks where skipping off-hours runs is acceptable.
 
-A window may cross midnight (10pm–7am works as written), and it uses the same timezone as the schedule, so it holds across daylight saving. If your quiet hours would swallow *every* run, the schedule won't save.
+A window may cross midnight (10pm–7am works as written), and it uses the same timezone as the schedule, so it holds across daylight saving. If your quiet hours would swallow *every* run, the schedule won't save — the same refusal applies from the CLI and to schedules your agent creates for itself, so an impossible cadence fails loudly instead of going quietly dead.
 
 ## Sleeping and stopped sandboxes
 

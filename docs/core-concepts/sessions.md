@@ -20,7 +20,7 @@ Open your sandbox in the DAM UI and type a message. A new session is created aut
 
 Sessions live with the sandbox's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
 
-The sessions list is ordered by last activity: each session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. (Terminal sessions carry no unread state — their timestamp is bumped by restarts and TUI repaints, not by you reading them.)
+The sessions list is ordered by last activity: each session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. (Terminal sessions carry no unread state at all — a terminal row never goes bold, however long you leave it.)
 
 ### Status Indicators
 
@@ -55,7 +55,7 @@ Whether a turn already in flight is disturbed depends on what you changed. **Add
 
 ### Model settings
 
-The **Model** settings panel sets per-sandbox harness defaults. These are written to the harness's own config file and apply to **new sessions only**; sessions already underway keep the settings they started with.
+The **Model** settings panel sets per-sandbox harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with.
 
 The panel lives on the sandbox's home page, under **Sandbox Setup**; chat shows the model in use and a gear that opens that page. Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them. While the sandbox is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
 

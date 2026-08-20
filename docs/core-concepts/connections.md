@@ -38,7 +38,12 @@ DAM integrates with GitHub.com and with any GitHub Enterprise host you supply:
    (plus an OAuth client id and secret, unless your operator registered one for everyone) and
    complete the OAuth flow
 
-Once connected, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
+Signing in confirms who you are — on its own it doesn't grant access to your repositories. For private
+repos, use the row's **Install on GitHub** link to install the app on the organization that owns them,
+choosing which of its repositories DAM may read and write. That's done once per organization, and if
+you don't own the org an owner has to approve or complete it.
+
+Once that's in place, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
 
 When you sign in with **GitHub.com**, commits the agent makes are attributed to that account — DAM writes your GitHub display name and email into the agent's git config (`user.name` / `user.email`). If your GitHub profile email is private, a `users.noreply.github.com` address is used instead, so your primary email never lands in commit history. Other GitHub connection types, including GitHub Enterprise, don't set this — configure git yourself there.
 
@@ -80,7 +85,7 @@ does, the button becomes **Create + Authorize** and walks you through the server
 - **Per-user** — your connections are yours alone, never shared with teammates.
 - **Granted per sandbox** — a connection you own reaches a sandbox only once you grant it there. Connect once under Settings, then grant it to each sandbox that should use it.
 - **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place rather than disconnecting and reconnecting: the connection's **⋯** menu → **Update credential**, or `dam connection update`. The connection keeps its name and all its sandbox grants, and nothing restarts. OAuth connections refresh themselves through their own flow and need no rotation.
-- **Re-authenticating** — a connection whose credential stopped working shows **Expired**, with a one-click fix offered as a button on the row: **Re-authenticate** where that applies, otherwise the same **Update credential** action. It re-runs login and consent and replaces only the tokens: the connection keeps its name and every sandbox grant. `dam connection reauth` does the same from the CLI.
+- **Re-authenticating** — a connection whose credential stopped working shows **Expired**, with a one-click **Re-authenticate** button on the row. It re-runs login and consent and replaces only the tokens: the connection keeps its name and every sandbox grant. `dam connection reauth` does the same from the CLI.
 
 ## Security
 

@@ -16,7 +16,7 @@ Once configured, the agent runs on a schedule and for each open PR:
 4. **Posts a structured review** — findings with severity levels, inline comments on specific lines
 5. **Shepherds PRs toward human review** (optional, Slack) — watches how long each PR waits for an independent review and nudges the right reviewers (or the author, when changes are requested) in your team channel, escalating over time
 6. **Generates visual PR artifacts on demand** — assign the bot account to a PR and the next heartbeat publishes a self-contained HTML review artifact and links it in a comment
-7. **Tracks state** — knows which PRs it already reviewed at which commit, only re-reviews when new commits are pushed
+7. **Tracks state** — knows which PRs it already reviewed at which commit. The first review of every open non-draft PR is automatic; after new commits a re-review runs **only** when it's asked for — add the re-review label (default `code-guardian-review`, chosen at onboarding; the agent removes it once posted), re-request the bot's review on GitHub, or ask in chat or a PR comment that @-mentions it
 8. **Learns your preferences** — remembers what to ignore, what to emphasize, and adapts over time
 
 Reviews are posted as proper GitHub PR reviews (with inline comments), not just top-level comments.
@@ -28,7 +28,7 @@ Scheduled run (every 10 min by default; configurable)
          │
          ├── Load work/CONFIG.md + install/refresh configured skills
          ├── Fetch open PRs
-         ├── Skip already-reviewed (same HEAD commit)
+         ├── Skip PRs with no review trigger (same HEAD, or no re-review request)
          │
          For each new/updated PR:
          │
@@ -161,7 +161,7 @@ Preferences are stored in `MEMORY.md` (global) and per-PR files (PR-specific ove
 | File | Purpose |
 |------|---------|
 | `CLAUDE.md` | Agent operating instructions — the full review playbook |
-| `work/CONFIG.md` | Instance configuration filled in at onboarding — bot identity, dedup marker, the review-skills table (each skill with its own source repo and trigger), artifact skill, Slack opt-in. Change any value later just by asking the agent in chat. |
+| `work/CONFIG.md` | Instance configuration filled in at onboarding — bot identity, dedup marker, the review-skills table (each skill with its own source repo and trigger), artifact skill, Slack opt-in. Change any value later just by asking the agent in chat — except the dedup marker, which is fixed once the first review is posted (changing it would hide every past review from deduplication). |
 | `work/MEMORY.md` | Review preferences and learned feedback |
 | `work/REVIEWS.md` | Tracking index — one row per PR with latest review state |
 | `work/reviews/pr-<n>.md` | Per-PR review history (append-only log) |

@@ -24,11 +24,11 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 
 Connections let your agent access your repositories — clone, push branches, and create PRs.
 
-1. Go to **Connections** (in Settings, alongside **Providers**)
-2. Choose the GitHub connection that matches where your project lives:
+1. Go to **Connections** (in Settings, alongside **Providers**) and click **New** to open the **Connection catalogue**
+2. On the **Apps** tab, find the GitHub card that matches where your project lives:
     - **GitHub** — for repos on `github.com`
     - **GitHub Enterprise** — for repos on your company's GitHub Enterprise instance (e.g., `github.ibm.com`)
-3. On that connection's card, click **New**. **GitHub** then asks how to authenticate: **Sign in with
+3. Click **New** on that card. **GitHub** then asks how to authenticate: **Sign in with
    Github** walks you through the OAuth flow, or **Personal access token** lets you paste a
    fine-grained token scoped to the repos you need. **GitHub Enterprise** goes straight to **Sign in
    with Github Enterprise**.

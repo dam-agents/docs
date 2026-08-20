@@ -63,13 +63,18 @@ blocked on a spawn, or deep in a computation — stays healthy. If the heartbeat
 crashed, the pod was lost), the run is marked failed and the sandbox is released.
 
 A script that's wedged but still alive keeps heartbeating and stays visibly running — the platform
-can't tell stuck from slow, which is what **Stop** is for.
+can't tell stuck from slow, which is what **Stop** is for. Stop also ends the run's in-flight
+sub-agents, which is what frees a loop parked waiting on one.
 
 ## Dashboards
 
 Every experiment gets a dashboard published to your [artifact library](artifacts.md). Your script can
 supply its own bespoke HTML instead of the stock one. Dashboards render sealed off from the network
 and from credentials — they visualize the data the run reported, nothing more.
+
+Everything DAM publishes for one experiment is filed together, in its own **Experiments** folder named
+after the experiment — the draft script, the dashboard, and each run's script copy and results page.
+The library lists those apart, in a collapsed **Experiments** section below your own artifacts.
 
 The live dashboard only works inside DAM, where it can receive the run's data. When a run finishes,
 the platform publishes a self-contained **results** artifact — the same view with the finished run's

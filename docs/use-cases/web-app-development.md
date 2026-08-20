@@ -38,7 +38,7 @@ You ←→ Agent (interactive session)
               unblocked     ticket      PR, close ticket
                ticket                        │
                                              ▼
-                                      All done? → disable schedule
+                                      All done? → delete schedule
 ```
 
 State lives entirely in GitHub labels — no external database. A heartbeat lock ensures only one execution runs at a time.
@@ -61,8 +61,8 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 1. **Create a sandbox from the Software Factory image** — on **Choose your starting point** pick
    **Custom image** and paste the Software Factory image address,
-   `quay.io/dam-agents/software-factory:<tag>`, with the tag from the latest release of
-   [dam-agents/software-factory](https://github.com/dam-agents/software-factory). It ships its own image rather than being one of the
+   `quay.io/dam-agents/software-factory:<tag>`. [dam-agents/software-factory](https://github.com/dam-agents/software-factory){:target="_blank"}
+   publishes no tagged releases, so ask its maintainers which tag to run rather than guessing one. It ships its own image rather than being one of the
    ready-made ones, because it runs extra processes alongside the harness. If that registry repository
    is private, expand **Private registry** in the same card and enter its **Server**, **Username**, and
    **Password** — see [Building a Custom Image](../guides/custom-image.md). Once it starts, the agent
@@ -113,10 +113,10 @@ You don't need to do anything — just watch PRs appear on GitHub.
 If the agent encounters repeated failures (CI red, permission errors, ambiguous requirements), it runs `/pause-and-notify`, which:
 
 1. Labels the PRD with `paused`
-2. Notifies via Slack (if connected)
+2. Notifies every connected channel — Slack and/or Telegram (skipped when none is bound)
 3. Stops working until you intervene
 
-To resume: tell the agent "resume" in a chat session (it clears the `paused` label via `/pause-and-notify` in resume mode).
+To resume: tell the agent "resume" in a chat session (it clears the `paused` label via `/pause-and-notify` in resume mode). Or remove the `paused` label from the PRD yourself — that's what the agent's own pause message asks for, and the next heartbeat picks up from there.
 
 ## Built-in Skills
 
