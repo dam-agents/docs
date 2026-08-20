@@ -95,10 +95,11 @@ private repos included, with a link out to the file on GitHub. Previewing works 
 repos; a source on GitHub Enterprise or another host can't be previewed this way.
 
 Installed skills are downloaded into your sandbox and become available on the **next session** — the
-harness picks them up when it next starts, not mid-session. Installing always takes the source's
-**current HEAD**, so re-installing is how you update. When a source moves ahead of what you have, the
-skill shows an **Update** pill; click it to reinstall at the latest version, or follow the compare
-link beside it to see what changed upstream first.
+harness picks them up when it next starts, not mid-session. Installing takes the version the source
+was **last scanned** at, not whatever its repo holds this second — so re-installing is how you
+update, and **Re-scan** is how you pick up a commit pushed in the last few minutes. When a source
+moves ahead of what you have, the skill shows an **Update** pill; click it to reinstall at the latest
+scanned version, or follow the compare link beside it to see what changed upstream first.
 
 To remove one of these, turn it off in its source card — the **Delete skill** action is only for
 skills you created here.
