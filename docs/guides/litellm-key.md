@@ -18,7 +18,7 @@ Great — you can use any team you already have access to. Go directly to Step 1
 
 ### If you don't have a team
 
-If you’re an IBM Research user, let us know when we follow up on your DAM access request or ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24). We can request you access to the team dedicated to DAM.
+If you’re an IBM Research user, let us know when we follow up on your DAM access request or ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24). We can request you access to the team dedicated to DAM, called "rits-restricted-agentic".
 
 > Note: Getting added to the DAM team requires an access request and may take a few days.
 
@@ -36,7 +36,7 @@ https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams
 ## Step 2: Create a Key
 
 1. Click **"+ Create New Key"**
-2. For **Team**, pick the team you're using with DAM — the one you already had, or the DAM group if we added you to it
+2. For **Team**, pick the team you're using with DAM — the one you already had, or "rits-restricted-agentic" if we added you to it
 3. **Name your key** (required)
 4. Under models, select **All Team Models**
 5. Click **Create**
@@ -65,7 +65,7 @@ Once connected, the key is saved and reused — the next time you create a sandb
 
 ## Models in the DAM team
 
-These are the models available through the team dedicated to DAM. A key scoped to a different team will offer a different list.
+These are the models available through the team dedicated to DAM: "rits-restricted-agentic". A key scoped to a different team will offer a different list.
 
 ```
 rits/deepseek-ai/DeepSeek-V3.2
