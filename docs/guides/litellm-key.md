@@ -6,11 +6,12 @@ DAM can use the **IBM LiteLLM ETE Proxy** as a model provider. To use it, you’
 
 Open the external LiteLLM proxy and sign in with your IBM SSO:
 
-https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams
-
-> Note: If you are outside an IBM office, this proxy requires [TUNNEL ALL VPN](https://w3.ibm.com/#/support/article/troubleshoot_secure/cert_issues).
+[https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams](https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams)
 
 You should see the **teams** you have access to.
+
+!!! note
+    If you are outside an IBM office, this proxy requires [TUNNEL ALL VPN](https://w3.ibm.com/#/support/article/troubleshoot_secure/cert_issues).
 
 ### If you already have a team
 
@@ -20,7 +21,8 @@ Great — you can use any team you already have access to. Go directly to Step 1
 
 If you’re an IBM Research user, let us know when we follow up on your DAM access request or ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24). We can request you access to the team dedicated to DAM, called "rits-restricted-agentic".
 
-> Note: Getting added to the DAM team requires an access request and may take a few days.
+!!! note
+    Getting added to the DAM team requires an access request and may take a few days.
 
 If you're outside IBM Research, you'll need to use an existing team on the external proxy.
 
@@ -28,7 +30,7 @@ If you're outside IBM Research, you'll need to use an existing team on the exter
 
 Open the external LiteLLM proxy and sign in with your IBM SSO credentials:
 
-https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams
+[https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams](https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams)
 
 !!! tip
     Bookmark this URL — you'll come back here whenever you need to manage your keys.
