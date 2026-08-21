@@ -14,11 +14,11 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 
 1. Go to **Settings → Providers**
 2. Find **IBM LiteLLM ETE Proxy** and click **Connect**
-3. Paste your LiteLLM API key
+3. Paste your LiteLLM API key — it must come from the **external** LiteLLM proxy
 4. Click **Save**
 
 !!! note
-    Don't have a LiteLLM key yet? See [How to Create a LiteLLM Key](../guides/litellm-key.md) for a walkthrough.
+    Don't have a LiteLLM key yet? See [How to Create a LiteLLM Key](../guides/litellm-key.md) for a walkthrough — including which proxy to use and which team to scope the key to.
 
 ### Step 3: Add Connections (optional but recommended)
 
