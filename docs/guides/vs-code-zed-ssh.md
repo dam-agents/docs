@@ -107,11 +107,19 @@ It prints the alias — `dam-` plus the name or ID you passed, e.g. `dam-my-agen
 Configure or clean up in bulk:
 
 ```bash
-dam ssh configure --all       # one host entry per agent on the active host; prunes deleted agents
+dam ssh configure --all       # one host entry per agent on the active host
 dam ssh configure --clear     # remove every dam-managed host entry
 ```
 
-`--all` is a reconcile: it adds entries for your current agents and removes entries whose agent no longer exists. `--clear` removes all of `dam`'s managed entries (and its `Include` line once empty).
+`--all` is a reconcile against the **active host only**: it adds an entry for each of that host's
+agents, then removes *every* other dam-managed entry. `--clear` removes all of `dam`'s managed
+entries (and its `Include` line once empty).
+
+!!! warning "`--all` prunes more than deleted agents"
+    There is one managed config for all your hosts, so an `--all` run drops entries for agents on
+    every *other* server you use. It also writes aliases from agent **names**, so an entry you
+    created by ID (`dam ssh configure agent-…`) is pruned and re-added under the name. Re-run
+    `--all` per host, or configure those agents individually.
 
 ## Keeping sandboxes awake
 

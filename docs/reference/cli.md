@@ -284,11 +284,11 @@ dam ssh connect <agent>                # Open an SSH session to an agent
 dam ssh connect <agent> -x code        # Launch VS Code Remote-SSH against the agent
 dam ssh connect <agent> -x zed         # Launch Zed against the agent
 dam ssh configure <agent>              # Write SSH host config for an agent (no launch)
-dam ssh configure -a, --all            # Reconcile config for every agent (prunes deleted ones)
+dam ssh configure -a, --all            # Reconcile the active host's agents (prunes every other entry)
 dam ssh configure --clear              # Remove all dam-managed SSH host config
 ```
 
-`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked. `dam ssh configure` writes the same host config without launching a client.
+`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked. `dam ssh configure` writes the same host config without launching a client, and takes exactly one of an agent, `--all`, or `--clear`. Because there is a single managed config for all hosts, `--all` prunes entries for agents on your other servers too — see the [SSH guide](../guides/vs-code-zed-ssh.md#wiring-up-other-tools-scp-sftp-tunnels).
 
 ### File Operations
 
