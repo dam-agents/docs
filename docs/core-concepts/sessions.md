@@ -20,7 +20,7 @@ Open your sandbox in the DAM UI and type a message. A new session is created aut
 
 Sessions live with the sandbox's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
 
-The sessions list is ordered by last activity: each session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. (Terminal sessions carry no unread state at all — a terminal row never goes bold, however long you leave it.)
+The sessions list is ordered by last activity. A **chat** session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. A **terminal** session records no message activity, so its timestamp is the harness file's modification time, which a restart or a redrawing full-screen program can bump without you having typed anything. (Terminal sessions carry no unread state at all either — a terminal row never goes bold, however long you leave it.)
 
 ### Status Indicators
 
@@ -29,7 +29,7 @@ working on their own:
 
 | Indicator | Meaning |
 |-----------|---------|
-| Animated dots | The agent is actively working the turn. |
+| Animated dots | Busy. On a chat session, the agent is working the turn; on a terminal session, the program in it produced output in the last second or so. |
 | Solid dot ("Needs your approval") | Blocked waiting for you to approve an action. Takes priority over working. |
 | Bold title | Unread — activity since you last opened it (chat sessions only). |
 | Terminal icon | A terminal (PTY) session, which has no agent turn of its own. |
