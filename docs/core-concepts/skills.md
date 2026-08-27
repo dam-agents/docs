@@ -1,7 +1,7 @@
 # Skills
 
 A **skill** is a folder of packaged instructions that teaches your agent a capability — how to plan a
-feature, draft a design doc, write a PRD, file a GitHub issue. Your sandbox's **Skills** panel is
+feature, draft a design doc, write a PRD, file a GitHub issue. Your agent's **Skills** panel is
 where you see and manage them.
 
 ## The three kinds of skill
@@ -11,17 +11,17 @@ group a skill is in decides what you can do with it, so this is the first thing 
 
 | Group in the panel | Where it came from | Who manages it |
 |---|---|---|
-| **Created in this sandbox** | You authored it here — wrote the files in the workspace, or uploaded Markdown | Yours: edit, download, delete, publish |
-| **Included with sandbox image** | Baked into the image your sandbox boots from | Read-only — comes and goes with the image |
+| **Created in this agent** | You authored it here — wrote the files in the workspace, or uploaded Markdown | Yours: edit, download, delete, publish |
+| **Included with agent image** | Baked into the image your agent boots from | Read-only — comes and goes with the image |
 | **Sourced from GitHub** | A git repo connected as a **skill source**; you install individual skills from it | Toggle each skill on or off; the repo is the source of truth |
 
 The rest of this page takes them in that order.
 
-The panel is read-only while your sandbox is stopped. What you see then is the list as it stood the
-last time it ran, dated in the notice at the top; start the sandbox for the live list and to make
+The panel is read-only while your agent is stopped. What you see then is the list as it stood the
+last time it ran, dated in the notice at the top; start the agent for the live list and to make
 changes. Click any skill's name to read its instructions in the panel.
 
-## Created in this sandbox
+## Created in this agent
 
 Two ways to make your own:
 
@@ -34,11 +34,11 @@ Two ways to make your own:
   notice naming it; a name collision keeps the dialog open and marks the offending rows without
   writing anything.
 
-Either way it lands under **Created in this sandbox**. Each one's **⋯** menu offers:
+Either way it lands under **Created in this agent**. Each one's **⋯** menu offers:
 
 - **Download skill** — a single-file skill comes down as one `.md` file, ready to re-upload as-is;
   anything with extra files comes down as a `.zip` of the skill's folder.
-- **Delete skill** — removes it from this sandbox.
+- **Delete skill** — removes it from this agent.
 - **Track from &lt;source&gt;** — only once a skill you published has been merged; see
   [Publishing one](#publishing-one).
 
@@ -72,11 +72,11 @@ asked to confirm, and warned if yours has diverged), and it's one-way.
 Publishing shares a skill; it doesn't move it. Deleting a skill you published doesn't withdraw its
 pull request — follow the link if you want to close it yourself.
 
-## Included with sandbox image
+## Included with agent image
 
-Some images ship with skills already inside them, so a fresh sandbox is useful immediately. Which
-ones you get depends on the image you picked in the create wizard — a specialized image usually
-carries the skills its job needs.
+Some images ship with skills already inside them, so a fresh agent is useful immediately. Which
+ones you get depends on the agent's image — an experiment or knowledge base agent, or a framework
+image, carries the skills its job needs.
 
 These are **read-only**. You can't publish them, and editing one only earns it a **Modified** badge,
 meaning the files on disk now differ from the copy the image shipped. They aren't yours to delete
@@ -88,7 +88,7 @@ either — they arrive with the image and change when you
 A **skill source** is a git repo full of skills. Connecting one doesn't install anything; it makes
 that repo's skills available to install individually.
 
-1. Open your sandbox's **Skills** panel
+1. Open your agent's **Skills** panel
 2. Browse the skills in an existing source, or **Add source** with a git repo URL
 3. Flip a skill's toggle on — it installs right away; flip it off to uninstall
 
@@ -96,7 +96,7 @@ Click a skill's name to read its instructions before you turn it on — it rende
 private repos included, with a link out to the file on GitHub. Previewing works for `github.com`
 repos; a source on GitHub Enterprise or another host can't be previewed this way.
 
-Installed skills are downloaded into your sandbox and become available on the **next session** — the
+Installed skills are downloaded into your agent and become available on the **next session** — the
 harness picks them up when it next starts, not mid-session. Installing takes the version the source
 was **last scanned** at, not whatever its repo holds this second — so re-installing is how you
 update, and **Re-scan** is how you pick up a commit pushed in the last few minutes. When a source
@@ -111,7 +111,7 @@ skills you created here.
 | Source | Can you remove it? |
 |--------|--------------------|
 | Set up by the platform team for everyone | No |
-| Declared by your sandbox's template | No |
+| Declared by your agent's template | No |
 | A git repo you added yourself | Yes |
 
 Each source card's header shows how many of its skills are on and when the list was last scanned. A

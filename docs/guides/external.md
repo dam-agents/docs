@@ -1,8 +1,8 @@
 # Calling an External Service
 
-Allowing your sandbox to call an external service.
+Allowing your agent to call an external service.
 
-The key idea: **you never put the real API key in your image.** You give DAM the key once, and it injects it securely at request time so the key never actually sits inside the running sandbox.
+The key idea: **you never put the real API key in your image.** You give DAM the key once, and it injects it securely at request time so the key never actually sits inside the running agent.
 
 There are three pieces.
 
@@ -30,13 +30,13 @@ On the **Connections** page click **New**, open the **Custom Headers** tab, and 
   still allowed and the real key still injected on the wire. What you lose is the variable your tool
   reads to know what to send, so fill it in whenever your tool gets its key from the environment
 
-Then add it to the sandbox from its **My connections** panel. (You can add it to an existing sandbox — no need to recreate it.) Adding the connection **automatically allows its configured host** on the sandbox's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. Hosts match exactly, so a rule for one host never covers its subdomains — `files.example.com` needs its own rule even if `api.example.com` is already allowed.
+Then add it to the agent from its **My connections** panel. (You can add it to an existing agent — no need to recreate it.) Adding the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. Hosts match exactly, so a rule for one host never covers its subdomains — `files.example.com` needs its own rule even if `api.example.com` is already allowed.
 
 ### 3. How the key reaches your tool
 
-**The real key is never inside the running sandbox:**
+**The real key is never inside the running agent:**
 
-1. Inside the sandbox, the environment variable holds your **placeholder** — not the real key. (`echo $MY_TOOL_API_KEY` prints the placeholder.)
+1. Inside the agent, the environment variable holds your **placeholder** — not the real key. (`echo $MY_TOOL_API_KEY` prints the placeholder.)
 2. Your tool reads that variable and puts it in the request header it sends.
 3. As the request leaves for the credential's host, DAM **swaps the placeholder header for the real key, on the wire.** Only for that host.
 

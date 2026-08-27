@@ -1,24 +1,24 @@
 # VS Code/Zed (SSH)
 
-You can open a running sandbox's workspace directly in **VS Code** (or **Zed**) and work in it like any other remote folder — editing files, running the terminal, debugging — with the sandbox's full environment behind it.
+You can open a running agent's workspace directly in **VS Code** (or **Zed**) and work in it like any other remote folder — editing files, running the terminal, debugging — with the agent's full environment behind it.
 
-This works because `dam ssh` gives you a **real SSH session** into the sandbox: not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell. Because it's standard SSH, everything that rides on SSH works too — `scp`, `sftp`, and port-forwarding — but opening the workspace in your editor is the part most people want.
+This works because `dam ssh` gives you a **real SSH session** into the agent: not the harness TUI you get from `dam chat`, but a plain `/bin/bash` login shell. Because it's standard SSH, everything that rides on SSH works too — `scp`, `sftp`, and port-forwarding — but opening the workspace in your editor is the part most people want.
 
-The session inherits the sandbox's full environment: the egress proxy, the credential placeholders your tools read, and `PATH`. So `git`, `gh`, and the AI CLIs behave exactly as they do for the harness itself.
+The session inherits the agent's full environment: the egress proxy, the credential placeholders your tools read, and `PATH`. So `git`, `gh`, and the AI CLIs behave exactly as they do for the harness itself.
 
 !!! info "How it works (you don't need to set any of this up)"
-    There's no SSH port exposed on the sandbox. The connection is tunneled over its own authenticated WebSocket — the same login and ownership check `dam chat` goes through — and SSH terminates at a small `sshd` running *inside* the sandbox. Your platform login is the real trust boundary; `dam` manages a dedicated SSH keypair for the transport so it never touches your personal `~/.ssh` keys.
+    There's no SSH port exposed on the agent. The connection is tunneled over its own authenticated WebSocket — the same login and ownership check `dam chat` goes through — and SSH terminates at a small `sshd` running *inside* the agent. Your platform login is the real trust boundary; `dam` manages a dedicated SSH keypair for the transport so it never touches your personal `~/.ssh` keys.
 
 ## Prerequisites
 
 - The `dam` CLI installed and logged in — see the [CLI reference](../reference/cli.md) (`dam auth login`).
 - The OpenSSH client (`ssh`, `ssh-keygen`) on your machine. Present by default on macOS and Linux.
-- A sandbox that isn't stopped. Connecting wakes a hibernated sandbox automatically; a **stopped** one has to be started first. (An open SSH connection then keeps it awake — see [Keeping sandboxes awake](#keeping-sandboxes-awake) below.)
+- An agent that isn't stopped. Connecting wakes a hibernated agent automatically; a **stopped** one has to be started first. (An open SSH connection then keeps it awake — see [Keeping agents awake](#keeping-agents-awake) below.)
 - For the editor modes: `code` (or `code-insiders`) / `zed` on your `PATH`.
 
 !!! note "Custom images need `sshd`"
     SSH only works on images that ship an SSH server. Every stock image does, because the
-    base image includes one — but if you [build a custom image](custom-image.md) from
+    base image includes one — but if you [build a custom image](../guides/custom-image.md) from
     something else, or strip `openssh-server` out, `dam ssh` has nothing to connect to.
 
 ## Open a shell
@@ -27,16 +27,16 @@ The session inherits the sandbox's full environment: the egress proxy, the crede
 dam ssh connect my-agent
 ```
 
-This drops you into a login shell on the sandbox, starting in the home directory `/home/agent`. The
+This drops you into a login shell on the agent, starting in the home directory `/home/agent`. The
 workspace the agent works in is `~/work` — `cd ~/work` to get there; the editor modes below open it
 directly. Exit with `exit` or `Ctrl-D`.
 
-The sandbox header's **Open in → VS Code / Zed (local)** gives you the same commands, pre-filled with
-the sandbox's ID.
+The agent header's **Open in → VS Code / Zed (local)** gives you the same commands, pre-filled with
+the agent's ID.
 
 Unlike the web terminal, SSH has no one-viewer limit: a shell and an editor window can be connected
-to the same sandbox at once, each with its own independent connection. SSH connections aren't
-sessions, so they don't appear in the sandbox's session list.
+to the same agent at once, each with its own independent connection. SSH connections aren't
+sessions, so they don't appear in the agent's session list.
 
 You can reference the agent by **name** or by **ID** (`agent-…`), the same as every other `dam` command.
 
@@ -46,10 +46,10 @@ You can reference the agent by **name** or by **ID** (`agent-…`), the same as 
 dam ssh connect my-agent -x code
 ```
 
-This launches VS Code with a Remote-SSH window pointed at the sandbox's workspace. Use `-x code-insiders` for the Insiders build.
+This launches VS Code with a Remote-SSH window pointed at the agent's workspace. Use `-x code-insiders` for the Insiders build.
 
 !!! tip "First connection downloads the VS Code server"
-    On the first connect, VS Code installs its remote server inside the sandbox. `dam` pre-approves the two hosts that download needs (`update.code.visualstudio.com`, `vscode.download.prss.microsoft.com`) so you don't get a network-approval prompt mid-connect. This is best-effort and idempotent — if it can't seed the rule it warns and continues.
+    On the first connect, VS Code installs its remote server inside the agent. `dam` pre-approves the two hosts that download needs (`update.code.visualstudio.com`, `vscode.download.prss.microsoft.com`) so you don't get a network-approval prompt mid-connect. This is best-effort and idempotent — if it can't seed the rule it warns and continues.
 
 ## Open in Zed
 
@@ -72,7 +72,7 @@ ssh -L 8080:localhost:3000 dam-my-agent    # forward a port
 
 !!! note
     `scp` and `sftp` need an `sftp-server` binary in the image. Every stock image has one; a
-    [custom image](custom-image.md) built from a slimmer base may not, in which case `ssh` and
+    [custom image](../guides/custom-image.md) built from a slimmer base may not, in which case `ssh` and
     port-forwarding still work but file transfer doesn't.
 
 ## Choosing the client (`-x` / `--exec`)
@@ -121,12 +121,12 @@ entries (and its `Include` line once empty).
     created by ID (`dam ssh configure agent-…`) is pruned and re-added under the name. Re-run
     `--all` per host, or configure those agents individually.
 
-## Keeping sandboxes awake
+## Keeping agents awake
 
-An open SSH connection counts as activity — like `dam chat` or the web terminal, it pins the sandbox so it **won't hibernate while you're connected**.
+An open SSH connection counts as activity — like `dam chat` or the web terminal, it pins the agent so it **won't hibernate while you're connected**.
 
-!!! warning "A forgotten editor window keeps the sandbox running"
-    The SSH stream is opaque to DAM, so it can't tell a real keystroke from a VS Code Remote-SSH keepalive. A connected-but-idle editor window therefore keeps the sandbox awake, holding its reserved compute. **Close the window to let the sandbox hibernate.** If your connection half-dies, DAM detects it and releases the pin automatically.
+!!! warning "A forgotten editor window keeps the agent running"
+    The SSH stream is opaque to DAM, so it can't tell a real keystroke from a VS Code Remote-SSH keepalive. A connected-but-idle editor window therefore keeps the agent awake, holding its reserved compute. **Close the window to let the agent hibernate.** If your connection half-dies, DAM detects it and releases the pin automatically.
 
 ## Troubleshooting
 
@@ -134,13 +134,13 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
     `dam ssh connect` hands off to the client you selected. Install the client (OpenSSH for `ssh`, VS Code for `-x code`, Zed for `-x zed`) and make sure it's on your `PATH`.
 
 ??? question "VS Code pops a network-approval prompt on first connect"
-    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in the web UI's inbox, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the sandbox's **Network access**.
+    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in the web UI's inbox, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
 
 ??? question "Host key warnings"
-    `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the in-pod host key authenticates nothing extra — and because it lives on the sandbox's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.
+    `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the in-pod host key authenticates nothing extra — and because it lives on the agent's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.
 
 ??? question "The shell starts but `git` / network calls fail"
-    The sandbox's environment is replayed into each SSH session on connect. If you added a connection or credential *after* opening the session, reconnect to pick it up — the environment is refreshed per connection, not live within one.
+    The agent's environment is replayed into each SSH session on connect. If you added a connection or credential *after* opening the session, reconnect to pick it up — the environment is refreshed per connection, not live within one.
 
 ## See also
 

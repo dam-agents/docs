@@ -1,10 +1,10 @@
 # File Manager
 
-Browse, edit, and upload files in your sandbox's persistent workspace.
+Browse, edit, and upload files in your agent's persistent workspace.
 
 ## Overview
 
-The File Manager gives you direct access to your sandbox's filesystem:
+The File Manager gives you direct access to your agent's filesystem:
 
 - `/home/agent` — the root of the tree (configuration, memory, skills)
 - `/home/agent/work` — your main working directory (repos, project files), a folder inside it
@@ -45,7 +45,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open
 | Max previewable file size | 50 MB |
 | Max download / transfer size | 50 MB |
 | Max upload file size | 50 MB |
-| Max import bundle size | 5 GiB (your operator can lower this — and should, if your sandbox's disk is smaller) |
+| Max import bundle size | 5 GiB (your operator can lower this — and should, if your agent's disk is smaller) |
 | Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews; other binary files open as a hex dump |
 
 ## Key Notes
@@ -55,7 +55,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open
 - **Uploading files** lands them in the folder you upload *into* — use a folder's **Upload files here…** action, or drag them onto it. If a file of that name already exists, you're asked before it's overwritten.
 - **Uploading a whole folder** is a bulk import instead: each top-level folder you bring replaces any existing top-level entry of the same name under `/home/agent/work`, and other top-level entries are left alone. Nothing is filtered on the way up — the folder goes as it sits, `node_modules` and `.venv` included — so prune it first, or use `dam import`, which skips `node_modules`, `.venv`, `__pycache__` and `.DS_Store` for you. Either way `.git` is kept.
 - Files modified in chat sessions appear immediately in the File Manager (and vice versa)
-- The workspace is shared across all sessions for a sandbox
+- The workspace is shared across all sessions for an agent
 - Files you attach to a chat message are saved under your home directory, grouped by session, and handed to the agent as a path it can read — they don't land in your working directory
 
 !!! note "What survives hibernation"

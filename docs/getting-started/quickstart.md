@@ -4,51 +4,40 @@ Launch a Claude Code agent in the cloud in minutes.
 
 Prefer the command line? [Jump to CLI quickstart](#cli).
 
+!!! note "Prerequisite: VPN"
+    DAM requires VPN access. If you're outside an IBM office, connect to VPN before starting. If the
+    site won't load, check your VPN connection first.
+
 ## Web UI
 
 ### Step 1: Log In
 
 Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} and sign in with your IBM SSO credentials.
 
-### Step 2: Add a Model Provider
+### Step 2: Create a Coding Agent
 
-1. Go to **Settings → Providers**
-2. Find **IBM LiteLLM ETE Proxy** and click **Connect**
-3. Paste your LiteLLM API key — it must come from the **external** LiteLLM proxy
-4. Click **Save**
+From the left sidebar, open **Coding agents** and click **Create coding agent**. Everything is on one
+page — **Setup your coding agent** — filled top to bottom:
+
+1. **Name** — what you'll call it (e.g., `my-agent`).
+2. **Image** — the harness that runs inside the pod. Pick the **Claude Code** card.
+3. **Provider** — the model provider. Not connected yet? Connect it **right here** — paste your key
+   inline, no trip to Settings.
+4. **Network access** — leave it on **Trusted defaults**, the right choice for most agents. Anything
+   the agent isn't allowed to reach surfaces for approval in the **Inbox** in the left sidebar.
+5. **Connections** *(optional)* — grant credentials the agent may use. For working against your repos,
+   add **GitHub** (for `github.com`) or **GitHub Enterprise** (for `github.ibm.com`) so it can clone,
+   push branches, and open PRs.
 
 !!! note
-    Don't have a LiteLLM key yet? See [How to Create a LiteLLM Key](../guides/litellm-key.md) for a walkthrough — including which proxy to use and which team to scope the key to.
+    No provider key yet? See [Create your LiteLLM key](../reference/litellm-key.md) — it covers which proxy
+    to use and how to scope the key.
 
-### Step 3: Add Connections (optional but recommended)
+Click **Create**. Your agent provisions in a few seconds and you land straight in its chat.
 
-Connections let your agent access your repositories — clone, push branches, and create PRs.
+### Step 3: Start Working
 
-1. Go to **Connections** (in Settings, alongside **Providers**) and click **New** to open the **Connection catalogue**
-2. On the **Apps** tab, find the GitHub card that matches where your project lives:
-    - **GitHub** — for repos on `github.com`
-    - **GitHub Enterprise** — for repos on your company's GitHub Enterprise instance (e.g., `github.ibm.com`)
-3. Click **New** on that card. **GitHub** then asks how to authenticate: **Sign in with
-   Github** walks you through the OAuth flow, or **Personal access token** lets you paste a
-   fine-grained token scoped to the repos you need. **GitHub Enterprise** goes straight to **Sign in
-   with Github Enterprise**.
-
-Connecting doesn't yet give a sandbox access — **grant** the connection to each sandbox that should use it.
-
-### Step 4: Create a Sandbox
-
-1. Click **"Create sandbox"**
-2. Choose **General-purpose sandbox**, then **Claude Code**
-3. Name it (e.g., `my-agent`), pick a **Size** and your provider, and leave **Network access** on
-   **Trusted defaults (recommended)** — anything it isn't allowed to reach surfaces for approval in the
-   **Inbox** in the left sidebar
-4. Grant the connections it should use, then create
-
-Your sandbox will provision in a few seconds — you'll see the status change to "Running."
-
-### Step 5: Start Working
-
-Open your sandbox and type your first message:
+Type your first message:
 
 ```
 Clone github.ibm.com/my-org/my-project and give me a summary
@@ -56,6 +45,10 @@ of the codebase architecture.
 ```
 
 Or use **Open in → Terminal (browser)** to launch the full Claude Code interactive TUI.
+
+!!! tip "Want the full tour?"
+    This gets you one working agent. To see the rest of the platform — connections, skills, schedules,
+    Slack, artifacts, and more — built up one capability at a time, take the **[DAM new user tour](tour.md)**.
 
 ---
 
@@ -123,7 +116,7 @@ Prefer to work in your editor? Open the agent's workspace in **VS Code** or **Ze
 dam ssh connect my-agent -x code    # or: -x zed
 ```
 
-This gives you a Remote-SSH window into the running agent — edit files, run the terminal, and debug with the agent's full environment behind it. See the [VS Code/Zed (SSH) guide](../guides/vs-code-zed-ssh.md) for prerequisites and details.
+This gives you a Remote-SSH window into the running agent — edit files, run the terminal, and debug with the agent's full environment behind it. See the [VS Code/Zed (SSH) guide](../integrations/vs-code-zed-ssh.md) for prerequisites and details.
 
 ### Other Useful Commands
 
@@ -133,11 +126,16 @@ dam agent get my-agent         # Show agent details
 dam session list my-agent      # List sessions
 ```
 
+!!! tip "Want the full tour?"
+    This gets you one working agent. To see the rest of the platform — connections, skills, schedules,
+    Slack, artifacts, and more — built up one capability at a time, take the **[DAM new user tour](tour.md)**.
+
 ---
 
 ## Next Steps
 
-- **[Run code reviews automatically](../use-cases/code-review.md)** — set up an agent that reviews every PR
-- **[Build a web app from scratch](../use-cases/web-app-development.md)** — describe an idea, let the agent build and deploy it
+- **[Build a knowledge base](../guides/building-knowledge-bases.md)** — a personal brain, a project base, or a team's memory you can ask
+- **[Run your first experiment](../guides/run-experiments.md)** — walk a small optimization loop end to end
+- **[Run code reviews automatically](../guides/code-review.md)** — set up an agent that reviews every PR
 - **[Add Slack](../integrations/slack.md)** — let your team interact with shared agents
 - **[Schedule tasks](../core-concepts/schedules.md)** — run agents on a timer with no human in the loop

@@ -287,6 +287,116 @@
   z-index: 1;
 }
 
+/* Welcome page hero — left-aligned editorial (eyebrow · headline · lead · CTAs) */
+.md-typeset .welcome-hero {
+  margin: 0 0 1rem;
+}
+.md-typeset .welcome-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #161616;
+  margin: 0 0 0.6rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .welcome-eyebrow {
+  color: #f4f4f4;
+}
+.md-typeset .welcome-hero h1 {
+  font-weight: 300;
+  font-size: 2.3rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 0.9rem;
+  max-width: 20ch;
+  color: #161616;
+}
+[data-md-color-scheme="slate"] .md-typeset .welcome-hero h1 {
+  color: #f4f4f4;
+}
+.md-typeset .welcome-lead {
+  font-size: 0.95rem;
+  color: #525252;
+  max-width: 40rem;
+  line-height: 1.6;
+  margin: 0 0 0.875rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .welcome-lead {
+  color: #a8a8a8;
+}
+.md-typeset .welcome-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 0;
+}
+.md-typeset .welcome-cta .md-button {
+  margin: 0;
+}
+
+/* Welcome page "Get started" numbered step cards */
+.md-typeset .get-started-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.25rem 0 2rem;
+}
+.md-typeset .gs-step {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.35rem 1.35rem 1.5rem;
+  background: #f7f7f7;
+}
+[data-md-color-scheme="slate"] .md-typeset .gs-step {
+  border-color: #393939;
+  background: #1b1b1b;
+}
+/* the number is wrapped in its own <p> by the markdown parser — neutralize it */
+.md-typeset .gs-step > p:first-child {
+  margin: 0 0 0.85rem;
+  line-height: 1;
+}
+.md-typeset .gs-step .gs-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #161616;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+[data-md-color-scheme="slate"] .md-typeset .gs-step .gs-num {
+  background: #f4f4f4;
+  color: #161616;
+}
+.md-typeset .gs-step .gs-title {
+  margin: 0 0 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #161616;
+}
+[data-md-color-scheme="slate"] .md-typeset .gs-step .gs-title {
+  color: #f4f4f4;
+}
+.md-typeset .gs-step p {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #525252;
+}
+[data-md-color-scheme="slate"] .md-typeset .gs-step p {
+  color: #a8a8a8;
+}
+@media screen and (max-width: 59.9375em) {
+  .md-typeset .get-started-steps { grid-template-columns: 1fr; }
+}
+
 .vpn-note {
   display: block;
   font-size: 0.6rem;
@@ -300,6 +410,12 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin: 1.5rem 0;
+}
+
+/* Three-up variant — for a set of three cards that should sit as one even row */
+.grid.cards.cards-3 { grid-template-columns: repeat(3, 1fr); }
+@media screen and (max-width: 59.9375em) {
+  .grid.cards.cards-3 { grid-template-columns: 1fr; }
 }
 
 .grid.cards > ul {
@@ -786,3 +902,214 @@
 .md-header__title .md-header__topic:first-child {
   display: none;
 }
+
+/* ------------------------------------------------------------------ *
+ * Row lists — a lighter alternative to card grids for catalog-style
+ * sections. Two aligned columns: a bold name on the left and a quiet
+ * description on the right, separated by whitespace (no dash). Author:
+ *
+ *   <div class="rows" markdown>
+ *   - **Name** <small>Tag</small> <span>One-line description.</span>
+ *   </div>
+ *
+ * The <span> is optional — a name-only row (e.g. "More soon…") just
+ * omits it. On narrow screens the description wraps under the name.
+ * ------------------------------------------------------------------ */
+.md-typeset .rows {
+  margin: 1.5rem 0;
+  border-top: 1px solid #e0e0e0;
+}
+[data-md-color-scheme="slate"] .md-typeset .rows {
+  border-top-color: #333;
+}
+
+.md-typeset .rows > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.md-typeset .rows > ul > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 1rem;
+  margin: 0;
+  padding: 0.7rem 0.25rem;
+  border-bottom: 1px solid #e0e0e0;
+  transition: border-color 0.15s;
+}
+[data-md-color-scheme="slate"] .md-typeset .rows > ul > li {
+  border-bottom-color: #333;
+}
+.md-typeset .rows > ul > li:hover {
+  border-bottom-color: #0f62fe;
+}
+[data-md-color-scheme="slate"] .md-typeset .rows > ul > li:hover {
+  border-bottom-color: #78a9ff;
+}
+
+/* Left column: the bold name, fixed width so descriptions line up.
+   Wraps to full width on narrow screens. */
+.md-typeset .rows > ul > li > strong:first-child {
+  flex: 0 0 11rem;
+  font-weight: 600;
+  color: var(--md-default-fg-color);
+}
+
+/* Right column: the description span reads quieter and takes the rest
+   of the row. */
+.md-typeset .rows > ul > li > span {
+  flex: 1 1 16rem;
+  font-size: 0.875rem;
+  color: #525252;
+}
+[data-md-color-scheme="slate"] .md-typeset .rows > ul > li > span {
+  color: #a8a8a8;
+}
+
+/* Small = an uppercase status tag (e.g. Alpha). */
+.md-typeset .rows > ul > li small {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0f62fe;
+  border: 1px solid #0f62fe;
+  border-radius: 3px;
+  padding: 0.05rem 0.35rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .rows > ul > li small {
+  color: #78a9ff;
+  border-color: #78a9ff;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .rows > ul > li > strong:first-child {
+    flex-basis: 100%;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Home page — narrative landing layout.
+ *
+ * Image slots (.home-anchor, .home-feature-media) show a dashed
+ * placeholder until a real image is dropped in. To fill one, put an
+ * <img> inside it:  <div class="home-anchor"><img src="..."></div>
+ * — the img fills the frame and the placeholder text is hidden.
+ * ------------------------------------------------------------------ */
+
+/* Top visual anchor (16:9) */
+.md-typeset .home-anchor {
+  margin: 2rem auto 2.5rem;
+  max-width: 52rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.md-typeset .home-anchor:not(:has(img)) {
+  border: 1px dashed #c0c0c0;
+  background: #f4f4f4;
+  aspect-ratio: 16 / 9;
+  display: flex; align-items: center; justify-content: center;
+  color: #8d8d8d; font-size: 0.85rem; text-align: center;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-anchor:not(:has(img)) {
+  border-color: #444; background: #161616; color: #6f6f6f;
+}
+.md-typeset .home-anchor img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid #e0e0e0; border-radius: 10px;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-anchor img { border-color: #333; }
+
+/* Feature band: text one side, visual the other */
+.md-typeset .home-feature {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;
+  align-items: center; margin: 3rem 0;
+}
+.md-typeset .home-feature.flip .home-feature-media { order: -1; }
+.md-typeset .home-feature h2 { margin-top: 0; }
+.md-typeset .home-feature-media { border-radius: 10px; overflow: hidden; }
+.md-typeset .home-feature-media:not(:has(img)) {
+  border: 1px dashed #c0c0c0; background: #f4f4f4;
+  aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center;
+  color: #8d8d8d; font-size: 0.8rem; text-align: center; padding: 1rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-feature-media:not(:has(img)) {
+  border-color: #444; background: #161616; color: #6f6f6f;
+}
+.md-typeset .home-feature-media img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid #e0e0e0; border-radius: 10px;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-feature-media img { border-color: #333; }
+@media screen and (max-width: 59.9375em) {
+  .md-typeset .home-feature { grid-template-columns: 1fr; gap: 1.25rem; }
+  .md-typeset .home-feature.flip .home-feature-media { order: 0; }
+}
+
+/* Matched pair of screenshots, equal size, side by side */
+.md-typeset .home-gallery {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem;
+  margin: 2rem 0 3rem;
+}
+.md-typeset .home-gallery figure { margin: 0; }
+.md-typeset .home-gallery img {
+  display: block; width: 100%;
+  aspect-ratio: 16 / 10; object-fit: cover; object-position: top center;
+  border: 1px solid #e0e0e0; border-radius: 10px;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-gallery img { border-color: #333; }
+.md-typeset .home-gallery figcaption {
+  margin-top: 0.6rem; font-size: 0.8rem; line-height: 1.5; color: #525252;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-gallery figcaption { color: #a8a8a8; }
+.md-typeset .home-gallery figcaption strong { color: inherit; font-weight: 600; }
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .home-gallery { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+/* Inline screenshot / placeholder for walkthroughs (tour, guides) */
+.md-typeset .tour-shot { margin: 1.4rem 0; }
+.md-typeset .tour-shot img {
+  display: block; width: 100%; height: auto;
+  border: 1px solid #e0e0e0; border-radius: 10px;
+}
+[data-md-color-scheme="slate"] .md-typeset .tour-shot img { border-color: #333; }
+/* Placeholder state: a .tour-shot with no image, just a caption */
+.md-typeset .tour-shot.is-placeholder {
+  border: 1px dashed #c6c6c6; border-radius: 10px;
+  background: #f7f7f7; padding: 1.1rem 1.25rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .tour-shot.is-placeholder {
+  border-color: #525252; background: #262626;
+}
+.md-typeset .tour-shot.is-placeholder::before {
+  content: "🖼"; font-size: 1rem; line-height: 1; opacity: 0.7; flex: none;
+}
+.md-typeset .tour-shot.is-placeholder figcaption { margin: 0; }
+.md-typeset .tour-shot figcaption {
+  margin-top: 0.6rem; font-size: 0.8rem; line-height: 1.5; color: #525252;
+}
+[data-md-color-scheme="slate"] .md-typeset .tour-shot figcaption { color: #a8a8a8; }
+.md-typeset .tour-shot figcaption strong { color: inherit; font-weight: 600; }
+
+/* Two text-only value props side by side */
+.md-typeset .home-props {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin: 2rem 0 1rem;
+}
+.md-typeset .home-props h3 { margin-top: 0; }
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .home-props { grid-template-columns: 1fr; gap: 1rem; }
+}
+
+/* Full-width call-to-action band */
+.md-typeset .home-cta {
+  margin: 3.5rem 0 1rem; padding: 2.5rem 1.5rem; text-align: center;
+  border: 1px solid #e0e0e0; border-radius: 10px; background: #f4f4f4;
+}
+[data-md-color-scheme="slate"] .md-typeset .home-cta { border-color: #333; background: #161616; }
+.md-typeset .home-cta h2 { margin: 0 0 0.5rem; border: 0; }
+.md-typeset .home-cta p { color: #525252; margin: 0 auto 1.5rem; max-width: 30rem; }
+[data-md-color-scheme="slate"] .md-typeset .home-cta p { color: #a8a8a8; }
+

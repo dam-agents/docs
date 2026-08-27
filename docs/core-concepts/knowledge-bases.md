@@ -1,10 +1,10 @@
 # Knowledge Bases
 
-A **knowledge base** is a sandbox whose job is to build and maintain a body of knowledge you work
+A **knowledge base** is an agent whose job is to build and maintain a body of knowledge you work
 with by chatting. You feed it sources; it organizes what it learns and keeps it.
 
 The platform deliberately owns very little here — there's no ingestion pipeline, no query language,
-no fixed schema. The knowledge lives as files in the sandbox's workspace, and the agent does the
+no fixed schema. The knowledge lives as files in the agent's workspace, and the agent does the
 organizing. That means you shape it by talking to it, and you can always open the files yourself.
 
 ## Templates
@@ -30,14 +30,10 @@ came from.
     creating a new knowledge base — there's no in-place conversion, and deleting the old one destroys
     its workspace.
 
-!!! info "Needs an image your operator enables"
-    The knowledge-base starting point needs the `claude-code` agent image. If it isn't installed, the
-    wizard hides it and tells you to ask your operator to enable it.
-
 ## Creating one
 
-From **Knowledge bases**, click **Create knowledge base** — that's the sandbox wizard with the
-**Knowledge base sandbox** starting point already selected.
+From **Knowledge bases**, click **Create knowledge base** — the knowledge base agent has its own
+creation flow.
 
 You'll pick the template, then name it, choose a **Size** and network access preset, a provider, and
 any connections to grant. Two things are decided for you: the harness is pinned to Claude Code (no
@@ -45,7 +41,7 @@ image to choose), and the provider list is limited to the two that reach Claude 
 Proxy** (recommended) or **Anthropic**.
 
 After it's created, the platform runs the template's setup command **once** in the workspace and
-wakes the sandbox, so the tooling is in place before you say anything. No conversation happens during
+wakes the agent, so the tooling is in place before you say anything. No conversation happens during
 setup — it's a workspace change, not a turn.
 
 Opening a brand-new knowledge base **greets you**: the agent introduces itself and explains how to
@@ -57,10 +53,10 @@ feed it, rather than dropping you into an empty chat.
     yourself. Setup itself keeps retrying on each wake until it succeeds.
 
 !!! warning "Setup needs network access"
-    The template's setup step downloads its toolkit from GitHub, through the sandbox's egress
+    The template's setup step downloads its toolkit from GitHub, through the agent's egress
     gateway. If you switch to the **Strict default-deny** network preset, that download can be blocked
     and the knowledge base comes up without its tooling. **Trusted defaults (recommended)** — the preset
-    a new sandbox starts on — is the safer choice here; if setup seems not to have run, check
+    a new agent starts on — is the safer choice here; if setup seems not to have run, check
     [network access](network-access.md) first.
 
 ## Adding sources and building knowledge
@@ -76,12 +72,12 @@ It's a conversation. Point the agent at what you want it to learn from:
 
 Ask it to reorganize, summarize, cross-link, or correct what it holds. Because the knowledge is just
 files in the workspace, you can browse or download it at any time, and it survives hibernation like
-any other sandbox content.
+any other agent content.
 
 ## Managing one
 
 Wake, restart, pause, stop, and delete behave exactly as they do for [any
-sandbox](agents.md#lifecycle). Opening a knowledge base from the list keeps you in that context, so
+agent](agents.md#lifecycle). Opening a knowledge base from the list keeps you in that context, so
 closing it returns you to the knowledge-base list rather than to Home.
 
 Its settings page covers the name, the harness (read-only), network access, and connections. **Size isn't
@@ -90,7 +86,7 @@ editable there** — a knowledge base runs on its defaults to keep the surface c
 There's no CLI command for creating a knowledge base, but `dam agent list` / `get` / `delete` all
 work on one.
 
-**Deleting a knowledge base deletes the sandbox and its workspace** — the knowledge with it. Export
+**Deleting a knowledge base deletes the agent and its workspace** — the knowledge with it. Export
 anything you want to keep first.
 
 Knowledge bases are owner-scoped: you see and manage your own.

@@ -7,7 +7,9 @@ hide:
 
 # IBM Research DAM
 
-Shared infrastructure for AI-native engineering and research — run agents continuously, connect them to your tools, and scale securely without exposing credentials.
+Shared infrastructure for AI-native engineering and research — run agent workloads, reuse what others have built, and turn experiments into knowledge the whole organization compounds on.
+
+**Run long-lived AI agents in isolated pods** — with runtime credential injection, scheduled triggers, and Slack-native access.
 
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
@@ -16,204 +18,72 @@ Shared infrastructure for AI-native engineering and research — run agents cont
 
 </div>
 
-## Why DAM?
+## The problem
 
-<div class="grid cards" markdown>
+Researchers across IBM have built impressive engines — pipelines, harnesses, automations. But each tends to solve one team's problem, on one laptop. Harnesses run locally and interactively; there's nowhere common to share results or the setups that produced them; and working against real systems means credential and network risk each researcher manages alone. Adoption stays uneven, and almost none of it compounds.
 
--   :material-cloud-outline:{ .lg .middle } **Runs in the cloud**
+## What DAM gives you
 
-    ---
+<div class="home-props" markdown>
+<div markdown>
 
-    Sandboxes live in the cloud, not on your laptop — schedules and channel messages keep them working while you're away.
+### One place to run
 
--   :material-shield-lock:{ .lg .middle } **Isolated execution**
+Every agent runs isolated, credentialed, and autonomous on shared infrastructure — no more one-off setups on a laptop each. Approvals and egress rules govern what it can reach, so working against real systems stops being a risk you manage alone.
 
-    ---
+</div>
+<div markdown>
 
-    Each sandbox runs in an isolated container, with all access routed through a policy-enforced gateway.
+### Reuse, don't rebuild
 
--   :material-key-variant:{ .lg .middle } **Zero trust credentials**
+Agentic best practice comes packaged as connections, skills, and templates — set up once, then reused by anyone. Sessions, schedules, and channels attach to an agent; artifacts come out of it and outlive it.
 
-    ---
+</div>
+</div>
 
-    Connect agents to your tools through a gateway that adds your credentials without ever revealing them.
+## What you learn, compounds
 
--   :material-account-group:{ .lg .middle } **Built for teams**
+Experiments, knowledge bases, and artifacts capture what worked — so the next person starts from it instead of from scratch. Give an agent something to optimize and watch it design and run the loop live; ask a question and get a synthesized answer with citations back to the source.
 
-    ---
+<div class="home-gallery">
+  <figure>
+    <img src="assets/home-experiment.png" alt="A live experiment run in DAM — the agent's chat alongside the score matrix and judge-scores chart">
+    <figcaption>Experiments — every stage, score, and candidate as it happens.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/home-anchor.png" alt="A DAM knowledge base in the web UI — sources on the left, synthesized answers with citations in the main panel">
+    <figcaption>Knowledge bases — synthesized answers, cited back to the source.</figcaption>
+  </figure>
+</div>
 
-    Run sandboxes on schedules for recurring work, and share what they produce in a Slack channel.
+---
+
+## Meet it where you work
+
+<div class="rows" markdown>
+
+- **Web UI** <span>Chat with your agent, stream its terminal, and manage files — all from the browser.</span>
+- **CLI** <span>Create agents, attach to live sessions, and manage them from your local terminal.</span>
+- **Slack** <span>Invite the DAM bot, run `/dam bind`, and the whole channel can work with your agent.</span>
+- **VS Code/Zed** <span>Open your agent's workspace over `dam ssh`.</span>
+- **Schedules** <span>Run agents on a recurring timer — daily reviews, nightly audits, continuous monitoring.</span>
 
 </div>
 
 ---
 
-## Ways to Use DAM
+## Comes with the platform
 
-<div class="grid cards" markdown>
+A choice of coding agents, ready-to-run experiment and knowledge base agents, optimization frameworks, and integrations for Slack, Telegram, and VS Code/Zed — available with no setup of your own. See **[The building blocks](core-concepts/building-blocks.md)** for the full set of reusable pieces, or **[Agents](core-concepts/agents.md)** for the harnesses and frameworks you can run.
 
--   :material-chat:{ .lg .middle } **Web UI**
+<div class="home-cta" markdown>
 
-    ---
+## Get started
 
-    Chat with your agent, stream its terminal, and manage files — all from the browser.
+New here? Start with **Welcome** for the whole picture in one place — what DAM is, why it exists, and how to sign up. Ready to build? Jump straight to the Quickstart.
 
--   :material-console-line:{ .lg .middle } **CLI**
-
-    ---
-
-    Create sandboxes, attach to live sessions, and manage them from your local terminal.
-
--   :material-slack:{ .lg .middle } **Slack**
-
-    ---
-
-    Invite the DAM bot, run `/dam bind`, and the whole channel can work with your agent.
-
--   :material-microsoft-visual-studio-code:{ .lg .middle } **VS Code/Zed**
-
-    ---
-
-    Open your sandbox's workspace in VS Code or Zed via the CLI's `dam ssh` editor modes.
-
--   :material-calendar-clock:{ .lg .middle } **Schedules**
-
-    ---
-
-    Run sandboxes on a recurring timer — daily code reviews, nightly audits, continuous monitoring.
-
-</div>
-
----
-
-## Available Harness Images
-
-<div class="grid cards" markdown>
-
--   :material-code-braces:{ .lg .middle } **Claude Code**
-
-    ---
-
-    Reasoning-first assistant for complex coding tasks.
-
--   :material-robot:{ .lg .middle } **PI Agent**
-
-    ---
-
-    Multi-provider coding harness across leading LLMs.
-
--   :material-console:{ .lg .middle } **IBM Bob**
-
-    ---
-
-    Bob shell agent — Anthropic, Mistral, or Granite models.
-
--   :material-code-tags:{ .lg .middle } **Codex**
-
-    ---
-
-    Execution-first system for end-to-end coding tasks.
-
-</div>
-
-## Available Specialized Images
-
-Ready-to-use agents built on top of the coding harnesses. Pick one under **Specialized sandbox** in the create wizard, connect a model provider, and launch. A couple need a little more — GEPA's optimization loop requires an API-key-style provider connection (an Anthropic OAuth token drives only its chat), and k-search evaluates on Modal by default.
-
-<div class="grid cards" markdown>
-
--   :material-flask-outline:{ .lg .middle } **NOUS** <small>Alpha</small>
-
-    ---
-
-    Hypothesis-driven agent for long-running research.
-
--   :material-dna:{ .lg .middle } **OpenEvolve** <small>Alpha</small>
-
-    ---
-
-    Evolutionary agent that iteratively optimizes your code.
-
--   :material-chip:{ .lg .middle } **k-search** <small>Alpha</small>
-
-    ---
-
-    LLM-driven agent that optimizes GPU kernels.
-
--   :material-dna:{ .lg .middle } **ShinkaEvolve** <small>Alpha</small>
-
-    ---
-
-    Sample-efficient evolutionary program-optimization agent.
-
--   :material-text-box-search-outline:{ .lg .middle } **GEPA** <small>Alpha</small>
-
-    ---
-
-    Reflective prompt and text-optimization agent.
-
--   :material-dna:{ .lg .middle } **AdaEvolve** <small>Alpha</small>
-
-    ---
-
-    Multi-island adaptive code and algorithm optimizer.
-
--   :material-dna:{ .lg .middle } **EvoX** <small>Alpha</small>
-
-    ---
-
-    Self-evolving code and algorithm optimizer.
-
--   :material-creation:{ .lg .middle } **More soon…**
-
-    ---
-
-    More ready-to-use agents are on the way.
-
-</div>
-
----
-
-## Beyond Chat
-
-<div class="grid cards" markdown>
-
--   :material-test-tube:{ .lg .middle } **[Experiments](core-concepts/experiments.md)**
-
-    ---
-
-    Give an agent something to optimize and watch it design and run the loop — every stage, score, and candidate live as it runs.
-
--   :material-book-open-variant:{ .lg .middle } **[Knowledge Bases](core-concepts/knowledge-bases.md)**
-
-    ---
-
-    Build an organized body of knowledge by conversation. Feed it sources; it keeps and organizes what it learns.
-
--   :material-package-variant-closed:{ .lg .middle } **[Artifacts](core-concepts/artifacts.md)**
-
-    ---
-
-    Durable, versioned outputs — reports, dashboards, generated pages — that outlive the sandbox and can be shared by link.
-
-</div>
-
----
-
-## Get Started
-
-<div class="grid cards" markdown>
-
--   **[Quickstart →](getting-started/quickstart.md)**
-
-    ---
-
-    Create a Claude Code sandbox and start chatting in five minutes.
-
--   **[Use Cases →](use-cases/code-review.md)**
-
-    ---
-
-    See what teams are building — code review, app development, and more.
+[Start with Welcome →](getting-started/welcome.md){: .md-button .md-button--primary}
+[Quickstart](getting-started/quickstart.md){: .md-button }
+[The building blocks](core-concepts/building-blocks.md){: .md-button }
 
 </div>

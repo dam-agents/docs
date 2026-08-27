@@ -1,10 +1,13 @@
-# Code Review
+# Automate PR review
 
-Get automated PR reviews on every pull request — posted to GitHub, with optional Slack nudging when PRs wait too long for a human review.
+PR review is the kind of steady, unglamorous work a long-running agent is perfect for. This guide walks
+through **Code Guardian** — the team's PR-review agent, built on the [code-guardian](https://github.com/dam-agents/code-guardian)
+definition — end to end, so you can set it up on your own repo.
 
-This guide walks through setting up the [code-guardian](https://github.com/dam-agents/code-guardian) agent on DAM to do it yourself.
-
-Once running, the agent works on a schedule, continuously watching for new or updated PRs and reviewing them for correctness, security, performance, architecture issues, and documentation drift. No one needs to trigger it — DAM's scheduled execution keeps the reviewer running around the clock with no human in the loop.
+On a schedule, it watches for new and updated PRs and reviews each one for correctness, security,
+performance, architecture, and documentation drift — posting straight to GitHub, with optional Slack
+nudges when a PR waits too long for a human. No one triggers it, and it only ever reports and proposes:
+a human still owns the merge.
 
 ## What It Does
 
@@ -59,7 +62,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 - **GitHub** or **GitHub Enterprise** — the agent reads PRs, posts reviews, and clones branches
 - **A Slack channel binding** (optional, **opt-in at onboarding**) — powers the PR Shepherd: escalating reminders in your team channel for PRs that sit unreviewed. The agent asks during onboarding whether to enable it and, on yes, walks you through importing your team (GitHub org team or top contributors) plus their Slack member IDs into a reviewer roster — the only people it may ever @-mention. With Slack disabled the agent never touches it; reviews still land in the chat UI and on GitHub.
 
-    This is a **channel binding**, not a Slack connection — nudges go out through the platform to the conversation bound to this sandbox. Bind it with `/dam bind` from inside Slack.
+    This is a **channel binding**, not a Slack connection — nudges go out through the platform to the conversation bound to this agent. Bind it with `/dam bind` from inside Slack.
 
 !!! tip "You can add Slack later"
     Skip Slack at onboarding and bind a channel whenever you're ready — the agent picks it up from
@@ -81,10 +84,10 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ## Setup
 
-1. **Create a Claude Code sandbox** — pick **General-purpose sandbox** then the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
+1. **Create a Claude Code agent** — click **Create agent** and pick the **Claude Code** harness in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM ETE Proxy or Anthropic with your API key
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
-4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the sandbox's **Sandbox Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
+4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the agent's **Agent Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
 5. **Onboard the agent** — send it the onboarding runbook as your **first message** and let it set itself up (see below)
 6. **Connect Slack** (optional) — only needed if you want the PR Shepherd nudging; you opt in during onboarding
 
@@ -102,11 +105,11 @@ Onboarding is a short **interactive dialog** — the agent checks out its own de
 !!! note "Its schedules run in UTC"
     The agent creates its schedules as cron expressions, and cron schedules run in **UTC** — so a
     weekly audit or a workday-windowed sweep won't follow your local clock. To get local wall-clock
-    times (and quiet hours), open the sandbox's **Schedules** section and re-create the schedule with a
+    times (and quiet hours), open the agent's **Schedules** section and re-create the schedule with a
     frequency and timezone. See [Schedules](../core-concepts/schedules.md).
 
 !!! tip "Files live in `work/`, not a subfolder"
-    The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh sandbox rather than moving files by hand.
+    The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh agent rather than moving files by hand.
 
 !!! tip "Customizing the agent"
     To change the agent's behavior, **fork** [dam-agents/code-guardian](https://github.com/dam-agents/code-guardian) and onboard from your fork's `ONBOARDING.md` URL instead.

@@ -1,6 +1,6 @@
 # CLI
 
-The `dam` CLI lets you manage sandboxes, attach to terminal sessions, transfer files, wire up connections, and more — all from your local machine.
+The `dam` CLI lets you manage agents, attach to terminal sessions, transfer files, wire up connections, and more — all from your local machine.
 
 ## Installation
 
@@ -64,7 +64,7 @@ dam auth token list                                 # list your keys (plaintext 
 dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
 ```
 
-- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. Omit `--scope` and you get `agents:operate` alone; a key always carries at least one scope. The valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every sandbox you own.
+- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. Omit `--scope` and you get `agents:operate` alone; a key always carries at least one scope. The valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every agent you own.
 - `--expires <iso>` takes an ISO 8601 timestamp.
 - The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 - Minted keys carry a **`pk_`** prefix and can be used directly as `DAM_TOKEN`. API-key principals cannot mint further keys.
@@ -126,7 +126,7 @@ Provider templates also declare their own required inputs, each exposed as its o
 
 Use `update` to replace a *secret you hold*, and `reauth` to replace *expired OAuth tokens*.
 
-`connection reauth` re-runs login and consent for an **OAuth** connection, replacing only its tokens: the connection keeps its identity and every sandbox grant it already has, so nothing needs re-granting afterwards. Reach for it when a connection shows expired, or to re-consent after its template gained scopes. It opens a browser and waits for you to authorize:
+`connection reauth` re-runs login and consent for an **OAuth** connection, replacing only its tokens: the connection keeps its identity and every agent grant it already has, so nothing needs re-granting afterwards. Reach for it when a connection shows expired, or to re-consent after its template gained scopes. It opens a browser and waits for you to authorize:
 
 ```bash
 dam connection reauth github
@@ -149,7 +149,7 @@ dam network apply-preset <agent> --preset <none|trusted|all> [-y]  # Apply a net
 dam network trusted-hosts                              # Platform-wide hosts seeded by the 'trusted' preset
 ```
 
-`network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`. A rule for a service that isn't on port 443 can't be created from the CLI — add it under **Network access** in the sandbox, where the host field takes `host:port`.
+`network create` flags: `--host <h>` (required), `--method <m>` (default `*`), `--path <p>` (default `*`), `--verdict allow|deny` (default `allow`), `-y, --yes` (skip the path-level restart confirmation), `--json`. A rule for a service that isn't on port 443 can't be created from the CLI — add it under **Network access** in the agent, where the host field takes `host:port`.
 
 `network update` flags: `--method <m>`, `--path <p>`, `--verdict allow|deny`, `-y, --yes`, `--json` — partial, so pass only the fields you want to change. Updating a rule marks it manual.
 
@@ -157,7 +157,7 @@ dam network trusted-hosts                              # Platform-wide hosts see
 
 !!! note "A narrowed rule restarts the gateway"
     A rule that specifies a non-wildcard method or path needs path-level enforcement, which
-    **restarts the sandbox's network gateway** (~5–15s) — the sandbox keeps running, but its outbound
+    **restarts the agent's network gateway** (~5–15s) — the agent keeps running, but its outbound
     requests are briefly interrupted. The CLI confirms first; `-y` skips the prompt. Host-only rules
     don't restart anything. See [Network & Approvals](../core-concepts/network-access.md).
 
@@ -288,7 +288,7 @@ dam ssh configure -a, --all            # Reconcile the active host's agents (pru
 dam ssh configure --clear              # Remove all dam-managed SSH host config
 ```
 
-`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked. `dam ssh configure` writes the same host config without launching a client, and takes exactly one of an agent, `--all`, or `--clear`. Because there is a single managed config for all hosts, `--all` prunes entries for agents on your other servers too — see the [SSH guide](../guides/vs-code-zed-ssh.md#wiring-up-other-tools-scp-sftp-tunnels).
+`-x, --exec <bin[:mode]>` selects the client to launch: an executable name or path, optionally suffixed with `:ssh`, `:code`, or `:zed` to force how it's invoked. `dam ssh configure` writes the same host config without launching a client, and takes exactly one of an agent, `--all`, or `--clear`. Because there is a single managed config for all hosts, `--all` prunes entries for agents on your other servers too — see the [SSH guide](../integrations/vs-code-zed-ssh.md#wiring-up-other-tools-scp-sftp-tunnels).
 
 ### File Operations
 

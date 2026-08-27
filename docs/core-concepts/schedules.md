@@ -1,6 +1,6 @@
 # Schedules
 
-Run your sandbox on a recurring basis without manual intervention.
+Run your agent on a recurring basis without manual intervention.
 
 ## Overview
 
@@ -12,7 +12,7 @@ Schedules let you define automated tasks that fire on a timer:
 
 ## Creating a Schedule
 
-1. Open your sandbox's **Schedules** panel
+1. Open your agent's **Schedules** panel
 2. Click **Create Schedule**
 3. Configure:
     - **Name** — what the schedule is called in the panel
@@ -34,9 +34,9 @@ Schedules let you define automated tasks that fire on a timer:
     Cron schedules **and any schedule your agent created for itself** can't be *edited* in the panel.
     **Edit schedule** still opens; instead of the form it explains which of the two applies:
 
-    - **"This schedule is managed by the sandbox"** — the agent created it, so changes belong in chat,
+    - **"This schedule is managed by the agent"** — the agent created it, so changes belong in chat,
       and the dialog offers an **Open chat** button. Editing it here risks putting it out of step with
-      the sandbox.
+      the agent.
     - **"This schedule uses the older cron format"** — the editor only works with the newer format and
       can't show this schedule's timing without rewriting it, so delete it and create a new one to
       change its cadence.
@@ -57,7 +57,7 @@ Use **fresh** for independent tasks (each PR review is standalone). Use **contin
 
 Fresh runs can overlap if one is still going when the next fires; continuous runs queue behind each other.
 
-**Starting over** — **Reset session** in a continuous schedule's **⋯** menu makes its next run begin a fresh session. Unlike a fire, a reset doesn't wake the sandbox — it waits for the next time the sandbox is up. If the sandbox stays down for about an hour, the reset lapses and the next run resumes the old session as before.
+**Starting over** — **Reset session** in a continuous schedule's **⋯** menu makes its next run begin a fresh session. Unlike a fire, a reset doesn't wake the agent — it waits for the next time the agent is up. If the agent stays down for about an hour, the reset lapses and the next run resumes the old session as before.
 
 ## Pausing, editing, deleting
 
@@ -76,14 +76,14 @@ Suppress schedule fires during specific time windows. Suppressed runs are **drop
 
 A window may cross midnight (10pm–7am works as written), and it uses the same timezone as the schedule, so it holds across daylight saving. If your quiet hours would swallow *every* run, the schedule won't save — the same refusal applies from the CLI and to schedules your agent creates for itself, so an impossible cadence fails loudly instead of going quietly dead.
 
-## Sleeping and stopped sandboxes
+## Sleeping and stopped agents
 
-A schedule fire **wakes a hibernated sandbox** automatically — you don't need to keep it running. It
-also restarts a sandbox you stopped by hand: stopping a sandbox does not pause its schedules, and the
+A schedule fire **wakes a hibernated agent** automatically — you don't need to keep it running. It
+also restarts an agent you stopped by hand: stopping an agent does not pause its schedules, and the
 UI warns you about this at stop time.
 
-A fire that can't reach the sandbox right away — it's erroring, or over budget — waits about an hour
-for it to come back, then lapses. So a brief outage still gets its run, but a sandbox that stays down
+A fire that can't reach the agent right away — it's erroring, or over budget — waits about an hour
+for it to come back, then lapses. So a brief outage still gets its run, but an agent that stays down
 longer won't hand you a burst of catch-up runs when it finally wakes.
 
 ## Viewing History

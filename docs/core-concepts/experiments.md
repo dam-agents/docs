@@ -11,7 +11,7 @@ and the dashboard.
 
 | Concept | What it is |
 |---------|-----------|
-| **Driver** | The sandbox that authors and runs the loop script. |
+| **Driver** | The agent that authors and runs the loop script. |
 | **Skeleton** | The stages and loops your script declares up front — a statement of intent. |
 | **Span** | One tagged step the script reports as it runs, carrying a status, an optional numeric score, and any artifacts it produced. |
 | **Run** | One execution of the script. Each run captures the script as it was at that moment. |
@@ -25,24 +25,20 @@ score *means* is yours to define.
 
 ## Getting started
 
-The quickest path is an **experiment sandbox** — pick it as your starting point when you
-[create a sandbox](agents.md#create). It's a Claude Code sandbox with the experiment authoring skill
+The quickest path is an **experiment agent** — its own choice when you
+[create an agent](agents.md#create). It's a Claude Code agent with the experiment authoring skill
 already installed, so you can just describe the loop you want and let the agent write it.
 
-!!! info "Needs an image your operator enables"
-    The experiment and knowledge-base starting points both need the `claude-code` agent image. If it
-    isn't installed, the wizard hides them and tells you to ask your operator to enable it.
-
-Any sandbox can drive an experiment, though — the SDK (`experiment_sdk`, Python, standard library
+Any agent can drive an experiment, though — the SDK (`experiment_sdk`, Python, standard library
 only) ships in the platform base image. Declaring a skeleton takes a handful of lines around code you
 would write anyway.
 
-### Optimization framework images
+### Optimization frameworks
 
-If you'd rather work in an established optimization framework than write the loop yourself, pick
-**Specialized sandbox** → **Choose an image** in the wizard, which offers preconfigured images such as
-**NOUS**, **OpenEvolve**, **k-search**, **ShinkaEvolve**, **GEPA**, **AdaEvolve**, and **EvoX**. Each is badged
-**Alpha** and depends on an image your operator has enabled.
+If you'd rather work in an established optimization framework than write the loop yourself, ask the
+agent to run one — point it at a target and a measurable objective in chat and it drives the framework
+for you. Available frameworks (all badged **Alpha**) include **NOUS**, **OpenEvolve**, **ShinkaEvolve**,
+**GEPA**, **k-search**, and **SkyDiscover** (which carries the **AdaEvolve** and **EvoX** search strategies).
 
 These run their own campaigns in their own terms — they don't register a plan or appear under
 Experiments.
@@ -53,14 +49,14 @@ Experiments.
    **draft** and publishes the script — plus a dashboard — into your [artifact library](artifacts.md).
    Re-registering the same experiment refreshes the draft in place.
 2. **Start a run.** The draft is the reusable blueprint; starting a run clones the script and launches
-   it in the background on the driver sandbox.
+   it in the background on the driver agent.
 3. **Watch it.** While a run is active you get a live feed of spans as they're reported.
 4. **It finishes** as either completed or failed — or you **stop** it.
 
-A running experiment **pins its sandbox awake**, so the idle timeout won't hibernate a loop mid-flight
+A running experiment **pins its agent awake**, so the idle timeout won't hibernate a loop mid-flight
 (a hard stop still wins). The SDK sends a heartbeat while your script lives, so a loop that's quiet —
 blocked on a spawn, or deep in a computation — stays healthy. If the heartbeat stops (the script
-crashed, the pod was lost), the run is marked failed and the sandbox is released.
+crashed, the pod was lost), the run is marked failed and the agent is released.
 
 A script that's wedged but still alive keeps heartbeating and stays visibly running — the platform
 can't tell stuck from slow, which is what **Stop** is for. Stop also ends the run's in-flight
@@ -83,12 +79,12 @@ data baked in. That's the one to
 
 ## Managing experiments
 
-Experiments have their own destination in the DAM UI, grouped under the sandbox running them — one
-sandbox can hold several, so the sandbox is the container. From there you reach an experiment's runs,
-the subagents a run currently has working, and its per-run artifacts, and open the sandbox's chat
+Experiments have their own destination in the DAM UI, grouped under the agent running them — one
+agent can hold several, so the agent is the container. From there you reach an experiment's runs,
+the subagents a run currently has working, and its per-run artifacts, and open the agent's chat
 where the dashboard docks.
 Deleting an experiment removes its runs with it; the artifacts it published survive. Stop a running
-experiment before deleting it — the platform refuses while a run is live. Deleting the *sandbox*
+experiment before deleting it — the platform refuses while a run is live. Deleting the *agent*
 doesn't delete its experiments: the runs stay listed, and their published results stay in your
 library.
 

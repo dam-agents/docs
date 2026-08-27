@@ -14,9 +14,9 @@ File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issue
 
 ## Request Access
 
-Don't have access yet? [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank"}. You can request access for other people too — the form asks for your email and, separately, the addresses to grant access to.
+Don't have access yet? [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank"}. The form lets you request access for teammates as well as yourself.
 
-We'll follow up to ask whether you already have a team on the external LiteLLM proxy, since that decides how quickly we can get you started — see [How to Create a LiteLLM Key](../guides/litellm-key.md) for what that means and how to check.
+We'll follow up to ask whether you already have a team on the external LiteLLM proxy, since that decides how quickly we can get you started — see [Create your LiteLLM key](litellm-key.md) for what that means and how to check.
 
 !!! note "Can't reach DAM?"
-    DAM requires the [TUNNELALL VPN](https://w3.ibm.com/#/support/article/troubleshoot_secure/connect_issue){:target="_blank"}. If the site won't load at all, check that first.
+    DAM requires the standard IBM VPN. If the site won't load at all, check that first.

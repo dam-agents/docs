@@ -6,11 +6,11 @@ or **terminal**. Resuming a chat session from the CLI's terminal switches its mo
 
 **SSH** is a third way in, but it isn't a session: it has no history, no entry in the sessions list,
 and no harness involvement — just a login shell. See the
-[VS Code/Zed (SSH) guide](../guides/vs-code-zed-ssh.md).
+[VS Code/Zed (SSH) guide](../integrations/vs-code-zed-ssh.md).
 
 ## Chat Sessions
 
-Open your sandbox in the DAM UI and type a message. A new session is created automatically.
+Open your agent in the DAM UI and type a message. A new session is created automatically.
 
 - **Resume** — click any previous session in the sidebar to continue
 - **New chat session** — from the **New** menu; starts fresh conversation context (workspace files
@@ -18,7 +18,7 @@ Open your sandbox in the DAM UI and type a message. A new session is created aut
 - **History** — scroll up to see full conversation including tool calls and file changes
 - **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
 
-Sessions live with the sandbox's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
+Sessions live with the agent's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
 
 The sessions list is ordered by last activity. A **chat** session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. A **terminal** session records no message activity, so its timestamp is the harness file's modification time, which a restart or a redrawing full-screen program can bump without you having typed anything. (Terminal sessions carry no unread state at all either — a terminal row never goes bold, however long you leave it.)
 
@@ -49,15 +49,15 @@ behind a confirm.
 
 ### Environment variables
 
-Environment variables you set in the sandbox's Environment editor are persisted separately and delivered to the running sandbox, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections when the names collide.
+Environment variables you set in the agent's Environment editor are persisted separately and delivered to the running agent, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections when the names collide.
 
 Whether a turn already in flight is disturbed depends on what you changed. **Adding or removing a variable** interrupts a turn still running about a minute after you save, so the new set can take effect. **Changing only a value** never interrupts a running turn — it applies at the next turn boundary.
 
 ### Model settings
 
-The **Model** settings panel sets per-sandbox harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with.
+The **Model** settings panel sets per-agent harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with.
 
-The panel lives on the sandbox's home page, under **Sandbox Setup**; chat shows the model in use and a gear that opens that page. Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them. While the sandbox is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
+The panel lives on the agent's home page, under **Agent Setup**; chat shows the model in use and a gear that opens that page. Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them. While the agent is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
 
 ## Terminal Sessions
 

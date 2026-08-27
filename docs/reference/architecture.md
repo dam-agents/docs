@@ -8,11 +8,11 @@ Your tokens and API keys are never visible to your agent — they're injected on
 
 ### The Gateway Model
 
-Every sandbox is paired with its own **credential gateway** — a separate, hardened environment that handles credential injection:
+Every agent is paired with its own **credential gateway** — a separate, hardened environment that handles credential injection:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│ Your sandbox                                        │
+│ Your agent                                        │
 │                                                     │
 │  Agent makes HTTPS request to api.github.com  ──────┼──┐
 │  (no credentials attached)                          │  │
@@ -33,36 +33,36 @@ Every sandbox is paired with its own **credential gateway** — a separate, hard
 
 **Key properties:**
 
-- Your sandbox has **no access** to the raw token — it never reaches the sandbox's disk, and where a tool expects an env var the sandbox gets a placeholder, not the real value
-- Your sandbox has no route to the internet except through the gateway, and that's enforced at the network layer rather than by the agent's own good behavior
+- Your agent has **no access** to the raw token — it never reaches the agent's disk, and where a tool expects an env var the agent gets a placeholder, not the real value
+- Your agent has no route to the internet except through the gateway, and that's enforced at the network layer rather than by the agent's own good behavior
 - Even if an agent is fully compromised (prompt injection, malicious code), it cannot exfiltrate your credentials
 
 ### Credential Scoping
 
 - **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
-- **All your sandboxes:** Any sandbox you own can be granted your connected credentials.
+- **All your agents:** Any agent you own can be granted your connected credentials.
 
 ### Token Management
 
 | Type | Storage | Refresh |
 |------|---------|---------|
-| **OAuth** (GitHub, etc.) | Held by the gateway, never by your sandbox | Auto-refreshed for you |
-| **API Key** (Anthropic, etc.) | Held by the gateway, never by your sandbox | No expiry unless you rotate manually |
+| **OAuth** (GitHub, etc.) | Held by the gateway, never by your agent | Auto-refreshed for you |
+| **API Key** (Anthropic, etc.) | Held by the gateway, never by your agent | No expiry unless you rotate manually |
 
 ---
 
 ## Network Isolation
 
-Each sandbox is network-isolated by default and can only reach external services you explicitly permit.
+Each agent is network-isolated by default and can only reach external services you explicitly permit.
 
 ### How It Works
 
-Every sandbox has **all** outbound traffic blocked except to its own credential gateway, which is the sole exit point to the internet.
+Every agent has **all** outbound traffic blocked except to its own credential gateway, which is the sole exit point to the internet.
 
 This means:
 
-- A sandbox cannot reach arbitrary internet endpoints
+- An agent cannot reach arbitrary internet endpoints
 - All outbound requests are mediated by the credential gateway
 - New destinations require explicit approval (via [Network & Approvals](../core-concepts/network-access.md))
 
@@ -70,7 +70,7 @@ This means:
 
 - **Data exfiltration** — a compromised agent cannot send your code or data to arbitrary servers
 - **Unauthorized API calls** — the agent can't use services you haven't approved
-- **Lateral movement** — sandboxes are isolated from each other and from internal infrastructure
+- **Lateral movement** — agents are isolated from each other and from internal infrastructure
 
 ### The Approval Flow
 
@@ -79,7 +79,7 @@ When your agent tries to reach a service for the first time:
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
 3. If no rule exists, the request is **held** and you see an approval prompt — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded in your Inbox instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
-4. You decide: **Allow once** (releases just this call), **Always allow this request** (a lasting rule for that host/method/path), **Always allow this host** (a host-level rule), **Deny once**, or **Always deny this request**. **Customize…** opens the sandbox's **Sandbox Setup** section, where you can write the rule yourself.
+4. You decide: **Allow once** (releases just this call), **Always allow this request** (a lasting rule for that host/method/path), **Always allow this host** (a host-level rule), **Deny once**, or **Always deny this request**. **Customize…** opens the agent's **Agent Setup** section, where you can write the rule yourself.
 
 From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#approvals).
 
@@ -90,7 +90,7 @@ From the CLI the same choices are `dam approval approve` / `deny` — note that 
 Binding a conversation to an agent is what authorizes it. There is one access model, and it is the same on both messengers:
 
 1. The binding itself is the authorization — anyone the messenger admits to the conversation drives the agent, with no login and no allow-list
-2. Every turn runs on the sandbox under the **agent's own** credentials
+2. Every turn runs on the agent under the **agent's own** credentials
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 

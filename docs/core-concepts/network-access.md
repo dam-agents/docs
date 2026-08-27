@@ -1,30 +1,30 @@
 # Network Access & Approvals
 
-Sandboxes can only reach external services you explicitly allow. Everything else is blocked or requires your approval.
+Agents can only reach external services you explicitly allow. Everything else is blocked or requires your approval.
 
 ## Egress Rules
 
-Each sandbox has an allowlist of external services it can reach.
+Each agent has an allowlist of external services it can reach.
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| Host | Domain the sandbox can reach, matched exactly — a subdomain needs its own rule. Add `:port` for a service that isn't on 443 | `api.github.com`, `api.prod.example:6443` |
+| Host | Domain the agent can reach, matched exactly — a subdomain needs its own rule. Add `:port` for a service that isn't on 443 | `api.github.com`, `api.prod.example:6443` |
 | Method | HTTP method (defaults to `*`, meaning all) | `GET`, `POST` |
 | Path | URL path pattern (defaults to `*`) | `/repos/*` |
 | Verdict | `allow` or `deny`. The most specific rule wins, so a deny rule can carve an exception out of a broad allow | `allow` |
 
 !!! note "Narrowing a rule restarts the gateway"
-    A host-only rule is cheap. Adding a method, path, or port means the sandbox's network gateway has
+    A host-only rule is cheap. Adding a method, path, or port means the agent's network gateway has
     to inspect that host's traffic more closely, which restarts the gateway (**~5–15 seconds**) for
-    that **sandbox only**. The sandbox keeps running throughout — its outbound requests are briefly
+    that **agent only**. The agent keeps running throughout — its outbound requests are briefly
     interrupted. DAM asks you to confirm before saving such a rule. Removing the last narrowed rule
     for a host reverses it.
 
 ### How Rules Are Created
 
-1. **From connections** — granting GitHub to a sandbox allows `api.github.com`, `github.com`, and `raw.githubusercontent.com` there. Granting GitHub Enterprise allows the host you specify plus its `api.<host>`. Creating the connection under Settings writes no rules on its own; they arrive with the grant, and are withdrawn when you remove it.
+1. **From connections** — granting GitHub to an agent allows `api.github.com`, `github.com`, and `raw.githubusercontent.com` there. Granting GitHub Enterprise allows the host you specify plus its `api.<host>`. Creating the connection under Settings writes no rules on its own; they arrive with the grant, and are withdrawn when you remove it.
 2. **From approvals** — clicking "Allow permanently" on an approval prompt creates a rule
-3. **Manually** — add rules directly under **Network access** in the sandbox's **Sandbox Setup** section
+3. **Manually** — add rules directly under **Network access** in the agent's **Agent Setup** section
 
 ### Presets
 
@@ -41,7 +41,7 @@ from a connection, are left alone.
 
 ## Approvals
 
-When a sandbox tries to reach a service not in its allowlist:
+When an agent tries to reach a service not in its allowlist:
 
 1. The request is **held** (paused, not rejected)
 2. You see an approval prompt in the chat UI or Inbox
@@ -55,12 +55,12 @@ When a sandbox tries to reach a service not in its allowlist:
 | **Deny once** (**Dismiss** in the Inbox) | Blocks just this request; future requests prompt again |
 | **Always deny this request** (**Deny forever** in the Inbox) | Creates a lasting deny rule; this and every future matching request fail |
 
-**Customize…** opens the sandbox's **Sandbox Setup** section so you can write the rule yourself. Like
+**Customize…** opens the agent's **Agent Setup** section so you can write the rule yourself. Like
 *Always allow this host*, it's offered on network prompts only — a tool-call prompt has no host to
 write a rule for.
 
 If an equivalent rule already exists with the opposite verdict, the verdict is refused rather than
-resolved, and you're pointed at the sandbox's network rules to change it there.
+resolved, and you're pointed at the agent's network rules to change it there.
 
 !!! warning "From the CLI, the bare verb is durable"
     `dam approval approve <id>` **writes a permanent allow rule** for a network request — the
@@ -73,18 +73,18 @@ resolved, and you're pointed at the sandbox's network rules to change it there.
 If no one responds within **30 minutes** (your operator can change this), the request is automatically denied. The agent can retry or take an alternative approach.
 
 !!! note "A turn driven from Slack or Telegram isn't held"
-    Nobody in a channel conversation can answer an approval — the members aren't the sandbox's owner,
+    Nobody in a channel conversation can answer an approval — the members aren't the agent's owner,
     and the owner may not be around. So when the request comes from a channel turn and **no** chat,
     terminal, or SSH session is attached, it's refused straight away instead of waiting out the
     window. The agent is told to name the host and point at you rather than retry into the same wall.
 
     The request is still recorded, so it appears in your Inbox as usual and allowing it there
-    permanently writes the rule the sandbox picks up on its next attempt. If you *do* have a session
-    open on that sandbox, a channel turn holds and resolves normally.
+    permanently writes the rule the agent picks up on its next attempt. If you *do* have a session
+    open on that agent, a channel turn holds and resolves normally.
 
 !!! tip "If a prompt timed out"
     The original request has already failed, so **Allow once** no longer does anything. Choosing
-    **Always allow this request** still writes the rule, and the sandbox succeeds on its next attempt.
+    **Always allow this request** still writes the rule, and the agent succeeds on its next attempt.
 
 ### When things fail
 
@@ -98,7 +98,7 @@ The default is always deny:
 
 ## The Inbox
 
-The Inbox shows all pending approval requests across your sandboxes. Check it when a sandbox seems stuck — it may be waiting for your approval.
+The Inbox shows all pending approval requests across your agents. Check it when an agent seems stuck — it may be waiting for your approval.
 
 !!! note
     In the left sidebar it's the envelope icon, labelled **Inbox** — the badge on it counts pending

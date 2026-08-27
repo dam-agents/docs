@@ -1,6 +1,6 @@
-# How to Create a LiteLLM Key
+# Create your LiteLLM key
 
-DAM can use the **IBM LiteLLM ETE Proxy** as a model provider. To use it, you’ll need an API key from the **external** LiteLLM proxy.
+DAM can use the **IBM LiteLLM ETE Proxy** as a model provider. To use it, you'll need an API key from the **external** LiteLLM proxy.
 
 ## Before you start
 
@@ -11,7 +11,7 @@ Open the external LiteLLM proxy and sign in with your IBM SSO:
 You should see the **teams** you have access to.
 
 !!! note
-    If you are outside an IBM office, this proxy requires [TUNNEL ALL VPN](https://w3.ibm.com/#/support/article/troubleshoot_secure/cert_issues).
+    If you are outside an IBM office, this proxy requires **TUNNEL ALL VPN** — a stronger mode than the standard VPN DAM itself needs. You only need TUNNEL ALL for this key-creation step, not for using DAM day to day.
 
 ### If you already have a team
 
@@ -19,12 +19,10 @@ Great — you can use any team you already have access to. Go directly to Step 1
 
 ### If you don't have a team
 
-If you’re an IBM Research user, let us know when we follow up on your DAM access request or ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24). We can request you access to the team dedicated to DAM, called "rits-restricted-agentic".
+If you're an IBM Research user, let us know when we follow up on your DAM access request or ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24). We can request you access to the team dedicated to DAM, called "rits-restricted-agentic".
 
 !!! note
     Getting added to the DAM team requires an access request and may take a few days.
-
-If you're outside IBM Research, you'll need to use an existing team on the external proxy.
 
 ## Step 1: Open the External LiteLLM Proxy
 
@@ -54,16 +52,16 @@ The full key is shown **only once**, at creation time.
 
 The key looks like `sk-...`.
 
-## Step 4: Add the Key When You Create a Sandbox
+## Step 4: Add the Key When You Create an Agent
 
-In DAM, the model provider is configured as part of creating a sandbox.
+In DAM, the model provider is configured as part of creating an agent.
 
-1. Start creating a sandbox to reach the **Setup your sandbox** step
+1. Start creating an agent to reach the **Setup your coding agent** step
 2. In the provider list, select **IBM LiteLLM ETE Proxy**
 3. Paste your LiteLLM API key
-4. Continue setting up the sandbox
+4. Continue setting up the agent
 
-Once connected, the key is saved and reused — the next time you create a sandbox you can pick the same provider without pasting it again. You can manage your provider keys any time in DAM settings.
+Once connected, the key is saved and reused — the next time you create an agent you can pick the same provider without pasting it again. You can manage your provider keys any time in DAM settings.
 
 ## Models in the DAM team
 
@@ -87,7 +85,7 @@ azure/gpt-5.3-codex
 Prefer to watch? This covers the whole process end to end.
 
 <video controls preload="metadata" style="width: 100%; max-width: 880px; border-radius: 8px; margin: 1rem 0;">
-  <source src="../../assets/dam-litellm-key.mp4" type="video/mp4">
+  <source src="../assets/litellm-key.mp4" type="video/mp4">
   Your browser doesn't support embedded video.
-  <a href="../../assets/dam-litellm-key.mp4">Download the walkthrough</a> instead.
+  <a href="../assets/litellm-key.mp4">Download the walkthrough</a> instead.
 </video>

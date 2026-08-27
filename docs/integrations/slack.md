@@ -73,7 +73,7 @@ A bare `/dam` prints the usage help: `/dam bind`, `/dam unbind`, or `/dam ambien
     A Slack conversation binds to at most one agent. The reverse is **not** true: one agent can be
     connected to **several conversations at once** — channels, group DMs, and DMs in any mix — so the
     same workspace, memory, and skills are reachable from all of them without duplicating the
-    sandbox. `/dam bind` in an already-connected conversation is refused, even for the same agent;
+    agent. `/dam bind` in an already-connected conversation is refused, even for the same agent;
     run `/dam unbind` there first.
 
     Conversations never bleed into each other: threads and sessions belong to the conversation they
@@ -181,16 +181,16 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
   since nobody summoned it.
 - **The first message wakes a sleeping agent.** If it's hibernated, expect a delay of up to a
   minute or two. The initial heads-up is private to whoever sent the message; if the wake takes
-  longer or fails, that's posted in the thread for everyone. A **stopped** sandbox is different — it
+  longer or fails, that's posted in the thread for everyone. A **stopped** agent is different — it
   stays down, and the thread says so: someone has to start it from DAM, or wait for its next
   scheduled run.
-- **Every post is signed.** Under each message the agent posts, Slack shows the sandbox's name as a
-  link into DAM. One bot posts for every sandbox, so the name is how you tell them apart — but only
-  the sandbox's owner can follow the link and read the conversation there.
+- **Every post is signed.** Under each message the agent posts, Slack shows the agent's name as a
+  link into DAM. One bot posts for every agent, so the name is how you tell them apart — but only
+  the agent's owner can follow the link and read the conversation there.
 - **Agents can post first.** A bound agent can post on its own — results when a scheduled run
   finishes, or an alert.
 - **A blocked network request won't stall the turn.** Nobody in the channel can answer an approval, so
-  with no chat, terminal, or SSH session of your own open on the sandbox, the request is refused
+  with no chat, terminal, or SSH session of your own open on the agent, the request is refused
   straight away — and instead of going quiet, the agent tells you which host it needed. It's still
   recorded in your [Inbox](../core-concepts/network-access.md#approvals); allowing it there writes the
   rule the agent picks up on its next attempt. With a session of your own open, the request holds and
@@ -211,7 +211,7 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
 You can also connect a **channel** from the DAM UI or the CLI. DMs and group DMs bind in-chat with
 `/dam bind`.
 
-From the **UI**, open the sandbox and go to **Channels**. The Slack card lists the channels already
+From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
 connected — each with whether ambient is on — and **Connect channel** adds another by its channel id.
 A connected channel's **⋯** menu offers **Edit** (to flip ambient) and **Disconnect**. The channel
 itself can't be swapped for a different one: connect the channel you want and disconnect this one.

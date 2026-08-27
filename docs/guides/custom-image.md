@@ -1,6 +1,6 @@
 # Building a Custom Image
 
-A custom image is a layer you build on top of DAM's base platform image, giving your sandboxes access to your own tools, scripts, and environment. You build it, push it to a container registry, and point a sandbox at it by pasting the image address into the **Custom image** starting point of the create wizard.
+A custom image is a layer you build on top of DAM's base platform image, giving your agents access to your own tools, scripts, and environment. You build it, push it to a container registry, and point an agent at it by pasting the image address into the **Custom image** card when you create a coding agent.
 
 This guide is **agent-neutral**: the platform supports any agent — Claude Code, Codex, PI Agent, IBM Bob, or your own command-line program — and relies only on a small contract (covered in Step 3). The examples below use **Claude Code**.
 
@@ -48,7 +48,7 @@ The base image provides:
 - The **agent-runtime** process (the ACP server for chat, the terminal and SSH relays, the file
   service, and the runtime channel that delivers env, files, MCP entries, skills, and triggers)
 - Default harness scripts you'll override in Step 3
-- An SSH server, so [`dam ssh` and the editor modes](vs-code-zed-ssh.md) work — keep it if you want
+- An SSH server, so [`dam ssh` and the editor modes](../integrations/vs-code-zed-ssh.md) work — keep it if you want
   them; removing `openssh-server` disables SSH for the image
 - A non-root user (UID 65532)
 
@@ -235,26 +235,25 @@ Notes:
 - **Match the node architecture.** Most clusters run `linux/amd64`. Building on an Apple-silicon Mac without `--platform` produces an `arm64` image the cluster cannot run. To support both, use `docker buildx build --platform linux/amd64,linux/arm64 ... --push`.
 - **Use immutable tags** (`:0.1.0`, a git SHA) rather than `:latest`, so a re-push does not change what running agents pull.
 
-## Step 5 — Create a sandbox from your image
+## Step 5 — Create an agent from your image
 
-Open the create-sandbox wizard. On step 1, **Choose your starting point**, pick **Custom image**
-(tagged *Advanced*), then paste your full reference into the **Custom** card that appears under
-**Image address** and click **Continue**:
+Start creating a coding agent with **Create agent**. Instead of picking a listed harness, paste your
+full reference into the **Custom image** card (tagged *Advanced*):
 
 ```
 ghcr.io/<your-org>/my-agent:0.1.0
 ```
 
-On step 2, **Setup your sandbox**: give it a **Name**, pick a **Size**, choose a **Provider**, and
-set a **Network access** preset. Every sandbox needs a provider to power its model — the presets are
+On step 2, **Setup your agent**: give it a **Name**, pick a **Size**, choose a **Provider**, and
+set a **Network access** preset. Every agent needs a provider to power its model — the presets are
 **IBM LiteLLM ETE Proxy**, **Bob Shell**, **Anthropic**, and **OpenAI**. Match it to your agent: an
 OpenAI-compatible harness needs an OpenAI-compatible provider.
 
-On step 3, **Grant connections**, attach any credentials your agent needs, then click **Create sandbox**.
+On step 3, **Grant connections**, attach any credentials your agent needs, then click **Create agent**.
 If it calls an external service, that's where you attach the credential and allow its host — see
 [how to call an external service](external.md).
 
-No template registration, Helm edit, or platform redeploy is needed; the sandbox is created directly
+No template registration, Helm edit, or platform redeploy is needed; the agent is created directly
 from the image address.
 
 ### Private registries
@@ -263,12 +262,12 @@ You don't have to publish the image publicly. Under **Image address**, in the **
 **Private registry** and fill in **Server** (e.g. `ghcr.io`), **Username**, and **Password** — a PAT,
 robot account, or access token. All three or none.
 
-DAM stores these as a pull secret scoped to that one sandbox, used only by the cluster to fetch the
-image. The agent never sees it, and it's deleted with the sandbox.
+DAM stores these as a pull secret scoped to that one agent, used only by the cluster to fetch the
+image. The agent never sees it, and it's deleted with the agent.
 
 !!! note "Two things to know"
     Credentials are only checked when the image is pulled, so a wrong one shows up as an
-    image-pull failure on a sandbox that won't start — not as an error when you create it. And only
+    image-pull failure on an agent that won't start — not as an error when you create it. And only
     long-lived credentials work; dynamically minted registry tokens (such as AWS ECR's) aren't
     supported.
 

@@ -1,10 +1,10 @@
 # Artifacts
 
 An **artifact** is a finished output your agent publishes to keep — a report, a dashboard, a
-generated page, a data file. Unlike a file in the sandbox workspace, an artifact **outlives the
-sandbox that made it**: delete the sandbox and the artifact stays in your library.
+generated page, a data file. Unlike a file in the agent workspace, an artifact **outlives the
+agent that made it**: delete the agent and the artifact stays in your library.
 
-Artifacts are yours, not the sandbox's. The library is owner-scoped — you see your own.
+Artifacts are yours, not the agent's. The library is owner-scoped — you see your own.
 
 ## What an artifact can be
 
@@ -22,7 +22,7 @@ artifacts render and run, which is what makes a dashboard or an interactive repo
 aren't separate kinds, just things you author as HTML, JSX, or markdown.
 
 !!! note "Self-contained only"
-    A rendered artifact is a single file. Anything that exists only inside the sandbox — a companion
+    A rendered artifact is a single file. Anything that exists only inside the agent — a companion
     file, an installed package, a running server — won't exist for a viewer. Resources must be
     inlined or referenced by absolute public URL.
 
@@ -43,7 +43,7 @@ configuring first. Text content up to **2 MB** is sent inline; anything larger o
 directly, so big files never pass through the conversation.
 
 Agents can read the library back too — any artifact, at its current or a past version — so a report
-one sandbox published can be picked up by another without passing through the conversation.
+one agent published can be picked up by another without passing through the conversation.
 
 When an agent publishes something, it links it in chat — opening that link previews the artifact
 beside the conversation, so you can read a report or click through a dashboard without leaving the
@@ -52,7 +52,7 @@ session.
 You can also upload a file yourself with **Upload artifact**.
 
 Everything collects in the **Artifacts** destination, searchable by title and file name. Each
-sandbox also shows the artifacts it produced.
+agent also shows the artifacts it produced.
 
 An agent can only publish into its own owner's library, and attribution can't be spoofed.
 
@@ -94,7 +94,7 @@ Folders get a public page automatically once something inside them is shared —
 artifacts that are **themselves shared**. **Copy folder link** in the folder's **⋯** menu gives you
 the URL, and stays disabled until at least one artifact inside is public.
 
-Each artifact records **who published it** (which sandbox, or you if you uploaded it) and a **view
+Each artifact records **who published it** (which agent, or you if you uploaded it) and a **view
 count** of public renders. The count is a bare number — no viewer identity or timestamps — and
 in-app previews don't add to it.
 

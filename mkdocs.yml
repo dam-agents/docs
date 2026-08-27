@@ -62,34 +62,41 @@ markdown_extensions:
 docs_dir: docs
 site_dir: site
 
+# Kept in the repo but deliberately out of the nav. These two read as generic
+# "yet another coding tool" walkthroughs; retained for anyone holding a direct link.
+not_in_nav: |
+  guides/web-app-development.md
+  guides/broken-link-monitor.md
+  guides/external.md
+  guides/building-knowledge-bases.md
+  guides/run-experiments.md
+
 nav:
   - Getting Started:
-    - Welcome: index.md
+    - Welcome: getting-started/welcome.md
     - Quickstart: getting-started/quickstart.md
-  - Use Cases:
-    - Web App Development: use-cases/web-app-development.md
-    - Code Review: use-cases/code-review.md
-    - Broken Link Monitor: use-cases/broken-link-monitor.md
+    - DAM new user tour: getting-started/tour.md
+  - Guides:
+    - Automate PR review: guides/code-review.md
   - Core Concepts:
+    - The building blocks: core-concepts/building-blocks.md
     - Agents: core-concepts/agents.md
     - Sessions: core-concepts/sessions.md
     - Connections: core-concepts/connections.md
-    - Network & Approvals: core-concepts/network-access.md
+    - Network & approvals: core-concepts/network-access.md
     - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md
-    - File Manager: core-concepts/file-manager.md
+    - File manager: core-concepts/file-manager.md
     - Experiments: core-concepts/experiments.md
-    - Knowledge Bases: core-concepts/knowledge-bases.md
+    - Knowledge bases: core-concepts/knowledge-bases.md
     - Artifacts: core-concepts/artifacts.md
   - Integrations:
     - Slack: integrations/slack.md
     - Telegram: integrations/telegram.md
-    - VS Code/Zed (SSH): guides/vs-code-zed-ssh.md
-  - Guides:
-    - How to Create a LiteLLM Key: guides/litellm-key.md
-    - Building a Custom Image: guides/custom-image.md
-    - Calling an External Service: guides/external.md
+    - VS Code/Zed (SSH): integrations/vs-code-zed-ssh.md
   - Reference:
     - Architecture: reference/architecture.md
     - CLI: reference/cli.md
+    - Create your LiteLLM key: reference/litellm-key.md
+    - Building a custom image: guides/custom-image.md
     - Contact: reference/contact.md
