@@ -8,7 +8,7 @@ Connecting a Slack conversation to an agent lets you:
 
 - Talk to your agent from Slack instead of the DAM UI
 - Let a whole channel work with one agent — and reach the same agent from several conversations
-- Share screenshots and images the agent can actually read
+- Share screenshots, images, and files the agent can actually work with
 - Get proactive posts — results after a scheduled run, alerts when a long task finishes
 - Keep a persistent session per thread
 
@@ -56,11 +56,13 @@ The same command binds a group DM or a 1:1 DM with the bot; see
 | Command | What it does |
 |---------|--------------|
 | `/dam bind` | Connect one of your agents to this conversation |
-| `/dam unbind` | Release the binding — allowed for whoever bound it, or the agent's owner |
-| `/dam ambient on\|off` | Turn ambient mode on or off |
-| `/dam ambient` | Report whether ambient mode is currently on |
+| `/dam unbind [agent]` | Release a binding — allowed for whoever bound it, or the agent's owner |
+| `/dam default [agent]` | Make an agent the one that unnamed mentions reach — the agent's owner only |
+| `/dam ambient [agent] on\|off` | Turn ambient mode on or off for one agent |
+| `/dam ambient [agent]` | Report whether ambient mode is currently on |
 
-A bare `/dam` prints the usage help: `/dam bind`, `/dam unbind`, or `/dam ambient on|off`.
+The agent name is needed only where more than one is connected in the conversation. A bare `/dam`
+prints the usage help.
 
 !!! note "When `/dam login` is required"
     Talking to the agent never needs a linked account. Linking only authorizes the *management*
@@ -69,12 +71,14 @@ A bare `/dam` prints the usage help: `/dam bind`, `/dam unbind`, or `/dam ambien
     were never linked**, and those two commands will ask you to run `/dam login` first.
     Reading the current state with a bare `/dam ambient` never needs a link. `/dam logout` unlinks.
 
-!!! info "One conversation, one agent — but an agent can hold several"
-    A Slack conversation binds to at most one agent. The reverse is **not** true: one agent can be
-    connected to **several conversations at once** — channels, group DMs, and DMs in any mix — so the
-    same workspace, memory, and skills are reachable from all of them without duplicating the
-    agent. `/dam bind` in an already-connected conversation is refused, even for the same agent;
-    run `/dam unbind` there first.
+!!! info "Bindings are many-to-many"
+    One agent can be connected to **several conversations at once** — channels, group DMs, and DMs in
+    any mix — so the same workspace, memory, and skills are reachable from all of them without
+    duplicating the agent. And a **conversation can hold several agents**: running `/dam bind` where
+    one is already connected *adds* to it rather than replacing it, and Slack tells you who's already
+    there before you confirm. See [Several agents in one conversation](#several-agents-in-one-conversation).
+
+    The only bind that's refused is the **same agent twice** in the same conversation.
 
     Conversations never bleed into each other: threads and sessions belong to the conversation they
     happened in, so a reply can't surface in another one. `/dam unbind` releases only the
@@ -98,6 +102,43 @@ Mentioning or DMing an **unbound** conversation gets you a private, sender-only 
 group DM it points you at `/dam bind`; in a channel it just says no agent is connected. A plain,
 un-addressed channel message gets no notice at all.
 
+## Several agents in one conversation
+
+A conversation with **one** agent behaves exactly as described above — everything in this section only
+starts to matter once you `/dam bind` a second one.
+
+**Reaching a specific agent.** Start your message with its name, right after the bot mention:
+
+```
+@dam Ops deploy the staging branch
+```
+
+Matching is case-insensitive and ignores extra spacing, and the name has to come first. Anything else
+— a bare `@dam` with no name, a name that isn't connected here, or a name two connected agents both
+answer to — goes to the conversation's **default agent** instead, which is quietly the common case: it
+means a channel keeps working even when nobody remembers the roster. An agent handed an ambiguous name
+is told as much and will say so rather than guess.
+
+**The default agent** is whichever was connected first. Change it with `/dam default <agent>` —
+allowed for that agent's owner only, since the default absorbs every unnamed mention. A conversation
+can also end up with *no* default: disconnecting the default doesn't promote a replacement, and until
+someone runs `/dam default`, an unnamed mention reaches nobody and says so.
+
+!!! note "Slash commands are stricter than mentions"
+    `/dam unbind`, `/dam ambient`, and `/dam default` need the name to match a connected agent
+    exactly, and refuse rather than falling back to the default — so a management command never acts
+    on an agent you didn't mean.
+
+**Reading along.** [Ambient mode](#ambient-mode) is per agent, so you can have one agent following the
+channel while others stay mentions-only. Where several are ambient, they take a message **one at a
+time** rather than all at once, and each later one can see what the earlier ones already posted — so
+they don't pile three answers onto the same question. The order isn't fixed, beyond the default going
+first.
+
+**Handing a message over.** An agent that judges a teammate better placed to answer can pass the
+message to it, and that agent replies in the thread itself. A handed-over message can't be handed on
+again, and attachments don't travel with it — the receiving agent gets the text.
+
 ## Ambient mode
 
 Normally the agent only answers when tagged. In **ambient mode** it reads along with the whole
@@ -114,12 +155,19 @@ ambient agent reads *every* message in the channel, not just the ones aimed at i
 /dam ambient         # report the current state
 ```
 
+Where several agents are connected, name the one you mean — `/dam ambient Ops on`. Ambient is set per
+agent, so turning it on for one leaves the others mentions-only.
+
 Changing it is allowed for whoever bound the channel, or the agent's owner — the same permission
 as `/dam unbind`, and like `unbind` it needs your account
 [linked](#connect-a-channel-dam-bind). It can be flipped any time, with no reconnect needed.
 
 What to expect when it's on:
 
+- **Dropping the `@` still reaches it.** People rarely tag a bot mid-conversation, so an ambient
+  agent treats a message that simply calls it by name — *DAM*, *dam*, or the agent's own name — as
+  addressed to it, and answers as it would a mention. That only applies while ambient is on: in a
+  mentions-only channel a typed name is never delivered at all, so nothing is quietly missed.
 - **It's asked to open with an emoji reaction** when it picks a message up — a quiet signal that
   notifies nobody. That's the agent's own judgement rather than an automatic acknowledgement, so
   a missing reaction doesn't reliably mean it passed on the message.
@@ -130,35 +178,42 @@ What to expect when it's on:
 - **The change isn't announced in the channel.** Whoever flips it sees the confirmation privately;
   other members get no status post either way.
 - **Nothing is ever posted about attachment problems.** Ambient turns stay out of the channel's
-  way, so an oversized or unfetchable image is dropped silently and the agent answers on the text.
+  way: an attachment that couldn't be used is reported to the agent but never to the channel.
 
 !!! tip "Tell the channel"
     Since ambient isn't announced, let the channel know when you enable it — people generally
     want to know an agent is reading along.
 
-## Sharing images and screenshots
+## Sharing images and files
 
-Paste or drop an **image** into a message and the agent reads it directly — screenshots of a
-failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns alike.
+Paste or drop an attachment into a message and the agent gets it — a screenshot of a failing UI, a
+diagram, a CSV to analyse, a PDF to summarise. It works on mentions, DMs, and ambient turns alike.
+Images and other files travel by different routes, so they have separate rules.
 
-- **Images only.** Non-image attachments (PDFs, CSVs, logs, `.txt`) are **ignored**, with no
-  notice in the channel — the message relays as ordinary text. If you need the contents of a
-  document, paste the relevant text into the message instead.
+**Images** are read directly, in the message itself:
+
 - **PNG, JPEG, GIF, and WebP.** Another picture format — an HEIC photo straight off a phone, an
-  SVG, a BMP — gets you a private note naming it, and the agent is told an attachment was withheld
-  rather than left to guess at it.
-- **Up to 30 MB of images per message.** Go over on a mention or DM and the **whole message is
-  dropped** — the agent never sees your text either — and you get a private note asking for fewer
-  or smaller images.
-- If an individual image can't be fetched, you get a private note naming it, and the agent still
-  gets your text plus whichever images did load.
-- If the agent's harness doesn't support images at all, you get a private note and it answers on
-  the text alone.
+  SVG, a BMP — is withheld, and the agent is told an attachment was withheld rather than left to
+  guess at its contents.
+- **Up to 30 MB of images per message.** Go over and the images are left out — your text still goes
+  through, and the agent is told what it didn't get.
 
-!!! note "On ambient turns, nothing is reported"
-    The notes above are for mentions and DMs. On an [ambient](#ambient-mode) turn nothing is ever
-    posted about attachments — over-cap or unfetchable images are dropped silently and the agent
-    answers on the text.
+**Everything else** is saved into the agent's workspace and handed over as a file path, so the agent
+can open it with ordinary tools rather than having to read it as a picture:
+
+- **Up to 20 MB per file, and 20 MB per message.** Over either and the file is left out with a
+  reason; send them a few at a time.
+- The agent is given each file's name and where it landed. A document too dull to read as an image —
+  a log, a spreadsheet export, a PDF — is now something it can actually work with.
+
+For either kind, a file that can't be fetched is named and left out, and the agent gets your text plus
+whatever did load. Nothing is guessed at: an attachment that didn't make it is reported to the agent as
+withheld, along with why.
+
+!!! note "Withheld notes are private, and ambient turns get none"
+    On a mention or DM you get a private, sender-only note naming anything that was left out. On an
+    [ambient](#ambient-mode) turn nothing is posted in the channel either way — the agent is still told
+    what was withheld, but the channel stays quiet.
 
 ## How sessions work
 
@@ -184,15 +239,17 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
   longer or fails, that's posted in the thread for everyone. A **stopped** agent is different — it
   stays down, and the thread says so: someone has to start it from DAM, or wait for its next
   scheduled run.
-- **Every post is signed.** Under each message the agent posts, Slack shows the agent's name as a
-  link into DAM. One bot posts for every agent, so the name is how you tell them apart — but only
-  the agent's owner can follow the link and read the conversation there.
+- **Every post is signed.** Under each message the agent posts, Slack shows *<agent name> - Powered
+  by DAM* as a link. One bot posts for every agent, so the name is how you tell them apart. Anyone
+  can follow the link — it lands on the agent's public page, described below, not in the
+  conversation; from there someone with a DAM account can **Open in DAM** to reach the thread's
+  session itself.
 - **Agents can post first.** A bound agent can post on its own — results when a scheduled run
   finishes, or an alert.
 - **A blocked network request won't stall the turn.** Nobody in the channel can answer an approval, so
   with no chat, terminal, or SSH session of your own open on the agent, the request is refused
   straight away — and instead of going quiet, the agent tells you which host it needed. It's still
-  recorded in your [Inbox](../core-concepts/network-access.md#approvals); allowing it there writes the
+  recorded on [Home](../core-concepts/network-access.md#where-approvals-appear); allowing it there writes the
   rule the agent picks up on its next attempt. With a session of your own open, the request holds and
   resolves as usual.
 
@@ -206,13 +263,34 @@ failing UI, a diagram, a chart. It works on mentions, DMs, and ambient turns ali
     An agent can also open a DM with someone, but that DM isn't bound by the post — for their
     replies to reach the agent, the DM needs its own `/dam bind`.
 
+## The agent's public page
+
+For most people in a shared channel, that signature link is the first bit of DAM they ever open — and
+they may not have an account. So it goes to a **page that needs no login**, naming the agent, showing
+who created it, and explaining that this agent is worked with by mentioning the bot in Slack.
+Underneath, it invites the reader to create their own agent; if they already have an account,
+**Open in DAM** takes them into the conversation instead.
+
+The page names an agent only while that agent is **connected to at least one channel** — which every
+agent posting in Slack is. Anything else shows the same generic introduction to the platform: an
+agent nobody has connected to a channel, an address that was never an agent, one that has since been
+deleted. That is deliberate, and it means the page is **not** a way to find out whether an agent
+exists or to check who may open it — those two states aren't a permission check, and the page can't
+tell an owner from a stranger.
+
+!!! note "Disconnecting a channel un-names past links"
+    Because naming follows the agent's current channels, releasing the last one turns every
+    signature link the agent ever posted — going back through the channel's history — into the
+    generic page. The links keep working; they just stop naming the agent.
+
 ## Other ways to bind
 
 You can also connect a **channel** from the DAM UI or the CLI. DMs and group DMs bind in-chat with
 `/dam bind`.
 
 From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
-connected — each with whether ambient is on — and **Connect channel** adds another by its channel id.
+connected — each with whether ambient is on, and a **Default** badge where this agent is the one
+unnamed mentions reach — and **Connect channel** adds another by its channel id.
 A connected channel's **⋯** menu offers **Edit** (to flip ambient) and **Disconnect**. The channel
 itself can't be swapped for a different one: connect the channel you want and disconnect this one.
 
@@ -229,8 +307,10 @@ dam channel slack connect <agent> --channel-id <C0…> --ambient    # ambient on
 
 Re-running `connect` for the **same** agent and channel updates that binding in place — which is how
 you change ambient mode from the CLI, with no disconnect needed. Connecting a *further* channel to the
-same agent adds a binding rather than replacing one. Pointing a channel that's already bound at a
-*different* agent is refused until that binding is released.
+same agent adds a binding rather than replacing one, and so does connecting a *different* agent to a
+channel that already has one — see
+[several agents in one conversation](#several-agents-in-one-conversation). There's no `default`
+command in the CLI; that's set in-chat with `/dam default`.
 
 Because an agent can hold several channels, `disconnect` needs to know which one to release:
 
@@ -250,11 +330,14 @@ already in.
 |---------|----------|
 | Bot doesn't respond in a channel | Make sure you **`@mention`** it, and that the conversation is bound (`/dam bind`) |
 | "This conversation isn't connected" / "No instance connected to this channel" | Run `/dam bind` to connect one of your agents |
-| Binding refused as already connected | The conversation is already bound. `/dam unbind` first |
+| Binding refused as already connected | That **same** agent is already connected here — binding a *different* one is allowed and adds it |
+| A mention with no name reached nobody | The conversation has no [default agent](#several-agents-in-one-conversation) — its owner can set one with `/dam default <agent>` |
+| The wrong agent answered | Start the message with the agent's name; an unknown or ambiguous name falls back to the default |
 | "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
-| An attached file was ignored | Only images are read. Paste document contents as text instead |
-| "Attached images total … over the cap" | 30 MB of images per message — send fewer or smaller |
+| An attached file was ignored | You'll have had a private note saying why — usually over a size cap, or a picture format the agent can't read |
+| "they total … over the 30 MB of images" | 30 MB of images per message — send fewer or smaller |
+| "the files on this message add up to more than …" | 20 MB of files per message — send them a few at a time |
 | Slow first reply | It's likely waking from hibernation — up to a minute or two |
 | It answered without the image | The agent's harness may not support images; you'll have had a private note |

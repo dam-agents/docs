@@ -34,10 +34,11 @@ Everything below is how you get an agent to do that.
 ## Set it up
 
 1. From **Knowledge bases**, click **Create knowledge base**.
-2. Choose a template (below), and name it something you'll recognize in a Slack picker (`strategy`,
-   not `kb-1`).
-3. Leave network access on **Trusted defaults** — the template downloads its toolkit at setup, and
-   you'll grant specific hosts as you add sources.
+2. Name it something you'll recognize in a Slack picker (`strategy`, not `kb-1`), and choose a
+   template (below).
+3. Click **Create knowledge base**. It starts on **Trusted defaults** for network access — the right
+   setting here, since the template downloads its toolkit at setup and you'll grant specific hosts as
+   you add sources.
 4. Open it once created. It greets you and explains how to feed it.
 
 ### Choosing a template

@@ -17,9 +17,22 @@ group a skill is in decides what you can do with it, so this is the first thing 
 
 The rest of this page takes them in that order.
 
-The panel is read-only while your agent is stopped. What you see then is the list as it stood the
-last time it ran, dated in the notice at the top; start the agent for the live list and to make
-changes. Click any skill's name to read its instructions in the panel.
+A **search box** at the top of the panel searches every connected source at once, and the line beneath
+it counts what you have — *12 skills · 3 connected sources · 5 on* — or how many match while you're
+searching.
+
+The panel is read-only unless the agent is **running** — a stopped, paused, restarting or unreachable
+agent all show the same read-only view, with a **Start agent** button. What you see then is **Skills at
+next start**: a count and the skill names as they stood the last time it ran, each row noting when it
+was recorded. Search, bulk actions, and the per-skill toggles are left out rather than greyed out.
+Sources stay editable throughout — only *reading* a private source's contents needs the agent up.
+
+An agent that has **never run** has nothing recorded at all, and says so: skills are resolved when it
+starts, so the page fills in after the first start.
+
+Click any skill's name to read its instructions — it opens in a dialog over the panel. For a skill you
+authored here or one that came with the image, the instructions live in the agent's own workspace, so
+the name is inert until the agent is up.
 
 ## Created in this agent
 
@@ -36,6 +49,7 @@ Two ways to make your own:
 
 Either way it lands under **Created in this agent**. Each one's **⋯** menu offers:
 
+- **Preview SKILL.md** — read the instructions without leaving the panel.
 - **Download skill** — a single-file skill comes down as one `.md` file, ready to re-upload as-is;
   anything with extra files comes down as a `.zip` of the skill's folder.
 - **Delete skill** — removes it from this agent.
@@ -68,6 +82,9 @@ Once a skill shows **Published**, its **⋯** menu offers **Track from &lt;sourc
 skill over to that source, so it becomes an installed skill that follows the source from then on and
 gets the usual update prompts when the source moves. It **overwrites your local copy** (you'll be
 asked to confirm, and warned if yours has diverged), and it's one-way.
+
+The item can appear **disabled**, with a note saying the source hasn't been scanned yet — tracking
+needs to know which version upstream now holds. **Re-scan** the source and it becomes available.
 
 Publishing shares a skill; it doesn't move it. Deleting a skill you published doesn't withdraw its
 pull request — follow the link if you want to close it yourself.
@@ -106,6 +123,13 @@ scanned version, or follow the compare link beside it to see what changed upstre
 To remove one of these, turn it off in its source card — the **Delete skill** action is only for
 skills you created here.
 
+!!! note "A download that fails says so"
+    Turning a skill on records your choice; fetching it into the agent happens just after. If that
+    fetch can't be done — the repo has moved, the credential no longer reaches it — the agent carries
+    a warning badge, in the agents list and beside its name in chat, and hovering it names what
+    failed. So a skill that's toggled on but never turns up isn't a silent gap: check the agent for
+    that badge.
+
 ### Which sources you have
 
 | Source | Can you remove it? |
@@ -114,14 +138,39 @@ skills you created here.
 | Declared by your agent's template | No |
 | A git repo you added yourself | Yes |
 
-Each source card's header shows how many of its skills are on and when the list was last scanned. A
-source with skills already installed opens showing just those; **Expand all** reveals the rest.
+Each source card's header shows how many of its skills are on and when the list was last scanned, with
+a re-scan button beside it. A source that has **some** on and some not opens collapsed to just the ones
+that are on; **Show N more available** reveals the rest. A source where everything is on — or nothing
+is — opens showing its full list with no collapse control.
+
+**Enable all** / **Disable all** on a source card flips every skill in it at once. With a search
+active, the button narrows to the matches instead — *Enable 4 matching*.
+
+!!! note "The scan time hides while a source is broken"
+    A source that can't be read shows its error in place of the *scanned …* label, so there's no
+    freshness to read off a failing card. Fix the cause — usually a missing GitHub connection — then
+    **Re-scan**.
 
 Each source card's **⋯** menu holds **Re-scan** (re-read the repo now — the card shows when its list
 was last scanned), **View repo**, and, for a source you added, **Remove source**.
 
 If you add your own source pointing at a repo the platform already provides, yours takes over the
 listing; remove yours and the platform entry reappears.
+
+### Reusing a selection across agents — skill sets
+
+Once you've got an agent's skills the way you want them, **Save as skill set…** names that selection and
+keeps it for reuse. **Add skill sets…** on any other agent turns a saved set's skills on there.
+
+- The set records skills **by name and source**, not by content — adding it elsewhere installs from the
+  same sources, so the other agent needs those sources connected. A set lists how many of its skills
+  aren't reachable before you apply it.
+- Only skills from a connected source can go in a set. A skill you authored here or one shipped with
+  the image has nowhere to install from, so it's left out.
+- Adding a set is **additive**: its skills turn on alongside what's already there, overlap is fine, and
+  nothing gets turned off. Pick several sets at once and you're told how many new skills that comes to.
+- Saving starts from what's currently on, and you can unmark anything you don't want in the set.
+- Sets are yours, not the agent's — delete one from the **Add skill sets…** dialog.
 
 ### Where skills live in a source repo
 
@@ -137,8 +186,13 @@ to the repo's top-level directories. When the same skill `name` appears under mo
 first match wins and the later duplicate is dropped.
 
 If you point a source at a specific **subdirectory** when you add it, only that directory is scanned
-and the roots above are skipped. Changing the subdirectory means removing the source and adding it
-again.
+and the roots above are skipped — the dialog says as much under the field: *Leave empty to search the
+usual locations.* Changing the subdirectory means removing the source and adding it again.
+
+A subdirectory that doesn't pay off **fails by name** rather than quietly listing nothing: the card
+tells you whether the path isn't a directory in the repo at all, or is one but holds no skill — naming
+the path, and the commit it looked at. Skills are found **one level below** the path you give, so
+pointing at an individual skill's own folder finds nothing.
 
 !!! tip "Your agent can manage skills itself"
     Beyond the panel, the agent has built-in tools to discover and install skills mid-task — list

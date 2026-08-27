@@ -13,12 +13,22 @@ and no harness involvement — just a login shell. See the
 Open your agent in the DAM UI and type a message. A new session is created automatically.
 
 - **Resume** — click any previous session in the sidebar to continue
-- **New chat session** — from the **New** menu; starts fresh conversation context (workspace files
+- **New chat session** — **New** in the sidebar; starts fresh conversation context (workspace files
   are unchanged)
-- **History** — scroll up to see full conversation including tool calls and file changes
+- **History** — scroll up to see the conversation including tool calls and file changes. A session
+  opens on its most recent stretch and loads older parts as you scroll back
 - **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
 
 Sessions live with the agent's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
+
+A chat session has its **own URL**, so the browser's back and forward buttons move between the sessions
+you've opened, and a link to one can be bookmarked or shared with anyone who can open that agent.
+Terminal sessions aren't addressed this way — the URL stays on the agent.
+
+If a link can't be opened, the conversation says which case it is rather than failing blankly: it may
+have been deleted or belong to someone else; the agent may still list it while no longer holding its
+history, in which case **Delete this session** clears the leftover entry; or the agent simply didn't
+answer, which **Try again** retries once it's awake.
 
 The sessions list is ordered by last activity. A **chat** session tracks the time of its most recent message, and that timestamp is what the list sorts and displays by — not the underlying harness file's modification time. A **terminal** session records no message activity, so its timestamp is the harness file's modification time, which a restart or a redrawing full-screen program can bump without you having typed anything. (Terminal sessions carry no unread state at all either — a terminal row never goes bold, however long you leave it.)
 
@@ -30,22 +40,43 @@ working on their own:
 | Indicator | Meaning |
 |-----------|---------|
 | Animated dots | Busy. On a chat session, the agent is working the turn; on a terminal session, the program in it produced output in the last second or so. |
+| Slower green dots | The agent has **background work** running in that session — something it kicked off and left going between turns. Hover for what's running. |
 | Solid dot ("Needs your approval") | Blocked waiting for you to approve an action. Takes priority over working. |
 | Bold title | Unread — activity since you last opened it (chat sessions only). |
+| Pencil icon | You have an unsent **draft** in that session. |
 | Terminal icon | A terminal (PTY) session, which has no agent turn of its own. |
 | Clock icon | A session created by a schedule. |
-| `#` icon | A channel (Slack/Telegram) session; a superscript **A** marks a channel's ambient reader. |
+| `#` icon | A channel (Slack/Telegram) session; a superscript **A** marks a channel's ambient reader — Slack only. |
+
+A session with no title yet shows `(no title · <id>)` in muted italics, and stays that way however
+much unread activity it has — the bold-for-unread styling needs a title.
 
 If the agent asks permission for a tool call and **no session is attached** to receive the prompt, the
 request expires after ten minutes and the agent is told it failed, so the tool call aborts cleanly.
 That's separate from the longer window on
-[network approvals](network-access.md#approvals), which wait for you in the Inbox until that window
+[network approvals](network-access.md#approvals), which wait for you on Home until that window
 runs out and are then denied.
 
 An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over
 **Chats**, **Experiment runs**, **Scheduled**, **Channels**, and **Terminal** (all on by default),
-and a **New** menu offering a new chat or terminal session. Deleting a session is in its row menu,
-behind a confirm.
+and **New**, which opens a chat session straight away — a terminal starts from the launch options
+beside the message box (see [Terminal Sessions](#terminal-sessions)). **Delete session** is in a
+session's row menu, behind a confirm — right-clicking or long-pressing the row offers the same item.
+
+!!! note "Sending while the agent is busy"
+    A message sent mid-turn is queued and delivered when the current turn finishes, so you don't have
+    to wait. The queue is bounded — past about thirty queued messages on one session, further sends
+    are refused rather than piling up.
+
+!!! tip "Drafts stay with their session"
+    A half-written message is kept with the session you wrote it for, so switching sessions — or
+    closing the tab — doesn't lose it. Anything you'd **attached** doesn't survive a reload: the draft
+    comes back as text, with a note naming the attachments you'll need to add again.
+
+An agent's **background work** — a long build, a batch job it started and left running — keeps showing
+in the header and on the session row while it runs, and the result arrives in the session as usual when
+it finishes. The indicator only updates while you have the chat open on a running agent, so it isn't a
+monitor to watch; it's there so a session between turns doesn't look dead.
 
 ### Environment variables
 
@@ -57,11 +88,26 @@ Whether a turn already in flight is disturbed depends on what you changed. **Add
 
 The **Model** settings panel sets per-agent harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with.
 
-The panel lives on the agent's home page, under **Agent Setup**; chat shows the model in use and a gear that opens that page. Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them. While the agent is asleep the panel is read-only, showing the last-known values with a **Start agent to edit** action.
+The panel lives on the agent's home page, under **Agent Setup**. Chat names the model in use under the
+composer; click it and a **Current model** note says which model this agent is using and where to change
+it, with **Configure model** to go straight there — so you can check without leaving the conversation.
+While the agent is waiting on a permission prompt, chat hides the model line until you've answered.
+
+Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them.
+
+Every setting also offers **Default** — *determined by harness settings* — which is what it reads when
+you haven't chosen anything, and what to pick to hand a choice back to the harness. Changing the model
+clears any companion setting the new model doesn't support, rather than leaving an invalid pair in
+place.
+
+While the agent is asleep the panel is read-only, with a **Start agent to edit** action. What it shows then depends on what's on record: normally the last-known values, but an agent that has **never run** has nothing to show at all and says so — settings are resolved when it starts, so the page fills in after the first start.
 
 ## Terminal Sessions
 
-Terminal sessions give you PTY-based shell access to the agent's environment — the same interactive TUI you'd get running the harness locally.
+Terminal sessions give you PTY-based shell access to the agent's environment — the same interactive TUI
+you'd get running the harness locally. Start one with **Terminal (browser)**, beside the message box on
+a session you haven't sent anything in yet — alongside **Terminal (local)** and
+**VS Code / Zed (local)**, which hand you a copyable command for your own machine instead.
 
 Use terminal for:
 

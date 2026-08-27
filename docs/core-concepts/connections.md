@@ -43,9 +43,20 @@ repos, use the row's **Install on GitHub** link to install the app on the organi
 choosing which of its repositories DAM may read and write. That's done once per organization, and if
 you don't own the org an owner has to approve or complete it.
 
+!!! note "No Install on GitHub link?"
+    The link needs two things: the connection has to be **active** (one still waiting on authorization
+    offers **Authorize** in its **⋯** menu instead), and your operator has to have registered DAM as a
+    GitHub *App* rather than a plain OAuth app. Where they haven't, there's no app to install and the
+    link never appears — use the **Personal access token** path for private repos instead, and ask your
+    operator if you need the app route.
+
 Once that's in place, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
 
 When you sign in with **GitHub.com**, commits the agent makes are attributed to that account — DAM writes your GitHub display name and email into the agent's git config (`user.name` / `user.email`). If your GitHub profile email is private, a `users.noreply.github.com` address is used instead, so your primary email never lands in commit history. Other GitHub connection types, including GitHub Enterprise, don't set this — configure git yourself there.
+
+That write is a convenience, not a guarantee: if GitHub doesn't answer when the connection is made, the
+connection still succeeds and the git config is simply left alone. If commits come out attributed to the
+pod's default identity rather than yours, set `user.name` and `user.email` in the agent yourself.
 
 ## API Key Connections
 
@@ -55,6 +66,21 @@ For services that use a static API key rather than OAuth, connect a prebuilt tem
 2. Fill in the fields the service asks for — the key, plus anything else on the form (Modal also wants its **Token ID**) — and click **Create**
 
 Model providers aren't here — they live on the **Providers** tab (see above).
+
+### Slack
+
+A **Slack** card in the catalogue's **Apps** tab connects your own Slack account, so the agent can
+search, read, post, and react in Slack as you. It's backed by Slack's own MCP server, so it arrives as
+a set of tools the agent calls.
+
+!!! note "This is not how you connect a channel"
+    Connecting Slack here lets an agent *act in* Slack under **your** account. Letting a Slack channel
+    *talk to* an agent is a different thing entirely — that's a binding, and it's covered in
+    [Slack](../integrations/slack.md). You can have either without the other.
+
+Unless your operator registered a Slack app for everyone, you supply an OAuth client id and secret from
+your own app. Enable the user-token scopes the tools need **before** authorizing: a scope you miss shows
+up later as a Slack call that fails, not as an error when you connect.
 
 ### Kubernetes / OpenShift
 
@@ -79,13 +105,20 @@ does, the button becomes **Create + Authorize** and walks you through the server
 
 ## Managing Connections
 
-- **View** — the Connections panel lists everything you've connected, grouped by service.
-- **Remove from one agent** — a connection's **⋯** menu → **Remove from this agent** revokes it there and leaves it available elsewhere.
+- **View** — **Settings → Connections** lists everything you've connected, grouped by service. Each
+  agent has its own **Connections** panel listing just what's been granted to it.
+- **Remove from one agent** — in the **agent's own** Connections panel, a connection's **⋯** menu →
+  **Remove from this agent** revokes it there and leaves it available elsewhere. That item is about the
+  grant, so it only appears where there is one — you won't find it under Settings.
 - **Delete everywhere** — **⋯** → **Delete this connection** removes it for every agent. DAM confirms first and lists the agents that will lose it.
 - **Per-user** — your connections are yours alone, never shared with teammates.
 - **Granted per agent** — a connection you own reaches an agent only once you grant it there. Connect once under Settings, then grant it to each agent that should use it.
 - **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place rather than disconnecting and reconnecting: the connection's **⋯** menu → **Update credential**, or `dam connection update`. The connection keeps its name and all its agent grants, and nothing restarts. OAuth connections refresh themselves through their own flow and need no rotation.
-- **Re-authenticating** — a connection whose credential stopped working shows **Expired**, with a one-click **Re-authenticate** button on the row. It re-runs login and consent and replaces only the tokens: the connection keeps its name and every agent grant. `dam connection reauth` does the same from the CLI.
+- **Re-authenticating** — an OAuth connection whose credential stopped working shows **Expired**, with a
+  one-click **Re-authenticate** button on the row. It re-runs login and consent and replaces only the
+  tokens: the connection keeps its name and every agent grant. `dam connection reauth` does the same from
+  the CLI. **Re-authenticate** is the OAuth repair — an expired API-key or custom-header connection
+  offers **Update credential** on the row instead, since there's no login to re-run.
 
 ## Security
 

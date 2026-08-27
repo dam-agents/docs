@@ -80,11 +80,11 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Network Access
 
-**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears in your inbox for them.
+**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears on Home for them.
 
 ## Setup
 
-1. **Create a Claude Code agent** — click **Create agent** and pick the **Claude Code** harness in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
+1. **Create a Claude Code agent** — open **Coding agents** → **Create coding agent** and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM ETE Proxy or Anthropic with your API key
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
 4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the agent's **Agent Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
@@ -102,11 +102,15 @@ https://github.com/dam-agents/code-guardian/blob/main/ONBOARDING.md
 
 Onboarding is a short **interactive dialog** — the agent checks out its own definition (derived from the URL you send, so forks stay pinned to the fork), wires up the `work/` directory, and asks a handful of configuration questions: the display name it signs reviews with, the dedup-marker prefix, which review skills to run (defaults offered, each skill with its own source repo), whether to enable Slack notifications (and if so, it imports your team into the reviewer roster), and the review cadence (default **every 10 minutes**). Everything lands in `work/CONFIG.md`; it then reconstructs review state, creates its recurring schedules (the review heartbeat, plus a Slack nudge sweep and a weekly audit where those apply), writes the `$HOME/.code-guardian-onboarded` sentinel, and finishes with a summary of what it configured and how to use it day-to-day.
 
-!!! note "Its schedules run in UTC"
+!!! note "Its schedules run in UTC, and you change them by asking"
     The agent creates its schedules as cron expressions, and cron schedules run in **UTC** — so a
     weekly audit or a workday-windowed sweep won't follow your local clock. To get local wall-clock
-    times (and quiet hours), open the agent's **Schedules** section and re-create the schedule with a
-    frequency and timezone. See [Schedules](../core-concepts/schedules.md).
+    times (and quiet hours), you want a schedule with a frequency and timezone instead.
+
+    A schedule the agent created isn't editable in the UI, though: because the agent owns it, its
+    **Schedules** section says so and points you back to chat. So **ask the agent** to change when it
+    runs — that's the intended route, and it can delete and recreate the schedule itself. See
+    [Schedules](../core-concepts/schedules.md).
 
 !!! tip "Files live in `work/`, not a subfolder"
     The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh agent rather than moving files by hand.

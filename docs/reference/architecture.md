@@ -78,8 +78,8 @@ When your agent tries to reach a service for the first time:
 
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
-3. If no rule exists, the request is **held** and you see an approval prompt — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded in your Inbox instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
-4. You decide: **Allow once** (releases just this call), **Always allow this request** (a lasting rule for that host/method/path), **Always allow this host** (a host-level rule), **Deny once**, or **Always deny this request**. **Customize…** opens the agent's **Agent Setup** section, where you can write the rule yourself.
+3. If no rule exists, the request is **held** and the approval appears on **Home** — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded there instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
+4. You decide: **Allow once** (releases just this call), **Allow permanently** (a lasting rule for that host/method/path), **Allow all of &lt;host&gt;** (a host-level rule), **Deny this request**, or **Deny permanently**.
 
 From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#approvals).
 
@@ -98,7 +98,7 @@ Linking your messenger identity (`/dam login`) is never needed to drive a turn. 
 
 Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 
-A Slack conversation binds to at most one agent. The reverse isn't true: one agent can be connected to several conversations at once, in any mix of channels, group DMs, and DMs. Each conversation is its own binding, released on its own.
+Bindings are many-to-many on the Slack side: a conversation can hold several agents, and one agent can be connected to several conversations at once, in any mix of channels, group DMs, and DMs. Each pairing is its own binding, released on its own, and the same agent can't join one conversation twice. A conversation with more than one agent has a **default** — the one a mention with no name reaches. A Telegram chat still binds to a single agent.
 
 ### What This Means for Access
 

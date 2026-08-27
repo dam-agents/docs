@@ -197,10 +197,11 @@ dam channel slack disconnect <agent>                        # Unbind (when only 
 dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of several connected channels
 ```
 
-- A Slack conversation binds to **exactly one** agent, but an agent may hold **several** Slack bindings at once. `disconnect` takes `--channel-id` to say which to release; it is required once the agent has more than one connected, and optional when it has just one. `disconnect` is idempotent — an agent that isn't connected exits 0.
+- A conversation may hold **several** agents, and an agent may hold **several** Slack bindings at once — the pairing is what's unique, so the same agent can't join one conversation twice. `disconnect` takes `--channel-id` to say which binding to release; it is required once the agent has more than one connected, and optional when it has just one. `disconnect` is idempotent — an agent that isn't connected exits 0.
 - **The binding is the authorization**: anyone Slack admits to the conversation drives the agent, and every turn runs under the **agent's own** credentials. There is no per-person mode and no allow-list. See [Who can drive the agent](../integrations/slack.md#who-can-drive-the-agent).
 - `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**. Against a server too old to understand ambient, the connect **fails loudly** rather than silently landing mentions-only.
-- **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one. Pointing a bound channel at a *different* agent fails with `Slack channel already bound to another agent`; `disconnect` first. (The in-chat `/dam bind` is stricter — it refuses any already-connected conversation, even for the same agent.)
+- **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one, and so does connecting a *different* agent to a channel that already has one — a conversation can hold several agents (see [Slack](../integrations/slack.md#several-agents-in-one-conversation)). Note the in-chat `/dam bind` is stricter: it refuses an agent already connected to that conversation rather than updating it.
+- **There's no `default` subcommand.** Which agent unnamed mentions reach is set in-chat with `/dam default <agent>`.
 - `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
 - **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind` and `/dam ambient on|off` require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/dam bind` rather than through this command group.
@@ -220,6 +221,10 @@ dam approval deny <id> --once                           # Deny only this held ca
 ```
 
 - `list` flags: `--status pending|resolved|expired|all` (default `pending`), `--limit <n>` (1–500).
+- `--once` and `--entire-host` are mutually exclusive.
+- The web UI offers the same choices on **Home** under different names: bare `approve` is
+  **Allow permanently**, `--once` is **Allow once**, `--entire-host` is **Allow all of &lt;host&gt;**,
+  `deny --once` is **Deny this request**, and bare `deny` is **Deny permanently**.
 
 !!! warning "Bare `approve` and `deny` are durable"
     For a **network** request, `dam approval approve <id>` writes a **permanent allow rule** — egress

@@ -19,13 +19,11 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 From the left sidebar, open **Coding agents** and click **Create coding agent**. Everything is on one
 page — **Setup your coding agent** — filled top to bottom:
 
-1. **Name** — what you'll call it (e.g., `my-agent`).
+1. **Name** — what you'll call it.
 2. **Image** — the harness that runs inside the pod. Pick the **Claude Code** card.
 3. **Provider** — the model provider. Not connected yet? Connect it **right here** — paste your key
    inline, no trip to Settings.
-4. **Network access** — leave it on **Trusted defaults**, the right choice for most agents. Anything
-   the agent isn't allowed to reach surfaces for approval in the **Inbox** in the left sidebar.
-5. **Connections** *(optional)* — grant credentials the agent may use. For working against your repos,
+4. **Connections** *(optional)* — grant credentials the agent may use. For working against your repos,
    add **GitHub** (for `github.com`) or **GitHub Enterprise** (for `github.ibm.com`) so it can clone,
    push branches, and open PRs.
 
@@ -33,7 +31,7 @@ page — **Setup your coding agent** — filled top to bottom:
     No provider key yet? See [Create your LiteLLM key](../reference/litellm-key.md) — it covers which proxy
     to use and how to scope the key.
 
-Click **Create**. Your agent provisions in a few seconds and you land straight in its chat.
+Click **Create coding agent**. Your agent provisions in a few seconds and you land straight in its chat.
 
 ### Step 3: Start Working
 
@@ -44,7 +42,8 @@ Clone github.ibm.com/my-org/my-project and give me a summary
 of the codebase architecture.
 ```
 
-Or use **Open in → Terminal (browser)** to launch the full Claude Code interactive TUI.
+Or, on a session with no messages yet, use **Terminal (browser)** beside the message box to launch the
+full Claude Code interactive TUI.
 
 !!! tip "Want the full tour?"
     This gets you one working agent. To see the rest of the platform — connections, skills, schedules,

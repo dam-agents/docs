@@ -13,17 +13,32 @@ Each agent has an allowlist of external services it can reach.
 | Path | URL path pattern (defaults to `*`) | `/repos/*` |
 | Verdict | `allow` or `deny`. The most specific rule wins, so a deny rule can carve an exception out of a broad allow | `allow` |
 
-!!! note "Narrowing a rule restarts the gateway"
+!!! info "The port doesn't narrow what matches"
+    A rule's port is recorded and displayed, but requests are matched on the **bare hostname** — the
+    port is stripped before the rule lookup. So `api.prod.example:6443` matches that host on any
+    port, and you cannot allow one port while denying another. What the port *does* do is make the
+    rule a narrowed one, which is what triggers the gateway restart described below.
+
+**Specificity is ranked, and method outranks path.** An exact host beats `*`; then an exact method
+beats `*`; then an exact path beats `*`; and among path patterns the longest wins. So an allow on
+`(host, GET, *)` beats a deny on `(host, *, /v1/admin)` — worth knowing before you rely on a deny
+rule to carve out a path.
+
+!!! note "Narrowing a rule usually restarts the gateway"
     A host-only rule is cheap. Adding a method, path, or port means the agent's network gateway has
     to inspect that host's traffic more closely, which restarts the gateway (**~5–15 seconds**) for
     that **agent only**. The agent keeps running throughout — its outbound requests are briefly
-    interrupted. DAM asks you to confirm before saving such a rule. Removing the last narrowed rule
-    for a host reverses it.
+    interrupted. DAM asks you to confirm before saving such a rule, and tells you when no restart is
+    needed.
+
+    Three cases don't restart it: a **second** narrowed rule on a host already being inspected, a
+    rule that came from a **connection** however narrow it is, and a narrowing on the catch-all `*`
+    host. Removing the last narrowed rule for a host reverses the promotion — which also restarts it.
 
 ### How Rules Are Created
 
 1. **From connections** — granting GitHub to an agent allows `api.github.com`, `github.com`, and `raw.githubusercontent.com` there. Granting GitHub Enterprise allows the host you specify plus its `api.<host>`. Creating the connection under Settings writes no rules on its own; they arrive with the grant, and are withdrawn when you remove it.
-2. **From approvals** — clicking "Allow permanently" on an approval prompt creates a rule
+2. **From approvals** — choosing **Allow permanently** on an approval creates a rule
 3. **Manually** — add rules directly under **Network access** in the agent's **Agent Setup** section
 
 ### Presets
@@ -33,7 +48,7 @@ Rather than writing rules one at a time, pick a preset:
 | Preset | What it does |
 |--------|--------------|
 | **Trusted defaults** | Allows GitHub, npm, PyPI, Anthropic and other common hosts. The usual starting point. |
-| **Strict default-deny** | Adds nothing — every request surfaces in your Inbox until you allow it. |
+| **Strict default-deny** | Adds nothing — every request needs your approval before it goes through. |
 | **Allow everything** | A development escape hatch. Narrow it back with deny rules. |
 
 Switching presets replaces the previous preset's rules. Rules you added by hand, and rules that came
@@ -44,28 +59,35 @@ from a connection, are left alone.
 When an agent tries to reach a service not in its allowlist:
 
 1. The request is **held** (paused, not rejected)
-2. You see an approval prompt in the chat UI or Inbox
+2. The approval appears on **Home**, and on any other page as a **Needs attention** pill
 3. You choose a verdict:
 
 | Verdict | Effect |
 |---------|--------|
 | **Allow once** | This request proceeds; future requests prompt again |
-| **Always allow this request** (**Allow permanently** in the Inbox) | Creates a lasting egress rule for that host/method/path |
-| **Always allow this host** (**Allow &lt;host&gt;** in the Inbox) | Creates a host-level rule (all methods/paths on that host). Offered on network prompts only — tool-call prompts have no host |
-| **Deny once** (**Dismiss** in the Inbox) | Blocks just this request; future requests prompt again |
-| **Always deny this request** (**Deny forever** in the Inbox) | Creates a lasting deny rule; this and every future matching request fail |
+| **Allow permanently** | Creates a lasting egress rule for that host/method/path |
+| **Allow all of &lt;host&gt;** | Creates a host-level rule (all methods/paths on that host). Offered on network prompts only — tool-call prompts have no host |
+| **Deny this request** | Blocks just this request; future requests prompt again |
+| **Deny permanently** | Creates a lasting deny rule; this and every future matching request fail |
 
-**Customize…** opens the agent's **Agent Setup** section so you can write the rule yourself. Like
-*Always allow this host*, it's offered on network prompts only — a tool-call prompt has no host to
-write a rule for.
+Allow-once is the card's own button, labelled just **Allow**; the other four are under the **⋮** beside
+it, along with **Network settings** to go and edit the agent's rules directly instead.
+
+Where a verdict would change what the gateway inspects, a **Restart network gateway?** confirmation
+appears first, naming the hosts affected and confirming with **Allow & restart** or
+**Deny & restart**. If nothing would restart, no confirmation appears — see
+[Egress Rules](#egress-rules). *Allow all of &lt;host&gt;* writes a host-wide rule, so it never
+restarts the gateway.
 
 If an equivalent rule already exists with the opposite verdict, the verdict is refused rather than
 resolved, and you're pointed at the agent's network rules to change it there.
 
 !!! warning "From the CLI, the bare verb is durable"
     `dam approval approve <id>` **writes a permanent allow rule** for a network request — the
-    equivalent of *Always allow this request*. Pass `--once` if you only mean to release the held
-    call. Tool-call approvals never write an egress rule. See the
+    equivalent of *Allow permanently*. Pass `--once` for *Allow once*, or `--entire-host` for
+    *Allow all of &lt;host&gt;* (network requests only, and not combinable with `--once`).
+    `dam approval deny <id>` is durable the same way — *Deny permanently* — with `--once` for
+    *Deny this request*. Tool-call approvals never write an egress rule. See the
     [CLI reference](../reference/cli.md#approvals).
 
 ### Timeout
@@ -78,13 +100,13 @@ If no one responds within **30 minutes** (your operator can change this), the re
     terminal, or SSH session is attached, it's refused straight away instead of waiting out the
     window. The agent is told to name the host and point at you rather than retry into the same wall.
 
-    The request is still recorded, so it appears in your Inbox as usual and allowing it there
+    The request is still recorded, so it appears on Home as usual and allowing it there
     permanently writes the rule the agent picks up on its next attempt. If you *do* have a session
     open on that agent, a channel turn holds and resolves normally.
 
 !!! tip "If a prompt timed out"
-    The original request has already failed, so **Allow once** no longer does anything. Choosing
-    **Always allow this request** still writes the rule, and the agent succeeds on its next attempt.
+    The original request has already failed, so **Allow once** is disabled. Choosing
+    **Allow permanently** still writes the rule, and the agent succeeds on its next attempt.
 
 ### When things fail
 
@@ -96,10 +118,23 @@ The default is always deny:
 - If the approval system itself is unreachable, the request is refused **without** raising a prompt.
 - An expired hold is denied, not allowed.
 
-## The Inbox
+!!! info "Some hosts never prompt"
+    A small set of platform-provided upstreams — the object store behind the artifact library, for
+    instance — is allowed ahead of your rules, so those requests never raise an approval and never
+    appear on Home. You don't need a rule for them, and you can't deny them with one. Everything your
+    agent reaches on its own behalf goes through the rules and approvals above.
 
-The Inbox shows all pending approval requests across your agents. Check it when an agent seems stuck — it may be waiting for your approval.
+## Where approvals appear
+
+Approvals live on **Home**, in the activity feed. Check it when an agent seems stuck — it may be
+waiting for you.
+
+- Filter the feed with **Needs attention** to see just the approvals; **In progress** and **Unread**
+  cover sessions, and **All** shows everything.
+- On any other page, a **Needs attention** pill floats in the corner with a count, and expands to the
+  same approval cards — so you can answer without navigating away.
 
 !!! note
-    In the left sidebar it's the envelope icon, labelled **Inbox** — the badge on it counts pending
-    approvals.
+    The feed mixes approvals with session activity from channels and schedules, so **Needs attention**
+    is the quickest route to the approvals themselves. An approval you've just answered stays on
+    screen showing what you chose, rather than vanishing as you click.

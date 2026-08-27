@@ -52,11 +52,11 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ### Network Access
 
-**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface in your inbox.
+**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface on Home.
 
 ## Setup
 
-1. **Create a Claude Code agent** — click **Create agent** and pick the **Claude Code** harness in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
+1. **Create a Claude Code agent** — open **Coding agents** → **Create coding agent** and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — connect GitHub via OAuth (default), or pick **Personal access token** on the **GitHub** card if you prefer a token
 4. **Clone the Link Guardian repo** — in your agent session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into `work/`

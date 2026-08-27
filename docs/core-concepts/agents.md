@@ -141,11 +141,13 @@ Rather than write an optimization loop from scratch, an experiment can run an es
 
 ### Create
 
-Each kind of agent has its own creation flow, reached from its own place in the app:
+Each kind of agent has its own creation flow, reached from its own place in the app. Each one is a
+**single page** — no steps to click through:
 
-- **Coding agent** — click **Create agent**. Name it, pick a **harness** (the AI software inside the
-  pod — Claude Code, Codex, Pi Agent, or Bob), and choose a model **provider**. To bring your own
-  image instead of a listed harness, see [Building a Custom Image](../guides/custom-image.md).
+- **Coding agent** — from **Coding agents**, click **Create coding agent**. Name it, pick an
+  **image** (the AI software inside the pod — Claude Code, Codex, Pi Agent, or Bob), and choose a
+  model **provider**. To bring your own image instead of a listed one, see
+  [Building a Custom Image](../guides/custom-image.md).
 - **Experiment agent** — from **Experiments**, click **Create experiment**. Name it, choose a
   provider, and add connections. It's a Claude Code agent with the experiment authoring skill
   installed. See [Experiments](experiments.md).
@@ -165,7 +167,7 @@ From the agent's page, the left nav has these sections:
   **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables, and
   **Size** (CPU/memory while running, within your [compute budget](#compute-budget-and-size);
   changing it restarts a running agent on save). The image is fixed at creation — the only change
-  to it is the upgrade below.
+  to it is the [update](#updating-the-image) below.
 - **Connections** — link GitHub, API keys, and other credentials
 - **Channels** — connect the agent to Slack channels or Telegram chats (see
   [Slack](../integrations/slack.md) and [Telegram](../integrations/telegram.md))
@@ -174,16 +176,25 @@ From the agent's page, the left nav has these sections:
 - **Artifacts** — files the agent has published
 - **Usage** — this agent's model spend for a calendar month, broken down by model and by day. It includes work the agent delegated to other agents.
 
-### Open in
+### Ways in
 
-Configure an agent once, then launch it however you like from the **Open in** menu on its page:
+**Chat is the default way in, and it's one click.** Clicking an agent in the list opens its chat — and
+starts it first if it's asleep, so there's no config page to pass through on the way. From chat, the
+**⋮** menu carries **Configure agent** to reach the page described above; the agents list has the same
+item in each row's **⋯** menu, and the agent's page has an **Open chat** button back the other way.
+
+The other ways in sit **beside the message box on a new session** — where a session has no messages
+yet, under *Start a new session*:
 
 | Option | What it does |
 |--------|--------------|
-| **Chat (browser)** | Opens the chat interface in the browser |
 | **Terminal (browser)** | Opens the harness terminal (PTY) in the browser |
-| **Terminal (local)** | Shows a copyable `dam` command to attach from your own terminal |
-| **VS Code / Zed (local)** | Shows a copyable command to open the workspace over SSH — see the [VS Code/Zed (SSH) guide](../integrations/vs-code-zed-ssh.md) |
+| **Terminal (local)** | Shows a copyable `dam chat` command to attach from your own terminal |
+| **VS Code / Zed (local)** | Shows copyable `dam ssh connect` commands for either editor — see the [VS Code/Zed (SSH) guide](../integrations/vs-code-zed-ssh.md) |
+
+Both dialogs link the CLI quickstart, so a first-time setup is one hop away. **New** in the sessions
+sidebar opens a chat session directly rather than asking which kind you want — start a terminal from
+the launch options above instead.
 
 ### Pause, Stop & Start
 
@@ -198,9 +209,18 @@ All of these preserve the workspace and configuration exactly like hibernation �
 
 ### Updating the image
 
-When the template an agent was created from moves on, its page shows an **Update available** badge
-and an **Upgrade** button under the Image field. Applying it is always explicit, changes only the
-image, and restarts the agent if it's running.
+When the template an agent was created from moves on, an **Update** button appears — in the agent's
+page header, and on its row in the agents list. Hover it to see which image version the template now
+ships, and a **See what changed** link where the harness publishes release notes; click it to confirm
+and apply.
+
+Applying is always explicit and changes only the image. An agent that's **hibernating**, or parked
+over budget, applies it the next time it starts; anything else restarts to apply it, so in-flight work
+is interrupted. The confirmation tells you which case you're in.
+
+Where **more than one** agent is behind, the list carries a banner counting them, with **Update all** to
+catch up in one action rather than a visit per agent. The experiment and knowledge base lists carry the
+same banner over their own agents.
 
 ### Delete
 

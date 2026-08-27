@@ -55,12 +55,12 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ### Network Access
 
-**Trusted defaults** (recommended) — covers GitHub, npm, PyPI, and package mirrors out of the box. Any additional hosts the agent needs will surface in your inbox for approval.
+**Trusted defaults** (recommended) — covers GitHub, npm, PyPI, and package mirrors out of the box. Any additional hosts the agent needs will surface on Home for approval.
 
 ## Setup
 
 1. **Create an agent from the Software Factory image** — start creating a coding agent, and in the
-   **Custom image** card paste the Software Factory image address,
+   **Custom** card paste the Software Factory image address,
    `quay.io/dam-agents/software-factory:<tag>`. [dam-agents/software-factory](https://github.com/dam-agents/software-factory){:target="_blank"}
    publishes no tagged releases, so ask its maintainers which tag to run rather than guessing one. It ships its own image rather than being one of the
    ready-made ones, because it runs extra processes alongside the harness. If that registry repository

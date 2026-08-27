@@ -96,9 +96,10 @@ it works*. Nothing to set up here — the goal is to understand what each featur
 
 A **session** is one working thread with the agent, and there are two kinds. A **chat session** is the
 conversation in the web UI — you send a message, it works, you reply; the thread survives restarts and
-hibernation, so you can close the tab and resume days later. A **terminal session** (**Open in →
-Terminal (browser)**) drops you into the agent's full interactive TUI against the same workspace, when
-you'd rather drive a real shell. Run several at once and resume any from the sidebar.
+hibernation, so you can close the tab and resume days later. A **terminal session** — **Terminal
+(browser)**, offered beside the message box on a session you haven't sent anything in yet — drops you
+into the agent's full interactive TUI against the same workspace, when you'd rather drive a real shell.
+Run several at once and resume any from the sidebar.
 
 → [Sessions](../core-concepts/sessions.md)
 
@@ -122,7 +123,7 @@ should use it.
 Every agent runs inside a network boundary, and you pick how tight it is. **Strict** allows only what
 you've explicitly permitted; **Trusted defaults** (where new agents start) allows a sensible baseline
 and holds anything else for review; **Allow everything** opens egress fully. Whenever an agent on
-Trusted defaults reaches for something outside its allowlist, that request surfaces in your **Inbox** —
+Trusted defaults reaches for something outside its allowlist, that request surfaces on **Home** —
 you approve or deny, and your choice becomes a standing rule. So an agent can reach the services it
 needs, but can't quietly phone home somewhere you didn't intend.
 

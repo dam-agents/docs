@@ -31,8 +31,8 @@ This drops you into a login shell on the agent, starting in the home directory `
 workspace the agent works in is `~/work` — `cd ~/work` to get there; the editor modes below open it
 directly. Exit with `exit` or `Ctrl-D`.
 
-The agent header's **Open in → VS Code / Zed (local)** gives you the same commands, pre-filled with
-the agent's ID.
+**VS Code / Zed (local)**, offered beside the message box on a session with no messages yet, gives you
+the same commands pre-filled with the agent's ID.
 
 Unlike the web terminal, SSH has no one-viewer limit: a shell and an editor window can be connected
 to the same agent at once, each with its own independent connection. SSH connections aren't
@@ -134,7 +134,7 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
     `dam ssh connect` hands off to the client you selected. Install the client (OpenSSH for `ssh`, VS Code for `-x code`, Zed for `-x zed`) and make sure it's on your `PATH`.
 
 ??? question "VS Code pops a network-approval prompt on first connect"
-    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in the web UI's inbox, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
+    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request on Home in the web UI, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
 
 ??? question "Host key warnings"
     `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the in-pod host key authenticates nothing extra — and because it lives on the agent's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.
@@ -145,5 +145,5 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
 ## See also
 
 - [CLI reference → SSH access](../reference/cli.md#ssh-access) — the full command surface.
-- [Network & Approvals](../core-concepts/network-access.md) — how egress rules and the approval inbox work.
+- [Network & Approvals](../core-concepts/network-access.md) — how egress rules and approvals work.
 - [Sessions](../core-concepts/sessions.md) — `dam chat` and the harness TUI, the other way to attach.

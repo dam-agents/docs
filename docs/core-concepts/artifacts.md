@@ -47,7 +47,9 @@ one agent published can be picked up by another without passing through the conv
 
 When an agent publishes something, it links it in chat — opening that link previews the artifact
 beside the conversation, so you can read a report or click through a dashboard without leaving the
-session.
+session. Where the artifact renders as a page, **Open fullscreen** in that panel gives it the whole
+window for a dashboard too dense to read in a column; the panel says it's *Opened in fullscreen*
+until you come back. **Source** switches to the underlying text instead.
 
 You can also upload a file yourself with **Upload artifact**.
 
@@ -72,6 +74,14 @@ content is a different kind of file.
 Group artifacts into folders to keep a library browsable. Create one with **New folder** in the
 Artifacts page header, beside **Upload artifact**. Folders are a **single flat level** — no nesting.
 Deleting a folder does **not** delete the artifacts inside it; they become ungrouped.
+
+File something into one with **Move to folder…** in its **⋯** menu, or drag the row onto the folder.
+**Rename** in the same menu changes the title.
+
+!!! note "An empty library has no header buttons"
+    **New folder** and **Upload artifact** appear once there's something in the library. Until then the
+    page is an empty state pointing you at your agents — so the first artifact comes from an agent
+    publishing one.
 
 ## Sharing
 
@@ -114,10 +124,10 @@ An expiry is **retention, not link lifetime**. This is the one thing worth readi
     Once the expiry passes, the link reports itself as expired and you can still renew it. After a
     **7-day grace period** the content is permanently deleted, every version with it.
 
-The Share dialog offers **Never expires**, 1 hour, 1 day, 7 days, or 30 days — plus **Keep current
-expiry** once the artifact already has one. Leave it at *never* to keep the artifact indefinitely; set
-one when you want the content gone on a schedule. The expiry control appears only while the public
-link is on.
+Because it's retention rather than sharing, it lives apart from the share link: **Delete after…** in an
+artifact's **⋯** menu offers **Never delete**, *Delete in 1 hour*, *1 day*, *7 days*, or *30 days* —
+plus **Keep current date** once one is set. It applies to a private artifact just as much as a public
+one, so you can schedule a cleanup without ever sharing the thing.
 
 Deleting an artifact is also permanent — all versions go, and the share link dies with them.
 

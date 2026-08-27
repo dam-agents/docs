@@ -57,10 +57,13 @@ connecting itself always happens in the chat, with `/dam bind`.
 Unbound **groups stay silent**, so the bot doesn't spam every chat it's been added to. In an unbound
 **DM** it replies *"This chat isn't connected to an agent. An admin needs to send `/dam bind`."*
 
-!!! warning "Text only"
+!!! warning "Inbound is text only"
     Telegram messages relay as **text**. Images and other attachments are not passed to the agent —
-    unlike [Slack](slack.md#sharing-images-and-screenshots), which does read images. Paste the
-    content you need the agent to see.
+    unlike [Slack](slack.md#sharing-images-and-files), which reads images and hands over files. Paste
+    the content you need the agent to see.
+
+    That's about messages *coming in*. Going the other way, an agent posting to Telegram of its own
+    accord can attach a single file to its message.
 
 ## Sessions
 

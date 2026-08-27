@@ -1,6 +1,6 @@
 # Building a Custom Image
 
-A custom image is a layer you build on top of DAM's base platform image, giving your agents access to your own tools, scripts, and environment. You build it, push it to a container registry, and point an agent at it by pasting the image address into the **Custom image** card when you create a coding agent.
+A custom image is a layer you build on top of DAM's base platform image, giving your agents access to your own tools, scripts, and environment. You build it, push it to a container registry, and point an agent at it by pasting the image address into the **Custom** card when you create a coding agent.
 
 This guide is **agent-neutral**: the platform supports any agent — Claude Code, Codex, PI Agent, IBM Bob, or your own command-line program — and relies only on a small contract (covered in Step 3). The examples below use **Claude Code**.
 
@@ -237,30 +237,38 @@ Notes:
 
 ## Step 5 — Create an agent from your image
 
-Start creating a coding agent with **Create agent**. Instead of picking a listed harness, paste your
-full reference into the **Custom image** card (tagged *Advanced*):
+From the sidebar, open **Coding agents** and click **Create coding agent**. Everything is on one page,
+**Setup your coding agent**, filled top to bottom:
 
-```
-ghcr.io/<your-org>/my-agent:0.1.0
-```
+1. **Name** — what you'll call it.
+2. **Image** — instead of picking a listed card, scroll past them to *or use a custom image* and paste
+   your full reference into the **Custom** card (tagged *Advanced*):
 
-On step 2, **Setup your agent**: give it a **Name**, pick a **Size**, choose a **Provider**, and
-set a **Network access** preset. Every agent needs a provider to power its model — the presets are
-**IBM LiteLLM ETE Proxy**, **Bob Shell**, **Anthropic**, and **OpenAI**. Match it to your agent: an
-OpenAI-compatible harness needs an OpenAI-compatible provider.
+    ```
+    ghcr.io/<your-org>/my-agent:0.1.0
+    ```
 
-On step 3, **Grant connections**, attach any credentials your agent needs, then click **Create agent**.
-If it calls an external service, that's where you attach the credential and allow its host — see
-[how to call an external service](external.md).
+3. **Provider** — every agent needs one to power its model. The options are **IBM LiteLLM ETE Proxy**,
+   **Bob Shell**, **Anthropic**, and **OpenAI**. Match it to your agent: an OpenAI-compatible harness
+   needs an OpenAI-compatible provider.
+4. **Connections** — attach any credentials your agent needs. If it calls an external service, that's
+   where you attach the credential and allow its host — see
+   [how to call an external service](external.md).
+
+Then click **Create coding agent**.
+
+Network access and **Size** aren't part of creation: a new agent starts on **Trusted defaults** at its
+template's size, and both are editable straight afterward from the agent's **Agent Setup** page.
 
 No template registration, Helm edit, or platform redeploy is needed; the agent is created directly
 from the image address.
 
 ### Private registries
 
-You don't have to publish the image publicly. Under **Image address**, in the **Custom** card, expand
-**Private registry** and fill in **Server** (e.g. `ghcr.io`), **Username**, and **Password** — a PAT,
-robot account, or access token. All three or none.
+You don't have to publish the image publicly. Once the **Custom** card's address field is non-empty, a
+**Private registry** section appears inside the card — fill in **Server** (e.g. `ghcr.io`),
+**Username**, and **Password** — a PAT, robot account, or access token. All three or none; a partly
+filled set blocks the create button.
 
 DAM stores these as a pull secret scoped to that one agent, used only by the cluster to fetch the
 image. The agent never sees it, and it's deleted with the agent.
