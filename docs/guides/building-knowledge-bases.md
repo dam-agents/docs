@@ -55,11 +55,11 @@ You get three things at once, which is why this is worth doing on day one rather
 - **A way out.** Cloning the repo is how you get everything at once; DAM's own File Manager downloads
   one file at a time.
 
-The credentials never sit in the workspace — the connection injects them into the agent's outbound
-requests, so `git push` just works. If you connected **GitHub.com**, DAM also writes your GitHub name
-and email into the agent's git config, so commits are attributed to you rather than to an anonymous
-pod identity. That write is best-effort and GitHub.com-only: on GitHub Enterprise, or if the lookup
-didn't answer, set `user.name` and `user.email` in the agent yourself.
+The connection handles both halves of this, so there's nothing to configure inside the agent. The
+credentials never sit in the workspace — they're injected into its outbound requests, so `git push`
+just works. And if you connected **GitHub.com**, the connection also sets the commit author, so commits
+are attributed to you rather than to an anonymous pod identity. See
+[connections](../core-concepts/connections.md) for which connection types set the author.
 
 !!! tip "Make the repo private"
     Whatever your team tells the base ends up in it — customer names, unreleased plans, internal
@@ -69,20 +69,21 @@ didn't answer, set `user.name` and `user.email` in the agent yourself.
 
 Two separate controls decide what a knowledge base can reach, and both are yours from the start:
 
-- **Network access** — the hosts it may reach. A knowledge base is created on **Trusted defaults**
-  (GitHub, npm, PyPI, Anthropic and other common hosts). Switch it to **Strict default-deny** and
-  every request needs your approval before it goes through, so you review each host as it comes up.
-  Or allow just the specific hosts you want and nothing else.
+- **Network access** — the hosts it may reach. Every knowledge base starts on **Trusted defaults**
+  (GitHub, npm, PyPI, Anthropic and other common hosts). Afterwards, under **Agent Setup** →
+  **Network access**, you can switch it to **Strict default-deny**, where every new host needs your
+  approval before a request goes through — so you review each one as it comes up — or allow just the
+  specific hosts you want and nothing else.
 - **Connections** — the credentials it holds. A knowledge base can only reach a system you've granted
   it a [connection](../core-concepts/connections.md) for. Grant none and it has no credentials at all.
 
-So if you want it locked down: keep the connections list short, and either approve hosts one at a time
-or name only the hosts it needs. See [network access](../core-concepts/network-access.md) for how rules
-and approvals work.
+So if you want it locked down: keep the connections list short, then tighten the network rules — either
+to **Strict default-deny**, so you approve each host as it comes up, or to a named list of hosts and
+nothing else. See [network access](../core-concepts/network-access.md) for how rules and approvals work.
 
-!!! warning "Strict default-deny can block first-time setup"
-    A new knowledge base downloads its toolkit from GitHub on creation. Create it on **Trusted
-    defaults** and tighten afterwards, or the toolkit may not install.
+!!! note "Why it starts on trusted defaults"
+    A new knowledge base installs its template from GitHub moments after it's created, so creation
+    always uses the trusted preset — tighten it once the base is up rather than before.
 
 ## 1. Create the base
 
@@ -99,7 +100,7 @@ a toolkit of commands and checks.
 
 | | **LLM Wiki** (default) | **Plain Wiki** |
 |---|---|---|
-| **What gets installed** | A Claude Code **skill** with seven slash commands, plus session hooks and maintenance scripts. | Two files: an operating manual and a single onboarding command. Nothing else. |
+| **What gets installed** | A Claude Code **skill** with seven slash commands, plus session hooks and maintenance scripts. | An operating manual, a single onboarding command, and a starter index in an empty notes folder. Nothing else. |
 | **How knowledge is organized** | An **interlinked graph** — pages carry structured frontmatter and `[[wikilinks]]`, with a generated index over them. | **Atomic markdown notes**, one topic per file, cross-linked by ordinary relative links, with an index you can read by hand. |
 | **What you drive it with** | Commands as well as conversation: ingest a source, query, save an answer as its own page, render the graph, run a health check, work a review queue. | Conversation only. You tell it what to file and what to answer; there are no commands to learn. |
 | **Where things land** | Sources you drop in stay immutable; compiled pages live beside them. | Raw material in one folder, durable notes in another — sources are evidence, notes are the memory. |
@@ -116,9 +117,10 @@ or a straightforward reference an agent tidies for you.
 
 !!! note "Both are open, and neither is a black box"
     Each template is installed from a public repo by a one-shot setup script when the base is created —
-    nothing runs a turn, and nothing is hidden. The knowledge, the instructions, and any commands all
-    end up as files in the workspace, so you can read exactly what your base is following, and change
-    it. That's also why either one syncs to a repo cleanly: it's all just files.
+    nothing runs a turn, and nothing is hidden. The knowledge and the instructions are plain files you
+    can read and change, so you can see exactly what your base is following. The knowledge itself lives
+    in the workspace, which is why either one syncs to a repo cleanly; LLM Wiki's commands and hooks
+    install alongside it, elsewhere in the agent's home.
 
 ## 2. Give it a clear purpose
 
@@ -194,9 +196,10 @@ You can bind both, and add the channel later — one agent can hold several bind
 [Slack](../integrations/slack.md) for the full command surface.
 
 !!! tip "Let it read along"
-    With **ambient mode** (`/dam ambient on`) the base follows the whole conversation and speaks up
-    when it has something to add — useful in a channel where decisions get made in passing. It reads
-    *every* message, so tell the channel when you turn it on.
+    With **ambient mode** the base follows the whole conversation and speaks up when it has something
+    to add — useful in a channel where decisions get made in passing. Send `/dam ambient on`, or
+    `/dam ambient <name> on` where more than one agent is connected. It reads *every* message, so tell
+    the channel when you turn it on.
 
 ## 4. Let the structure emerge
 
