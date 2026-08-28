@@ -128,6 +128,18 @@ When you first open the base, it greets you and asks what it's for. This is wher
 purpose — not in a settings field, but by telling it, in that first chat, what to remember and how
 to behave.
 
+The greeting happens once, on your first chat with the base in DAM — feeding it from Slack first
+doesn't use it up. It's a convenience either way: everything in this step works the same in any
+conversation, so if you've already started talking, just carry on. On **LLM Wiki** the greeting is a
+short setup interview that also offers to wire up a git remote and a maintenance schedule, which
+covers some of what follows.
+
+!!! tip "If the first greeting looks off, just start talking"
+    A new base installs its template in the background, and opening it immediately can get you there
+    first — so a greeting that arrives in the first few seconds may read oddly. Setup carries on
+    regardless and nothing is lost. Tell it what it's for in your own words; the greeting is a
+    convenience, not a step you have to complete.
+
 Say something like:
 
 > You're our team's memory. Our team builds products for AI Incubation. Our goal is to understand and track trends closely so we can make smart product decisions. Capture customer meetings and feedback, and follow these rules:
@@ -152,6 +164,12 @@ The same goes for anything you want it to keep behaving by — the team roster b
 convention, a page you always want linked. **If it should outlive the conversation, ask it to write it
 down.** It's a habit worth keeping past setup: when you correct the base months from now, add "and
 remember that" and the correction holds.
+
+!!! tip "Keep the rules inside the repo you sync"
+    On **LLM Wiki**, the base's own operating manual lives outside `~/work`, so a repo sync won't carry
+    it. Ask it to keep *your* rules in a file under the workspace — its instructions can point at that
+    file — and they travel with the backup. On **Plain Wiki** the manual is already in the workspace,
+    so there's nothing to move.
 
 ### Tell it who your team is
 
@@ -182,8 +200,9 @@ tidy.
 Do this early — Slack is where a knowledge base earns its keep, and it's easier to feed from there
 than from the UI.
 
-Invite the **DAM** bot to a conversation and send **`/dam bind`**, then pick the base from the picker.
-Two shapes work well:
+Invite the **DAM** bot to a conversation and send **`/dam bind`**. It replies with a link to connect an
+agent — follow it, sign in, and pick the base from the list that opens in your browser. (You can also
+create one right there if you haven't yet.) Two shapes work well:
 
 - **Your own 1:1 DM with the bot** — the best place to build a base up privately before anyone else
   sees it, and the right home for a personal base.
@@ -304,8 +323,9 @@ post.
 !!! note "Say the timezone you mean"
     Ask for a local time and name the zone — "9am Eastern" — and the schedule holds that wall-clock
     time year-round, across daylight saving. Ask for a bare cron expression instead and it runs in
-    **UTC** and ignores quiet hours. Schedules the agent creates for itself can't be edited in the
-    panel; changes go through chat.
+    **UTC** and ignores quiet hours. A schedule the agent created for itself can't be *edited* in the
+    panel — **Edit schedule** opens a note offering **Open chat** instead — but you can still pause or
+    delete it there whenever you want.
 
 ## Keeping it responsive
 
