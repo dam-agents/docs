@@ -1,250 +1,342 @@
 # Building knowledge bases
 
-A [knowledge base](../core-concepts/knowledge-bases.md) is an agent whose job is to hold what you or
-your team knows and answer from it. You feed it sources; it organizes what it learns, keeps it, and
-answers questions with citations back to where each answer came from.
+A teammate that remembers everything your team learns — and answers when you ask.
 
-This guide follows one real knowledge base — a **team memory** — from what it's for down to how a
-meeting becomes a durable, queryable page. It's the shape that gets the most out of the platform,
-because its value is in the **links**: who said a thing, which account they were from, and which
-decision it fed. Two lighter shapes — a personal brain and a project base — come at the end as
-variants once you've seen the full one.
+A **knowledge base** is an agent that collects what your team knows, organizes it, and answers questions
+from it with citations back to the source.
 
-## The example: a team-memory base
-
-Picture a base that holds a product team's own thinking: customer meetings, user research, feedback,
-personas, decisions, and the principles behind them. One team built exactly this and runs it as a
-shared agent. Its job, in its own words, is to **be the team's memory** — and that mission is worth
-stealing wholesale, because each line is a design decision you'll make too:
-
-- **Capture** meetings, calls, research, feedback, and decisions as durable pages.
-- **Attribute** everything — feedback to the person and account that gave it, a decision to whoever
-  made the call. Never let a quote float free of who said it.
-- **Find patterns** — the same complaint from three accounts is one roadmap item, not three notes.
-- **Close the loop to where work happens** — make sure feedback lands as a tracked issue, and keep the
-  link between the account that asked and the issue that tracks it.
-- **Answer questions** from the base for anyone who asks.
-
-Everything below is how you get an agent to do that.
+The most useful knowledge bases have one clear purpose. A project base might remember approaches,
+results, and decisions. A team base might track customer conversations and recurring feedback. A
+personal base can simply remember your own notes and decisions.
 
 !!! tip "Start narrow"
-    A base holding one team's decisions *well* beats a base meant to hold everything. Scope is what
-    keeps answers relevant — pick a single purpose before you create anything.
+    Pick one thing you want the base to know well. A focused base tends to give sharper, better-cited
+    answers than one that tries to remember everything — and you can always add a second base later.
 
-## Set it up
+## A team memory, in practice
 
-1. From **Knowledge bases**, click **Create knowledge base**.
-2. Name it something you'll recognize in a Slack picker (`strategy`, not `kb-1`), and choose a
-   template (below).
-3. Click **Create knowledge base**. It starts on **Trusted defaults** for network access — the right
-   setting here, since the template downloads its toolkit at setup and you'll grant specific hosts as
-   you add sources.
-4. Open it once created. It greets you and explains how to feed it.
+Imagine a shared agent sitting in your team's Slack channel.
 
-### Choosing a template
+After a meeting, you give it the notes. It captures the important details, links them to the right
+people and accounts, and keeps the history organized. Later, anyone can ask:
 
-Both templates are create-time choices you can't change later, so pick with the base's intended
-lifetime in mind:
+- What are customers asking for most often?
+- Which accounts have raised the same issue?
+- What have we already tried, and which approach worked best?
 
-| Template | Pick it when |
-|----------|--------------|
-| **LLM Wiki** (default) | You want structure — a wiki with a knowledge graph linking what it learns. **This is the right choice for a team memory**: the graph is doing real work once there are people, accounts, and decisions to link. |
-| **Plain Wiki** | You want durable markdown you could read straight out of the workspace, with no toolkit. Best for a base you'll skim by hand, or one that must keep working offline. |
+The base doesn't just remember individual facts. Because related information is linked, it can surface
+patterns across everything you've fed it.
 
-## Give it its charter
+That's the example we'll build below. Your job is to point it at the right things and keep feeding it —
+you're the source and the editor, it's the librarian. The organizing, linking, and recall are its side
+of the work.
 
-The platform decides how a knowledge base stores and retrieves pages. It does **not** decide what your
-base is *for*, how minimal to keep it, or what counts as an accurate entry — and those are the
-decisions that separate a base people open from one they abandon. You set them once, in plain language,
-and the agent holds them.
+## Where the knowledge actually lives
 
-The team-memory base runs on four standing rules worth copying:
+It's **plain files in the agent's workspace**, under `~/work` — not a database you can only reach
+through the agent. You can browse and edit them yourself in the
+[File Manager](../core-concepts/file-manager.md), and they survive hibernation and restarts.
 
-- **Keep it minimal.** A base nobody wants to open has failed, however complete it is. Facts, not
-  scaffolding: if a heading has nothing real under it, there's no heading. One fact lives in one place,
-  and other pages link to it rather than restating it — copied text drifts out of sync. Tell your agent
-  that minimal outranks complete, and that it should *prune on write* rather than append forever.
-- **Attribute or mark unknown.** A wrong attributed quote is worse than a missing one. Anything the
-  agent doesn't actually know is written as `unknown`, never guessed — in who-said-it, in severity, in
-  its answers. This one rule is what makes the base trustworthy enough to act on.
-- **Don't over-report.** Not every observation is a problem. A question someone asked and got answered
-  on a call is them learning the product, not a defect. Tell the agent: before it records a complaint,
-  it should be able to imagine the person recognizing it as one.
-- **Keep it confidential.** A team memory holds named people and private meeting content. It doesn't
-  get published, shared, or quoted outside the team unless someone explicitly asks for that specific
-  thing.
+That has one consequence worth planning for up front: **by default there is exactly one copy**, and
+deleting the agent destroys it.
 
-!!! info "Who can change it, and who can only ask"
-    Decide early who's allowed to *change* the base versus only *query* it. The team-memory base treats
-    a named set of people as **contributors** — they can ingest, correct, delete, and reset the rules —
-    and treats everyone else as a **user** who gets full answers but can't alter content. A user's
-    correction isn't refused; it's logged for a contributor to decide on. Setting this boundary is what
-    lets you open the base widely without it drifting.
+### Sync it to a Git repo
 
-## Structure it so questions are answerable
+So point the base at a repo of your own. Create an empty one, grant the agent a
+[GitHub connection](../core-concepts/connections.md), then tell it what you want:
 
-The whole point of the LLM Wiki template is that a well-structured base can answer *patterns*, not just
-recall single facts. Structure is what makes that possible. The team-memory base uses a small, fixed
-set of page kinds — resist inventing more:
+> The knowledge lives in a git repo. After you file anything, commit it with a short message saying
+> what changed, and push.
 
-| Page kind | Holds |
-|-----------|-------|
-| **Account** | One customer/account's home page: who they are, and a running log of every touchpoint |
-| **Person** | A stakeholder — created once they matter (2+ touchpoints or real influence), not on first mention |
-| **Touchpoint** | One meeting or call. Links the account and each attendee. The atomic unit of capture |
-| **Theme** | A recurring ask that shows up across accounts — created on its *third* occurrence, not its first |
-| **Synthesis** | The output of a pattern question: "who's asking for X, and how badly" |
+You get three things at once, which is why this is worth doing on day one rather than later:
 
-Three conventions turn that structure into something queryable:
+- **A backup** that isn't the agent.
+- **History** — a diff of how the knowledge changed, and who prompted each change.
+- **A way out.** Cloning the repo is how you get everything at once; DAM's own File Manager downloads
+  one file at a time.
 
-- **One meeting, one page.** A call becomes a touchpoint page; each distinct piece of feedback becomes
-  its own linked bullet on it. That granularity is what makes patterns findable later.
-- **Every page links its entities.** A touchpoint links its account and each attendee; a theme links
-  the feedback that evidences it. A page with no links is a dead end the graph can't reach.
-- **Feedback is verbatim, and carries its metadata inline.** Each feedback item names who said it, the
-  theme it belongs to, the issue tracking it, and how severe they said it was — on one line, so nothing
-  floats free.
+The credentials never sit in the workspace — the connection injects them into the agent's outbound
+requests, so `git push` just works. If you connected **GitHub.com**, DAM also writes your GitHub name
+and email into the agent's git config, so commits are attributed to you rather than to an anonymous
+pod identity. That write is best-effort and GitHub.com-only: on GitHub Enterprise, or if the lookup
+didn't answer, set `user.name` and `user.email` in the agent yourself.
 
-!!! tip "Let it grow into structure"
-    You don't hand the agent this schema up front and drill it. You tell it the *purpose* and the
-    minimal rules, feed it real meetings, and ask it to reorganize when a topic gets big enough to
-    deserve its own page. The structure earns its way in — a theme page appears when the third account
-    raises the same thing, not before.
+!!! tip "Make the repo private"
+    Whatever your team tells the base ends up in it — customer names, unreleased plans, internal
+    feedback. A private repo keeps the sync from becoming a disclosure.
 
-## Feed it a meeting
+## How locked down it is, is your call
 
-The core habit is small and constant: after a call, hand the agent the notes and let it file them.
+Two separate controls decide what a knowledge base can reach, and both are yours from the start:
 
-Tell it to:
+- **Network access** — the hosts it may reach. A knowledge base is created on **Trusted defaults**
+  (GitHub, npm, PyPI, Anthropic and other common hosts). Switch it to **Strict default-deny** and
+  every request needs your approval before it goes through, so you review each host as it comes up.
+  Or allow just the specific hosts you want and nothing else.
+- **Connections** — the credentials it holds. A knowledge base can only reach a system you've granted
+  it a [connection](../core-concepts/connections.md) for. Grant none and it has no credentials at all.
 
-1. **Create the touchpoint page** and link the account and everyone who attended.
-2. **Pull out each distinct piece of feedback** as its own bullet — verbatim, attributed, with the
-   severity the person themselves implied (or `unknown`).
-3. **Match each item to a theme.** If the same complaint has now shown up a third time, that's when the
-   theme page gets created and the earlier touchpoints get linked to it.
-4. **Append the meeting to the account's log**, so the account page stays a complete history.
+So if you want it locked down: keep the connections list short, and either approve hosts one at a time
+or name only the hosts it needs. See [network access](../core-concepts/network-access.md) for how rules
+and approvals work.
 
-Done as a routine, this is what a good ingest reports back — one line, not a wall of text:
+!!! warning "Strict default-deny can block first-time setup"
+    A new knowledge base downloads its toolkit from GitHub on creation. Create it on **Trusted
+    defaults** and tighten afterwards, or the toolkit may not install.
 
-> *Logged the Acme call — 3 feedback items, 1 new theme, 2 that need issues filed.*
+## 1. Create the base
 
-## Close the loop to where work happens
+From **Knowledge bases**, click **Create knowledge base**. Choose a name you'll recognize in Slack,
+such as `team-memory`.
 
-Capturing feedback isn't the goal; **acting on it** is. The team-memory base treats an unfiled piece of
-feedback as unfinished work, and it's built to carry each item out to a tracked issue and keep the link
-back.
+Then pick a template. This is the one decision you can't undo later, so it's worth knowing what each
+one actually installs.
 
-- **File real asks as issues** in the repo where the team actually works — a usability complaint as a
-  bug, a request for new capability as a feature.
-- **Dedupe first, and dedupe hard.** Duplicate issues are the main failure mode: the same complaint
-  arrives from several accounts, and most duplicates hide in the *closed* set. Tell the agent to search
-  all issues — open and closed — and to read a candidate in full before calling anything a duplicate. A
-  keyword match is not a duplicate.
-- **Attach evidence.** When an issue already exists, the agent adds the new account as a datapoint
-  rather than filing again — which accounts asked, and when, is exactly what makes an issue
-  prioritizable.
-- **Write the issue link back** into the feedback bullet. An unlinked feedback item is the thing this
-  whole system exists to prevent.
+A template is **not** a different kind of agent or a different engine. Both are the same Claude Code
+agent, and both keep their knowledge as markdown files in the workspace. What differs is the *working
+method* installed on top: a set of instructions the agent reads every session, and — for one of them —
+a toolkit of commands and checks.
 
-!!! warning "Filing an issue is an outward-facing act"
-    Issues are more public than the base. Have the agent confirm before it files, carry over the
-    technical substance rather than internal politics or commercial terms, and ask before naming an
-    account in a public repo. Nothing gets filed without an explicit go from someone allowed to give
-    one.
+| | **LLM Wiki** (default) | **Plain Wiki** |
+|---|---|---|
+| **What gets installed** | A Claude Code **skill** with seven slash commands, plus session hooks and maintenance scripts. | Two files: an operating manual and a single onboarding command. Nothing else. |
+| **How knowledge is organized** | An **interlinked graph** — pages carry structured frontmatter and `[[wikilinks]]`, with a generated index over them. | **Atomic markdown notes**, one topic per file, cross-linked by ordinary relative links, with an index you can read by hand. |
+| **What you drive it with** | Commands as well as conversation: ingest a source, query, save an answer as its own page, render the graph, run a health check, work a review queue. | Conversation only. You tell it what to file and what to answer; there are no commands to learn. |
+| **Where things land** | Sources you drop in stay immutable; compiled pages live beside them. | Raw material in one folder, durable notes in another — sources are evidence, notes are the memory. |
+| **Upkeep** | The toolkit can audit itself: find broken links, orphaned pages, stale entries, malformed frontmatter. | Whatever you and the agent keep up by hand. |
 
-## Reach it, and ask it for patterns
+The real trade-off is **structure versus simplicity**. LLM Wiki compiles knowledge once and keeps it
+current, so it can answer across many pieces at once — "which accounts asked for this," "what have we
+tried" — which is what this guide's example needs. It's also more machinery: more conventions, more
+commands, more that can drift. Plain Wiki is a manual and a folder of notes, and it works entirely
+offline once installed, with nothing to break; you just don't get the graph or the audits.
 
-A team memory earns its keep when the team can reach it without opening DAM, and when it answers the
-questions that are otherwise expensive to ask.
+Pick **LLM Wiki** when the connections between facts are the point, **Plain Wiki** for a personal base
+or a straightforward reference an agent tidies for you.
 
-**Reach it from Slack.** A knowledge base is an ordinary agent, so it binds to a Slack conversation
-like any other — invite the bot, run **`/dam bind`**, authenticate, and pick the base. Bound to the
-team's **channel**, it answers on `@mention`, so a sweep result or an answer is visible to everyone
-instead of making one person the relay. (Bound to a **1:1 DM**, every message reaches it — that's the
-right surface for the personal variant below.)
+!!! note "Both are open, and neither is a black box"
+    Each template is installed from a public repo by a one-shot setup script when the base is created —
+    nothing runs a turn, and nothing is hidden. The knowledge, the instructions, and any commands all
+    end up as files in the workspace, so you can read exactly what your base is following, and change
+    it. That's also why either one syncs to a repo cleanly: it's all just files.
 
-**Ask it for patterns, not just recall.** This is the question a structured base exists to answer:
+## 2. Give it a clear purpose
 
-- *What are the three most-asked-for things across all accounts right now?*
-- *Which complaint has come up after we thought we'd closed it?*
-- *Which accounts have gone quiet, weighted by how much they matter?*
+When you first open the base, it greets you and asks what it's for. This is where you set its
+purpose — not in a settings field, but by telling it, in that first chat, what to remember and how
+to behave.
 
-Grounded answers cite the touchpoints — "three top-tier accounts raised exports this month," with the
-pages to prove it, not "customers seem frustrated."
+Say something like:
 
-**Republish views as artifacts.** Ask the base to publish recomputed views — an open-items list, a
-leadership summary — to your [artifact library](../core-concepts/artifacts.md). An artifact keeps a
-stable link, so a regenerated view is something the team can bookmark and share with people who have no
-DAM account. Two rules make this work: **update the artifact in place** (a new one silently orphans
-everyone holding the old link), and **recompute every number from the source pages** each time rather
-than carrying the last version's counts forward.
+> You're our team's memory. Our team builds products for AI Incubation. Our goal is to understand and track trends closely so we can make smart product decisions. Capture customer meetings and feedback, and follow these rules:
 
-!!! tip "Keep it on schedule"
-    Add a [schedule](../core-concepts/schedules.md) so the base does its upkeep without anyone driving
-    — a daily sweep for accounts going quiet or feedback still unfiled, posted to the channel. A good
-    sweep post names itself, says what it checked in one line, and posts *nothing* on a quiet day.
+> - **Keep it minimal.** Store each fact once and link to it — don't copy it around.
+> - **Attribute everything.** Record who said it, where it came from, and what it refers to. If something's unknown, write `unknown` rather than guessing.
+> - **Keep it confidential.** Don't share anything outside the team unless I ask.
 
----
+### Ask it to write that down
 
-## Lighter variants
+**Then say so explicitly:**
 
-The same machinery scales down. Once you've seen the team memory, these are small adjustments to scope,
-sources, and reach — not different tools.
+> Write these instructions into your own instructions file so you follow them in every conversation
+> from now on, not just this one.
 
-### A personal brain you DM in Slack
+This matters more than it looks. A chat is one conversation's context — a Slack thread is its own
+session, and starting a new chat starts fresh. Rules that live only in *this* conversation's history
+won't reliably reach the next one. Asking the agent to record them puts them in a file it reads at the
+start of every session, so the purpose sticks.
 
-The most useful base is often the smallest: your own notes, meeting takeaways, and half-remembered
-decisions, reachable from your phone.
+The same goes for anything you want it to keep behaving by — the team roster below, a naming
+convention, a page you always want linked. **If it should outlive the conversation, ask it to write it
+down.** It's a habit worth keeping past setup: when you correct the base months from now, add "and
+remember that" and the correction holds.
 
-- **Create it** like above; either template works — pick **Plain Wiki** if you'd rather your notes stay
-  plain files you own.
-- **Bind it to a 1:1 DM** with the DAM bot (`/dam bind` inside the DM). In a DM every message reaches
-  the agent — no `@mention`, no ambient mode — so it reads like texting a colleague, and it stays
-  private to you.
-- **Feed it as you go:** after a meeting or decision, paste the gist into the DM and say *remember
-  this*. Good sources are meeting takeaways, links and documents you'll want to ask about, and the
-  reasoning behind decisions — the part you forget first. Upload files with the
-  [File Manager](../core-concepts/file-manager.md) or `dam import`.
+### Tell it who your team is
 
-### A project base for a group
+This is the most valuable thing you can put in that first conversation, and it's the closest thing to
+per-person permissions a knowledge base has.
 
-For a team working on one thing — a chip design programme, a research track, a product area — a shared
-base becomes where the project's context lives, so nobody rebuilds it from scroll-back.
+There's no read-only role. Anyone who can reach the agent — everyone in a bound Slack channel, for
+one — talks to it on equal footing and can ask it to change what it holds. So introduce your team to
+it explicitly:
 
-- **It lives in a channel, not a DM.** Bind it to the team's Slack channel so anyone can ask it; it
-  answers on `@mention`.
-- **It needs connections.** A project base usually reads from somewhere — a repo of design documents,
-  an issue tracker. Grant the [connection](../core-concepts/connections.md) and allow the host under
-  [network access](../core-concepts/network-access.md).
-- **Its sources change**, so add a [schedule](../core-concepts/schedules.md) to re-read them on a
-  cadence and keep it from drifting out of date.
-- **Its highest-value content is result history** — what was tried, what came out of it, what was
-  concluded. Feed it each result as it lands (the configuration, the numbers, the takeaway) and it can
-  answer *what have we already tried, which approach won last time, has anyone hit this failure mode.*
+> Our team is:
+>
+> - **Priya Raman** (`@priya`, GitHub `praman`) — engineering lead. Can correct or delete anything.
+> - **Dan Osei** (`@dan`, GitHub `daosei`) — PM. Can correct or delete anything.
+> - **Everyone else in this channel** — ask questions freely. If they ask you to change or remove
+>   knowledge, log it as a suggestion and flag it for Priya or Dan instead of applying it.
+>
+> Attribute what people tell you to them by name, and use these handles when you need to mention
+> someone.
 
-!!! info "The same shape watches the outside world"
-    Point that project-base machinery — connections, a re-read schedule, structure — at papers,
-    publications, and blogs instead, and you have a **field-awareness base**: one place you and your
-    agents can ask to stay on top of a space. Same setup; its sources are external and its job is to
-    summarize the field rather than the team's own results.
+Roles, handles, and who may edit versus who may ask: agents follow instructions like these well. But
+they *are* prompt engineering, not enforced rules — the real boundary is who's in the channel and who
+has the base open in DAM. Set the door deliberately, then use these instructions to keep the inside
+tidy.
 
----
+## 3. Connect it to Slack
 
-## Best practices across all of them
+Do this early — Slack is where a knowledge base earns its keep, and it's easier to feed from there
+than from the UI.
 
-- **One base, one purpose.** Two clear bases beat one that holds everything.
-- **Feed it as you go.** A base built from a steady trickle is better organized than one loaded in a
-  single dump.
-- **Ask it to reorganize.** It's a conversation, not a schema — when a topic outgrows its page, say so.
-- **Check the knowledge yourself.** It's just files in the workspace — browse or download them anytime
-  to see what it actually holds.
-- **Mind the single owner.** A knowledge base has one owner, and turns in a bound channel run under
-  that owner's credentials. For a base the team depends on, choose that owner deliberately.
-- **Export before deleting.** Deleting a base destroys its workspace and the knowledge with it.
+Invite the **DAM** bot to a conversation and send **`/dam bind`**, then pick the base from the picker.
+Two shapes work well:
 
-## What's next
+- **Your own 1:1 DM with the bot** — the best place to build a base up privately before anyone else
+  sees it, and the right home for a personal base.
+- **A team channel** — everyone can feed it and ask it questions where the work already happens.
 
-- [Knowledge Bases](../core-concepts/knowledge-bases.md) — templates, creation, and management in full
-- [Slack](../integrations/slack.md) — binding, triggering, and what to expect in a conversation
-- [Artifacts](../core-concepts/artifacts.md) — publishing summaries at stable links
-- [Schedules](../core-concepts/schedules.md) — unattended sweeps and re-reads
+Once bound, `@mention` the base with a question and the answer appears in the thread, with citations.
+`@mention` it with notes and `file this` and it captures them.
+
+You can bind both, and add the channel later — one agent can hold several bindings at once. See
+[Slack](../integrations/slack.md) for the full command surface.
+
+!!! tip "Let it read along"
+    With **ambient mode** (`/dam ambient on`) the base follows the whole conversation and speaks up
+    when it has something to add — useful in a channel where decisions get made in passing. It reads
+    *every* message, so tell the channel when you turn it on.
+
+## 4. Let the structure emerge
+
+Don't start by building a giant schema. Start with the things your team actually works with, then let
+the base grow as patterns appear.
+
+A customer-focused base might use:
+
+- **Account**: the customer's history
+- **Person**: an important stakeholder
+- **Touchpoint**: one meeting or call
+- **Theme**: a recurring request or complaint
+- **Synthesis**: an answer built from patterns across the base
+
+A project memory might instead use **Approach** (something you're trying), **Result** (one run),
+**Decision** (a decision and its reasoning), and **Synthesis**.
+
+The names don't matter. The relationships do: **one event becomes one page, and every page links to
+the things it relates to.** That's what makes patterns discoverable later.
+
+## 5. Feed it as work happens
+
+The best knowledge bases aren't built in one giant import. Feed them continuously — and with far less
+ceremony than you'd expect.
+
+Most of the time, no instructions at all. Drop meeting notes in the channel, `@mention` the base, and
+it files them: creating the touchpoint, linking the account and attendees, capturing each piece of
+feedback with its source, and attaching it to an existing theme or opening a new one. It'll tell you
+what it did:
+
+> Logged the Acme call: 3 feedback items, 1 new theme, 2 that need issues filed.
+
+Be specific only when you want something specific — a particular framing, a page you want linked, a
+detail you know matters and it can't infer.
+
+!!! tip "Attach the file, don't paste it"
+    Drop a transcript, spreadsheet, or PDF straight into the Slack message. Non-image files are saved
+    into the agent's workspace and handed over as a path, so it opens them with ordinary tools —
+    up to **20 MB per file** and 20 MB per message. Images are read directly (PNG, JPEG, GIF, WebP,
+    up to 30 MB per message). Anything left out is named to you privately, so you're never guessing.
+
+### Have it read Slack itself
+
+The **Slack** card in the connection catalogue's **Apps** tab is a different thing from the binding
+above: it connects *your* Slack account, so the base can search, read, post, and react as you. It's
+backed by Slack's own MCP server, so it arrives as a set of tools the agent calls.
+
+That means you can point it at channels it isn't bound to, and put it on a cadence:
+
+> Read #customer-feedback and #support-escalations every weekday at 6pm. File anything new as feedback
+> against the right account, and skip what you've already captured.
+
+Pair it with a [schedule](../core-concepts/schedules.md) (step 8) and the base keeps itself current
+without anyone remembering to paste. Note the Slack connection reads under your account, so it sees
+what you can see.
+
+## 6. Ask for patterns
+
+This is where a structured knowledge base pays off:
+
+- What are the three things customers ask for most often?
+- What have we already tried on exports, and which worked best?
+- Which complaints keep coming back?
+- Which accounts have gone quiet?
+
+Because the answers come from linked source pages, the agent can show you the evidence behind each one.
+
+You can also ask it to publish a view — an open-items list, a leadership summary — to the
+[artifact library](../core-concepts/artifacts.md), and **share it**: an artifact starts private, and
+publishing it mints a link that needs no DAM account, so you can hand it to anyone. The link stays the
+same when the base regenerates the contents, so a summary you've circulated keeps working as the
+knowledge behind it changes.
+
+!!! warning "A shared link is public"
+    The URL's unguessable token is the only thing protecting it — no sign-in, no allowlist. Treat a
+    shared artifact as public, and keep internal context out of one you circulate.
+
+## 7. Turn knowledge into action
+
+A knowledge base shouldn't just collect. When feedback represents a real product ask, connect it to
+your issue tracker and have it:
+
+- Search existing **open and closed** issues before creating one.
+- Add new accounts as evidence when an issue already exists.
+- Link the issue back to the original feedback.
+
+!!! warning "Get confirmation before filing"
+    Issues are outward facing. Have it confirm with you before filing, and hold back internal context.
+
+## 8. Put it on a schedule
+
+Ask the base for recurring work in plain language and it creates real
+[schedules](../core-concepts/schedules.md) — they run on the platform, survive restarts, wake the agent
+when they fire, and show up in its **Schedules** panel:
+
+> Every weekday morning, check for unfiled feedback and accounts that have gone quiet. Every night,
+> re-read the results repo.
+
+A good scheduled sweep is quiet when there's nothing to report. The goal is signal, not a daily status
+post.
+
+!!! note "Say the timezone you mean"
+    Ask for a local time and name the zone — "9am Eastern" — and the schedule holds that wall-clock
+    time year-round, across daylight saving. Ask for a bare cron expression instead and it runs in
+    **UTC** and ignores quiet hours. Schedules the agent creates for itself can't be edited in the
+    panel; changes go through chat.
+
+## Keeping it responsive
+
+A knowledge base is an ordinary [agent](../core-concepts/agents.md), so it **hibernates after a period
+of inactivity** and wakes on the next thing that needs it — a mention in Slack, opening it in DAM, a
+schedule firing. Nothing is lost when it sleeps; the workspace comes back untouched. But a wake takes a
+moment, so the first question after a quiet spell can be slow to answer.
+
+For a base a team leans on all day, that wait is worth removing. Under **Agent Setup** → **Lifecycle**,
+set the hibernation timeout to **`0`** — it then never hibernates and answers immediately, every time.
+
+!!! warning "An always-on base holds its compute"
+    A never-hibernating agent reserves its share of your compute budget even while idle, and DAM won't
+    reclaim that room to start something else — it keeps it away from your other agents. Use `0` for a
+    base your team genuinely queries all day; leave the default on a personal one, where a few seconds'
+    wake is no bother.
+
+## A personal base
+
+Not every knowledge base needs to be shared. A personal base is a place for your own notes,
+decisions, links, and meeting takeaways — created the same way, bound to your 1:1 DM with the bot.
+
+From there, treat it like a colleague with a very good memory. *Remember this.* Later: *What did we
+decide about the vendor, and why?* It answers from what you've given it, with a citation back to the
+original note.
+
+## Keep these principles in mind
+
+- **One base, one purpose.**
+- **Feed it continuously**, with as little ceremony as possible.
+- **Let the structure evolve.**
+- **Check what it actually knows.**
+- **Set the door deliberately** — connections, network rules, and channel membership.
+- **Sync it to a repo.** It's the backup, the history, and the way out.
+
+Once the base is connected to the places your team already works, the goal is simple: **capture
+knowledge once, make it easy to find, and keep it useful over time.**

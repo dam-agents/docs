@@ -68,7 +68,6 @@ not_in_nav: |
   guides/web-app-development.md
   guides/broken-link-monitor.md
   guides/external.md
-  guides/building-knowledge-bases.md
   guides/run-experiments.md
 
 nav:
@@ -77,6 +76,7 @@ nav:
     - Quickstart: getting-started/quickstart.md
     - DAM new user tour: getting-started/tour.md
   - Guides:
+    - Building knowledge bases: guides/building-knowledge-bases.md
     - Automate PR review: guides/code-review.md
   - Core Concepts:
     - The building blocks: core-concepts/building-blocks.md
