@@ -65,6 +65,7 @@ site_dir: site
 # Kept in the repo but deliberately out of the nav. These two read as generic
 # "yet another coding tool" walkthroughs; retained for anyone holding a direct link.
 not_in_nav: |
+  getting-started/welcome.md
   guides/web-app-development.md
   guides/broken-link-monitor.md
   guides/external.md
@@ -72,7 +73,7 @@ not_in_nav: |
 
 nav:
   - Getting Started:
-    - Welcome: getting-started/welcome.md
+    - Welcome: index.md
     - Quickstart: getting-started/quickstart.md
     - DAM new user tour: getting-started/tour.md
   - Guides:

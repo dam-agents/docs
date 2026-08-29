@@ -1,89 +1,46 @@
----
-hide:
-  - toc
----
+<div class="welcome-hero" markdown>
 
-<div class="hero" markdown>
+<p class="welcome-eyebrow">IBM Research</p>
 
-# IBM Research DAM
+# Welcome to DAM
 
-Shared infrastructure for AI-native engineering and research — run agent workloads, reuse what others have built, and turn experiments into knowledge the whole organization compounds on.
+<p class="welcome-lead">Run long-lived AI agents in isolated pods, with runtime credential injection, scheduled triggers, and Slack-native access.</p>
 
-**Run long-lived AI agents in isolated pods** — with runtime credential injection, scheduled triggers, and Slack-native access.
-
-[Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
-[Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank" .md-button}
-
-<small class="vpn-note">If you're outside an IBM office, VPN is required</small>
+<div class="welcome-cta" markdown>
+[Join the waitlist →](https://ibm.biz/dam-waitlist){:target="_blank" .md-button .md-button--primary}
+[Launch DAM](https://ibm.biz/dam-agents){:target="_blank" .md-button}
+</div>
 
 </div>
 
-## The problem
+## What is DAM?
 
-Researchers across IBM have built impressive engines — pipelines, harnesses, automations. But each tends to solve one team's problem, on one laptop. Harnesses run locally and interactively; there's nowhere common to share results or the setups that produced them; and working against real systems means credential and network risk each researcher manages alone. Adoption stays uneven, and almost none of it compounds.
+**DAM is IBM Research's platform for running long-lived AI agents.** An agent runs in its own isolated pod with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, experiments, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
 
-## What DAM gives you
+## What problem does it solve, and for whom?
 
-<div class="home-props" markdown>
-<div markdown>
+It's for **IBM Research engineers and researchers** who run agent workloads — and the **teams and leaders** who want the good ones to spread. Across IBM, people have built genuinely useful agents and workflows, but most live on one laptop and each new team rebuilds the same infrastructure — running agents, managing credentials, scheduling, storing results — before it can even start. So the work rarely compounds. DAM turns that infrastructure into shared building blocks no one has to rebuild: a practice proven in one place can be picked up everywhere, and new ones — from any team, or the wider industry — get captured once and made available to all.
 
-### One place to run
+## Start building
 
-Every agent runs isolated, credentialed, and autonomous on shared infrastructure — no more one-off setups on a laptop each. Approvals and egress rules govern what it can reach, so working against real systems stops being a risk you manage alone.
+Off the waitlist? Pick your entry point.
 
-</div>
-<div markdown>
+<div class="grid cards" markdown>
 
-### Reuse, don't rebuild
+- :material-rocket-launch-outline: **Quickstart**
 
-Agentic best practice comes packaged as connections, skills, and templates — set up once, then reused by anyone. Sessions, schedules, and channels attach to an agent; artifacts come out of it and outlive it.
+    ---
 
-</div>
-</div>
+    Launch your first Claude Code agent in minutes — in the web UI or the CLI.
 
-## What you learn, compounds
+    [Run the Quickstart →](getting-started/quickstart.md)
 
-Experiments, knowledge bases, and artifacts capture what worked — so the next person starts from it instead of from scratch. Give an agent something to optimize and watch it design and run the loop live; ask a question and get a synthesized answer with citations back to the source.
+- :material-map-outline: **Take the tour**
 
-<div class="home-gallery">
-  <figure>
-    <img src="assets/home-experiment.png" alt="A live experiment run in DAM — the agent's chat alongside the score matrix and judge-scores chart">
-    <figcaption>Experiments — every stage, score, and candidate as it happens.</figcaption>
-  </figure>
-  <figure>
-    <img src="assets/home-anchor.png" alt="A DAM knowledge base in the web UI — sources on the left, synthesized answers with citations in the main panel">
-    <figcaption>Knowledge bases — synthesized answers, cited back to the source.</figcaption>
-  </figure>
-</div>
+    ---
 
----
+    A guided walkthrough that builds one agent up capability by capability, so you see the whole platform first.
 
-## Meet it where you work
-
-<div class="rows" markdown>
-
-- **Web UI** <span>Chat with your agent, stream its terminal, and manage files — all from the browser.</span>
-- **CLI** <span>Create agents, attach to live sessions, and manage them from your local terminal.</span>
-- **Slack** <span>Invite the DAM bot, run `/dam bind`, and the whole channel can work with your agent.</span>
-- **VS Code/Zed** <span>Open your agent's workspace over `dam ssh`.</span>
-- **Schedules** <span>Run agents on a recurring timer — daily reviews, nightly audits, continuous monitoring.</span>
-
-</div>
-
----
-
-## Comes with the platform
-
-A choice of coding agents, ready-to-run experiment and knowledge base agents, optimization frameworks, and integrations for Slack, Telegram, and VS Code/Zed — available with no setup of your own. See **[The building blocks](core-concepts/building-blocks.md)** for the full set of reusable pieces, or **[Agents](core-concepts/agents.md)** for the harnesses and frameworks you can run.
-
-<div class="home-cta" markdown>
-
-## Get started
-
-New here? Start with **Welcome** for the whole picture in one place — what DAM is, why it exists, and how to sign up. Ready to build? Jump straight to the Quickstart.
-
-[Start with Welcome →](getting-started/welcome.md){: .md-button .md-button--primary}
-[Quickstart](getting-started/quickstart.md){: .md-button }
-[The building blocks](core-concepts/building-blocks.md){: .md-button }
+    [Start the tour →](getting-started/tour.md)
 
 </div>
