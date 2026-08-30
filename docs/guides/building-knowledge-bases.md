@@ -201,8 +201,8 @@ Do this early — Slack is where a knowledge base earns its keep, and it's easie
 than from the UI.
 
 Invite the **DAM** bot to a conversation and send **`/dam bind`**. It replies with a link to connect an
-agent — follow it, sign in, and pick the base from the list that opens in your browser. (You can also
-create one right there if you haven't yet.) Two shapes work well:
+agent — follow it, sign in, and pick your base from the list that opens in your browser. Create the base
+in step 1 first; that page can only connect one you already have. Two shapes work well:
 
 - **Your own 1:1 DM with the bot** — the best place to build a base up privately before anyone else
   sees it, and the right home for a personal base.
