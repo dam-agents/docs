@@ -24,7 +24,9 @@ Every credential your agent uses on the wire — provider API keys, GitHub token
 
 ## OAuth Connections
 
-OAuth connections auto-refresh and require no manual rotation.
+OAuth connections refresh their own access tokens, so the tokens never need rotating by hand. A
+client secret you supplied yourself is the one part that stays yours to replace — see
+[Managing Connections](#managing-connections).
 
 ### GitHub
 
@@ -113,12 +115,21 @@ does, the button becomes **Create + Authorize** and walks you through the server
 - **Delete everywhere** — **⋯** → **Delete this connection** removes it for every agent. DAM confirms first and lists the agents that will lose it.
 - **Per-user** — your connections are yours alone, never shared with teammates.
 - **Granted per agent** — a connection you own reaches an agent only once you grant it there. Connect once under Settings, then grant it to each agent that should use it.
-- **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place rather than disconnecting and reconnecting: the connection's **⋯** menu → **Update credential**, or `dam connection update`. The connection keeps its name and all its agent grants, and nothing restarts. OAuth connections refresh themselves through their own flow and need no rotation.
+- **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place rather than disconnecting and reconnecting: the connection's **⋯** menu → **Update credential**, or `dam connection update`. The connection keeps its name and all its agent grants, and nothing restarts.
+- **Rotating an OAuth client secret** — an OAuth connection you created with **your own** client id and
+  secret also offers a rotation item, labelled **Update client secret**, for when that secret changes at
+  the provider. DAM tries to revive the connection with it immediately. A connection that authorized
+  through the client secret your operator configured for everyone has no such item: there is no
+  per-connection secret to replace, and rotating it is the operator's job.
 - **Re-authenticating** — an OAuth connection whose credential stopped working shows **Expired**, with a
   one-click **Re-authenticate** button on the row. It re-runs login and consent and replaces only the
   tokens: the connection keeps its name and every agent grant. `dam connection reauth` does the same from
-  the CLI. **Re-authenticate** is the OAuth repair — an expired API-key or custom-header connection
-  offers **Update credential** on the row instead, since there's no login to re-run.
+  the CLI. A connection still waiting on its first authorization reads **Authorizing…** instead of
+  **Expired**, and offers **Authorize** in its **⋯** menu rather than a button on the row.
+- **Which repair you get** — **Re-authenticate** is the OAuth repair; there is no login to re-run for a
+  key, so an API-key or custom-header connection offers **Update credential** instead. In practice a
+  plain API-key connection doesn't go stale on its own: DAM has no expiry to read for one, so it stays
+  **active** and you replace its value when the service rejects it.
 
 ## Security
 
