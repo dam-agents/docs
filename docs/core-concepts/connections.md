@@ -80,6 +80,17 @@ a set of tools the agent calls.
     *talk to* an agent is a different thing entirely — that's a binding, and it's covered in
     [Slack](../integrations/slack.md). You can have either without the other.
 
+Because it reads as you, this is the way to have an agent **follow channels for context** — any channel
+you can see, with no binding and without inviting the DAM bot. Point one agent at as many channels as you
+like: the connection is granted per **agent**, so more channels needs no more setup, and a second agent
+is for separate knowledge or separate credentials rather than for separate channels.
+
+!!! warning "There's no read-only mode — 'never post' is an instruction"
+    The connection carries posting ability (writing messages, reactions, and canvases) whatever you
+    intend to use it for, and the create form has no scopes field to trim. So an agent that only watches
+    is one you've *told* to only watch, in its instructions — not one DAM restricts. If you need that
+    enforced rather than asked for, narrow the user-token scopes on your own Slack app.
+
 Unless your operator registered a Slack app for everyone, you supply an OAuth client id and secret from
 your own app. Enable the user-token scopes the tools need **before** authorizing: a scope you miss shows
 up later as a Slack call that fails, not as an error when you connect.

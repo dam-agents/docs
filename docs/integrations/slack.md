@@ -12,6 +12,17 @@ Connecting a Slack conversation to an agent lets you:
 - Get proactive posts — results after a scheduled run, alerts when a long task finishes
 - Keep a persistent session per thread
 
+!!! tip "Want it to read a channel, not answer in it?"
+    Then you don't want a binding at all. The **Slack** connection
+    ([Connections](../core-concepts/connections.md#slack)) signs your agent in as *you*, so it can read
+    and search any channel you can see — no `/dam bind`, and no invite for the DAM bot. One agent covers
+    as many channels as you point it at: the connection is granted per **agent**, not per channel, so
+    reach for several agents when you want separate knowledge or separate credentials, not when you want
+    more channels. Note there's no read-only *mode* — see the warning on that page.
+
+    Binding is the other thing entirely: a channel that *talks to* the agent. You can have either
+    without the other, or both.
+
 ## Who can drive the agent
 
 **The binding is the authorization.** Anyone Slack admits to the conversation can drive the agent,
