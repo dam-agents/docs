@@ -181,7 +181,7 @@ dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--b
 - `source add` also takes `--name <name>` and `--path <subdir>` to scan only a subdirectory of the repo. The name defaults to the git URL's path with a leading `/`, a trailing `/`, and a trailing `.git` removed — `https://github.com/acme/skills` becomes `acme/skills`. Slashes are kept; unlike connection names, skill-source names aren't slugified. On a TTY you're prompted with that value pre-filled.
 - `source list --agent <ref>` additionally includes sources declared by the agent's template. `source remove` confirms on a TTY — pass `-y, --yes` non-interactively.
 - `catalog --agent <ref>` annotates each skill as not-installed / installed / update-available **and** scans private sources through that agent's pod.
-- `install` always installs the source's **current HEAD** — there is no `--version` flag and no separate `update` verb; re-running `install` updates in place.
+- `install` installs the version the source was **last scanned** at, not whatever its repo holds this second — there is no `--version` flag and no separate `update` verb; re-running `install` updates in place. To pick up a commit pushed in the last few minutes, run `source refresh <id>` first so the next scan re-reads upstream.
 - `publish` works only on **standalone** (locally-authored) skills, and only against **GitHub** sources. Its `--source` is the repo to open the pull request *against* — not where the skill came from, as it means on `install`/`uninstall`, since a standalone skill has no origin source.
 
 ### Channels
