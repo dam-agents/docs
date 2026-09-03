@@ -64,7 +64,7 @@ Requires Node 20 or later.
 ### Step 2: Configure and Log In
 
 ```bash
-dam config set server https://dam-prod.apps.dam-cl.fmaas.res.ibm.com/
+dam config set server https://dam.res.ibm.com/
 dam auth login
 ```
 
