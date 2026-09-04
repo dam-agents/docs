@@ -8,7 +8,7 @@ The base image handles the platform plumbing:
 
 - It runs the **agent-runtime** process — the ACP server for chat, the terminal and SSH relays, the file service, and the runtime channel — that connects your agent to the platform. You never modify it.
 - It controls *when* your agent is launched (a chat session vs. a terminal session). You define *what* gets launched.
-- It includes common tools: Node, Python, `git`, and `curl` ready to use, with `gh`, `jq`, and `uv` a call away.
+- It includes common tools: Node, Python, `git`, `curl`, `gh`, and `jq` ready to use, with `uv` a call away.
 
 Customizing the image is mostly a few lines in the Dockerfile. Options, used alone or in combination:
 
@@ -43,8 +43,9 @@ Every agent Dockerfile follows the same shape: start `FROM` the published base i
 The base image provides:
 
 - **Node 24** and `npm`, **Python 3.12**, plus `git`, `curl`, `tar`, `gzip`, and `mise`
-- `gh`, `jq`, `rg`, `fd`, `uv`/`uvx`, `kubectl`, `oc`, and `gws` as lazy `mise` shims — on `PATH`, but
-  the first call installs them through the egress gateway
+- `gh`, `jq`, `rg`, and `fd` installed in the image and ready to run offline
+- `uv`/`uvx`, `kubectl`, `oc`, and `gws` as lazy `mise` shims — on `PATH`, but the first call installs
+  them through the egress gateway
 - The **agent-runtime** process (the ACP server for chat, the terminal and SSH relays, the file
   service, and the runtime channel that delivers env, files, MCP entries, skills, and triggers)
 - Default harness scripts you'll override in Step 3

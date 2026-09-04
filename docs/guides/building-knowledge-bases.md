@@ -134,11 +134,11 @@ conversation, so if you've already started talking, just carry on. On **LLM Wiki
 short setup interview that also offers to wire up a git remote and a maintenance schedule, which
 covers some of what follows.
 
-!!! tip "If the first greeting looks off, just start talking"
-    A new base installs its template in the background, and opening it immediately can get you there
-    first — so a greeting that arrives in the first few seconds may read oddly. Setup carries on
-    regardless and nothing is lost. Tell it what it's for in your own words; the greeting is a
-    convenience, not a step you have to complete.
+!!! tip "Opening it straight away is fine"
+    A new base installs its template before it greets you, so opening it seconds after creating it
+    shows **Preparing workspace** for a moment rather than an oddly uninformed greeting. Nothing is
+    lost either way — and if you'd rather just start talking, do: everything here works in an ordinary
+    message.
 
 Say something like:
 
@@ -254,6 +254,10 @@ what it did:
 Be specific only when you want something specific — a particular framing, a page you want linked, a
 detail you know matters and it can't infer.
 
+Feeding it a few messages at a time is fine: a run of messages is taken as one thought and filed in one
+go, so you don't have to compose the whole note before sending, and you won't get a half-answer to the
+first line.
+
 !!! tip "Attach the file, don't paste it"
     Drop a transcript, spreadsheet, or PDF straight into the Slack message. Non-image files are saved
     into the agent's workspace and handed over as a path, so it opens them with ordinary tools —
@@ -295,6 +299,21 @@ knowledge behind it changes.
 !!! warning "A shared link is public"
     The URL's unguessable token is the only thing protecting it — no sign-in, no allowlist. Treat a
     shared artifact as public, and keep internal context out of one you circulate.
+
+### Let other people's agents read it
+
+An artifact is a snapshot of one answer. If you want colleagues asking their *own* questions of the
+base, [share the base itself](../core-concepts/knowledge-bases.md#sharing-one-with-your-team): under
+**Agent Setup** → **Knowledge**, pick the folders to publish and hand out the `kbshare_…` link. Their
+agents get read-only access — they can search and read what you published, and change nothing.
+
+Two things make this the natural fit for a team memory. It's **read-only by construction**, so the
+per-person rules you wrote in step 2 stop being the only thing standing between a colleague and your
+knowledge. And the published copy is served independently of the agent, so people can read the base
+**while it's hibernated** — no wake, no compute off your budget, no queue behind your own questions.
+
+Feeding it stays yours: only the folders you named are published, and only the raw notes travel — your
+instructions, commands, and the base's working method don't.
 
 ## 7. Turn knowledge into action
 

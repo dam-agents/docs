@@ -138,3 +138,10 @@ waiting for you.
     The feed mixes approvals with session activity from channels and schedules, so **Needs attention**
     is the quickest route to the approvals themselves. An approval you've just answered stays on
     screen showing what you chose, rather than vanishing as you click.
+
+The session cards around them behave the same way: a card stays until you **dismiss** it, rather than
+disappearing the moment you've looked at the session — so the feed is a list you clear, not one that
+clears itself behind you. Cards for finished work age out after a week either way. Where a session
+produced [artifacts](artifacts.md), the card carries them as chips that open the preview directly, up to
+three with **+N more** for the rest. Terminal sessions don't appear in the feed at all, and don't carry
+chips.

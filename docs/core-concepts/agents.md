@@ -104,6 +104,10 @@ Your Sizes draw against a per-user **compute budget** — a ceiling on how much 
 - To make room, **pause** or **stop** an agent you aren't using, then start the waiting one. DAM will also free room for you where it can: starting an agent that doesn't fit hibernates your own idle, unattended agents — longest-idle first, and only enough to fit — once they've been idle a few minutes, without waiting for their own timeout. Agents you have open, and any set to never hibernate, are never touched.
 - Changing the Size of a running agent restarts it on save; if it's down, the new Size applies the next time it starts. Growing a **running** agent past your budget is refused when you save — free room first.
 
+**Home** shows where you stand, under **Compute allocated** — what your running agents currently reserve
+against the ceiling, not what they're actually consuming, so it drops when you stop or pause one rather
+than when an agent goes quiet. **Request more** beside it goes wherever your operator points it.
+
 ## Available Coding Harnesses
 
 Each agent runs one **coding harness** — the AI software inside the pod:

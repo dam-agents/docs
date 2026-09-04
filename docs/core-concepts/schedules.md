@@ -90,5 +90,10 @@ longer won't hand you a burst of catch-up runs when it finally wakes.
 
 **View results** on a schedule lists the sessions it has produced — open one to see what happened on
 that run. A **fresh** schedule accumulates one session per run; a **continuous** schedule has a single
-session you can revisit. **View details** expands the schedule to show its next and last run, and
-whether that last run succeeded.
+session you can revisit. **View details** expands the schedule to show its next and last run, whether
+that last run succeeded, its timezone, and its session mode.
+
+A session a schedule produced also carries **how long the agent worked** on it, on its row in the
+sessions list — a single run's time, a running total across a continuous schedule's fires, or that it's
+working right now. The reading counts the agent's own working time, so a reply you type into a scheduled
+session doesn't inflate it, and a run that crashed contributes nothing.

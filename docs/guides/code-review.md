@@ -109,8 +109,8 @@ Onboarding is a short **interactive dialog** — the agent checks out its own de
 
     A schedule the agent created isn't editable in the UI, though: because the agent owns it, its
     **Schedules** section says so and points you back to chat. So **ask the agent** to change when it
-    runs — that's the intended route, and it can delete and recreate the schedule itself. See
-    [Schedules](../core-concepts/schedules.md).
+    runs — that's the intended route, and it can delete and recreate the schedule itself. You can still
+    pause or delete it from the panel yourself. See [Schedules](../core-concepts/schedules.md).
 
 !!! tip "Files live in `work/`, not a subfolder"
     The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh agent rather than moving files by hand.

@@ -16,7 +16,9 @@ Open your agent in the DAM UI and type a message. A new session is created autom
 - **New chat session** — **New** in the sidebar; starts fresh conversation context (workspace files
   are unchanged)
 - **History** — scroll up to see the conversation including tool calls and file changes. A session
-  opens on its most recent stretch and loads older parts as you scroll back
+  opens on its most recent stretch and loads older parts as you scroll back. A very long session's
+  history is eventually trimmed from the front; where that's happened, the top of the conversation
+  says so instead of pretending it's the beginning
 - **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
 
 Sessions live with the agent's own files, so they survive hibernation, restarts, and platform updates. All sessions share the same workspace files.
@@ -72,6 +74,13 @@ session's row menu, behind a confirm — right-clicking or long-pressing the row
     A half-written message is kept with the session you wrote it for, so switching sessions — or
     closing the tab — doesn't lose it. Anything you'd **attached** doesn't survive a reload: the draft
     comes back as text, with a note naming the attachments you'll need to add again.
+
+!!! note "An older agent shows polled data"
+    Sessions and files normally update live. An agent still running an image from before that shipped
+    can't push updates, so DAM falls back to polling and says so above the conversation: *Live updates
+    need a newer agent runtime — showing polled data.* Everything still works, just less promptly. Where
+    an update for the agent's image is available the notice offers it right there; where none is yet, it
+    tells you that too, so a stale notice isn't something you can act on and fail.
 
 An agent's **background work** — a long build, a batch job it started and left running — keeps showing
 in the header and on the session row while it runs, and the result arrives in the session as usual when

@@ -48,10 +48,9 @@ setup — it's a workspace change, not a turn.
 Opening a brand-new knowledge base **greets you**: the agent introduces itself and explains how to
 feed it, rather than dropping you into an empty chat.
 
-!!! tip "No greeting? Setup was still landing"
-    The greeting can fire before setup has finished, in which case it silently does nothing and you
-    get an empty chat. It won't retry on its own — just send a message, or run `/wiki-onboard`
-    yourself. Setup itself keeps retrying on each wake until it succeeds.
+Open it the moment it's created and you'll wait through **Preparing workspace** first — the greeting
+holds until setup has landed, so it can't arrive half-configured. The greeting happens **once**, on
+your first chat with the base in DAM; feeding it from Slack, or a schedule firing, doesn't use it up.
 
 !!! warning "Setup needs network access"
     The template's setup step downloads its toolkit from GitHub, through the agent's egress
@@ -75,14 +74,54 @@ Ask it to reorganize, summarize, cross-link, or correct what it holds. Because t
 files in the workspace, you can browse or download it at any time, and it survives hibernation like
 any other agent content.
 
+## Sharing one with your team
+
+A knowledge base is normally yours alone. **Sharing** publishes a read-only copy of it that other
+people's agents can read — so a base one person feeds can answer questions for the whole team without
+anyone else being able to change it, or reach the agent behind it.
+
+Open the base's **Agent Setup** → **Knowledge**, then **Share this knowledge base**. Pick which of its
+workspace folders to publish — you're choosing folders, not the whole workspace — and DAM mints a
+**share link** starting `kbshare_`. Hand that to a teammate and they paste it under the same
+**Knowledge** section on *their* agent, under **Connected knowledge bases**, and that agent can list,
+search, and read what you published.
+
+What a consumer gets is deliberately narrow: **raw files only**. Skills, slash commands, and the way
+your base behaves aren't shared and won't work for them — they're reading your notes, not borrowing
+your agent.
+
+Once shared, the published copy **updates itself** as the knowledge changes; **Refresh now** republishes
+immediately if you don't want to wait. The section shows how many documents are published, when the copy
+was last updated, and how many queries it has served.
+
+Because consumers read the published copy rather than the agent, **a shared base answers while it's
+hibernated** — nobody wakes your agent, or spends its compute, by reading it.
+
+!!! warning "The link is the access control"
+    Anyone holding a share link can read everything you published, with no DAM account needed for the
+    agent they paste it into. **Rotate link…** issues a new one and everyone on the old link loses
+    access until you hand out the replacement; **Stop sharing…** deletes the published copy and kills
+    the link at once. Neither touches the knowledge base itself.
+
+**Reveal share link** shows it again later — it's hidden until you ask, and it's never given to the
+agent, so you can safely tell a base to share itself and still be the only one who can hand the link
+out. **Public name** is what consumers see the base called.
+
+!!! note "Sharing needs an object store"
+    Publishing writes the read-only copy to object storage, which your operator configures. Where none
+    is, sharing isn't available and says so — ask them rather than retrying.
+
 ## Managing one
 
 Wake, restart, pause, stop, and delete behave exactly as they do for [any
 agent](agents.md#lifecycle). Opening a knowledge base from the list keeps you in that context, so
 closing it returns you to the knowledge-base list rather than to Home.
 
-Its settings page covers the name, the harness (read-only), network access, and connections. **Size isn't
-editable there** — a knowledge base runs on its defaults to keep the surface conversational.
+A knowledge base gets the same **Agent Setup** page as any other agent: the name, size, its harness
+(read-only), the provider and model settings, **Knowledge**
+([sharing](#sharing-one-with-your-team)), network access, the hibernation timeout, and environment
+variables — alongside the usual Connections, Channels, Skills,
+Schedules, Artifacts, and Usage sections.
 
 There's no CLI command for creating a knowledge base, but `dam agent list` / `get` / `delete` all
 work on one.

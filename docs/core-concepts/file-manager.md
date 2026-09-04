@@ -46,7 +46,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open
 | Max download / transfer size | 50 MB |
 | Max upload file size | 50 MB |
 | Max import bundle size | 5 GiB (your operator can lower this — and should, if your agent's disk is smaller) |
-| Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews; other binary files open as a hex dump |
+| Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews; other binary files open as a hex dump of the first kilobyte |
 
 ## Key Notes
 

@@ -234,9 +234,21 @@ withheld, along with why.
   as context — so the conversation continues, but the earlier reasoning is gone.
 - **Threads run in parallel.** Several conversations with the same agent at once is fine. Within
   one thread, messages are handled in order rather than concurrently.
+- **A burst of messages gets one answer.** Write a thought across three messages and the agent waits
+  for you to finish, then answers all of them together — rather than replying to the first fragment
+  before you've made your point. Something you add while it's already working is handed to the
+  in-flight turn where the harness supports that, so you still get one reply; otherwise it becomes the
+  next turn rather than a second answer racing the first. A message with an attachment always gets its
+  own turn, and holds back anything behind it so nothing arrives out of order.
+  Bursts are grouped **per conversation** — in a thread, or per sender in a channel — so two people
+  raising different things are still answered separately.
 - **Fresh sessions get context.** A new top-level thread is given the channel's last 10 messages;
   picking up inside an existing thread injects up to 50 of that thread's replies. The window is
-  deliberately short, and a resumed session isn't re-injected.
+  deliberately short.
+- **A thread the agent returns to catches up.** Picking a thread back up, it's also given whatever
+  arrived since its own last turn there — so a conversation that carried on without it, or that another
+  connected agent answered in the meantime, isn't invisible to it. Best-effort: after a platform
+  restart a resuming turn may get no catch-up at all. Channel and DM turns are unaffected.
 - **Ambient adds a channel-level session** for top-level messages, alongside the per-thread ones.
 
 ## What else to expect
