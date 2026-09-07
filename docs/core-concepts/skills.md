@@ -12,7 +12,7 @@ group a skill is in decides what you can do with it, so this is the first thing 
 | Group in the panel | Where it came from | Who manages it |
 |---|---|---|
 | **Created in this agent** | You authored it here — wrote the files in the workspace, or uploaded Markdown | Yours: edit, download, delete, publish |
-| **Included with agent image** | Baked into the image your agent boots from | Read-only — comes and goes with the image |
+| **Included with sandbox image** | Baked into the image your agent boots from | Read-only — comes and goes with the image |
 | **Sourced from GitHub** | A git repo connected as a **skill source**; you install individual skills from it | Toggle each skill on or off; the repo is the source of truth |
 
 The rest of this page takes them in that order.
@@ -89,7 +89,7 @@ needs to know which version upstream now holds. **Re-scan** the source and it be
 Publishing shares a skill; it doesn't move it. Deleting a skill you published doesn't withdraw its
 pull request — follow the link if you want to close it yourself.
 
-## Included with agent image
+## Included with sandbox image
 
 Some images ship with skills already inside them, so a fresh agent is useful immediately. Which
 ones you get depends on the agent's image — an experiment or knowledge base agent, or a framework
