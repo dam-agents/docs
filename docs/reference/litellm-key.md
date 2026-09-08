@@ -68,6 +68,7 @@ Once connected, the key is saved and reused — the next time you create an agen
 These are the models available through the team dedicated to DAM: "rits-restricted-agentic". A key scoped to a different team will offer a different list.
 
 ```
+rits/zai-org/glm-5-1-fp8-agentic
 rits/deepseek-ai/DeepSeek-V3.2
 rits/moonshotai/Kimi-K2.5
 aws/claude-opus-4-8
@@ -78,6 +79,10 @@ gcp/gemini-3.1-pro-preview
 Azure/text-embedding-3-small-1
 Azure/text-embedding-3-large-1
 azure/gpt-5.3-codex
+aws/claude-opus-5
+azure/gpt-5.6-sol
+azure/gpt-5.6-luna
+azure/gpt-5.6-terra
 ```
 
 ## Video Walkthrough
