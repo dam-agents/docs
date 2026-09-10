@@ -94,7 +94,7 @@ Binding a conversation to an agent is what authorizes it. There is one access mo
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `/dam unbind` and `/dam ambient on|off`. Bare `/dam ambient`, which just reports the current setting, needs no link either. (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
+Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>`. The read-only forms, a bare `/dam ambient` or a bare `/dam default`, need no link either. (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
 
 Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 

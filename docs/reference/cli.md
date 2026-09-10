@@ -203,7 +203,7 @@ dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of se
 - **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one, and so does connecting a *different* agent to a channel that already has one — a conversation can hold several agents (see [Slack](../integrations/slack.md#several-agents-in-one-conversation)). Note the in-chat `/dam bind` is stricter: it refuses an agent already connected to that conversation rather than updating it.
 - **There's no `default` subcommand.** Which agent unnamed mentions reach is set in-chat with `/dam default <agent>`.
 - `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
-- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind` and `/dam ambient on|off` require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
+- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/dam bind` rather than through this command group.
 
 ### Approvals

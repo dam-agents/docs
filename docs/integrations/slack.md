@@ -77,10 +77,11 @@ prints the usage help.
 
 !!! note "When `/dam login` is required"
     Talking to the agent never needs a linked account. Linking only authorizes the *management*
-    commands — `/dam unbind` and `/dam ambient on|off`. `/dam bind` links you automatically, so if
-    that's how you connected the conversation you're already set; **if you bound from the CLI, you
-    were never linked**, and those two commands will ask you to run `/dam login` first.
-    Reading the current state with a bare `/dam ambient` never needs a link. `/dam logout` unlinks.
+    commands — `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>`. `/dam bind` links
+    you automatically, so if that's how you connected the conversation you're already set; **if you
+    bound from the CLI, you were never linked**, and those commands will ask you to run
+    `/dam login` first. Reading the current state with a bare `/dam ambient` or a bare `/dam default`
+    never needs a link. `/dam logout` unlinks.
 
 !!! info "Bindings are many-to-many"
     One agent can be connected to **several conversations at once** — channels, group DMs, and DMs in
@@ -361,7 +362,7 @@ already in.
 | Binding refused as already connected | That **same** agent is already connected here — binding a *different* one is allowed and adds it |
 | A mention with no name reached nobody | The conversation has no [default agent](#several-agents-in-one-conversation) — its owner can set one with `/dam default <agent>` |
 | The wrong agent answered | Start the message with the agent's name; an unknown or ambiguous name falls back to the default |
-| "Link your account first" on `unbind` or `ambient` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
+| "Link your account first" on `unbind`, `ambient`, or `default` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
 | An attached file was ignored | You'll have had a private note saying why — usually over a size cap, or a picture format the agent can't read |
