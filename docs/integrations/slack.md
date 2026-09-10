@@ -286,6 +286,11 @@ withheld, along with why.
     An agent can also open a DM with someone, but that DM isn't bound by the post — for their
     replies to reach the agent, the DM needs its own `/dam bind`.
 
+    Answering *you* in a thread is a third tool, and it can attach a file too — so a reply can hand
+    back the report or chart it just made rather than describing it. The file goes up after the reply
+    has already posted, so if the upload fails the answer is still in the thread and the agent is told
+    the attachment didn't make it.
+
 ## The agent's public page
 
 For most people in a shared channel, that signature link is the first bit of DAM they ever open — and

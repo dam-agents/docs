@@ -32,14 +32,14 @@ came from.
 
 ## Creating one
 
-From **Knowledge bases**, click **Create knowledge base** — the knowledge base agent has its own
-creation flow, all on one page: **Setup your knowledge base**.
+From **Knowledge base agents**, click **Create knowledge base agent** — it has its own creation flow,
+all on one page: **Setup your knowledge base agent**.
 
-Name it, pick the **Template**, choose a **Provider**, and grant any connections. Two things are
-decided for you: the harness is pinned to Claude Code (no image to choose), and the provider list is
-limited to the two that reach Claude — **IBM LiteLLM ETE Proxy** (recommended) or **Anthropic**.
-Network access isn't part of creation either: a new knowledge base starts on **Trusted defaults**,
-editable afterward from its settings page.
+Name it, pick the **Template**, pick a **Harness**, choose a **Provider**, and grant any connections.
+The harness list is the same one a coding agent chooses from — Claude Code is preselected, and any
+provider works — but a **custom image** isn't offered here, so a knowledge base runs one of the listed
+harnesses. Network access isn't part of creation either: a new knowledge base starts on **Trusted
+defaults**, editable afterward from its settings page.
 
 After it's created, the platform runs the template's setup command **once** in the workspace and
 wakes the agent, so the tooling is in place before you say anything. No conversation happens during

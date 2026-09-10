@@ -87,20 +87,20 @@ nothing else. See [network access](../core-concepts/network-access.md) for how r
 
 ## 1. Create the base
 
-From **Knowledge bases**, click **Create knowledge base**. Choose a name you'll recognize in Slack,
-such as `team-memory`.
+From **Knowledge base agents**, click **Create knowledge base agent**. Choose a name you'll recognize in
+Slack, such as `team-memory`.
 
 Then pick a template. This is the one decision you can't undo later, so it's worth knowing what each
 one actually installs.
 
-A template is **not** a different kind of agent or a different engine. Both are the same Claude Code
-agent, and both keep their knowledge as markdown files in the workspace. What differs is the *working
-method* installed on top: a set of instructions the agent reads every session, and — for one of them —
-a toolkit of commands and checks.
+A template is **not** a different kind of agent or a different engine. Both run whichever harness you
+picked in the step above, and both keep their knowledge as markdown files in the workspace. What differs
+is the *working method* installed on top: a set of instructions the agent reads every session, and — for
+one of them — a toolkit of commands and checks.
 
 | | **LLM Wiki** (default) | **Plain Wiki** |
 |---|---|---|
-| **What gets installed** | A Claude Code **skill** with seven slash commands, plus session hooks and maintenance scripts. | An operating manual, a single onboarding command, and a starter index in an empty notes folder. Nothing else. |
+| **What gets installed** | A toolkit of seven `wiki-` commands, plus session hooks and maintenance scripts. It installs itself into the harness you chose, so on most harnesses those arrive as slash commands. | An operating manual, a single onboarding command, and a starter index in an empty notes folder. Nothing else. |
 | **How knowledge is organized** | An **interlinked graph** — pages carry structured frontmatter and `[[wikilinks]]`, with a generated index over them. | **Atomic markdown notes**, one topic per file, cross-linked by ordinary relative links, with an index you can read by hand. |
 | **What you drive it with** | Commands as well as conversation: ingest a source, query, save an answer as its own page, render the graph, run a health check, work a review queue. | Conversation only. You tell it what to file and what to answer; there are no commands to learn. |
 | **Where things land** | Sources you drop in stay immutable; compiled pages live beside them. | Raw material in one folder, durable notes in another — sources are evidence, notes are the memory. |
@@ -296,9 +296,11 @@ publishing it mints a link that needs no DAM account, so you can hand it to anyo
 same when the base regenerates the contents, so a summary you've circulated keeps working as the
 knowledge behind it changes.
 
-!!! warning "A shared link is public"
-    The URL's unguessable token is the only thing protecting it — no sign-in, no allowlist. Treat a
-    shared artifact as public, and keep internal context out of one you circulate.
+!!! warning "A public link is public"
+    The URL's unguessable token is the only thing protecting a **public** artifact — no sign-in. Treat
+    one as public, and keep internal context out of anything you circulate that way. Where you need to
+    know who's reading, share it **Restricted** instead and name the people who may open it — see
+    [Sharing](../core-concepts/artifacts.md#sharing).
 
 ### Let other people's agents read it
 

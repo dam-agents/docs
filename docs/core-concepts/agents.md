@@ -33,7 +33,7 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
 | **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
 | **Paused** | You put it to sleep now instead of waiting for the idle timeout. Frees its budget immediately, and wakes automatically on next use — like an on-demand hibernate. |
 | **Stopped** | A hard stop. Stays down and **does not wake on its own** — you must **Start** it (a scheduled run will also start it). Frees its budget. |
-| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-size). |
+| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-resources). |
 | **Error** | Pod failed to start or encountered a fatal issue. |
 
 !!! note "The status pill collapses some of these"
@@ -42,7 +42,7 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
     are the underlying model, not nine distinct badges. **Preparing workspace** sits inside Running
     rather than before it, which is why it isn't a step in the diagram above.
 
-**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires. One exception: pausing an agent set to never hibernate behaves like **Stop** — it stays down until you start it.
+**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires. One exception: an agent set to never hibernate can't be paused at all — **Pause** is offered but unavailable, since it would wake itself straight back up. **Stop** it instead.
 
 ### Automatic Hibernation
 
@@ -94,19 +94,29 @@ an always-on agent and one that may be interrupted.
     Anything your agent needs permanently — system packages, tools installed at runtime — should go
     into a [custom image](../guides/custom-image.md), or it will vanish on the next hibernation.
 
-## Compute budget and Size
+## Compute budget and resources
 
-Each agent has a **Size** — how much CPU and memory it can use while it's running. You choose the Size when you create an agent and can change it later in settings; each catalog image starts from a sensible default.
+Each agent gets a share of compute — CPU and memory it can use while it's running. Under **Compute
+resources** you pick from a short list of sizes rather than setting cores and gigabytes yourself; each
+option is a multiple of one **slot**, the standard share your operator's install is set up around, and
+each catalog image starts from a sensible default. An agent created before the list existed keeps
+whatever it was given and stays selectable as its own option, so nothing is forced to resize.
 
-Your Sizes draw against a per-user **compute budget** — a ceiling on how much CPU and memory your *running* agents can reserve at once. An agent reserves its Size against the budget only while it's up; pausing, stopping, or hibernating it frees that room immediately. If the Size you pick is larger than the room currently free, the wizard warns you and names the free CPU and memory — the agent still saves, it just waits parked until room frees.
+Those choices draw against a per-user **compute budget** — a ceiling on how many slots your *running*
+agents can reserve at once. An agent reserves its share only while it's up; pausing, stopping, or
+hibernating it frees that room immediately. Pick a size larger than the room currently free and you're
+told how many slots it needs against how many are free — the agent still saves, it just waits parked
+until room frees.
 
 - If a new or resized agent would exceed your budget, it can't start and shows as **Over budget** — it waits until other agents free up room, and **Start** is its retry.
 - To make room, **pause** or **stop** an agent you aren't using, then start the waiting one. DAM will also free room for you where it can: starting an agent that doesn't fit hibernates your own idle, unattended agents — longest-idle first, and only enough to fit — once they've been idle a few minutes, without waiting for their own timeout. Agents you have open, and any set to never hibernate, are never touched.
-- Changing the Size of a running agent restarts it on save; if it's down, the new Size applies the next time it starts. Growing a **running** agent past your budget is refused when you save — free room first.
+- Changing an agent's compute restarts it on save; if it's down, the new size applies the next time it starts. Growing a **running** agent past your budget is refused when you save — free room first.
 
-**Home** shows where you stand, under **Compute allocated** — what your running agents currently reserve
-against the ceiling, not what they're actually consuming, so it drops when you stop or pause one rather
-than when an agent goes quiet. **Request more** beside it goes wherever your operator points it.
+**Home** and the **Coding agents** page both show where you stand, under **Compute resources** — a meter
+of how much of your ceiling is taken, with each agent holding compute marked as running or merely awake,
+and the rest free. It counts what your running agents **reserve, not what they're actually consuming**,
+so it drops when you stop or pause one rather than when an agent goes quiet. **Request more budget**
+beside it goes wherever your operator points it.
 
 ## Available Coding Harnesses
 
@@ -123,12 +133,12 @@ Want to bring your own? See the [Building a Custom Image](../guides/custom-image
 
 ## Experiments, knowledge bases, and frameworks
 
-Experiments and knowledge bases aren't separate kinds of agent — they're a base agent (today, Claude Code) with a capability layered on:
+Experiments and knowledge bases aren't separate kinds of agent — they're an ordinary agent with a capability layered on:
 
-- An **experiment** is a Claude Code agent with the experiment-authoring skill installed. Describe the design → build → test → learn loop you want and it writes it as ordinary Python, while the platform charts every stage, score, and candidate live. See [Experiments](experiments.md) and the [Run experiments](../guides/run-experiments.md) walkthrough.
-- A **knowledge base** is a Claude Code agent set up to build and maintain a body of knowledge you chat with. Feed it sources and it answers with citations back to where the answer came from. See [Knowledge bases](knowledge-bases.md) and the [Capture team knowledge](../guides/building-knowledge-bases.md) guide.
+- An **experiment** is a design → build → test → learn loop an agent writes as ordinary Python, while the platform charts every stage, score, and candidate live. Any agent can drive one: the SDK ships in the platform base image, and a live run docks its dashboard beside that agent's chat. There's no Experiments destination in the interface at the moment, so ask an agent in chat to set one up.
+- A **knowledge base** is an agent set up to build and maintain a body of knowledge you chat with. Feed it sources and it answers with citations back to where the answer came from. See [Knowledge bases](knowledge-bases.md) and the [Capture team knowledge](../guides/building-knowledge-bases.md) guide.
 
-Rather than write an optimization loop from scratch, an experiment can run an established **framework**. Each isn't an agent in its own right — it's run by a Claude Code subagent the experiment spawns, pairing the base agent with that framework. Point it at a target and a measurable objective in chat — "evolve this function to run faster on this input set" — and it authors the run, drives the framework, and reports the winner. Just tell it which one to use.
+Rather than write an optimization loop from scratch, an experiment can run an established **framework**. Each isn't an agent in its own right — it's run by a Claude Code subagent the experiment spawns, pairing the driving agent with that framework. Point it at a target and a measurable objective in chat — "evolve this function to run faster on this input set" — and it authors the run, drives the framework, and reports the winner. Just tell it which one to use.
 
 <div class="rows" markdown>
 
@@ -152,15 +162,18 @@ Each kind of agent has its own creation flow, reached from its own place in the 
   **image** (the AI software inside the pod — Claude Code, Codex, Pi Agent, or Bob), and choose a
   model **provider**. To bring your own image instead of a listed one, see
   [Building a Custom Image](../guides/custom-image.md).
-- **Experiment agent** — from **Experiments**, click **Create experiment**. Name it, choose a
-  provider, and add connections. It's a Claude Code agent with the experiment authoring skill
-  installed. See [Experiments](experiments.md).
-- **Knowledge base agent** — from **Knowledge bases**, click **Create knowledge base**. Name it,
-  pick a **template** (Plain Wiki or LLM Wiki), choose a provider, and add connections. See
-  [Knowledge Bases](knowledge-bases.md).
+- **Knowledge base agent** — from **Knowledge base agents**, click **Create knowledge base agent**.
+  Name it, pick a **template** (Plain Wiki or LLM Wiki), pick a harness, choose a provider, and add
+  connections. See [Knowledge Bases](knowledge-bases.md).
 
 New agents start with **Trusted defaults** for network access; you tune network permissions and
-**Size** (CPU/memory, within your budget) afterward from the agent's page — see [Configure](#configure).
+**Compute resources** (within your budget) afterward from the agent's page — see [Configure](#configure).
+
+!!! note "No creation flow for an experiment agent right now"
+    There used to be a third flow here, for an agent set up to run experiments. It isn't in the
+    interface at the moment. Experiment agents you already have keep working and list on the **Coding
+    agents** page under an **Experiment** badge; to start a new loop, ask an ordinary coding agent to
+    drive the experiment SDK.
 
 ### Configure
 
@@ -169,9 +182,9 @@ From the agent's page, the left nav has these sections:
 - **Agent Setup** — name, provider, **Model settings** (see
   [Sessions](sessions.md#model-settings)), **Network access** (which external services it may reach),
   **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables, and
-  **Size** (CPU/memory while running, within your [compute budget](#compute-budget-and-size);
-  changing it restarts a running agent on save). The image is fixed at creation — the only change
-  to it is the [update](#updating-the-image) below.
+  **Compute resources** (its share while running, within your
+  [compute budget](#compute-budget-and-resources); changing it restarts a running agent on save). The
+  image is fixed at creation — the only change to it is the [update](#updating-the-image) below.
 - **Connections** — link GitHub, API keys, and other credentials
 - **Channels** — connect the agent to Slack channels or Telegram chats (see
   [Slack](../integrations/slack.md) and [Telegram](../integrations/telegram.md))
@@ -202,14 +215,23 @@ the launch options above instead.
 
 ### Pause, Stop & Start
 
-From the agent's actions menu you can take it down without deleting it:
+From the agent's actions menu — on its own page and on its row in the list — you can take it down
+without deleting it. The two that free compute sit together under **Free up compute**, each naming what
+brings the agent back:
 
-- **Pause — wakes on next use** — puts it to sleep now and frees its budget.
-- **Stop — until started again** — a hard stop; it stays down until you bring it back up (or a scheduled run fires). Use this to reliably free budget for other work.
+- **Stop** — a hard stop. It frees the agent's budget and *wakes only when a schedule fires or you start
+  it*. Reach for this when you want the room to stay free.
+- **Pause** — puts it to sleep now and frees its budget too, but *wakes on any action* — a schedule
+  firing, a message arriving, or you opening a chat.
 - **Wake** / **Start** — brings an agent back up; the label depends on where you are. Opening an agent that's down offers **Start agent**. In the agents list a parked agent offers *Start* (which retries the budget gate) and any other agent that's down offers *Wake*; on the agent's own actions menu an agent that's down reads *Wake* whatever the reason it went down.
 - **Restart** — offered for a running or errored agent, and the only power action for those states. It recreates the agent on its current settings; the workspace survives. Reach for it when one is wedged.
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).
+
+!!! note "Pause is unavailable on a never-hibernating agent"
+    An agent whose idle timeout is `0` shows **Pause** marked **Unavailable**, because pausing it would
+    only wake it straight back up. **Stop** it instead, or change the timeout under **Agent Setup** →
+    **Lifecycle**.
 
 ### Updating the image
 
@@ -223,8 +245,8 @@ over budget, applies it the next time it starts; anything else restarts to apply
 is interrupted. The confirmation tells you which case you're in.
 
 Where **more than one** agent is behind, the list carries a banner counting them, with **Update all** to
-catch up in one action rather than a visit per agent. The experiment and knowledge base lists carry the
-same banner over their own agents.
+catch up in one action rather than a visit per agent. The knowledge base agents list carries the same
+banner over its own agents.
 
 ### Delete
 

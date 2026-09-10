@@ -60,15 +60,16 @@ That's separate from the longer window on
 runs out and are then denied.
 
 An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over
-**Chats**, **Experiment runs**, **Scheduled**, **Channels**, and **Terminal** (all on by default),
+**Chats**, **Experiment runs**, **Scheduled**, **Channels**, **Runs**, and **Terminal** (all on by default),
 and **New**, which opens a chat session straight away — a terminal starts from the launch options
 beside the message box (see [Terminal Sessions](#terminal-sessions)). **Delete session** is in a
 session's row menu, behind a confirm — right-clicking or long-pressing the row offers the same item.
 
-!!! note "Sending while the agent is busy"
-    A message sent mid-turn is queued and delivered when the current turn finishes, so you don't have
-    to wait. The queue is bounded — past about thirty queued messages on one session, further sends
-    are refused rather than piling up.
+!!! note "Sending while the agent isn't ready"
+    A message you send before the agent can take it is queued and delivered once it can — most often
+    a turn already in flight, but also an agent still coming up or a channel not yet engaged. The queue
+    is bounded: past about thirty queued messages on one session, further sends are refused rather than
+    piling up.
 
 !!! tip "Drafts stay with their session"
     A half-written message is kept with the session you wrote it for, so switching sessions — or
@@ -86,6 +87,26 @@ An agent's **background work** — a long build, a batch job it started and left
 in the header and on the session row while it runs, and the result arrives in the session as usual when
 it finishes. The indicator only updates while you have the chat open on a running agent, so it isn't a
 monitor to watch; it's there so a session between turns doesn't look dead.
+
+### A message that never got through
+
+A prompt that never reached the agent isn't lost and isn't silently dropped. It stays in the
+conversation marked **not delivered**, with a note saying why where the cause is known — a rejected
+credential, a rate limit, a full queue — and its **⋯** menu offers **Retry**, **Copy text**, and
+**Delete**.
+
+That survives a reload. The message is kept with the agent, and your browser keeps its own copy of the
+text while the agent is unreachable, handing it back the next time the session loads. So closing the tab
+on a send that didn't land still leaves you something to retry.
+
+Two limits worth knowing. Large images attached to such a message aren't kept — the marker names what
+won't come back with a retry, so you know to attach it again. And the copies your *browser* is holding
+are dropped when you sign out or switch user, which is the one case where retry is gone.
+
+!!! note "A conversation cut short resumes itself"
+    If the agent's harness dies unexpectedly mid-turn, the conversation says so — *interrupted by an
+    unexpected restart (often out of memory) and is resuming automatically* — and picks the task back
+    up on its own. Nothing to retry and nothing to restart.
 
 ### Environment variables
 

@@ -30,29 +30,62 @@ client secret you supplied yourself is the one part that stays yours to replace 
 
 ### GitHub
 
-DAM integrates with GitHub.com and with any GitHub Enterprise host you supply:
+DAM integrates with GitHub.com and with any GitHub Enterprise host you supply, and there are three ways
+to connect either one:
 
 1. Go to **Settings → Connections** and click **New** to open the **Connection catalogue**
-2. On the **Apps** tab, click **New** on the **GitHub** card, then choose **Sign in with Github** and
-   complete the OAuth flow, or **Personal access token** and paste a token you create on GitHub — the
-   token path is the one to pick when you want finer-grained repo access
-3. For **GitHub Enterprise**, **New** opens **Sign in with Github Enterprise** — supply the host
-   (plus an OAuth client id and secret, unless your operator registered one for everyone) and
-   complete the OAuth flow
+2. On the **Apps** tab, click **New** on the **GitHub** card (or **GitHub Enterprise**). One pane —
+   **Connect GitHub** — offers all three methods together; pick one and its fields appear below it
+3. Fill them in and submit: **Continue to GitHub** hands off to GitHub's own sign-in, while **Create
+   token** and **Connect app** save without leaving DAM
 
-Signing in confirms who you are — on its own it doesn't grant access to your repositories. For private
-repos, use the row's **Install on GitHub** link to install the app on the organization that owns them,
-choosing which of its repositories DAM may read and write. That's done once per organization, and if
-you don't own the org an owner has to approve or complete it.
+| Method | What you supply | Reach for it when |
+|--------|-----------------|-------------------|
+| **Authorize with GitHub** | Nothing — unless your operator hasn't registered an OAuth app for everyone, in which case a client id and secret of your own | You want the quickest route, and the agent acting as you |
+| **Connect with a personal access token** | A fine-grained token you create on GitHub | You want to scope access to just the repos you choose — the simplest route to private repos |
+| **Connect your GitHub App** | An app id, installation id, and the app's private key | You'd rather agents act as a bot your organization owns |
 
-!!! note "No Install on GitHub link?"
-    The link needs two things: the connection has to be **active** (one still waiting on authorization
-    offers **Authorize** in its **⋯** menu instead), and your operator has to have registered DAM as a
-    GitHub *App* rather than a plain OAuth app. Where they haven't, there's no app to install and the
-    link never appears — use the **Personal access token** path for private repos instead, and ask your
-    operator if you need the app route.
+A **GitHub Enterprise** connection asks for the hostname as well, whichever method you pick.
+
+#### Authorizing is only half of the OAuth route
+
+Signing in confirms who you are — on its own it doesn't grant access to your repositories, which is why
+the form tells you **2 steps required for successful connection**. The second step is installing the DAM
+app on the organization that owns the repos you want, choosing which of its repositories DAM may read
+and write. An active connection that still needs it carries a button on its row to go and install (the
+label uses whatever name your operator has given the platform). That's done once per organization, and
+if you don't own the org an owner has to approve or complete it.
+
+!!! note "No install button?"
+    It takes three things. The connection has to be **active** — one still waiting on authorization
+    offers **Authorize** in its **⋯** menu instead. Your operator has to have registered DAM as a GitHub
+    *App* rather than a plain OAuth app. And it has to be *that* app you authorized through: supply an
+    OAuth client id of your own and there's nothing for DAM to offer, because it doesn't know your app.
+    Where there's no install to do, use a **personal access token** or **your own GitHub App** for
+    private repos instead.
 
 Once that's in place, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
+
+#### Connecting your own GitHub App
+
+Pick **Connect your GitHub App** when you'd rather agents act as a bot your organization owns than as
+you. Create the app on GitHub under **Settings → Developer settings → GitHub Apps**, grant it the
+repository permissions your agents need, and install it on your organization. DAM only ever mints tokens
+from the app's private key, so leave the app's **Callback URL** empty and leave its webhook inactive.
+
+Then give DAM the app's **App ID**, **Installation ID**, and **Private key (PEM)** — the whole file
+including the BEGIN/END lines, or its base64 encoding. The key is verified by minting an installation
+token before anything is stored, so a wrong one is refused rather than saved.
+
+By default the connection can do everything that installation can. To narrow it, **Read installation**
+lists what the installation actually holds: tick the repositories this connection should reach (tick
+nothing and it reaches all of them), and set a level per permission (leave them all off and it keeps
+every permission the app was granted). A permission can't be set higher than the installation holds it,
+so this only ever narrows. Where the installation has more repositories than can be listed, you name
+them instead.
+
+Afterwards, **Edit repositories & permissions** in the connection's **⋯** menu revisits that scope, and
+**Update private key** rotates the key.
 
 When you sign in with **GitHub.com**, commits the agent makes are attributed to that account — DAM writes your GitHub display name and email into the agent's git config (`user.name` / `user.email`). If your GitHub profile email is private, a `users.noreply.github.com` address is used instead, so your primary email never lands in commit history. Other GitHub connection types, including GitHub Enterprise, don't set this — configure git yourself there.
 

@@ -69,7 +69,6 @@ not_in_nav: |
   guides/web-app-development.md
   guides/broken-link-monitor.md
   guides/external.md
-  guides/run-experiments.md
 
 nav:
   - Getting Started:
@@ -88,7 +87,6 @@ nav:
     - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md
     - File manager: core-concepts/file-manager.md
-    - Experiments: core-concepts/experiments.md
     - Knowledge bases: core-concepts/knowledge-bases.md
     - Artifacts: core-concepts/artifacts.md
   - Integrations:

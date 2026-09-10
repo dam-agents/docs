@@ -34,7 +34,8 @@ The built-in editor supports:
 - Line numbers
 - Direct in-browser editing with save
 
-SVG, Markdown and HTML files open rendered; **Raw** flips to the source and **Render** flips back.
+SVG, Markdown and HTML files open rendered; **Source** flips to the underlying text and **Preview** flips
+back.
 
 When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open fullscreen** button opens the rendered preview at full size in a dialog — it's offered only while the rendered view is showing. Press **Escape** or the close button to leave it; switching to another file also returns you to the side panel.
 

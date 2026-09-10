@@ -78,6 +78,10 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
     A dedicated account can also be shared across a team's agents. If you don't have one, create a new GitHub account for the bot and add it as a collaborator on the target repo before onboarding.
 
+    If your organization would rather not manage a second human account, connecting **your own GitHub
+    App** gives you a bot identity the org itself owns — see
+    [Connecting your own GitHub App](../core-concepts/connections.md#connecting-your-own-github-app).
+
 ### Network Access
 
 **Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears on Home for them.

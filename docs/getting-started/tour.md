@@ -1,7 +1,7 @@
 # DAM new user tour
 
 Welcome to DAM. This tour gives you a quick look at what you can do with DAM and how the pieces fit
-together. We'll start at Home, then explore coding agents, experiments, and knowledge bases.
+together. We'll start at Home, then explore coding agents and knowledge bases.
 
 ## Start on the home page
 
@@ -21,30 +21,23 @@ is this tour's order.
 
 - **Home** <span>Where you are — the Activity dashboard, or the "Accelerate research with DAM" welcome on a fresh account.</span>
 - **Coding agents** <span>The AI coding agents you create and chat with. The heart of the platform, and where this tour starts.</span>
-- **Experiments** <span>Self-improving design → build → test → learn loops, charted live.</span>
-- **Knowledge bases** <span>Agents that hold what your team knows and answer from it, with citations.</span>
+- **Knowledge base agents** <span>Agents that hold what your team knows and answer from it, with citations.</span>
 - **Artifacts** <span>The kept, shareable outputs your agents publish — reports, dashboards, reviews.</span>
 - **Settings** <span>Providers, connections, and account-wide configuration your agents draw on.</span>
 
 </div>
 
 One idea to hold onto: everything an agent is made of — connections, skills, schedules, channels,
-files, artifacts — is a **reusable building block** you assemble, not something each team rebuilds. All
-three features below are built from the same pieces.
+files, artifacts — is a **reusable building block** you assemble, not something each team rebuilds. Both
+features below are built from the same pieces.
 
-<div class="grid cards cards-3" markdown>
+<div class="grid cards" markdown>
 
 - :material-robot-outline: **Coding agents**
 
     ---
 
     An AI coding harness in its own pod — reads and writes code, runs commands, acts on your services. The core of DAM.
-
-- :material-flask-outline: **Experiments**
-
-    ---
-
-    A design → build → test → learn loop the platform charts live. Build something that improves itself.
 
 - :material-book-open-variant: **Knowledge bases**
 
@@ -169,27 +162,7 @@ result with a stable link you can share, even with people outside DAM.
 
 ---
 
-## 2. Experiments
-
-An **experiment** is a Claude Code agent set up to run a **design → build → test → learn** loop, charted
-live — every stage, score, and candidate as it happens. It's how you build something that improves
-itself, or point an optimization framework at a target of your own.
-
-The clearest way to see it: point one at **tiny-cache**, a small key/value cache on GitHub, and ask it
-to make lookups faster without breaking the tests. Each round it rewrites the code, runs the tests,
-benchmarks latency, and scores the candidate — and the chart in your chat fills in as it goes. Swap in
-your own target and the loop is the same.
-
-<figure class="tour-shot" markdown>
-![A live experiment run in DAM — the agent's chat beside the score matrix and judge-scores chart](../assets/home-experiment.png)
-<figcaption>An experiment charting every stage, score, and candidate as it runs.</figcaption>
-</figure>
-
-→ [Experiments](../core-concepts/experiments.md)
-
----
-
-## 3. Knowledge bases
+## 2. Knowledge base agents
 
 A **knowledge base** is an agent whose job is to hold what you or your team knows and answer from it —
 with **citations back to the source**. You feed it sources; it organizes what it learns and keeps it.

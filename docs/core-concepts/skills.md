@@ -17,6 +17,10 @@ group a skill is in decides what you can do with it, so this is the first thing 
 
 The rest of this page takes them in that order.
 
+Skills that came with the image are shown as **two** groups rather than one, because some of them are
+there to make a DAM feature work rather than to teach your agent a task — see
+[From platform features](#from-platform-features). Both are read-only either way.
+
 A **search box** at the top of the panel searches every connected source at once, and the line beneath
 it counts what you have — *12 skills · 3 connected sources · 5 on* — or how many match while you're
 searching.
@@ -92,13 +96,37 @@ pull request — follow the link if you want to close it yourself.
 ## Included with sandbox image
 
 Some images ship with skills already inside them, so a fresh agent is useful immediately. Which
-ones you get depends on the agent's image — an experiment or knowledge base agent, or a framework
-image, carries the skills its job needs.
+ones you get depends on the agent's image — an [optimization framework](agents.md#experiments-knowledge-bases-and-frameworks)
+image carries the skill that drives its framework, for instance.
 
 These are **read-only**. You can't publish them, and editing one only earns it a **Modified** badge,
 meaning the files on disk now differ from the copy the image shipped. They aren't yours to delete
 either — they arrive with the image and change when you
 [update the image](agents.md#updating-the-image).
+
+An update moves each of these skills on to the version the new image ships, and drops any the new image
+no longer carries. One you've edited is the exception: once it reads **Modified** it's treated as yours,
+and an image update leaves it exactly as you left it.
+
+This group only appears when there's something in it, so don't read its absence as a problem: on some
+images every skill that came with the agent is a feature skill, and they're all listed under
+[From platform features](#from-platform-features) instead.
+
+## From platform features
+
+Some of what an agent boots with isn't there to teach it a task at all — it's there so a DAM feature
+works. Those are collected under **From platform features**, with the description saying as much: *the
+platform ships these so a feature works. They are managed for you — you cannot edit or delete them
+here.*
+
+Each row carries a badge naming the feature it belongs to — **Schedules**, **Invocations**,
+**Experiments**, or **Model providers** — so it's clear why a skill you didn't ask for is present. Where
+the feature has a section of its own in the left nav, the badge is a shortcut to it: **Schedules** opens
+the agent's schedules, **Model providers** opens its connections. The other two are labels only.
+
+They behave like anything else that came with the image — read-only, no publishing, no delete — and the
+same **Modified** badge appears if the files on disk drift from what shipped. The practical point is
+that turning one off isn't a knob you have: the feature that relies on it brought it.
 
 ## Sourced from GitHub
 

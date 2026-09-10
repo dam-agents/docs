@@ -15,7 +15,7 @@
 
 ## What is DAM?
 
-**DAM is IBM Research's platform for running long-lived AI agents.** An agent runs in its own isolated pod with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, experiments, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
+**DAM is IBM Research's platform for running long-lived AI agents.** An agent runs in its own isolated pod with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, artifacts, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
 
 ## What problem does it solve, and for whom?
 

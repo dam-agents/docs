@@ -78,6 +78,21 @@ Deleting a folder does **not** delete the artifacts inside it; they become ungro
 File something into one with **Move to folder…** in its **⋯** menu, or drag the row onto the folder.
 **Rename** in the same menu changes the title.
 
+Your folders show up wherever an agent's artifacts are listed, not just on the library page: the
+**Artifacts** panel beside a chat, and the **Artifacts** section on the agent's own page, both group into
+the same collapsible folders with a count on each. Two things about those two places are worth knowing,
+because they're what makes a folder look wrong when it isn't:
+
+- The count is **that agent's** artifacts, not the folder's whole contents — the same folder shows
+  different numbers beside two different agents, and anything you filed there from elsewhere isn't
+  counted.
+- **Every folder you've made is listed even when that agent has put nothing in it**, so there's always
+  somewhere to drop a row — an empty one just starts collapsed. You can drag an artifact into a folder
+  straight from the chat panel without opening the library.
+
+The three sections beside a chat — **Sessions**, **Files** and **Artifacts** — all start **open**, and
+each remembers whether you collapsed it, so the sidebar comes back the way you had it.
+
 !!! note "An empty library has no header buttons"
     **New folder** and **Upload artifact** appear once there's something in the library. Until then the
     page is an empty state pointing you at your agents — so the first artifact comes from an agent
@@ -90,13 +105,32 @@ served from a separate share domain, so a shared artifact can never reach your D
 also carries a link button: it copies the share link once the artifact is public, and opens the
 sharing dialog while it isn't.
 
-!!! warning "The link is the access control"
-    The share URL contains an unguessable random token, and **that token is the only thing
-    protecting it**. Anyone who has the link can view the artifact — no sign-in, no allowlist, and
-    **no password option**. Treat a public link as public: guarding it is up to you.
+The dialog offers three choices for who can open it:
+
+| Choice | Who can open it |
+|--------|-----------------|
+| **Private** | Only you — no link |
+| **Restricted** | Only invited people, who sign in first |
+| **Public** | Anyone with the link |
+
+**Restricted** shares with people you name. Add each one's email address, and a visitor has to sign in
+before the artifact renders; anyone whose signed-in email isn't on the list gets a plain no-access page
+offering to switch account. Add nobody and the link opens for you alone. The list holds email
+addresses rather than DAM accounts, so you can invite someone who has never signed in — but they do
+need an account your organization's identity provider admits, since an email on the list doesn't
+create one.
+
+Only *you* can make an artifact restricted, in this dialog. An agent's own sharing tools offer private
+and public, and refuse any sharing change to an artifact that's already restricted — so an agent can
+neither widen a restricted link nor edit who's on it.
+
+!!! warning "A public link is the access control"
+    A **public** share URL contains an unguessable random token, and **that token is the only thing
+    protecting it**. Anyone who has the link can view the artifact — no sign-in and **no password
+    option**. Treat a public link as public: guarding it is up to you.
 
     Sending it to an external service publishes it. It may be cached or indexed even if you later
-    make the artifact private.
+    make the artifact private. Choose **Restricted** instead where you need to know who's reading.
 
 Turning visibility back to private disables the link immediately.
 
@@ -133,4 +167,5 @@ Deleting an artifact is also permanent — all versions go, and the share link d
 
 ## Related
 
-Experiments publish their dashboards here — see [Experiments](experiments.md#dashboards).
+An agent running an [experiment](agents.md#experiments-knowledge-bases-and-frameworks) publishes its
+dashboard here, filed in a folder of its own along with each run's results.

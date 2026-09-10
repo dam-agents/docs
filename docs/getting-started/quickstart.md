@@ -134,7 +134,6 @@ dam session list my-agent      # List sessions
 ## Next Steps
 
 - **[Build a knowledge base](../guides/building-knowledge-bases.md)** — a personal brain, a project base, or a team's memory you can ask
-- **[Run your first experiment](../guides/run-experiments.md)** — walk a small optimization loop end to end
 - **[Run code reviews automatically](../guides/code-review.md)** — set up an agent that reviews every PR
 - **[Add Slack](../integrations/slack.md)** — let your team interact with shared agents
 - **[Schedule tasks](../core-concepts/schedules.md)** — run agents on a timer with no human in the loop

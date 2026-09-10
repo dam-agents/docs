@@ -282,6 +282,55 @@ dam session list <agent>               # List all sessions for an agent (`dam se
 
 `dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness. On disconnect, the CLI prints a `dam chat --resume` command for easy reattach. Short flags: `-c` (`--continue`), `-r` (`--resume`).
 
+### Headless runs
+
+Where `dam chat` gives you an interactive terminal, `dam run` gives you one prompt and one answer on
+stdout — the shape you want in a script or a pipeline.
+
+```bash
+dam run <agent> -p "summarize today's open PRs"   # Submit a prompt, stream the answer
+dam run <agent> --prompt-file task.md             # Read the prompt from a file
+cat task.md | dam run <agent> --prompt-file -     # ...or from stdin
+dam run <agent> -p "..." --session <id>           # Continue an existing session
+dam run <agent> -p "..." --async                  # Exit once the run starts; prints its session id
+dam run get <agent> <session-id>                  # Read a run's recorded result
+dam run get <agent> <session-id> --wait           # ...blocking until the turn finishes
+dam run cancel <agent> <session-id>               # Cancel a run in flight
+```
+
+- Pass **exactly one** of `-p, --prompt` and `--prompt-file` — passing both, or neither, is an error.
+  A promptless `dam run` refuses rather than waiting on stdin, so it can't hang a script by accident.
+- The answer goes to **stdout**; progress, warnings, and the closing `stopReason` go to **stderr**, so
+  redirecting stdout gives you just the reply.
+- **Exit codes carry the outcome.** `0` means the agent finished its turn normally; a run that stopped
+  for any other reason, a run whose result you fetched and found stopped, and a timeout each exit
+  non-zero with a distinct code — so a pipeline can branch without parsing text.
+- `--timeout <seconds>` bounds only *your* wait, not the run. Defaults to an hour. On expiry the CLI
+  says so and names the `dam run get` command to pick the result up later — **the turn keeps going on
+  the agent**.
+- `--session <id>` continues a session rather than starting one, so a script can hold a thread across
+  several runs.
+- `run get` prints the recorded reply, `--json` gives you the raw payload, and `-w, --wait` blocks
+  until the turn ends. A session that never finished a headless run here — or whose record has since
+  been evicted — reports that rather than an empty answer.
+
+**A dropped connection doesn't lose the run.** The turn is running on the agent, not in your terminal,
+so the CLI reconnects with backoff, reloads the session, and finishes from the agent's own record of
+the run — printing only the text it hasn't already printed. That's also why a run record lives on the
+agent: **delete the session and the record goes with it**, so treat `run get` as a way to collect a
+result soon after, not as durable history.
+
+!!! warning "A run never answers an approval for you"
+    If the agent asks permission for a tool call, or reaches a host its
+    [network rules](../core-concepts/network-access.md) don't cover, `dam run` **never decides on your
+    behalf**. It prints a line naming what's being asked and the [`dam approval`](#approvals) command
+    that clears it, and waits.
+
+    A **detached** run (`--async`) has nobody attached to receive that prompt, so the ten-minute
+    orphan window applies — the request expires, that one tool call fails, and the turn carries on.
+    See [Sessions](../core-concepts/sessions.md#status-indicators). If a run needs approvals, stay
+    attached, or pre-approve what it will reach.
+
 ### SSH access
 
 ```bash

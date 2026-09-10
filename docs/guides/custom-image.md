@@ -258,8 +258,9 @@ From the sidebar, open **Coding agents** and click **Create coding agent**. Ever
 
 Then click **Create coding agent**.
 
-Network access and **Size** aren't part of creation: a new agent starts on **Trusted defaults** at its
-template's size, and both are editable straight afterward from the agent's **Agent Setup** page.
+Network access and **Compute resources** aren't part of creation: a new agent starts on **Trusted
+defaults** at its template's size, and both are editable straight afterward from the agent's **Agent
+Setup** page.
 
 No template registration, Helm edit, or platform redeploy is needed; the agent is created directly
 from the image address.
