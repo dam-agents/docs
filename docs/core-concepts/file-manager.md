@@ -18,7 +18,7 @@ staging folders (`.import-staging-…`) are hidden too. Ordinary repo noise like
 | Action | Description |
 |--------|-------------|
 | Browse | Navigate the directory tree |
-| View | Read file contents with syntax highlighting, or as a rendered preview (images, PDF, SVG, Markdown, HTML) |
+| View | Read file contents with syntax highlighting, or as a rendered preview (images, PDF, SVG, Markdown, HTML — with one SVG caveat below) |
 | Fullscreen | Open a rendered preview at full size in a dialog via the **Open fullscreen** button |
 | Edit | Modify files directly in the browser |
 | Upload | Add files from your local machine to the workspace |
@@ -37,7 +37,18 @@ The built-in editor supports:
 SVG, Markdown and HTML files open rendered; **Source** flips to the underlying text and **Preview** flips
 back.
 
-When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open fullscreen** button opens the rendered preview at full size in a dialog — it's offered only while the rendered view is showing. Press **Escape** or the close button to leave it; switching to another file also returns you to the side panel.
+!!! warning "An SVG that starts with an XML declaration opens as a hex dump"
+    If the very first bytes of a file are an XML declaration — `<?xml version="1.0"?>`, which many
+    drawing tools write at the top of an SVG — the workspace treats the file as binary. It opens as a
+    hex dump instead of a rendered image, and **Edit** and **Open fullscreen** aren't offered for it.
+    The same applies to any `.xml` file written that way.
+
+    This affects how the File Manager displays the file, not the file itself: **Download** still returns
+    it byte for byte, and asking the agent to read or change it in a session works as usual. To get
+    the rendered preview and in-browser editing back, remove the declaration — an SVG that begins with
+    its `<svg …>` tag, a comment, or a doctype renders normally.
+
+When viewing a file that renders (image, PDF, SVG, Markdown, or HTML — subject to the SVG caveat above), an **Open fullscreen** button opens the rendered preview at full size in a dialog — it's offered only while the rendered view is showing. Press **Escape** or the close button to leave it; switching to another file also returns you to the side panel.
 
 ## Limits
 
@@ -47,7 +58,7 @@ When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open
 | Max download / transfer size | 50 MB |
 | Max upload file size | 50 MB |
 | Max import bundle size | 5 GiB (your operator can lower this — and should, if your agent's disk is smaller) |
-| Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews; other binary files open as a hex dump of the first kilobyte |
+| Supported formats | Text files with syntax highlighting; images, PDF, SVG, Markdown and HTML render as previews (except an SVG whose first bytes are an XML declaration — see above); other binary files open as a hex dump of the first kilobyte |
 
 ## Key Notes
 
