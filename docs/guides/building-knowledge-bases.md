@@ -82,23 +82,21 @@ to **Strict default-deny**, so you approve each host as it comes up, or to a nam
 nothing else. See [network access](../core-concepts/network-access.md) for how rules and approvals work.
 
 !!! note "Why it starts on trusted defaults"
-    A new knowledge base installs its template from GitHub moments after it's created, so creation
+    A new knowledge base installs its kit from GitHub moments after it's created, so creation
     always uses the trusted preset — tighten it once the base is up rather than before.
 
 ## 1. Create the base
 
-From **Knowledge base agents**, click **Create knowledge base agent**. Choose a name you'll recognize in
-Slack, such as `team-memory`.
+Open **Starter Kits** and pick the **Knowledge** shelf. Two kits build a knowledge base — **LLM Wiki**
+and **Plain Wiki** — and which you choose is the one decision you can't undo later, so it's worth
+knowing what each actually installs.
 
-Then pick a template. This is the one decision you can't undo later, so it's worth knowing what each
-one actually installs.
-
-A template is **not** a different kind of agent or a different engine. Both run whichever harness you
-picked in the step above, and both keep their knowledge as markdown files in the workspace. What differs
+Neither is a different kind of agent or a different engine. Both run whichever harness you pick during
+creation, and both keep their knowledge as markdown files in the workspace. What differs
 is the *working method* installed on top: a set of instructions the agent reads every session, and — for
 one of them — a toolkit of commands and checks.
 
-| | **LLM Wiki** (default) | **Plain Wiki** |
+| | **LLM Wiki** | **Plain Wiki** |
 |---|---|---|
 | **What gets installed** | A toolkit of seven `wiki-` commands, plus session hooks and maintenance scripts. It installs itself into the harness you chose, so on most harnesses those arrive as slash commands. | An operating manual, a single onboarding command, and a starter index in an empty notes folder. Nothing else. |
 | **How knowledge is organized** | An **interlinked graph** — pages carry structured frontmatter and `[[wikilinks]]`, with a generated index over them. | **Atomic markdown notes**, one topic per file, cross-linked by ordinary relative links, with an index you can read by hand. |
@@ -115,28 +113,35 @@ offline once installed, with nothing to break; you just don't get the graph or t
 Pick **LLM Wiki** when the connections between facts are the point, **Plain Wiki** for a personal base
 or a straightforward reference an agent tidies for you.
 
+Open the kit you want and click **Use this Starter Kit**. On the **Create an agent** page, choose a name
+you'll recognize in Slack — such as `team-memory` — pick a **Harness**, and choose a **Provider**. The
+kit has answered the rest.
+
 !!! note "Both are open, and neither is a black box"
-    Each template is installed from a public repo by a one-shot setup script when the base is created —
+    Each kit is installed from a public repo by a one-shot setup script when the base is created —
     nothing runs a turn, and nothing is hidden. The knowledge and the instructions are plain files you
     can read and change, so you can see exactly what your base is following. The knowledge itself lives
     in the workspace, which is why either one syncs to a repo cleanly; LLM Wiki's commands and hooks
     install alongside it, elsewhere in the agent's home.
 
+    Because the kits live in their own repositories rather than in the platform, what they install can
+    change without a DAM release — the kit's own page links its source.
+
 ## 2. Give it a clear purpose
 
-When you first open the base, it greets you and asks what it's for. This is where you set its
-purpose — not in a settings field, but by telling it, in that first chat, what to remember and how
-to behave.
+The kit opens a first session itself, in which the agent introduces itself and asks what the base is
+for. This is where you set its purpose — not in a settings field, but by telling it, in that first
+chat, what to remember and how to behave. An **Onboarding** badge tracks what it's still waiting on
+from you.
 
-The greeting happens once, on your first chat with the base in DAM — feeding it from Slack first
-doesn't use it up. It's a convenience either way: everything in this step works the same in any
-conversation, so if you've already started talking, just carry on. On **LLM Wiki** the greeting is a
+That first session is a convenience, not a gate: everything in this step works the same in any
+conversation, so if you've already started talking, just carry on. On **LLM Wiki** the opening is a
 short setup interview that also offers to wire up a git remote and a maintenance schedule, which
 covers some of what follows.
 
 !!! tip "Opening it straight away is fine"
-    A new base installs its template before it greets you, so opening it seconds after creating it
-    shows **Preparing workspace** for a moment rather than an oddly uninformed greeting. Nothing is
+    A new base installs its kit before that first session runs, so opening it seconds after creating it
+    shows **Preparing workspace** for a moment rather than an oddly uninformed opening. Nothing is
     lost either way — and if you'd rather just start talking, do: everything here works in an ordinary
     message.
 
@@ -356,11 +361,12 @@ schedule firing. Nothing is lost when it sleeps; the workspace comes back untouc
 moment, so the first question after a quiet spell can be slow to answer.
 
 For a base a team leans on all day, that wait is worth removing. Under **Agent Setup** → **Lifecycle**,
-set the hibernation timeout to **`0`** — it then never hibernates and answers immediately, every time.
+switch it from **Hibernate when idle** to **Always on** — it then never hibernates and answers
+immediately, every time.
 
 !!! warning "An always-on base holds its compute"
     A never-hibernating agent reserves its share of your compute budget even while idle, and DAM won't
-    reclaim that room to start something else — it keeps it away from your other agents. Use `0` for a
+    reclaim that room to start something else — it keeps it away from your other agents. Choose it for a
     base your team genuinely queries all day; leave the default on a personal one, where a few seconds'
     wake is no bother.
 

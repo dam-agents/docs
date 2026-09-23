@@ -8,7 +8,7 @@ The base image handles the platform plumbing:
 
 - It runs the **agent-runtime** process — the ACP server for chat, the terminal and SSH relays, the file service, and the runtime channel — that connects your agent to the platform. You never modify it.
 - It controls *when* your agent is launched (a chat session vs. a terminal session). You define *what* gets launched.
-- It includes common tools: Node, Python, `git`, `curl`, `gh`, and `jq` ready to use, with `uv` a call away.
+- It includes common tools: Node, Python, `git`, `curl`, `gh`, `jq`, and `uv` ready to use, and can install more on demand.
 
 Customizing the image is mostly a few lines in the Dockerfile. Options, used alone or in combination:
 
@@ -42,10 +42,12 @@ Every agent Dockerfile follows the same shape: start `FROM` the published base i
 
 The base image provides:
 
-- **Node 24** and `npm`, **Python 3.12**, plus `git`, `curl`, `tar`, `gzip`, and `mise`
-- `gh`, `jq`, `rg`, and `fd` installed in the image and ready to run offline
-- `uv`/`uvx`, `kubectl`, `oc`, and `gws` as lazy `mise` shims — on `PATH`, but the first call installs
+- **Node 24** and `npm`, `pnpm`, **Python 3.12**, plus `git`, `curl`, `tar`, `gzip`, and `mise`
+- `gh`, `jq`, `rg`, `fd`, and `uv`/`uvx` installed in the image and ready to run offline
+- `kubectl`, `oc`, and `gws` as lazy `mise` shims — on `PATH`, but the first call installs
   them through the egress gateway
+- `docker` and `k3s` the same way: on `PATH`, installed on first use, so an agent that never runs a
+  container carries none of it
 - The **agent-runtime** process (the ACP server for chat, the terminal and SSH relays, the file
   service, and the runtime channel that delivers env, files, MCP entries, skills, and triggers)
 - Default harness scripts you'll override in Step 3
@@ -53,9 +55,8 @@ The base image provides:
   them; removing `openssh-server` disables SSH for the image
 - A non-root user (UID 65532)
 
-The base is a RHEL image, but the final layer is built from a sysroot, so **it has no package
-manager** — neither `dnf` nor `apt` is available at build time. Install with `npm`, `uv`, or by
-downloading a binary; for an OS package, use the two-stage pattern shown below.
+The base is a **Fedora** image and **`dnf` is available**, at build time and at runtime, so an OS package
+is one `RUN dnf install` away. `npm`, `uv`, and downloading a binary all work too.
 
 `PYTHONPATH` is preset to the platform's Python library directory. Append to it rather than
 replacing it, or you'll break the experiment SDK.
@@ -68,9 +69,8 @@ FROM quay.io/dam-agents/platform-base:<version>  # (1) build on the base image; 
 USER root                                     # (2) switch to root to make changes
 
 # (3) CUSTOMIZE: install any tools or libraries your agent should have.
-#     The base ships node/npm, Python 3.12 and uv — but no package manager,
-#     so dnf/apt are unavailable here. Install one of these ways:
-#       - an OS package:    use the two-stage pattern below
+#     The base ships node/npm, Python 3.12, uv, and dnf. Install any of these ways:
+#       - an OS package:    RUN dnf install -y <package> && dnf clean all
 #       - an npm package:   RUN npm install -g <package>
 #       - a Python package: RUN uv venv --python 3.12 /opt/venv \
 #                               && uv pip install --python /opt/venv/bin/python <package>
@@ -118,22 +118,25 @@ Rules enforced by the skeleton:
 - **Always end as the agent user.** Make changes as `root`, but the last line must be `USER 65532`. After writing files as root, run `chown -R 65532:0 /app` so the agent can read them. (`65532` is the ID of the non-root user the agent runs as.)
 - **Never `COPY` into `/home/agent`.** That path is a persistent volume at runtime, so anything baked there is hidden by the volume. Stage seed files at **`/app/working-dir/`** instead.
 - **`workspace/` ships files to the agent.** The contents of `/app/working-dir/` are copied into the agent's home when it first starts. The copy happens *once*, without overwriting — it seeds initial files and does not push updates to an agent that has already run.
-- **There is no package manager in the final image.** The base is built from a sysroot, so neither `dnf` nor `apt` exists at runtime. `npm`, `uv`, and downloading a binary all work directly. To add an OS package, install it in a separate builder stage and copy it in:
+- **An OS package is one line.** The base is a Fedora image with `dnf`, so install what you need and clean
+  up after yourself:
 
     ```dockerfile
-    FROM registry.access.redhat.com/hi/core-runtime:latest-builder AS extra
-    USER root
-    RUN dnf install -y --installroot=/extra --use-host-config \
-        --releasever="$(. /etc/os-release; echo "$VERSION_ID")" \
-        --setopt=install_weak_deps=0 sqlite && dnf clean all
-    # ...then, in your main stage:
-    # COPY --from=extra /extra/usr/bin/sqlite3 /usr/bin/sqlite3
-    # COPY --from=extra /extra/usr/lib64/libsqlite3.so.* /usr/lib64/
-    # RUN sqlite3 -version   # fail the build if a shared library is missing
+    RUN dnf install -y --setopt=install_weak_deps=False sqlite \
+        && dnf clean all && rm -rf /var/cache/dnf
     ```
 
-    A copied binary usually needs its shared libraries copied too, so run it once during the
-    build — that turns a silent runtime failure into a build failure.
+    Baking a package into the image is still the right call for anything your agent needs every time — it
+    doesn't have to be downloaded on each new agent, and it doesn't depend on the agent's network rules.
+
+!!! tip "Your agent can also install packages at runtime"
+    `dnf` is in the image the agent actually runs, not just the build, so an agent can install what a task
+    turns out to need. That goes out through its [egress
+    gateway](../core-concepts/network-access.md) like any other request; the Fedora repositories the base
+    is pinned to are in the **Trusted defaults** preset, so it works on a new agent without a rule of your
+    own. `docker` and `k3s` work the same way — both are on `PATH` and install themselves the first time
+    they're called, so an agent that wants a container or a cluster can have one without carrying it
+    otherwise.
 
 ## Step 3 — Provide the session launchers
 
@@ -238,8 +241,8 @@ Notes:
 
 ## Step 5 — Create an agent from your image
 
-From the sidebar, open **Coding agents** and click **Create coding agent**. Everything is on one page,
-**Setup your coding agent**, filled top to bottom:
+On **Home**, click **Create agent** (choosing **Start from scratch instead** if you're offered the starter
+kits first). Everything is on one page, **Create an agent**, filled top to bottom:
 
 1. **Name** — what you'll call it.
 2. **Image** — instead of picking a listed card, scroll past them to *or use a custom image* and paste
@@ -256,10 +259,11 @@ From the sidebar, open **Coding agents** and click **Create coding agent**. Ever
    where you attach the credential and allow its host — see
    [how to call an external service](external.md).
 
-Then click **Create coding agent**.
+The rest of the page — **Lifecycle**, **Knowledge bases** and **Channels** — can be left as it is; see
+[Create](../core-concepts/agents.md#create) for what each does. Then click **Create coding agent**.
 
 Network access and **Compute resources** aren't part of creation: a new agent starts on **Trusted
-defaults** at its template's size, and both are editable straight afterward from the agent's **Agent
+defaults** at its image's default size, and both are editable straight afterward from the agent's **Agent
 Setup** page.
 
 No template registration, Helm edit, or platform redeploy is needed; the agent is created directly

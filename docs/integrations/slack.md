@@ -243,9 +243,9 @@ withheld, along with why.
   own turn, and holds back anything behind it so nothing arrives out of order.
   Bursts are grouped **per conversation** — in a thread, or per sender in a channel — so two people
   raising different things are still answered separately.
-- **Fresh sessions get context.** A new top-level thread is given the channel's last 10 messages;
-  picking up inside an existing thread injects up to 50 of that thread's replies. The window is
-  deliberately short.
+- **Fresh sessions get context.** A new top-level thread is given the channel's recent messages — up to
+  about fifty — and picking up inside an existing thread injects up to fifty of that thread's replies.
+  The window is deliberately short.
 - **A thread the agent returns to catches up.** Picking a thread back up, it's also given whatever
   arrived since its own last turn there — so a conversation that carried on without it, or that another
   connected agent answered in the meantime, isn't invisible to it. Best-effort: after a platform
@@ -259,10 +259,18 @@ withheld, along with why.
   surface and shows nothing where the workspace can't display it. Ambient turns show no status,
   since nobody summoned it.
 - **The first message wakes a sleeping agent.** If it's hibernated, expect a delay of up to a
-  minute or two. The initial heads-up is private to whoever sent the message; if the wake takes
-  longer or fails, that's posted in the thread for everyone. A **stopped** agent is different — it
-  stays down, and the thread says so: someone has to start it from DAM, or wait for its next
-  scheduled run.
+  minute or two. The initial heads-up is private to whoever sent the message. Where the agent is slower
+  than that, the turn **keeps waiting** rather than giving up, and the thread says so —
+  *the agent is still starting; it'll answer as soon as it's up* — for everyone to see. It does give up
+  eventually. A **stopped** agent is different, and so is one whose image won't pull or whose owner is
+  over budget: those aren't slowness, they're answers, and the thread says so straight away rather than
+  waiting.
+- **Long work isn't dropped.** A turn is judged by whether the agent is still going, not by how long
+  it has taken, so a job that runs for an hour finishes and answers.
+- **An answer the relay loses is still posted.** Where the agent wrote a reply that never made it to
+  Slack, it's asked **once** to post it, and what you see is the answer rather than an apology. If
+  something already went wrong visibly in the thread, the agent knows you saw that and answers
+  accordingly. An agent that deliberately had nothing to say isn't prodded.
 - **Every post is signed.** Under each message the agent posts, Slack shows *<agent name> - Powered
   by DAM* as a link. One bot posts for every agent, so the name is how you tell them apart. Anyone
   can follow the link — it lands on the agent's public page, described below, not in the
@@ -314,8 +322,16 @@ tell an owner from a stranger.
 
 ## Other ways to bind
 
-You can also connect a **channel** from the DAM UI or the CLI. DMs and group DMs bind in-chat with
-`/dam bind`.
+You can also connect a channel as you **create** the agent — the **Channels** section of
+**Create an agent** offers **Slack Channel** and **Telegram Chat**, so an agent can be reachable from
+Slack before you've ever opened its chat. See [Create](../core-concepts/agents.md#create).
+
+Otherwise, connect a **channel** from the DAM UI or the CLI at any time. DMs and group DMs bind in-chat
+with `/dam bind`.
+
+Once connected, a channel is shown **by name** — `#team-eng` rather than a raw `C0…` id — on the agent's
+row and wherever its channels are listed. You still connect it *by* id; the name is just how it's
+displayed afterwards, and the id shows instead where the name isn't known.
 
 From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
 connected — each with whether ambient is on, and a **Default** badge where this agent is the one

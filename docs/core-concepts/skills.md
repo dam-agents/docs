@@ -166,6 +166,10 @@ skills you created here.
 | Declared by your agent's template | No |
 | A git repo you added yourself | Yes |
 
+Coming back to the Skills panel shows you the lists it last held, rather than emptying while it reloads —
+a card that's checking upstream keeps its skills and shows a small spinner in place. A page reload starts
+over and re-reads every source.
+
 Each source card's header shows how many of its skills are on and when the list was last scanned, with
 a re-scan button beside it. A source that has **some** on and some not opens collapsed to just the ones
 that are on; **Show N more available** reveals the rest. A source where everything is on — or nothing

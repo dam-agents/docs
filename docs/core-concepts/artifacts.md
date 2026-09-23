@@ -51,17 +51,39 @@ session. Where the artifact renders as a page, **Open fullscreen** in that panel
 window for a dashboard too dense to read in a column; the panel says it's *Opened in fullscreen*
 until you come back. **Source** switches to the underlying text instead.
 
-You can also upload a file yourself with **Upload artifact**.
+You can also upload a file yourself with **Upload artifact**, or publish a file straight out of an agent's
+workspace — see [the File Manager](file-manager.md#publishing-a-file-as-an-artifact).
 
 Everything collects in the **Artifacts** destination, searchable by title and file name. Each
 agent also shows the artifacts it produced.
 
 An agent can only publish into its own owner's library, and attribution can't be spoofed.
 
+## Editing one yourself
+
+You don't have to ask the agent to fix a typo. **Edit** — in an artifact's **⋯** menu, and in the
+artifact once it's open — edits the text in place and saves it as a **new version**, exactly as an agent's
+own update would: same share link, same version history.
+
+Three things make an artifact editable, and the menu simply leaves **Edit** out otherwise:
+
+- It's **text** — anything but a binary file.
+- It's the **current** version. Pin an older one to read it and editing is off; come back to the latest
+  to change it.
+- It's **small enough** to send back inline. A large artifact you can still read is offered as too large
+  to edit here.
+
+If someone else — or the agent — published a new version while you were typing, your save **stops and
+tells you** rather than quietly burying theirs: *this artifact has a newer version — overwrite it with
+your changes?* Say yes and yours becomes the latest; say no and nothing is saved, so you can reopen the
+newer one and redo your edit on top. An unsaved edit is guarded too: navigating away asks before
+discarding it.
+
 ## Versions
 
 Updating an artifact's content publishes a **new version** rather than overwriting it. The artifact
-keeps its identity: **the share link stays the same**, and viewers can switch between versions.
+keeps its identity: **the share link stays the same**, and viewers can switch between versions. The
+version list shows each one's age, its size, and who published it — **You**, or the agent's name.
 
 Editing only metadata — title, file name, folder — changes it in place without a new version.
 
@@ -91,7 +113,19 @@ because they're what makes a folder look wrong when it isn't:
   straight from the chat panel without opening the library.
 
 The three sections beside a chat — **Sessions**, **Files** and **Artifacts** — all start **open**, and
-each remembers whether you collapsed it, so the sidebar comes back the way you had it.
+each remembers whether you collapsed it, so the sidebar comes back the way you had it. Where two of them
+are open, the divider between them can be dragged to change how they share the height, and that's
+remembered too. A panel won't shrink past a readable minimum, and a collapsed panel has no divider.
+
+## Picking work back up from one
+
+An artifact is usually the end of a piece of work, but it's a reasonable place to start the next one.
+**Start a new session** — in the row's **⋯** menu, and in the preview dialog and docked panel while
+you're looking at the current version — opens a fresh chat **with the agent that published it**, with a
+reference to the artifact already in the message box.
+
+Nothing runs until you send: you read the line, add what you want done, and send it yourself. An artifact
+you **uploaded** has no publishing agent, so it doesn't offer the action at all.
 
 !!! note "An empty library has no header buttons"
     **New folder** and **Upload artifact** appear once there's something in the library. Until then the
@@ -100,10 +134,11 @@ each remembers whether you collapsed it, so the sidebar comes back the way you h
 
 ## Sharing
 
-Artifacts start **private**. Use **Share** in an artifact's **⋯** menu to publish it; the link is
-served from a separate share domain, so a shared artifact can never reach your DAM session. Every row
-also carries a link button: it copies the share link once the artifact is public, and opens the
-sharing dialog while it isn't.
+Artifacts start **private**. Every row wears a badge saying which it is — **Private**, **Restricted** or
+**Public** — and **the badge is the control**: click it to open the sharing dialog. **Share** in the
+artifact's **⋯** menu and a **Share** button in the opened artifact get you to the same place. The link is
+served from a separate share domain, so a shared artifact can never reach your DAM session. Once an
+artifact is public, a copy-link control sits beside the badge.
 
 The dialog offers three choices for who can open it:
 

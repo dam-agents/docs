@@ -7,53 +7,53 @@ The platform deliberately owns very little here — there's no ingestion pipelin
 no fixed schema. The knowledge lives as files in the agent's workspace, and the agent does the
 organizing. That means you shape it by talking to it, and you can always open the files yourself.
 
-## Templates
+## Choosing a kit
 
-Pick a template at create time. It decides what tooling gets installed in the workspace:
+A knowledge base is created from a [starter kit](agents.md#starter-kits) on the **Knowledge** shelf. The
+kit decides what tooling gets installed in the workspace:
 
-| Template | What it does |
+| Kit | What it does |
 |----------|-------------|
-| **LLM Wiki** (default) | Installs the llm-wiki toolkit and builds a structured wiki with a knowledge graph as you feed it sources. |
+| **LLM Wiki** | Installs the llm-wiki toolkit and builds a structured wiki with a knowledge graph as you feed it sources. |
 | **Plain Wiki** | No toolkit — the agent reads your files as knowledge and keeps what it learns as plain markdown notes. |
 
 Choose **Plain Wiki** if you want something durable and dependency-free that you could read straight
 out of the workspace — once it's set up, it works offline. Choose **LLM Wiki** for a structured wiki
-with a knowledge graph over what it has learned. Both templates fetch their setup from GitHub when the
+with a knowledge graph over what it has learned. Both kits fetch their setup from GitHub when the
 knowledge base is created, so neither avoids the network requirement below; the difference is whether
 you still need the network afterwards.
 
-The template is recorded on the knowledge base and shown in the list, so you can see which one it
-came from.
+The kit is recorded on the agent and shown as a badge on its row, so you can see which one it came from.
 
-!!! warning "The template can't be changed later"
-    Template and harness are both create-time choices. Switching from Plain Wiki to LLM Wiki means
+!!! warning "The kit can't be changed later"
+    Kit and harness are both create-time choices. Switching from Plain Wiki to LLM Wiki means
     creating a new knowledge base — there's no in-place conversion, and deleting the old one destroys
     its workspace.
 
 ## Creating one
 
-From **Knowledge base agents**, click **Create knowledge base agent** — it has its own creation flow,
-all on one page: **Setup your knowledge base agent**.
+Open **Starter Kits**, pick **Knowledge**, and open **LLM Wiki** or **Plain Wiki**. The kit's page shows
+what it brings; **Use this Starter Kit** takes you to **Create an agent** with most of it already filled
+in.
 
-Name it, pick the **Template**, pick a **Harness**, choose a **Provider**, and grant any connections.
-The harness list is the same one a coding agent chooses from — Claude Code is preselected, and any
-provider works — but a **custom image** isn't offered here, so a knowledge base runs one of the listed
-harnesses. Network access isn't part of creation either: a new knowledge base starts on **Trusted
-defaults**, editable afterward from its settings page.
+Name it, pick a **Harness**, and choose a **Provider**. The harness list is the same one any agent
+chooses from and Claude Code is preselected, but a **custom image** isn't offered for a kit — so a
+knowledge base runs one of the listed harnesses. **Repository** shows what the kit seeds your workspace
+from, and **Connections** lists anything it needs. Network access isn't part of creation: a new agent
+starts on **Trusted defaults**, editable afterwards from its **Agent Setup** page.
 
-After it's created, the platform runs the template's setup command **once** in the workspace and
-wakes the agent, so the tooling is in place before you say anything. No conversation happens during
-setup — it's a workspace change, not a turn.
+After it's created, the platform runs the kit's install command **once** in the workspace, so the tooling
+is in place before you say anything. No conversation happens during that step — it's a workspace change,
+not a turn.
 
-Opening a brand-new knowledge base **greets you**: the agent introduces itself and explains how to
-feed it, rather than dropping you into an empty chat.
-
-Open it the moment it's created and you'll wait through **Preparing workspace** first — the greeting
-holds until setup has landed, so it can't arrive half-configured. The greeting happens **once**, on
-your first chat with the base in DAM; feeding it from Slack, or a schedule firing, doesn't use it up.
+Then the kit opens a **first session** itself. Rather than dropping you into an empty chat, the agent
+introduces itself, asks you for the few things only you can tell it, and explains how to feed it. An
+**Onboarding** badge on the agent, and a bar above the message box, track what's still outstanding; any
+schedules the kit registered are held until the agent marks setup complete. Open it the moment it's
+created and you'll wait through **Preparing workspace** first, so nothing arrives half-configured.
 
 !!! warning "Setup needs network access"
-    The template's setup step downloads its toolkit from GitHub, through the agent's egress
+    The kit's install step downloads its toolkit from GitHub, through the agent's egress
     gateway. If you switch to the **Strict default-deny** network preset, that download can be blocked
     and the knowledge base comes up without its tooling. **Trusted defaults (recommended)** — the preset
     a new agent starts on — is the safer choice here; if setup seems not to have run, check
@@ -114,12 +114,11 @@ out. **Public name** is what consumers see the base called.
 ## Managing one
 
 Wake, restart, pause, stop, and delete behave exactly as they do for [any
-agent](agents.md#lifecycle). Opening a knowledge base from the list keeps you in that context, so
-closing it returns you to the knowledge-base list rather than to Home.
+agent](agents.md#lifecycle). A knowledge base lists on **Home** with your other agents.
 
-A knowledge base gets the same **Agent Setup** page as any other agent: the name, size, its harness
+It gets the same **Agent Setup** page as any other agent too: the name, compute resources, its harness
 (read-only), the provider and model settings, **Knowledge**
-([sharing](#sharing-one-with-your-team)), network access, the hibernation timeout, and environment
+([sharing](#sharing-one-with-your-team)), network access, **Lifecycle**, and environment
 variables — alongside the usual Connections, Channels, Skills,
 Schedules, Artifacts, and Usage sections.
 

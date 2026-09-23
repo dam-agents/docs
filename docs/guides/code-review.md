@@ -88,7 +88,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ## Setup
 
-1. **Create a Claude Code agent** — open **Coding agents** → **Create coding agent** and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code` from the CLI
+1. **Create a Claude Code agent** — on **Home**, **Create agent** and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code --provider <your-provider>` from the CLI
 2. **Add your provider** — configure IBM LiteLLM ETE Proxy or Anthropic with your API key
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
 4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the agent's **Agent Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.

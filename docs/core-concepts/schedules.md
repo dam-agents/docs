@@ -21,6 +21,8 @@ Schedules let you define automated tasks that fire on a timer:
     - **Quiet hours** — time windows when the schedule is suppressed. Each window has its own switch, so you can turn one off without deleting it.
     - **Prompt** — what the agent should do when it wakes
     - **Session type** — Fresh or Continuous (see [Session Modes](#session-modes) below)
+    - **Precheck (optional)** — a command that decides whether this fire runs at all (see
+      [Prechecks](#prechecks) below)
 4. Click **Create**
 
 !!! tip "Your agent can manage schedules itself"
@@ -65,6 +67,39 @@ Each schedule has a toggle — flip it off to pause it without deleting; its nex
 **Paused**. The **⋯** menu holds **Edit schedule**, **Delete schedule**, and, for a continuous
 schedule, **Reset session**.
 
+## Prechecks
+
+A schedule that fires often usually finds nothing to do, and every one of those fires still costs a model
+call. A **Precheck** is a cheap test that decides whether the fire is worth it: a shell command, run in
+the agent's workspace root before any session opens, whose exit code is the answer.
+
+| Exit code | What happens |
+|-----------|--------------|
+| `0` | The run goes ahead, and whatever the command printed is appended to the prompt — so the check can hand the agent what it found. |
+| `1` | The occurrence is skipped. No session, no turn, no model call. |
+| anything else | **The check itself is treated as broken, and the run happens anyway**, with the reason recorded. |
+
+That last row is the important one: a Precheck that can't run — a typo, a missing script, a command that
+hangs — **does not silence your schedule**. It errs toward running, so a broken check costs you an extra
+session rather than a month of missed work. **View details** shows the command, and *Precheck failed —
+ran anyway* with the reason when that's what happened.
+
+A typical one asks "has anything changed?":
+
+```sh
+git fetch -q && git log --oneline HEAD..origin/main | grep -q .
+```
+
+Two honest limits. The agent still **wakes** to run the check, so this saves the turn rather than the
+wake — but a fire the Precheck declines doesn't hold the agent awake afterwards, so a frequent check
+won't stop it hibernating. And the Precheck is a plain shell command in the agent's pod: it can't do
+anything the agent couldn't already do itself.
+
+Prechecks are also available from the CLI (`--precheck`, and `--precheck-none` to remove one) and to the
+agent's own schedule tools, so an agent can gate its own schedules. A [starter
+kit](agents.md#starter-kits) may declare a Precheck on a schedule it registers; you can keep, replace or
+drop it as you create the agent.
+
 ## Quiet Hours
 
 Suppress schedule fires during specific time windows. Suppressed runs are **dropped, not deferred** — if a fire lands in quiet hours, it's skipped entirely (not queued for later).
@@ -91,7 +126,12 @@ longer won't hand you a burst of catch-up runs when it finally wakes.
 **View results** on a schedule lists the sessions it has produced — open one to see what happened on
 that run. A **fresh** schedule accumulates one session per run; a **continuous** schedule has a single
 session you can revisit. **View details** expands the schedule to show its next and last run, whether
-that last run succeeded, its timezone, and its session mode.
+that last run succeeded, its timezone, its session mode, and its [Precheck](#prechecks) if it has one.
+
+Past runs are recorded **in the agent**, so a **stopped** agent can't list them. Rather than looking
+broken, **View results** says so and offers **Start agent** right there; the last run and whether it
+succeeded are shown either way. On a running agent that can't be read, **Try again** retries, and a
+schedule that has never fired says **No runs yet**.
 
 A session a schedule produced also carries **how long the agent worked** on it, on its row in the
 sessions list — a single run's time, a running total across a continuous schedule's fires, or that it's

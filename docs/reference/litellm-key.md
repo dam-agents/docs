@@ -56,7 +56,7 @@ The key looks like `sk-...`.
 
 In DAM, the model provider is configured as part of creating an agent.
 
-1. Start creating an agent to reach the **Setup your coding agent** step
+1. Start creating an agent — **Create agent** on **Home** — and scroll to **Provider**
 2. In the provider list, select **IBM LiteLLM ETE Proxy**
 3. Paste your LiteLLM API key
 4. Continue setting up the agent

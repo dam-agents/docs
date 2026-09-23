@@ -30,7 +30,7 @@ On the **Connections** page click **New**, open the **Custom Headers** tab, and 
   still allowed and the real key still injected on the wire. What you lose is the variable your tool
   reads to know what to send, so fill it in whenever your tool gets its key from the environment
 
-Then add it to the agent from its **My connections** panel. (You can add it to an existing agent — no need to recreate it.) Adding the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. Hosts match exactly, so a rule for one host never covers its subdomains — `files.example.com` needs its own rule even if `api.example.com` is already allowed.
+Then add it to the agent from its **My connections** panel. (You can add it to an existing agent — no need to recreate it.) Adding the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. A rule for one host doesn't cover its subdomains unless you say so — `files.example.com` needs its own rule even if `api.example.com` is already allowed, or a `*.example.com` rule to cover both.
 
 ### 3. How the key reaches your tool
 

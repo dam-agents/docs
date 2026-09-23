@@ -1,28 +1,28 @@
 # DAM new user tour
 
 Welcome to DAM. This tour gives you a quick look at what you can do with DAM and how the pieces fit
-together. We'll start at Home, then explore coding agents and knowledge bases.
+together. We'll start at Home, then explore agents and knowledge bases.
 
 ## Start on the home page
 
-When you sign in, you land on **Home** — your **Activity** dashboard: a review feed of anything waiting
-on you, plus **Compute**, **Spend**, and **Schedules** at a glance. (On a brand-new account with no
-agents yet, DAM takes you straight into creating your first one instead.)
+When you sign in, you land on **Home** — your agents, plus an activity feed of anything waiting on you
+and **Compute allocated** and **Spend** at a glance. (On a brand-new account with no agents yet, Home is
+a welcome that puts you straight into creating your first one instead.)
 
 The real map, though, is the **left sidebar** — it's the whole platform, top to bottom, and its order
 is this tour's order.
 
 <figure class="tour-shot" markdown>
 ![The DAM home page with the left-sidebar nav](../assets/tour-home.png)
-<figcaption>The home Activity dashboard. The left sidebar is the whole platform — see what each item is below.</figcaption>
+<figcaption>The Home page. The left sidebar is the whole platform — see what each item is below.</figcaption>
 </figure>
 
 <div class="rows" markdown>
 
-- **Home** <span>Where you are — the Activity dashboard, or the "Accelerate research with DAM" welcome on a fresh account.</span>
-- **Coding agents** <span>The AI coding agents you create and chat with. The heart of the platform, and where this tour starts.</span>
-- **Knowledge base agents** <span>Agents that hold what your team knows and answer from it, with citations.</span>
+- **Home** <span>Where you are — your agents, the activity feed, and where you create a new one. Where this tour starts.</span>
+- **Starter Kits** <span>Ready-made agent configurations — a code reviewer, a knowledge base, a personal assistant.</span>
 - **Artifacts** <span>The kept, shareable outputs your agents publish — reports, dashboards, reviews.</span>
+- **Documentation** <span>This site, opened in a new tab — the same pages you're reading now.</span>
 - **Settings** <span>Providers, connections, and account-wide configuration your agents draw on.</span>
 
 </div>
@@ -56,20 +56,31 @@ one and then walk through the pieces it's made of.
 
 ### Create it
 
-From the sidebar, open **Coding agents** → **Create coding agent**. Everything's on one page —
-**Setup your coding agent** — top to bottom:
+On **Home**, click **Create agent**. (**Browse starter kits** beside it is the other route — a kit
+pre-fills most of this page for you, and it's covered [below](#2-starter-kits). Take the long way once,
+to see what the pieces are.)
 
-- **Name** — what you'll call it.
+Everything's on one page — **Create an agent** — top to bottom:
+
+- **Name** — what you'll call it, pre-filled so you can leave it.
 - **Image** — the harness that runs inside the pod. Pick a card: **Claude Code**, **Codex**, **PI
   Agent**, or **IBM Bob** — or *use a custom image* to bring your own ([Building a custom image](../guides/custom-image.md)). Choose **Claude Code** to follow along.
 - **Provider** — the model provider. Not connected yet? Connect it right here and paste your key — no
   trip to Settings.
-- **Network access** — starts on **Trusted defaults**, the right choice for most agents.
 - **Connections** — grant the credentials this agent may use, like **GitHub** for working against your
   repos. More on those below.
+- **Lifecycle** — **Hibernate when idle** (with a timeout in minutes) or **Always on**. Leave it on
+  hibernate.
+- **Knowledge bases** — paste share links to knowledge bases someone has published, so this agent can
+  read them. Skip it for now.
+- **Channels** — connect it to a **Slack Channel** or **Telegram Chat** as you create it. Skip it; we
+  come back to channels below.
+
+Network access isn't a step here — a new agent starts on **Trusted defaults**, the right choice for most
+agents, and you tune it afterwards.
 
 <figure class="tour-shot" markdown>
-![The "Setup your coding agent" page — name, image cards, and provider](../assets/tour-create.png)
+![The "Create an agent" page — name, image cards, and provider](../assets/tour-create.png)
 <figcaption>One page: name the agent, pick an image, choose a provider, and grant connections.</figcaption>
 </figure>
 
@@ -146,8 +157,8 @@ work.
 
 A **channel** binds the agent to a place your team already talks — **Slack** or **Telegram**. Bound to a
 Slack channel, the agent answers when mentioned; in a DM it treats every message as a prompt. Setup is a
-one-time bind (invite the bot, run **`/dam bind`**, authenticate, pick the agent), and from then on
-anyone in the channel can work with it without opening DAM.
+one-time bind (invite the bot, run **`/dam bind`** in Slack or **`/bind`** in Telegram, authenticate,
+pick the agent), and from then on anyone in the channel can work with it without opening DAM.
 
 → [Slack](../integrations/slack.md) · [Telegram](../integrations/telegram.md)
 
@@ -162,7 +173,32 @@ result with a stable link you can share, even with people outside DAM.
 
 ---
 
-## 2. Knowledge base agents
+## 2. Starter kits
+
+Everything above was a choice you made yourself. A **starter kit** makes most of those choices for you:
+it's a ready-made agent configuration — a harness, skills, schedules, connections and channels bundled
+together — that you create an agent from in one step.
+
+**Starter Kits** in the sidebar lists what your install offers, on shelves: **Software**,
+**Knowledge**, **Productivity** and **Research**. Open one to see exactly what it brings before you
+commit — which connections it needs, which schedules it will register, what it seeds your workspace
+with — then **Use this Starter Kit**.
+
+What you get is an ordinary agent. The difference is the start: instead of an empty chat, the kit opens
+a **first session** where the agent asks you for the handful of things only you can supply — which
+repository to review, who it's assisting — and does the rest itself. An **Onboarding** badge and a bar
+above the message box track what's left, and any schedules the kit registered are held until the agent
+says setup is done.
+
+The knowledge bases in the next section are two of these kits. So is a code reviewer that reviews every
+pull request in a repository, and a personal assistant that keeps one person's task list and briefs them
+each morning.
+
+→ [Starter kits](../core-concepts/agents.md#starter-kits)
+
+---
+
+## 3. Knowledge bases
 
 A **knowledge base** is an agent whose job is to hold what you or your team knows and answer from it —
 with **citations back to the source**. You feed it sources; it organizes what it learns and keeps it.
@@ -172,6 +208,10 @@ choose this queue?" and it answers from the material with links to where the ans
 of digging through Slack scroll-back. Your other agents can read from it too, so they start from what
 the team already knows. The same shape covers a personal brain, a shared project base, or a team's
 memory.
+
+You create one from the **Knowledge** shelf on **Starter Kits** — **LLM Wiki** for a structured wiki
+with a knowledge graph, **Plain Wiki** for plain markdown notes you could read straight out of the
+workspace.
 
 <figure class="tour-shot" markdown>
 ![A DAM knowledge base — sources on the left, synthesized answers with citations in the main panel](../assets/home-anchor.png)

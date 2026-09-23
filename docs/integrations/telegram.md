@@ -16,8 +16,8 @@ Slack tells you it's waking.
 ## Connect a chat
 
 1. Add the bot to the chat (or open a DM with it).
-2. Send **`/dam bind`**. In a **group, only admins** can do this — anyone else gets
-   *"Only group admins can `/dam bind`."*
+2. Send **`/bind`**. In a **group, only admins** can do this — anyone else gets
+   *"Only group admins can `/bind`."*
 3. Follow the login link, then pick one of **your own** agents.
 4. The bot confirms in the chat.
 
@@ -25,23 +25,31 @@ Slack tells you it's waking.
 
 | Command | What it does |
 |---------|--------------|
-| `/dam bind` | Connect one of your agents to this chat (group admins only) |
-| `/dam unbind` | Release the binding (group admins only) |
-| `/dam` | Show the available commands |
+| `/bind` | Connect one of your agents to this chat (group admins only) |
+| `/unbind` | Release the binding (group admins only) |
+
+Both are published to Telegram's own command menu, so typing `/` in the chat lists them with a
+description — there's no separate help command to find. In a group with more than one bot, address a
+command to this one as `/bind@<botname>`.
+
+!!! note "These commands are Telegram's own, not `/dam`'s"
+    Telegram's commands are bare: `/bind`, not `/dam bind`. Slack is different — there the agent is driven
+    with the `/dam` [slash command](slack.md), because a Slack app owns one command name and namespaces
+    its verbs underneath it.
 
 !!! note "One agent per chat"
     A chat binds to one agent. Binding an already-connected chat is refused with *"This chat is
-    already connected to an agent. Send `/dam unbind` first to reconnect."* The same agent **can** be
+    already connected to an agent. Send `/unbind` first to reconnect."* The same agent **can** be
     bound to several chats — as it can to several [Slack](slack.md) conversations.
 
-The login link expires after about 10 minutes — send `/dam bind` again if you miss the window.
+The login link expires after about 10 minutes — send `/bind` again if you miss the window.
 
-Send `/dam unbind` in the chat to release the binding; the bot confirms in the chat.
+Send `/unbind` in the chat to release the binding; the bot confirms in the chat.
 
 You can also disconnect from DAM: open the agent, go to **Channels**, and click **Disconnect** on
 the chat in the Telegram card. The bot posts a farewell note in the chat before the binding goes. The
 card lists the chats already connected and links the bot so you can add it somewhere new — but
-connecting itself always happens in the chat, with `/dam bind`.
+connecting itself always happens in the chat, with `/bind`.
 
 !!! note "If Telegram isn't listed"
     Channels only shows what your operator has set up. Where Telegram isn't wired up, its card isn't
@@ -55,7 +63,7 @@ connecting itself always happens in the chat, with `/dam bind`.
 | **Group** | An `@mention` — after the first one, follow-ups in that chat are picked up too (the agent decides whether to answer) |
 
 Unbound **groups stay silent**, so the bot doesn't spam every chat it's been added to. In an unbound
-**DM** it replies *"This chat isn't connected to an agent. An admin needs to send `/dam bind`."*
+**DM** it replies *"This chat isn't connected to an agent. An admin needs to send `/bind`."*
 
 !!! warning "Inbound is text only"
     Telegram messages relay as **text**. Images and other attachments are not passed to the agent —
@@ -79,11 +87,11 @@ it. Unlike Slack, it can't reach a chat it isn't connected to.
 
 | Problem | Solution |
 |---------|----------|
-| "Only group admins can `/dam bind`" | Only a chat admin can connect a group. Ask one to run it |
-| "Only group admins can `/dam unbind`" | Ask a chat admin to run `/dam unbind` in the chat |
-| "This chat is already connected to an agent" | Send `/dam unbind` first, then bind again |
-| "This chat isn't connected to an agent" | Run `/dam bind` to connect one of your agents |
+| "Only group admins can `/bind`" | Only a chat admin can connect a group. Ask one to run it |
+| "Only group admins can `/unbind`" | Ask a chat admin to run `/unbind` in the chat |
+| "This chat is already connected to an agent" | Send `/unbind` first, then bind again |
+| "This chat isn't connected to an agent" | Run `/bind` to connect one of your agents |
 | Bot silent in a group | Make sure you `@mention` it, and that the chat is bound |
-| The login link didn't work | It expires after ~10 minutes — send `/dam bind` again |
+| The login link didn't work | It expires after ~10 minutes — send `/bind` again |
 | An attached image was ignored | Telegram relays text only. Paste the content instead |
 | Asked to accept Terms of Use in a DM, or silence in a group | Whoever bound the chat must accept the terms in DAM before any turn runs — turns use that person's consent, not yours. A DM says so; in a group nothing is posted and the bot just stays quiet |

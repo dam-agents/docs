@@ -14,9 +14,10 @@ Every agent in DAM is assembled from the same reusable pieces — compute, crede
 - **Files & memory** <span>Browse, edit, and upload files in the persistent workspace that holds the agent's configuration and memory across sessions. See [File Manager](../core-concepts/file-manager.md).</span>
 - **Artifacts** <span>Finished outputs an agent publishes to keep — a report, a dashboard, a generated page, a data file — that outlive any single run. See [Artifacts](../core-concepts/artifacts.md).</span>
 - **Knowledge bases** <span>An agent whose job is to hold a body of knowledge you chat with, answering with citations back to the source. See [Knowledge Bases](../core-concepts/knowledge-bases.md).</span>
+- **Starter kits** <span>The blocks above, pre-assembled into a ready-made agent you create in one step and it sets itself up. See [Starter kits](../core-concepts/agents.md#starter-kits).</span>
 
 </div>
 
 The blocks are the point. A coding assistant that reviews pull requests, a research agent that runs experiments, a knowledge base your whole team can query — these are all the same building blocks combined differently. DAM gives you the pieces; what you build with them is yours.
 
-Put them together and you get the things our team actually runs today — a personal brain you DM, an automated code reviewer, a live optimization loop. The [guides](../guides/building-knowledge-bases.md) walk through building a few end to end.
+Put them together and you get the things our team actually runs today — a personal brain you DM, an automated code reviewer, a live optimization loop. Several of those are offered as **starter kits**, so you can have one without assembling it yourself; the [guides](../guides/building-knowledge-bases.md) walk through building a few end to end.

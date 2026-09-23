@@ -8,7 +8,7 @@ Each agent has an allowlist of external services it can reach.
 
 | Field | Description | Example |
 |-------|-------------|---------|
-| Host | Domain the agent can reach, matched exactly — a subdomain needs its own rule. Add `:port` for a service that isn't on 443 | `api.github.com`, `api.prod.example:6443` |
+| Host | Domain the agent can reach. A leading `*.` covers one level of subdomain; `*` on its own covers everything. Add `:port` for a service that isn't on 443 | `api.github.com`, `*.pkg.dev`, `api.prod.example:6443` |
 | Method | HTTP method (defaults to `*`, meaning all) | `GET`, `POST` |
 | Path | URL path pattern (defaults to `*`) | `/repos/*` |
 | Verdict | `allow` or `deny`. The most specific rule wins, so a deny rule can carve an exception out of a broad allow | `allow` |
@@ -19,10 +19,15 @@ Each agent has an allowlist of external services it can reach.
     port, and you cannot allow one port while denying another. What the port *does* do is make the
     rule a narrowed one, which is what triggers the gateway restart described below.
 
-**Specificity is ranked, and method outranks path.** An exact host beats `*`; then an exact method
-beats `*`; then an exact path beats `*`; and among path patterns the longest wins. So an allow on
-`(host, GET, *)` beats a deny on `(host, *, /v1/admin)` — worth knowing before you rely on a deny
-rule to carve out a path.
+!!! info "A wildcard stands for exactly one label"
+    `*.pkg.dev` covers `us-docker.pkg.dev`, and **not** `a.b.pkg.dev` — the same rule a wildcard TLS
+    certificate follows, and the same one the gateway enforces on the wire. A deeper subdomain needs its
+    own rule, or its own `*.` wildcard.
+
+**Specificity is ranked, and method outranks path.** An exact host beats a `*.` wildcard, which beats
+`*`; then an exact method beats `*`; then an exact path beats `*`; and among path patterns the longest
+wins. So an allow on `(host, GET, *)` beats a deny on `(host, *, /v1/admin)` — worth knowing before you
+rely on a deny rule to carve out a path.
 
 !!! note "Narrowing a rule usually restarts the gateway"
     A host-only rule is cheap. Adding a method, path, or port means the agent's network gateway has
@@ -130,7 +135,8 @@ Approvals live on **Home**, in the activity feed. Check it when an agent seems s
 waiting for you.
 
 - Filter the feed with **Needs attention** to see just the approvals; **In progress** and **Unread**
-  cover sessions, and **All** shows everything.
+  cover sessions, and **All** shows everything. A second set of filters narrows by where the activity
+  came from — **Chat**, **Slack**, **Telegram**, **Schedule**, **Terminal**.
 - On any other page, a **Needs attention** pill floats in the corner with a count, and expands to the
   same approval cards — so you can answer without navigating away.
 
@@ -143,5 +149,8 @@ The session cards around them behave the same way: a card stays until you **dism
 disappearing the moment you've looked at the session — so the feed is a list you clear, not one that
 clears itself behind you. Cards for finished work age out after a week either way. Where a session
 produced [artifacts](artifacts.md), the card carries them as chips that open the preview directly, up to
-three with **+N more** for the rest. Terminal sessions don't appear in the feed at all, and don't carry
-chips.
+three with **+N more** for the rest.
+
+The feed is remembered **for you, not for the browser you cleared it in**: dismiss a card on your laptop
+and it stays dismissed on your phone. It also answers for an agent that's **hibernated** — an agent
+doesn't have to be up for its activity to be listed.

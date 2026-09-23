@@ -28,21 +28,23 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
 |-------|-----------------|
 | **Starting** | Pod is scaling up from hibernated, stopped, or newly created. |
 | **Preparing workspace** | A one-time workspace setup step is still running. The pod is already up — it just isn't usable until that finishes. |
-| **Running** | Pod is active, ready to chat. Reserves compute against your budget. |
+| **Running** | Pod is active, ready to chat. Reserves compute against your budget. In the agents list and on the agent's own page this splits into **Working** (a turn in flight) and **Idle** (up, with nothing running). |
 | **Hibernating** | Pod is scaling down — the short window after you pause or stop it, before it reports down. |
 | **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
 | **Paused** | You put it to sleep now instead of waiting for the idle timeout. Frees its budget immediately, and wakes automatically on next use — like an on-demand hibernate. |
 | **Stopped** | A hard stop. Stays down and **does not wake on its own** — you must **Start** it (a scheduled run will also start it). Frees its budget. |
-| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-resources). |
+| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. An **Always on** agent is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-resources). |
 | **Error** | Pod failed to start or encountered a fatal issue. |
 
 !!! note "The status pill collapses some of these"
     Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and an agent waiting
     on budget shows as **Over budget** (with the CPU/memory figures in its tooltip). The states above
     are the underlying model, not nine distinct badges. **Preparing workspace** sits inside Running
-    rather than before it, which is why it isn't a step in the diagram above.
+    rather than before it, which is why it isn't a step in the diagram above. An **Always on** agent's
+    badge carries a power icon; hover it and it says the agent never hibernates on its own and keeps
+    its compute reserved.
 
-**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires. One exception: an agent set to never hibernate can't be paused at all — **Pause** is offered but unavailable, since it would wake itself straight back up. **Stop** it instead.
+**Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires. One exception: an **Always on** agent can't be paused at all — **Pause** is offered but unavailable, since it would wake itself straight back up. **Stop** it instead.
 
 ### Automatic Hibernation
 
@@ -53,9 +55,16 @@ an approval — and also while any chat, terminal, or SSH connection is simply *
 nothing running. It only scales down once it's both idle and unconnected, so closing the tab, terminal,
 or editor is what lets it idle down.
 
-By default an agent hibernates after the DAM-wide idle timeout. You can **override this per agent** from its settings (the idle timeout is set in minutes): raise or lower it to fit how the agent is used, or set it to **0 to never hibernate** so it stays running. The field always shows the value in force, so an agent with no override displays the inherited default rather than a blank.
+**Lifecycle** is a choice between two cards, offered when you create an agent and editable afterwards
+under **Agent Setup**:
 
-!!! warning "An agent that never hibernates holds its reserved compute even while idle, keeping that room away from your other agents. Use `0` only when you genuinely need one always on."
+- **Hibernate when idle** — *Requires time to start. Frees compute when not in use.* Pick this and you
+  also set the idle timeout in minutes; raise or lower it to fit how the agent is used. The field
+  always shows the value in force, so an agent with no override displays the inherited default rather
+  than a blank.
+- **Always on** — *Instant response (never idles). Always reserves compute.* The agent stays up.
+
+!!! warning "An **Always on** agent holds its reserved compute even while idle, keeping that room away from your other agents. The card says how much it reserves. Choose it only when you genuinely need one always on."
 
 ### Background work and hibernation
 
@@ -71,14 +80,14 @@ what will eventually end it. For those, either:
 
 - **Keep a terminal or SSH session open** for the duration — an open connection pins the agent
   awake, and closing the tab or editor is what lets it idle down again.
-- **Raise the hibernation timeout**, or set it to `0` to never hibernate, before starting the job.
+- **Raise the hibernation timeout**, or switch the agent to **Always on**, before starting the job.
   Raising it only defers hibernation rather than preventing it.
 
 Closing a chat tab doesn't stop a turn either — a running turn keeps the agent awake until it
 finishes.
 
-Crossing the `0` boundary asks you to confirm in both directions, since it's the difference between
-an always-on agent and one that may be interrupted.
+Switching between **Always on** and **Hibernate when idle** asks you to confirm in both directions,
+since it's the difference between an always-on agent and one that may be interrupted.
 
 ### What Survives Hibernation
 
@@ -109,14 +118,14 @@ told how many slots it needs against how many are free — the agent still saves
 until room frees.
 
 - If a new or resized agent would exceed your budget, it can't start and shows as **Over budget** — it waits until other agents free up room, and **Start** is its retry.
-- To make room, **pause** or **stop** an agent you aren't using, then start the waiting one. DAM will also free room for you where it can: starting an agent that doesn't fit hibernates your own idle, unattended agents — longest-idle first, and only enough to fit — once they've been idle a few minutes, without waiting for their own timeout. Agents you have open, and any set to never hibernate, are never touched.
+- To make room, **pause** or **stop** an agent you aren't using, then start the waiting one. DAM will also free room for you where it can: starting an agent that doesn't fit hibernates your own idle, unattended agents — longest-idle first, and only enough to fit — once they've been idle a few minutes, without waiting for their own timeout. Agents you have open, and any set to **Always on**, are never touched.
 - Changing an agent's compute restarts it on save; if it's down, the new size applies the next time it starts. Growing a **running** agent past your budget is refused when you save — free room first.
 
-**Home** and the **Coding agents** page both show where you stand, under **Compute resources** — a meter
-of how much of your ceiling is taken, with each agent holding compute marked as running or merely awake,
-and the rest free. It counts what your running agents **reserve, not what they're actually consuming**,
-so it drops when you stop or pause one rather than when an agent goes quiet. **Request more budget**
-beside it goes wherever your operator points it.
+**Home** shows where you stand, under **Compute allocated** — how many slots of your ceiling are taken,
+with each agent holding compute grouped as **Working** or **Idle**, and the rest free. It counts what
+your running agents **reserve, not what they're actually consuming**, so it drops when you stop or pause
+one rather than when an agent goes quiet. **Request more** beside it goes wherever your operator points
+it.
 
 ## Available Coding Harnesses
 
@@ -136,44 +145,88 @@ Want to bring your own? See the [Building a Custom Image](../guides/custom-image
 Experiments and knowledge bases aren't separate kinds of agent — they're an ordinary agent with a capability layered on:
 
 - An **experiment** is a design → build → test → learn loop an agent writes as ordinary Python, while the platform charts every stage, score, and candidate live. Any agent can drive one: the SDK ships in the platform base image, and a live run docks its dashboard beside that agent's chat. There's no Experiments destination in the interface at the moment, so ask an agent in chat to set one up.
-- A **knowledge base** is an agent set up to build and maintain a body of knowledge you chat with. Feed it sources and it answers with citations back to where the answer came from. See [Knowledge bases](knowledge-bases.md) and the [Capture team knowledge](../guides/building-knowledge-bases.md) guide.
+- A **knowledge base** is an agent set up to build and maintain a body of knowledge you chat with. Feed it sources and it answers with citations back to where the answer came from. You create one from a [starter kit](#starter-kits) under **Knowledge**. See [Knowledge bases](knowledge-bases.md) and the [Capture team knowledge](../guides/building-knowledge-bases.md) guide.
 
-Rather than write an optimization loop from scratch, an experiment can run an established **framework**. Each isn't an agent in its own right — it's run by a Claude Code subagent the experiment spawns, pairing the driving agent with that framework. Point it at a target and a measurable objective in chat — "evolve this function to run faster on this input set" — and it authors the run, drives the framework, and reports the winner. Just tell it which one to use.
+Rather than write an optimization loop from scratch, you can run an established **framework**. Each is
+offered as a [starter kit](#starter-kits) under **Research**, and each brings its own image — so you
+create an agent from the kit and give it your brief in its first message, rather than pairing it with an
+agent you already have. Point it at a target and a measurable objective — "evolve this function to run
+faster on this input set" — and it authors the run, drives the framework, and reports the winner.
 
 <div class="rows" markdown>
 
-- **NOUS** <small>Alpha</small> <span>Hypothesis-driven experimentation framework for long-running research.</span>
-- **OpenEvolve** <small>Alpha</small> <span>Open-source AlphaEvolve — evolves code through scored variations.</span>
-- **ShinkaEvolve** <small>Alpha</small> <span>Sample-efficient evolutionary program optimization from Sakana AI.</span>
-- **GEPA** <small>Alpha</small> <span>Reflective text and prompt optimization (Genetic-Pareto).</span>
-- **k-search** <small>Alpha</small> <span>LLM-driven search that optimizes GPU kernels.</span>
-- **SkyDiscover** <small>Alpha</small> <span>Berkeley Sky lab's code and algorithm optimizer, with AdaEvolve and EvoX search strategies.</span>
+- **Nous** <span>Hypothesis-driven campaigns against a target system it clones, builds, patches and measures.</span>
+- **OpenEvolve** <span>Evolutionary code optimization — evolves programs against a fitness function you define.</span>
+- **ShinkaEvolve** <span>Sample-efficient evolutionary program optimization, for when each evaluation is costly.</span>
+- **GEPA** <span>Reflective prompt and text optimization, rather than optimization of code itself.</span>
+- **K-Search** <span>LLM-driven GPU kernel optimization, with each candidate evaluated on Modal.</span>
+- **AdaEvolve** <span>Multi-island adaptive code and algorithm optimization, from the SkyDiscover project.</span>
 
 </div>
+
+Which of these your install offers is up to your operator, so the **Research** shelf on **Starter
+Kits** is the list to trust — **EvoX**, a self-evolving optimizer from the same project as AdaEvolve,
+ships switched off, for instance. Each kit's page links its own documentation.
 
 ## Managing agents
 
 ### Create
 
-Each kind of agent has its own creation flow, reached from its own place in the app. Each one is a
-**single page** — no steps to click through:
+Every agent is created the same way, from **Home**. There are two routes in, and both land on one
+**single page** — **Create an agent** — filled top to bottom:
 
-- **Coding agent** — from **Coding agents**, click **Create coding agent**. Name it, pick an
-  **image** (the AI software inside the pod — Claude Code, Codex, Pi Agent, or Bob), and choose a
-  model **provider**. To bring your own image instead of a listed one, see
-  [Building a Custom Image](../guides/custom-image.md).
-- **Knowledge base agent** — from **Knowledge base agents**, click **Create knowledge base agent**.
-  Name it, pick a **template** (Plain Wiki or LLM Wiki), pick a harness, choose a provider, and add
-  connections. See [Knowledge Bases](knowledge-bases.md).
+- **Create agent** — start from scratch and choose everything yourself.
+- **Browse starter kits** — start from a [starter kit](#starter-kits), which pre-fills most of the page
+  for you.
 
-New agents start with **Trusted defaults** for network access; you tune network permissions and
-**Compute resources** (within your budget) afterward from the agent's page — see [Configure](#configure).
+From scratch, the page asks for:
 
-!!! note "No creation flow for an experiment agent right now"
-    There used to be a third flow here, for an agent set up to run experiments. It isn't in the
-    interface at the moment. Experiment agents you already have keep working and list on the **Coding
-    agents** page under an **Experiment** badge; to start a new loop, ask an ordinary coding agent to
-    drive the experiment SDK.
+- **Name** — what you'll call it. It comes pre-filled, so you can accept it and move on.
+- **Image** — the AI software inside the pod: Claude Code, Codex, PI Agent, or IBM Bob. To bring your
+  own image instead of a listed card, see [Building a Custom Image](../guides/custom-image.md).
+- **Provider** — the model provider. Not connected yet? Connect it right here rather than in Settings.
+- **Connections** — the credentials this agent may use, like GitHub for working against your repos.
+- **Lifecycle** — **Hibernate when idle** or **Always on**, as described
+  [above](#automatic-hibernation).
+- **Knowledge bases** — paste share links to give this agent read-only access to
+  [knowledge bases](knowledge-bases.md) someone has published.
+- **Channels** — connect it to **Slack Channel** or **Telegram Chat** as you create it, rather than
+  afterwards. Each row explains the difference between the two: a channel means the agent answers *as
+  itself*, where a Slack connection means it acts *as you*. The rows only appear for a messenger your
+  operator has set up, and the agent starts in mentions-only mode either way.
+
+Then **Create coding agent**. Network access isn't part of creation — a new agent starts on **Trusted
+defaults** — and neither is **Compute resources**; both are editable straight afterwards from the
+agent's page, see [Configure](#configure).
+
+#### Starter kits
+
+A **starter kit** is a ready-made agent configuration: a harness, skills, schedules, connections and
+channels bundled together, sometimes with a repository of its own. **Starter Kits** in the sidebar
+lists what your install offers, grouped as **Software**, **Knowledge**, **Productivity** and
+**Research**, and searchable. Open one to see exactly what it brings before you commit, then **Use this
+Starter Kit** — or **Start from scratch instead**.
+
+Creating from a kit asks you for less, because the kit has answered most of it. What it does ask is
+marked as the kit's, so you can tell its choices from yours, and you can adjust or skip any of them:
+the **Harness** it runs on (fixed, where the kit brings its own image), a **Provider**, the
+**Repository** it seeds your workspace from, the **Schedules** it registers, and the **Connections** it
+needs — required ones are called out, so you know what it can't work without.
+
+A kit usually opens a **first session** as soon as the agent exists, where the agent asks you for the
+handful of things only you can supply and does the rest itself. While that's unfinished the agent
+carries an **Onboarding** badge — **Onboarding 2/5** once it knows how many steps there are — and a bar
+above the message box tracks the same list. **Any schedules the kit registered are held until the agent
+marks onboarding complete**, so nothing fires against a half-configured agent.
+
+Afterwards it's an ordinary agent, listed on **Home** with the rest, carrying a badge naming the kit it
+came from. (Agents you created to run experiments before that flow was retired are listed there too,
+under an **Experiment** badge, and keep working.)
+
+!!! note "Which kits you see is up to your operator"
+    The catalogue is configured per install and can move without a platform release, so treat the list
+    on your own **Starter Kits** page as the authority. Where an install has no catalogue configured,
+    the page says so and points you at starting from scratch.
 
 ### Configure
 
@@ -181,7 +234,8 @@ From the agent's page, the left nav has these sections:
 
 - **Agent Setup** — name, provider, **Model settings** (see
   [Sessions](sessions.md#model-settings)), **Network access** (which external services it may reach),
-  **Lifecycle** (hibernation timeout — in minutes; `0` = never), **Environment** variables, and
+  **Lifecycle** (**Hibernate when idle**, with the timeout in minutes, or **Always on**),
+  **Knowledge** (share links to other knowledge bases), **Environment** variables, and
   **Compute resources** (its share while running, within your
   [compute budget](#compute-budget-and-resources); changing it restarts a running agent on save). The
   image is fixed at creation — the only change to it is the [update](#updating-the-image) below.
@@ -228,10 +282,10 @@ brings the agent back:
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).
 
-!!! note "Pause is unavailable on a never-hibernating agent"
-    An agent whose idle timeout is `0` shows **Pause** marked **Unavailable**, because pausing it would
-    only wake it straight back up. **Stop** it instead, or change the timeout under **Agent Setup** →
-    **Lifecycle**.
+!!! note "Pause is unavailable on an Always on agent"
+    An **Always on** agent shows **Pause** marked **Unavailable**, because pausing it would only wake it
+    straight back up. **Stop** it instead, or switch it to **Hibernate when idle** under **Agent Setup**
+    → **Lifecycle**.
 
 ### Updating the image
 
@@ -245,8 +299,13 @@ over budget, applies it the next time it starts; anything else restarts to apply
 is interrupted. The confirmation tells you which case you're in.
 
 Where **more than one** agent is behind, the list carries a banner counting them, with **Update all** to
-catch up in one action rather than a visit per agent. The knowledge base agents list carries the same
-banner over its own agents.
+catch up in one action rather than a visit per agent.
+
+An agent can also be behind in a way that costs it something silently. Where its runtime is too old to
+accept configuration you granted it — network access, credentials, files, MCP servers, skills — it
+carries a **Missing config** warning badge on its row and in its chat header, and the conversation says
+which kinds it's running without. Where an image update exists, **Update** is offered right there; where
+none is yet, it tells you that instead, so the warning is never something you can act on and fail.
 
 ### Delete
 

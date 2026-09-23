@@ -76,15 +76,16 @@ dam auth token revoke key-abcdef12                  # revoke a key; rejected on 
 ```bash
 dam agent list                                   # List your agents (default command)
 dam agent get <name-or-id>                        # Show one agent's details
-dam agent create <name> --template <id>           # Create an agent (--template required)
-dam agent create <name> --template <id> --wait    # Block until the agent reaches running
+dam agent create <name> --template <id> --provider <id-or-name>          # Create an agent
+dam agent create <name> --template <id> --provider <id-or-name> --wait  # Block until it reaches running
 dam agent create-interactive                     # Interactive setup: name + template + credentials (TTY-only)
 dam agent delete <name-or-id>                     # Delete an agent and all its persistent data (confirms)
 dam agent delete <name-or-id> --yes               # Delete without confirmation
 dam agent restart <name-or-id>                    # Restart the pod (persistent volumes survive)
 ```
 
-- `create` flags: `--template <id>` (required), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
+- `create` flags: `--template <id>` (**required**), `--provider <id-or-name>` (**required**), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
+- `--provider` names a **model-provider connection**, by connection id or by a name unique among your providers — `dam connection list` shows both. A missing, unknown, ambiguous, non-provider or inactive selection is refused **before** the agent is created, so a wrong flag costs nothing. Resolving a *name* reads your connections, which needs `credentials:read`; pass a connection id to create with `agents:manage` alone. `dam agent create-interactive` collects the provider for you and needs neither flag.
 - `--wait` is available on `create` and `restart`; pair with `--timeout` to change the 120s default.
 - `--json` on `list`, `get`, `delete`, and `restart` for machine-readable output.
 
@@ -178,7 +179,7 @@ dam skill uninstall <agent> --source <id-or-url> --name <skill>   # Remove a ski
 dam skill publish <agent> --name <skill> --source <id-or-url> [--title <t>] [--body <b>]   # Publish a skill as a PR (--name/--source required; --title/--body optional)
 ```
 
-- `source add` also takes `--name <name>` and `--path <subdir>` to scan only a subdirectory of the repo. The name defaults to the git URL's path with a leading `/`, a trailing `/`, and a trailing `.git` removed — `https://github.com/acme/skills` becomes `acme/skills`. Slashes are kept; unlike connection names, skill-source names aren't slugified. On a TTY you're prompted with that value pre-filled.
+- `source add` also takes `--name <name>` and `--path <subdir>` to scan only a subdirectory of the repo. The name defaults to the repository's owner and name — `https://github.com/acme/skills` becomes `acme/skills`. Slashes are kept; unlike connection names, skill-source names aren't slugified. On **github.com** the owner and name are lowercased, so a URL you pasted with capitals gives a lowercase name. You can also paste a URL straight out of the browser: a `…/tree/<ref>/<subdir>` link supplies the subdirectory for you, so you don't have to pass `--path` as well. On a TTY you're prompted with that value pre-filled.
 - `source list --agent <ref>` additionally includes sources declared by the agent's template. `source remove` confirms on a TTY — pass `-y, --yes` non-interactively.
 - `catalog --agent <ref>` annotates each skill as not-installed / installed / update-available **and** scans private sources through that agent's pod.
 - `install` installs the version the source was **last scanned** at, not whatever its repo holds this second — there is no `--version` flag and no separate `update` verb; re-running `install` updates in place. To pick up a commit pushed in the last few minutes, run `source refresh <id>` first so the next scan re-reads upstream.
@@ -204,7 +205,7 @@ dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of se
 - **There's no `default` subcommand.** Which agent unnamed mentions reach is set in-chat with `/dam default <agent>`.
 - `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
 - **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
-- [Telegram](../integrations/telegram.md) chats bind in-chat via `/dam bind` rather than through this command group.
+- [Telegram](../integrations/telegram.md) chats bind in-chat via `/bind` — Telegram's commands are bare, not namespaced under `/dam` — rather than through this command group.
 
 ### Approvals
 
@@ -264,6 +265,7 @@ Additional flags (on both `create` and `update`):
 - `--timezone <tz>` — IANA timezone (defaults to the host's zone)
 - `--quiet-window <HH:MM-HH:MM>` — suppress fires inside a window (repeatable)
 - `--session-mode <fresh|continuous>` — new session per fire, or one shared session. Defaults to `fresh` on `create`; on `update`, omitting it leaves the stored value unchanged
+- `--precheck <command>` — a shell command that decides whether each fire actually runs. See [Prechecks](../core-concepts/schedules.md#prechecks). `update` also takes `--precheck-none` to remove one
 - `--json` — emit the schedule as JSON (available on every subcommand)
 
 On **`update`**, `--quiet-window` **replaces all** existing windows rather than adding to them, and at least one field must be passed. Legacy cron schedules are **read-only** — recreate them as RRULE schedules to edit.
@@ -349,13 +351,14 @@ dam ssh configure --clear              # Remove all dam-managed SSH host config
 ```bash
 dam import <agent> <path...>           # Upload files/folders to the agent workspace
 dam file list <agent> [<path>]         # List a workspace directory's immediate children
+dam file list <agent> [<path>] -R      # List everything beneath it, recursively
 dam file get <agent> <remote-path>     # Download a single file from the agent
 dam file put <agent> <local> <remote>  # Upload a single file to the agent
 ```
 
 **Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded by basename at every level: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. A symlink passed **as a `<path>` argument** is rejected and the import fails; symlinks found **inside** an imported directory are **skipped, not followed**. Use `-y, --yes` to skip the confirm (required on non-TTY).
 
-**File list** shows a directory's immediate children and is **not recursive**; the path defaults to the workspace root. The default output lists only files — pass `--json` to include directories.
+**File list** shows a directory's immediate children; the path defaults to the workspace root. Files and directories are both listed, with a trailing `/` marking a directory. Pass `-R, --recursive` to walk the whole subtree instead — paths come back workspace-relative and sorted, with empty directories included. `--json` emits each entry as `{ path, type }`, the same either way.
 
 **File get/put** operate on single files. `file get` writes to `basename(remote-path)` in the current directory by default; use `-o, --output <path>` to choose the local path, `--stdout` to stream to stdout instead of writing a file, and `--overwrite` to clobber an existing local file. If `-o` names an existing **directory**, the file lands inside it under its remote basename, and `--overwrite` is ignored with `--stdout`. `file put` takes `--overwrite` to clobber an existing remote file.
 
@@ -395,7 +398,7 @@ dam --help           # Show help
 
 ## Agent Addressing
 
-Agents can be referenced by **name** (case-sensitive, exact match) or by **ID** (starts with `agent-`). If a name matches multiple agents, the CLI exits with an error.
+Agents can be referenced by **name** (case-sensitive, exact match) or by **ID** — `agent-` followed by a fixed-length hex string. A `agent-` prefix alone doesn't make something an ID, so `agent-2` is a perfectly good *name*; a name is refused only when it would be mistaken for an ID outright. If a name matches multiple agents, the CLI exits with an error.
 
 ## Compatibility
 

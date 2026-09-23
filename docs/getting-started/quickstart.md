@@ -14,12 +14,15 @@ Prefer the command line? [Jump to CLI quickstart](#cli).
 
 Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} and sign in with your IBM SSO credentials.
 
-### Step 2: Create a Coding Agent
+### Step 2: Create an Agent
 
-From the left sidebar, open **Coding agents** and click **Create coding agent**. Everything is on one
-page — **Setup your coding agent** — filled top to bottom:
+On **Home**, click **Create agent**. On a brand-new account that offers you the starter kits first — a
+kit is a ready-made configuration, and there's a good one for most jobs — but for this quickstart choose
+**Start from scratch instead**.
 
-1. **Name** — what you'll call it.
+Everything is then on one page — **Create an agent** — filled top to bottom:
+
+1. **Name** — what you'll call it. It comes pre-filled, so you can leave it.
 2. **Image** — the harness that runs inside the pod. Pick the **Claude Code** card.
 3. **Provider** — the model provider. Not connected yet? Connect it **right here** — paste your key
    inline, no trip to Settings.
@@ -27,11 +30,19 @@ page — **Setup your coding agent** — filled top to bottom:
    add **GitHub** (for `github.com`) or **GitHub Enterprise** (for `github.ibm.com`) so it can clone,
    push branches, and open PRs.
 
+The rest of the page — **Lifecycle**, **Knowledge bases**, **Channels** — can all be left as it is and
+changed later.
+
 !!! note
     No provider key yet? See [Create your LiteLLM key](../reference/litellm-key.md) — it covers which proxy
     to use and how to scope the key.
 
 Click **Create coding agent**. Your agent provisions in a few seconds and you land straight in its chat.
+
+!!! tip "Or skip the choices entirely"
+    **Browse starter kits** on Home offers ready-made agents — a code reviewer, a knowledge base, a
+    personal assistant — each bringing its own skills, schedules and connections, and each walking you
+    through what it needs in its first message. See [starter kits](../core-concepts/agents.md#starter-kits).
 
 ### Step 3: Start Working
 
@@ -73,17 +84,22 @@ complete login. Pass `--no-browser` if you'd rather open the URL yourself.
 
 ### Step 3: Create a Claude Code Agent
 
-Scripted (`--template` is required — list available templates with `dam template list`):
+Scripted. Both flags are required: `--template` names the harness (list them with `dam template list`)
+and `--provider` names a model-provider connection by id or unique name (list them with
+`dam connection list`):
 
 ```bash
-dam agent create my-agent --template claude-code
+dam agent create my-agent --template claude-code --provider "My provider"
 ```
 
 Wait for it to reach running state:
 
 ```bash
-dam agent create my-agent --template claude-code --wait
+dam agent create my-agent --template claude-code --provider "My provider" --wait
 ```
+
+A missing, unknown, ambiguous or non-provider `--provider` fails **before** any agent is created, so a
+wrong flag costs you nothing but the error.
 
 Or run the interactive setup, which walks you through the name, template selection, and credentials:
 
