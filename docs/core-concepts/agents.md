@@ -33,7 +33,7 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
 | **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
 | **Paused** | You put it to sleep now instead of waiting for the idle timeout. Frees its budget immediately, and wakes automatically on next use — like an on-demand hibernate. |
 | **Stopped** | A hard stop. Stays down and **does not wake on its own** — you must **Start** it (a scheduled run will also start it). Frees its budget. |
-| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. A never-hibernate agent (timeout `0`) is the exception: it starts itself as soon as room frees. An **Always on** agent is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-resources). |
+| **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. An **Always on** agent is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-resources). |
 | **Error** | Pod failed to start or encountered a fatal issue. |
 
 !!! note "The status pill collapses some of these"
