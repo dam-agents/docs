@@ -128,6 +128,12 @@ Unless your operator registered a Slack app for everyone, you supply an OAuth cl
 your own app. Enable the user-token scopes the tools need **before** authorizing: a scope you miss shows
 up later as a Slack call that fails, not as an error when you connect.
 
+!!! note "The workspace has to have the app installed"
+    You're signing in through a Slack app — the shared DAM one where your operator registered it,
+    otherwise your own — so the workspace you sign in to has to have that app installed. On the shared
+    app that's the same install a channel binding needs, and not every workspace has it: see
+    [Is DAM in your Slack workspace?](../integrations/slack.md#is-dam-in-your-slack-workspace).
+
 ### Kubernetes / OpenShift
 
 Connect a cluster with its **API server URL** and a service-account token (plus the **Cluster CA

@@ -23,6 +23,20 @@ Connecting a Slack conversation to an agent lets you:
     Binding is the other thing entirely: a channel that *talks to* the agent. You can have either
     without the other, or both.
 
+## Is DAM in your Slack workspace?
+
+Everything on this page needs DAM's Slack app installed in the workspace you're working in. Not every
+workspace has it, and the tell is that there's nothing to connect to: no **DAM** app to invite to a
+channel, and `/dam` isn't a command your workspace knows.
+
+To get it installed, submit the
+[DAM Slack request form](https://ibm.biz/dam-slack-request){:target="_blank"}. The DAM team takes it
+from there.
+
+The **Slack** connection needs the app in your workspace too, and it's a different thing from a
+binding: it signs the agent into **your own Slack account**, so it acts as you — reading *and* posting,
+anywhere you can. See [Connections](../core-concepts/connections.md#slack).
+
 ## Who can drive the agent
 
 **The binding is the authorization.** Anyone Slack admits to the conversation can drive the agent,
@@ -373,6 +387,7 @@ already in.
 
 | Problem | Solution |
 |---------|----------|
+| There's no **DAM** app to invite, or `/dam` isn't a command here | The app isn't installed in this workspace — [request it](#is-dam-in-your-slack-workspace) |
 | Bot doesn't respond in a channel | Make sure you **`@mention`** it, and that the conversation is bound (`/dam bind`) |
 | "This conversation isn't connected" / "No instance connected to this channel" | Run `/dam bind` to connect one of your agents |
 | Binding refused as already connected | That **same** agent is already connected here — binding a *different* one is allowed and adds it |

@@ -20,3 +20,7 @@ We'll follow up to ask whether you already have a team on the external LiteLLM p
 
 !!! note "Can't reach DAM?"
     DAM requires the standard IBM VPN. If the site won't load at all, check that first.
+
+## DAM in Your Slack Workspace
+
+Using DAM in Slack — connecting a channel to an agent, or acting in Slack through a Slack connection — needs DAM's Slack app installed in that workspace, and not every workspace has it. To request it, submit the [DAM Slack request form](https://ibm.biz/dam-slack-request){:target="_blank"}. See [Is DAM in your Slack workspace?](../integrations/slack.md#is-dam-in-your-slack-workspace).
