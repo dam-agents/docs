@@ -80,6 +80,12 @@ conversation continues in one place rather than splitting per reply — unlike
 [Slack](slack.md#how-sessions-work), where each thread gets its own session. (In a forum group each
 topic counts as its own chat, so it binds and sessions separately.) Ambient mode is Slack-only.
 
+**A burst of messages gets one answer**, as on [Slack](slack.md#how-sessions-work): the agent waits
+for a short pause, then answers everything that arrived together. Something sent while it's already
+working is handed to that turn where the harness supports it; otherwise it becomes the next turn
+rather than a second answer racing the first. Bursts are grouped per **chat**, not per person — so
+in a group, messages from several people that land together are answered together.
+
 A Telegram agent can post on its own — a scheduled result, an alert — but only into chats bound to
 it. Unlike Slack, it can't reach a chat it isn't connected to.
 

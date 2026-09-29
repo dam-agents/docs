@@ -304,6 +304,9 @@ withheld, along with why.
     (list the chats it can post to) and `send_channel_message` (post text, optionally with a
     single file attached — a large file is refused). Nothing to configure — but the agent can only
     post where the DAM bot is already a member, so a channel it hasn't been invited to is refused.
+    And an agent bound in **more than one** Slack workspace can post only into conversations it's
+    already bound to — a new channel or a DM with someone is refused, since a channel or person only
+    means something inside one workspace.
 
     A reply from a Slack user to one of these posts is routed by that conversation's own binding.
     An agent can also open a DM with someone, but that DM isn't bound by the post — for their
