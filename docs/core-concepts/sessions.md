@@ -59,7 +59,7 @@ much unread activity it has — the bold-for-unread styling needs a title.
 If the agent asks permission for a tool call and **no session is attached** to receive the prompt, the
 request expires after ten minutes and the agent is told it failed, so the tool call aborts cleanly.
 That's separate from the longer window on
-[network approvals](network-access.md#approvals), which wait for you on Home until that window
+[network approvals](network-access.md#approvals), which wait for you in Activity until that window
 runs out and are then denied.
 
 An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over

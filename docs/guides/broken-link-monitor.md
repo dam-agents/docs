@@ -52,7 +52,7 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ### Network Access
 
-**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface on Home.
+**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface in Activity.
 
 ## Setup
 

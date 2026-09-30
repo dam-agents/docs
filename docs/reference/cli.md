@@ -223,7 +223,7 @@ dam approval deny <id> --once                           # Deny only this held ca
 
 - `list` flags: `--status pending|resolved|expired|all` (default `pending`), `--limit <n>` (1–500).
 - `--once` and `--entire-host` are mutually exclusive.
-- The web UI offers the same choices on **Home** under different names: bare `approve` is
+- The web UI offers the same choices in **Activity** under different names: bare `approve` is
   **Allow permanently**, `--once` is **Allow once**, `--entire-host` is **Allow all of &lt;host&gt;**,
   `deny --once` is **Deny this request**, and bare `deny` is **Deny permanently**.
 

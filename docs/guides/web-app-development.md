@@ -55,7 +55,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ### Network Access
 
-**Trusted defaults** (recommended) — covers GitHub, npm, PyPI, and package mirrors out of the box. Any additional hosts the agent needs will surface on Home for approval.
+**Trusted defaults** (recommended) — covers GitHub, npm, PyPI, and package mirrors out of the box. Any additional hosts the agent needs will surface in Activity for approval.
 
 ## Setup
 

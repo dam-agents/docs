@@ -5,8 +5,10 @@ together. We'll start at Home, then explore agents and knowledge bases.
 
 ## Start on the home page
 
-When you sign in, you land on **Home** — your agents, plus an activity feed of anything waiting on you
-and **Compute allocated** and **Spend** at a glance. (On a brand-new account with no agents yet, Home is
+When you sign in, you land on **Home** — your agents, with **Compute allocated** and **Spend** at a
+glance, and a banner whenever an approval is waiting on you. Everything else going on — approvals,
+sessions in progress, ones with something new — collects in **Activity**, behind the bell at the top
+right of every page. (On a brand-new account with no agents yet, Home is
 a welcome that puts you straight into creating your first one instead.)
 
 The real map, though, is the **left sidebar** — it's the whole platform, top to bottom, and its order
@@ -19,7 +21,7 @@ is this tour's order.
 
 <div class="rows" markdown>
 
-- **Home** <span>Where you are — your agents, the activity feed, and where you create a new one. Where this tour starts.</span>
+- **Home** <span>Where you are — your agents, your compute and spend, and where you create a new one. Where this tour starts.</span>
 - **Starter Kits** <span>Ready-made agent configurations — a code reviewer, a knowledge base, a personal assistant.</span>
 - **Artifacts** <span>The kept, shareable outputs your agents publish — reports, dashboards, reviews.</span>
 - **Documentation** <span>This site, opened in a new tab — the same pages you're reading now.</span>
@@ -127,8 +129,8 @@ should use it.
 Every agent runs inside a network boundary, and you pick how tight it is. **Strict** allows only what
 you've explicitly permitted; **Trusted defaults** (where new agents start) allows a sensible baseline
 and holds anything else for review; **Allow everything** opens egress fully. Whenever an agent on
-Trusted defaults reaches for something outside its allowlist, that request surfaces on **Home** —
-you approve or deny, and your choice becomes a standing rule. So an agent can reach the services it
+Trusted defaults reaches for something outside its allowlist, that request surfaces in **Activity** —
+you approve or deny it, just this once or as a standing rule. So an agent can reach the services it
 needs, but can't quietly phone home somewhere you didn't intend.
 
 → [Network & approvals](../core-concepts/network-access.md)

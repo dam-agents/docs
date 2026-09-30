@@ -295,7 +295,7 @@ withheld, along with why.
 - **A blocked network request won't stall the turn.** Nobody in the channel can answer an approval, so
   with no chat, terminal, or SSH session of your own open on the agent, the request is refused
   straight away — and instead of going quiet, the agent tells you which host it needed. It's still
-  recorded on [Home](../core-concepts/network-access.md#where-approvals-appear); allowing it there writes the
+  recorded in [Activity](../core-concepts/network-access.md#where-approvals-appear); allowing it there writes the
   rule the agent picks up on its next attempt. With a session of your own open, the request holds and
   resolves as usual.
 

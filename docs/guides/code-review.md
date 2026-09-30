@@ -84,7 +84,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Network Access
 
-**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears on Home for them.
+**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears in Activity for them.
 
 ## Setup
 

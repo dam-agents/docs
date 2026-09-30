@@ -64,7 +64,7 @@ from a connection, are left alone.
 When an agent tries to reach a service not in its allowlist:
 
 1. The request is **held** (paused, not rejected)
-2. The approval appears on **Home**, and on any other page as a **Needs attention** pill
+2. The approval appears in **Activity** — see [Where approvals appear](#where-approvals-appear)
 3. You choose a verdict:
 
 | Verdict | Effect |
@@ -105,7 +105,7 @@ If no one responds within **30 minutes** (your operator can change this), the re
     terminal, or SSH session is attached, it's refused straight away instead of waiting out the
     window. The agent is told to name the host and point at you rather than retry into the same wall.
 
-    The request is still recorded, so it appears on Home as usual and allowing it there
+    The request is still recorded, so it appears in Activity as usual and allowing it there
     permanently writes the rule the agent picks up on its next attempt. If you *do* have a session
     open on that agent, a channel turn holds and resolves normally.
 
@@ -126,31 +126,34 @@ The default is always deny:
 !!! info "Some hosts never prompt"
     A small set of platform-provided upstreams — the object store behind the artifact library, for
     instance — is allowed ahead of your rules, so those requests never raise an approval and never
-    appear on Home. You don't need a rule for them, and you can't deny them with one. Everything your
+    appear in Activity. You don't need a rule for them, and you can't deny them with one. Everything your
     agent reaches on its own behalf goes through the rules and approvals above.
 
 ## Where approvals appear
 
-Approvals live on **Home**, in the activity feed. Check it when an agent seems stuck — it may be
-waiting for you.
+Approvals live in **Activity**, the panel behind the bell at the top right of every page. The bell
+shows a count while approvals are waiting, so check it when an agent seems stuck — it may be
+waiting for you. You're pointed there two other ways too: a new approval pops up briefly naming the
+agent, and while any are waiting **Home** shows a banner counting them. Clicking either opens
+Activity.
 
-- Filter the feed with **Needs attention** to see just the approvals; **In progress** and **Unread**
-  cover sessions, and **All** shows everything. A second set of filters narrows by where the activity
-  came from — **Chat**, **Slack**, **Telegram**, **Schedule**, **Terminal**.
-- On any other page, a **Needs attention** pill floats in the corner with a count, and expands to the
-  same approval cards — so you can answer without navigating away.
+- At the top of Activity, an **approvals waiting** summary opens just the approvals — the quickest
+  route to them, since the list below mixes them with session activity from chats, channels, and
+  schedules.
+- Two filters narrow the list: one by status — **All**, **Needs attention**, **In progress**,
+  **Unread** — and one by where the activity came from — **Chat**, **Slack**, **Telegram**,
+  **Schedule**, **Terminal**.
 
 !!! note
-    The feed mixes approvals with session activity from channels and schedules, so **Needs attention**
-    is the quickest route to the approvals themselves. An approval you've just answered stays on
-    screen showing what you chose, rather than vanishing as you click.
+    In the main list, an approval you've just answered stays on screen showing what you chose, rather
+    than vanishing as you click.
 
 The session cards around them behave the same way: a card stays until you **dismiss** it, rather than
-disappearing the moment you've looked at the session — so the feed is a list you clear, not one that
+disappearing the moment you've looked at the session — so Activity is a list you clear, not one that
 clears itself behind you. Cards for finished work age out after a week either way. Where a session
 produced [artifacts](artifacts.md), the card carries them as chips that open the preview directly, up to
 three with **+N more** for the rest.
 
-The feed is remembered **for you, not for the browser you cleared it in**: dismiss a card on your laptop
+Activity is remembered **for you, not for the browser you cleared it in**: dismiss a card on your laptop
 and it stays dismissed on your phone. It also answers for an agent that's **hibernated** — an agent
 doesn't have to be up for its activity to be listed.

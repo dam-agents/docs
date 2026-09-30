@@ -78,7 +78,7 @@ When your agent tries to reach a service for the first time:
 
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
-3. If no rule exists, the request is **held** and the approval appears on **Home** — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded there instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
+3. If no rule exists, the request is **held** and the approval appears in **Activity**, the bell at the top right of every page — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded there instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
 4. You decide: **Allow once** (releases just this call), **Allow permanently** (a lasting rule for that host/method/path), **Allow all of &lt;host&gt;** (a host-level rule), **Deny this request**, or **Deny permanently**.
 
 From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#approvals).
