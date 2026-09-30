@@ -110,8 +110,10 @@ If no one responds within **30 minutes** (your operator can change this), the re
     open on that agent, a channel turn holds and resolves normally.
 
 !!! tip "If a prompt timed out"
-    The original request has already failed, so **Allow once** is disabled. Choosing
-    **Allow permanently** still writes the rule, and the agent succeeds on its next attempt.
+    A prompt that timed out leaves Activity, because the request has already failed. To let the
+    agent through next time, **Add rule** under the agent's **Network access**, or find the prompt
+    with `dam approval list --status expired` and run a bare `dam approval approve <id>`. That still
+    writes the rule, and the agent succeeds on its next attempt.
 
 ### When things fail
 
