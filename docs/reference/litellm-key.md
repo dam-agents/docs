@@ -8,21 +8,11 @@ Open the external LiteLLM proxy and sign in with your IBM SSO:
 
 [https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams](https://ete-litellm.ai-models.vpc.res.ibm.com/ui/?page=teams)
 
-You should see the **teams** you have access to.
+You should see the **teams** you have access to. Any team you already have access to
+will work — pick whichever one you want to use with DAM.
 
 !!! note
     If you are outside an IBM office, this proxy requires **TUNNEL ALL VPN** — a stronger mode than the standard VPN DAM itself needs. You only need TUNNEL ALL for this key-creation step, not for using DAM day to day.
-
-### If you already have a team
-
-Great — you can use any team you already have access to. Go directly to Step 1 below.
-
-### If you don't have a team
-
-If you're an IBM Research user, let us know when we follow up on your DAM access request or ask in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24). We can request you access to the team dedicated to DAM, called "rits-restricted-agentic".
-
-!!! note
-    Getting added to the DAM team requires an access request and may take a few days.
 
 ## Step 1: Open the External LiteLLM Proxy
 
@@ -36,7 +26,7 @@ Open the external LiteLLM proxy and sign in with your IBM SSO credentials:
 ## Step 2: Create a Key
 
 1. Click **"+ Create New Key"**
-2. For **Team**, pick the team you're using with DAM — the one you already had, or "rits-restricted-agentic" if we added you to it
+2. For **Team**, pick the team you're using with DAM
 3. **Name your key** (required)
 4. Under models, select **All Team Models**
 5. Click **Create**
@@ -62,28 +52,6 @@ In DAM, the model provider is configured as part of creating an agent.
 4. Continue setting up the agent
 
 Once connected, the key is saved and reused — the next time you create an agent you can pick the same provider without pasting it again. You can manage your provider keys any time in DAM settings.
-
-## Models in the DAM team
-
-These are the models available through the team dedicated to DAM: "rits-restricted-agentic". A key scoped to a different team will offer a different list.
-
-```
-rits/zai-org/glm-5-1-fp8-agentic
-rits/deepseek-ai/DeepSeek-V3.2
-rits/moonshotai/Kimi-K2.5
-aws/claude-opus-4-8
-aws/claude-sonnet-4-6
-aws/claude-opus-4-5
-azure/gpt-5.5
-gcp/gemini-3.1-pro-preview
-Azure/text-embedding-3-small-1
-Azure/text-embedding-3-large-1
-azure/gpt-5.3-codex
-aws/claude-opus-5
-azure/gpt-5.6-sol
-azure/gpt-5.6-luna
-azure/gpt-5.6-terra
-```
 
 ## Video Walkthrough
 
