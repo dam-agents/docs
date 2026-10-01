@@ -13,6 +13,12 @@
 
 </div>
 
+!!! tip "DAM in 3 minutes"
+    Follow one agent from start to finish: pick a harness and model, connect your tools, bind it
+    to Slack, put it on a schedule, and gate sensitive actions behind human approval.
+
+    [:material-play-circle-outline: Watch the demo](https://ibm.biz/dam-demo){:target="_blank"}
+
 ## What is DAM?
 
 **DAM is IBM Research's platform for running long-lived AI agents.** An agent runs in its own isolated pod with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, artifacts, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
