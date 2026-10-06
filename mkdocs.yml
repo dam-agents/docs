@@ -98,4 +98,5 @@ nav:
     - CLI: reference/cli.md
     - Create your LiteLLM key: reference/litellm-key.md
     - Building a custom image: guides/custom-image.md
+    - Roadmap: reference/roadmap.md
     - Contact: reference/contact.md
