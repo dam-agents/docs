@@ -2,8 +2,7 @@
 
 What the DAM team is working on now, what comes next, and what's further out.
 
-!!! note "Plans change"
-    This is a statement of direction, not a commitment to dates or scope. Items can move between columns, change shape, or drop off. For what you can use today, see the rest of these docs.
+DAM is a research project, and real users drive its direction. Much of what we build is exploratory: we try things, keep pushing on what works and gets traction, and change course or drop what doesn't. So expect this list to evolve as we learn.
 
 ## Now
 
@@ -17,11 +16,11 @@ What the DAM team is working on now, what comes next, and what's further out.
 
 ## Next
 
-- **Onboarding & first-run experience**: The product itself teaches a new user what DAM can do. Every empty page explains what its feature is for and gives you one clear next step.
+- **Onboarding & first-run experience**: A shorter, simpler path to your first working agent, so you get value sooner. Plus an optional guided experience for getting started with DAM.
 
-- **Delegating work to sub-agents**: An agent hands parts of a task to other agents and sees each one's status and result in the conversation. Examples: running one task on two different harnesses to compare them, or sending a question to whichever of your agents owns that area.
+- **Delegating work to sub-agents**: Handing work to other agents becomes a dependable, visible capability. An agent can split a task across sub-agents and pick the harness and model for each one, for example to run one prompt on two harnesses and compare the answers. You watch the whole tree, with each sub-agent's status and cost, and limits apply to the tree as a whole. A sub-agent that needs a person can ask you without holding up the others. An agent can also call one of your existing agents that already has the context. Later, your everyday questions go to whichever of your agents owns that area, and you always see which agent answered.
 
-- **Self-serve telemetry data**: You can pull your own agents' traces, logs and costs yourself, so an agent is no longer a black box. This also gives the team real usage data to base product decisions on.
+- **Self-serve telemetry data**: Pull everything DAM records about your own agents, meaning traces, logs and costs, and build your own tooling on it outside DAM. You only ever see your own agents' data, and the content of your conversations is never included. Usage questions get answered without waiting on a person: ask a telemetry agent in Slack, or open a dashboard that stays current.
 
 - **Cost & performance optimization**: Ways to decide what an agent's work costs before it happens: run each task on a model that fits it, skip work that would find nothing, and set spending limits the platform enforces. Plus clearer answers to "why is my agent slow or expensive?"
 
@@ -41,4 +40,4 @@ What the DAM team is working on now, what comes next, and what's further out.
 
 ## Have a request?
 
-Feature requests and feedback are welcome in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}, or file them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"}. See [Contact](contact.md).
+Feature requests and feedback are welcome in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}, or file them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"}.
