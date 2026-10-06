@@ -11,7 +11,7 @@ When you create an agent, DAM provisions:
 - **A credential gateway** — a paired security pod that injects your tokens on the wire
 - **Network isolation** — the agent can only reach services you explicitly allow
 
-Each agent is independent. You can run several at once, each with a different coding harness and configuration.
+Each agent is independent. You can run several at once, each with a different harness and configuration.
 
 ## Lifecycle
 
@@ -127,9 +127,9 @@ your running agents **reserve, not what they're actually consuming**, so it drop
 one rather than when an agent goes quiet. **Request more** beside it goes wherever your operator points
 it.
 
-## Available Coding Harnesses
+## Available Harnesses
 
-Each agent runs one **coding harness** — the AI software inside the pod:
+Each agent runs one **harness** — the AI software inside the pod:
 
 | Harness | Best For |
 |---------|----------|

@@ -39,7 +39,7 @@ features below are built from the same pieces.
 
     ---
 
-    An AI coding harness in its own pod — reads and writes code, runs commands, acts on your services. The core of DAM.
+    An AI harness in its own pod — reads and writes code, runs commands, acts on your services. The core of DAM.
 
 - :material-book-open-variant: **Knowledge bases**
 
