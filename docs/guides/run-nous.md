@@ -21,10 +21,6 @@ This 90-second demo walks through a whole campaign, from picking the kit to the 
 
 - **A provider.** The kit runs on **IBM LiteLLM** or **Anthropic** — the provider picker offers only
   those two. See [Create your LiteLLM key](../reference/litellm-key.md).
-- **Compute.** A campaign clones, builds and repeatedly runs the target, so the kit asks for more CPU,
-  memory and disk than a chat agent. The kit's card on the create page shows what it reserves, and says
-  how many of your [compute slots](../core-concepts/agents.md#compute-budget-and-resources) that is when
-  it's more than one. CPU and memory stay editable afterwards; **disk is fixed at create**.
 - **A GitHub connection** — optional. You need one to clone a **private** target, or to push results
   back. Any GitHub or GitHub Enterprise connection satisfies it: the OAuth sign-in, a personal access
   token or a GitHub App. See [Connections](../core-concepts/connections.md).
