@@ -40,9 +40,10 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
     Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and an agent waiting
     on budget shows as **Over budget** (with the CPU/memory figures in its tooltip). The states above
     are the underlying model, not nine distinct badges. **Preparing workspace** sits inside Running
-    rather than before it, which is why it isn't a step in the diagram above. An **Always on** agent's
-    badge carries a power icon; hover it and it says the agent never hibernates on its own and keeps
-    its compute reserved.
+    rather than before it, which is why it isn't a step in the diagram above. An **Always on** agent
+    carries a grey **Always on** tag beside its status — in the agents list, on the agent's own page,
+    and in the agent picker when you connect a channel. Hover it and it says the agent never
+    hibernates on its own and keeps its compute reserved.
 
 **Pause vs. Stop vs. Hibernate.** All three take an agent down and free its budget, but they differ in how it comes back: a **hibernated** or **paused** agent wakes automatically the next time you use it (hibernate happens on its own after the idle timeout; pause is you doing it now), while a **stopped** agent stays down until you explicitly start it or a schedule fires. One exception: an **Always on** agent can't be paused at all — **Pause** is offered but unavailable, since it would wake itself straight back up. **Stop** it instead.
 
@@ -111,21 +112,21 @@ option is a multiple of one **slot**, the standard share your operator's install
 each catalog image starts from a sensible default. An agent created before the list existed keeps
 whatever it was given and stays selectable as its own option, so nothing is forced to resize.
 
-Those choices draw against a per-user **compute budget** — a ceiling on how many slots your *running*
-agents can reserve at once. An agent reserves its share only while it's up; pausing, stopping, or
-hibernating it frees that room immediately. Pick a size larger than the room currently free and you're
-told how many slots it needs against how many are free — the agent still saves, it just waits parked
-until room frees.
+Those choices draw against a per-user **compute budget** — a ceiling on how many slots your agents can
+reserve at once. An agent reserves its share only while it's up — from the moment it starts, not once
+it's finished starting; pausing, stopping, or hibernating it frees that room immediately. Pick a size
+larger than the room currently free and you're told how many slots it needs against how many are free —
+the agent still saves, it just waits parked until room frees.
 
-- If a new or resized agent would exceed your budget, it can't start and shows as **Over budget** — it waits until other agents free up room, and **Start** is its retry.
+- If a new or resized agent would exceed your budget, it can't start and shows as **Over budget** — it waits until other agents free up room, and **Start** is its retry. When a start you asked for is parked this way, a dialog titled **This agent could not start** says why.
 - To make room, **pause** or **stop** an agent you aren't using, then start the waiting one. DAM will also free room for you where it can: starting an agent that doesn't fit hibernates your own idle, unattended agents — longest-idle first, and only enough to fit — once they've been idle a few minutes, without waiting for their own timeout. Agents you have open, and any set to **Always on**, are never touched.
 - Changing an agent's compute restarts it on save; if it's down, the new size applies the next time it starts. Growing a **running** agent past your budget is refused when you save — free room first.
 
 **Home** shows where you stand, under **Compute allocated** — how many slots of your ceiling are taken,
 with each agent holding compute grouped as **Working** or **Idle**, and the rest free. It counts what
-your running agents **reserve, not what they're actually consuming**, so it drops when you stop or pause
-one rather than when an agent goes quiet. **Request more** beside it goes wherever your operator points
-it.
+every agent that's up **reserves, not what it's actually consuming** — one still starting included, an
+agent that's down or parked over budget not — so it drops when you stop or pause one rather than when an
+agent goes quiet. **Request more** beside it goes wherever your operator points it.
 
 ## Available Harnesses
 
@@ -140,12 +141,13 @@ Each agent runs one **harness** — the AI software inside the pod:
 
 Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
-## Experiments, knowledge bases, and frameworks
+## Knowledge bases and frameworks
 
-Experiments and knowledge bases aren't separate kinds of agent — they're an ordinary agent with a capability layered on:
-
-- An **experiment** is a design → build → test → learn loop an agent writes as ordinary Python, while the platform charts every stage, score, and candidate live. Any agent can drive one: the SDK ships in the platform base image, and a live run docks its dashboard beside that agent's chat. There's no Experiments destination in the interface at the moment, so ask an agent in chat to set one up.
-- A **knowledge base** is an agent set up to build and maintain a body of knowledge you chat with. Feed it sources and it answers with citations back to where the answer came from. You create one from a [starter kit](#starter-kits) under **Knowledge**. See [Knowledge bases](knowledge-bases.md) and the [Capture team knowledge](../guides/building-knowledge-bases.md) guide.
+A knowledge base isn't a separate kind of agent — it's an ordinary agent with a capability layered on.
+It's set up to build and maintain a body of knowledge you chat with: feed it sources and it answers with
+citations back to where the answer came from. You create one from a [starter kit](#starter-kits) under
+**Knowledge**. See [Knowledge bases](knowledge-bases.md) and the
+[Capture team knowledge](../guides/building-knowledge-bases.md) guide.
 
 Rather than write an optimization loop from scratch, you can run an established **framework**. Each is
 offered as a [starter kit](#starter-kits) under **Research**, and each brings its own image — so you
@@ -196,9 +198,10 @@ From scratch, the page asks for:
   itself*, where a Slack connection means it acts *as you*. The rows only appear for a messenger your
   operator has set up, and the agent starts in mentions-only mode either way.
 
-Then **Create coding agent**. Network access isn't part of creation — a new agent starts on **Trusted
-defaults** — and neither is **Compute resources**; both are editable straight afterwards from the
-agent's page, see [Configure](#configure).
+Then click **Create agent** at the bottom of the page — the button that submits it, not Home's
+**Create agent** that brought you here. Network access isn't part of creation from scratch — a new
+agent starts on **Trusted defaults** — and neither is **Compute resources**; both are editable straight
+afterwards from the agent's page, see [Configure](#configure).
 
 #### Starter kits
 
@@ -208,11 +211,18 @@ lists what your install offers, grouped as **Software**, **Knowledge**, **Produc
 **Research**, and searchable. Open one to see exactly what it brings before you commit, then **Use this
 Starter Kit** — or **Start from scratch instead**.
 
-Creating from a kit asks you for less, because the kit has answered most of it. What it does ask is
-marked as the kit's, so you can tell its choices from yours, and you can adjust or skip any of them:
-the **Harness** it runs on (fixed, where the kit brings its own image), a **Provider**, the
-**Repository** it seeds your workspace from, the **Schedules** it registers, and the **Connections** it
-needs — required ones are called out, so you know what it can't work without.
+Creating from a kit asks you for less, because the kit has answered most of it. What it brings is
+marked as the kit's, so you can tell its choices from yours: the **Harness** it runs on (fixed, where
+the kit brings its own image), a **Provider**, the **Repository** it seeds your workspace from, the
+**Schedules** it registers — adjust or skip any of them — and the **Connections** it needs, with required
+ones called out so you know what it can't work without. A kit's repository, where it has one, is shown
+but can't be removed: the agent always starts with it.
+
+**Network access** is shown too, read-only: the preset the agent starts on — the trusted defaults
+unless the kit sets its own — and any rules the kit adds on top. A kit can ask for more than the
+defaults, up to **Full web access**, so this is where you see that before you create. It's a starting
+point, not a lock: you change it in the agent's **Network access** settings afterwards, where the kit's
+rules are marked *from the starter kit*. Then **Create agent from this kit**.
 
 A kit usually opens a **first session** as soon as the agent exists, where the agent asks you for the
 handful of things only you can supply and does the rest itself. While that's unfinished the agent
@@ -221,8 +231,16 @@ above the message box tracks the same list. **Any schedules the kit registered a
 marks onboarding complete**, so nothing fires against a half-configured agent.
 
 Afterwards it's an ordinary agent, listed on **Home** with the rest, carrying a badge naming the kit it
-came from. (Agents you created to run experiments before that flow was retired are listed there too,
-under an **Experiment** badge, and keep working.)
+came from.
+
+**When the kit moves on.** A kit that seeds a repository can improve after you've created from it. When
+it has, the agent carries a **Kit update** tag in the agents list, and its chat shows a bar above the
+message box saying the kit has a newer version. Hover **Update** to see what changed, or click it to open
+a session where the agent walks you through the changes and asks which to take — including where the
+update touches a file you've edited. Your own edits stay as local changes: the agent is told never to
+commit or push them. **Skip this version** hides the offer until the kit moves again, and an update
+you've started but not finished offers **Continue update** or **Start again**. Nothing is offered while
+the agent is still onboarding.
 
 !!! note "Which kits you see is up to your operator"
     The catalogue is configured per install and can move without a platform release, so treat the list
@@ -279,9 +297,14 @@ brings the agent back:
 - **Pause** — puts it to sleep now and frees its budget too, but *wakes on any action* — a schedule
   firing, a message arriving, or you opening a chat.
 - **Wake** / **Start** — brings an agent back up; the label depends on where you are. Opening an agent that's down offers **Start agent**. In the agents list a parked agent offers *Start* (which retries the budget gate) and any other agent that's down offers *Wake*; on the agent's own actions menu an agent that's down reads *Wake* whatever the reason it went down.
-- **Restart** — offered for a running or errored agent, and the only power action for those states. It recreates the agent on its current settings; the workspace survives. Reach for it when one is wedged.
+- **Restart** — offered for a running or errored agent, and the only power action for those states. It's also offered for an agent stuck starting — on its row, its page and its start screen, which then says starting is taking longer than usual, or why the start failed. It recreates the agent on its current settings; the workspace survives. Reach for it when one is wedged.
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).
+
+If an agent's pod restarts on its own while you have DAM open, a notice says so, naming the cause where
+it's known: one that ran out of memory says so and suggests a larger size under **Compute resources**;
+otherwise it says the agent crashed and restarted. You're told once per restart, and not afterwards about
+a restart that happened while you were away.
 
 !!! note "Pause is unavailable on an Always on agent"
     An **Always on** agent shows **Pause** marked **Unavailable**, because pausing it would only wake it

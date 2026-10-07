@@ -83,7 +83,9 @@ nav:
     - The building blocks: core-concepts/building-blocks.md
     - Agents: core-concepts/agents.md
     - Sessions: core-concepts/sessions.md
+    - Sub-agents: core-concepts/sub-agents.md
     - Connections: core-concepts/connections.md
+    - Satellites (experimental): core-concepts/satellites.md
     - Network & approvals: core-concepts/network-access.md
     - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md

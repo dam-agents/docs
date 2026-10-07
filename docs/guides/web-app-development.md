@@ -59,8 +59,8 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ## Setup
 
-1. **Create an agent from the Software Factory image** — on **Home**, click **Create agent**, and in the
-   **Custom** card paste the Software Factory image address,
+1. **Create an agent from the Software Factory image** — on **Home**, click **Create agent** (on a brand-new account,
+   choose **Start from scratch instead** in the starter kits it opens), and in the **Custom** card paste the Software Factory image address,
    `quay.io/dam-agents/software-factory:<tag>`. [dam-agents/software-factory](https://github.com/dam-agents/software-factory){:target="_blank"}
    publishes no tagged releases, so ask its maintainers which tag to run rather than guessing one. It ships its own image rather than being one of the
    ready-made ones, because it runs extra processes alongside the harness. If that registry repository

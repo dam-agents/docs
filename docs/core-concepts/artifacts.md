@@ -82,8 +82,10 @@ discarding it.
 ## Versions
 
 Updating an artifact's content publishes a **new version** rather than overwriting it. The artifact
-keeps its identity: **the share link stays the same**, and viewers can switch between versions. The
-version list shows each one's age, its size, and who published it — **You**, or the agent's name.
+keeps its identity: **the share link stays the same**, and it always shows the **current** version.
+Someone with the link can't page back through older ones — a link that names an older version opens
+on the current one. The history stays with you in the app, where the version list shows each one's
+age, its size, and who published it — **You**, or the agent's name.
 
 Editing only metadata — title, file name, folder — changes it in place without a new version.
 
@@ -199,8 +201,3 @@ plus **Keep current date** once one is set. It applies to a private artifact jus
 one, so you can schedule a cleanup without ever sharing the thing.
 
 Deleting an artifact is also permanent — all versions go, and the share link dies with them.
-
-## Related
-
-An agent running an [experiment](agents.md#experiments-knowledge-bases-and-frameworks) publishes its
-dashboard here, filed in a folder of its own along with each run's results.

@@ -39,8 +39,9 @@ in.
 Name it, pick a **Harness**, and choose a **Provider**. The harness list is the same one any agent
 chooses from and Claude Code is preselected, but a **custom image** isn't offered for a kit — so a
 knowledge base runs one of the listed harnesses. **Repository** shows what the kit seeds your workspace
-from, and **Connections** lists anything it needs. Network access isn't part of creation: a new agent
-starts on **Trusted defaults**, editable afterwards from its **Agent Setup** page.
+from, and **Connections** lists anything it needs. You don't choose network access here: the read-only
+**Network access** box shows the preset the agent starts on — the trusted defaults unless the kit sets
+its own — and you change it afterwards from its **Agent Setup** page.
 
 After it's created, the platform runs the kit's install command **once** in the workspace, so the tooling
 is in place before you say anything. No conversation happens during that step — it's a workspace change,
@@ -55,8 +56,8 @@ created and you'll wait through **Preparing workspace** first, so nothing arrive
 !!! warning "Setup needs network access"
     The kit's install step downloads its toolkit from GitHub, through the agent's egress
     gateway. If you switch to the **Strict default-deny** network preset, that download can be blocked
-    and the knowledge base comes up without its tooling. **Trusted defaults (recommended)** — the preset
-    a new agent starts on — is the safer choice here; if setup seems not to have run, check
+    and the knowledge base comes up without its tooling. **Trusted defaults** — the preset a new agent
+    starts on unless its kit sets another — is the safer choice here; if setup seems not to have run, check
     [network access](network-access.md) first.
 
 ## Adding sources and building knowledge
@@ -121,6 +122,10 @@ It gets the same **Agent Setup** page as any other agent too: the name, compute 
 ([sharing](#sharing-one-with-your-team)), network access, **Lifecycle**, and environment
 variables — alongside the usual Connections, Channels, Skills,
 Schedules, Artifacts, and Usage sections.
+
+When its kit has a newer version, the base is offered the update like any agent from a kit — a
+**Kit update** tag in the list and a bar above the message box; see
+[Starter kits](agents.md#starter-kits). That updates the same kit; it doesn't switch you to the other one.
 
 There's no CLI command for creating a knowledge base, but `dam agent list` / `get` / `delete` all
 work on one.

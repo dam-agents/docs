@@ -43,8 +43,8 @@ Schedules let you define automated tasks that fire on a timer:
       can't show this schedule's timing without rewriting it, so delete it and create a new one to
       change its cadence.
 
-    Either way you can still pause and delete them from the panel, and reset the session on a
-    continuous one.
+    Either way you can still pause, delete, or [run](#running-one-now) them from the panel, and reset
+    the session on a continuous one.
 
 ## Session Modes
 
@@ -64,8 +64,20 @@ Fresh runs can overlap if one is still going when the next fires; continuous run
 ## Pausing, editing, deleting
 
 Each schedule has a toggle — flip it off to pause it without deleting; its next run then reads
-**Paused**. The **⋯** menu holds **Edit schedule**, **Delete schedule**, and, for a continuous
-schedule, **Reset session**.
+**Paused**. The **⋯** menu holds **Run now**, **Edit schedule**, **Delete schedule**, and, for a
+continuous schedule, **Reset session**.
+
+A schedule that is switched on but will never fire again reads **Stopped** instead of a next run —
+its rule has no occurrences left, for instance, or its quiet hours cover every one that remains. Hover
+**Stopped**, or open **View details**, for the reason. Editing it so it has a future run clears it.
+
+### Running one now
+
+**Run now** fires the schedule once, straight away, after you confirm. It's the same run a scheduled
+occurrence would be: it wakes the agent if it's asleep, and a [Precheck](#prechecks) still decides
+whether it goes ahead. It leaves the cadence alone — the next scheduled run doesn't move, and a paused
+schedule stays paused afterwards. The run shows up under **View results** like any other. While the
+agent hasn't finished onboarding, **Run now** is refused, just as its scheduled runs are held.
 
 ## Prechecks
 

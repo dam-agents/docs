@@ -7,8 +7,8 @@ together. We'll start at Home, then explore agents and knowledge bases.
 
 When you sign in, you land on **Home** — your agents, with **Compute allocated** and **Spend** at a
 glance, and a banner whenever an approval is waiting on you. Everything else going on — approvals,
-sessions in progress, ones with something new — collects in **Activity**, behind the bell at the top
-right of every page. (On a brand-new account with no agents yet, Home is
+sessions in progress, ones with something new — collects in **Activity**, behind the **Activity** button at
+the top right of every page. (On a brand-new account with no agents yet, Home is
 a welcome that puts you straight into creating your first one instead.)
 
 The real map, though, is the **left sidebar** — it's the whole platform, top to bottom, and its order
@@ -58,9 +58,9 @@ one and then walk through the pieces it's made of.
 
 ### Create it
 
-On **Home**, click **Create agent**. (**Browse starter kits** beside it is the other route — a kit
-pre-fills most of this page for you, and it's covered [below](#2-starter-kits). Take the long way once,
-to see what the pieces are.)
+On **Home**, click **Create agent**. On a brand-new account that opens the starter kits first — choose
+**Start from scratch instead**. (A kit is the other route — it pre-fills most of this page for you, and
+it's covered [below](#2-starter-kits). Take the long way once, to see what the pieces are.)
 
 Everything's on one page — **Create an agent** — top to bottom:
 

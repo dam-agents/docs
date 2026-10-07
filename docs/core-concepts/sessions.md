@@ -19,7 +19,11 @@ Open your agent in the DAM UI and type a message. A new session is created autom
   opens on its most recent stretch and loads older parts as you scroll back. A very long session's
   history is eventually trimmed from the front; where that's happened, the top of the conversation
   says so instead of pretending it's the beginning
-- **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md))
+- **Slack threads** — each thread maps to one session (see [Slack](../integrations/slack.md)). The
+  channel history a Slack session was given when it started or resumed shows as a collapsed
+  **Conversation history** block you can open
+- **Messages that arrive mid-turn** — in a Slack or Telegram session, each message that came in while
+  the agent was already working shows as a message of its own
 - **When each message was posted** — a relative time beside the role label, with the exact day and time
   on hover. A conversation that crosses midnight carries a divider at the day boundary, and a scheduled
   run starts with one naming its time
@@ -63,10 +67,12 @@ That's separate from the longer window on
 runs out and are then denied.
 
 An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over
-**Chats**, **Experiment runs**, **Scheduled**, **Channels**, **Runs**, and **Terminal** (all on by default),
+**Chats**, **Scheduled**, **Channels**, **Runs**, and **Terminal** (all on by default),
 and **New**, which opens a chat session straight away — a terminal starts from the launch options
 beside the message box (see [Terminal Sessions](#terminal-sessions)). **Delete session** is in a
 session's row menu, behind a confirm — right-clicking or long-pressing the row offers the same item.
+The list starts with your most recent sessions; where there are more, **Show older sessions** at the
+bottom loads the next batch.
 
 !!! note "Sending while the agent isn't ready"
     A message you send before the agent can take it is queued and delivered once it can — most often
@@ -131,12 +137,15 @@ Whether a turn already in flight is disturbed depends on what you changed. **Add
 
 ### Model settings
 
-The **Model** settings panel sets per-agent harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with.
+The **Model** settings panel sets per-agent harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with, unless you switch a session's model from chat (below).
 
-The panel lives on the agent's home page, under **Agent Setup**. Chat names the model in use under the
-composer; click it and a **Current model** note says which model this agent is using and where to change
-it, with **Configure model** to go straight there — so you can check without leaving the conversation.
-While the agent is waiting on a permission prompt, chat hides the model line until you've answered.
+The panel lives on the agent's home page, under **Agent Setup**. Chat names a model under the composer:
+the open session's own where the harness reports it, otherwise the agent's default. Click it for a
+**Current model** note. On some harnesses the note also lists the models this session can switch to:
+pick one and **this session** switches in place, while the panel's default for new sessions stays as it
+was. If a switch fails, a message says why. **Configure model** goes straight to the panel to change the
+default. While the agent is waiting on a permission prompt, chat hides the model line until you've
+answered.
 
 Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them.
 

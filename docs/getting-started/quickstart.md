@@ -37,7 +37,8 @@ changed later.
     No provider key yet? See [Create your LiteLLM key](../reference/litellm-key.md) — it covers which proxy
     to use and how to scope the key.
 
-Click **Create coding agent**. Your agent provisions in a few seconds and you land straight in its chat.
+Click **Create agent** at the bottom of the page — the button that finishes this page, not the one on
+Home you started from. Your agent provisions in a few seconds and you land straight in its chat.
 
 !!! tip "Or skip the choices entirely"
     **Browse starter kits** on Home offers ready-made agents — a code reviewer, a knowledge base, a

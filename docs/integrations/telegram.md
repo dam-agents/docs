@@ -86,6 +86,9 @@ working is handed to that turn where the harness supports it; otherwise it becom
 rather than a second answer racing the first. Bursts are grouped per **chat**, not per person — so
 in a group, messages from several people that land together are answered together.
 
+As on Slack, nobody is there to answer a harness permission prompt, so a tool the agent would have to
+ask about is refused; see [what else to expect](slack.md#what-else-to-expect).
+
 A Telegram agent can post on its own — a scheduled result, an alert — but only into chats bound to
 it. Unlike Slack, it can't reach a chat it isn't connected to.
 

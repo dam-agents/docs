@@ -45,6 +45,11 @@ rely on a deny rule to carve out a path.
 1. **From connections** — granting GitHub to an agent allows `api.github.com`, `github.com`, and `raw.githubusercontent.com` there. Granting GitHub Enterprise allows the host you specify plus its `api.<host>`. Creating the connection under Settings writes no rules on its own; they arrive with the grant, and are withdrawn when you remove it.
 2. **From approvals** — choosing **Allow permanently** on an approval creates a rule
 3. **Manually** — add rules directly under **Network access** in the agent's **Agent Setup** section
+4. **From a starter kit** — a [starter kit](agents.md#starter-kits) can pick the agent's preset,
+   including one that allows everything, and add rules of its own. Creating from the kit shows both in
+   a read-only **Network access** section before you create the agent, so check it there. Afterwards
+   they're yours: in the rule list they read *from the starter kit*, and you can revoke them or switch
+   the preset like on any agent
 
 ### Presets
 
@@ -57,7 +62,7 @@ Rather than writing rules one at a time, pick a preset:
 | **Allow everything** | A development escape hatch. Narrow it back with deny rules. |
 
 Switching presets replaces the previous preset's rules. Rules you added by hand, and rules that came
-from a connection, are left alone.
+from a connection or a starter kit, are left alone.
 
 ## Approvals
 
@@ -133,26 +138,26 @@ The default is always deny:
 
 ## Where approvals appear
 
-Approvals live in **Activity**, the panel behind the bell at the top right of every page. The bell
-shows a count while approvals are waiting, so check it when an agent seems stuck — it may be
-waiting for you. You're pointed there two other ways too: a new approval pops up briefly naming the
-agent, and while any are waiting **Home** shows a banner counting them. Clicking either opens
-Activity.
+Approvals live in **Activity**, the panel the **Activity** button at the top right of every page
+opens. The button shows a count while approvals are waiting, so check it when an agent seems stuck —
+it may be waiting for you. You're pointed there two other ways too. A new approval pops up briefly
+naming the agent, and clicking it opens Activity straight on the approvals. And while any are waiting,
+**Home** shows a banner counting them, which opens Activity.
 
-- At the top of Activity, an **approvals waiting** summary opens just the approvals — the quickest
-  route to them, since the list below mixes them with session activity from chats, channels, and
-  schedules.
+- Approvals aren't mixed into Activity's list of session activity from chats, channels, and schedules.
+  An **approvals waiting** summary at the top of that list opens them, as does the **Needs attention**
+  filter; the view's back arrow returns you to the full list.
 - Two filters narrow the list: one by status — **All**, **Needs attention**, **In progress**,
   **Unread** — and one by where the activity came from — **Chat**, **Slack**, **Telegram**,
   **Schedule**, **Terminal**.
 
 !!! note
-    In the main list, an approval you've just answered stays on screen showing what you chose, rather
-    than vanishing as you click.
+    An approval you've just answered stays on screen showing what you chose, rather than vanishing as
+    you click.
 
-The session cards around them behave the same way: a card stays until you **dismiss** it, rather than
-disappearing the moment you've looked at the session — so Activity is a list you clear, not one that
-clears itself behind you. Cards for finished work age out after a week either way. Where a session
+Session cards stay until you **dismiss** them, rather than disappearing the moment you've looked at
+the session — so Activity is a list you clear, not one that clears itself behind you. Cards for
+finished work age out after a week either way. Where a session
 produced [artifacts](artifacts.md), the card carries them as chips that open the preview directly, up to
 three with **+N more** for the rest.
 

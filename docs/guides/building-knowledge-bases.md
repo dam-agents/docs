@@ -69,8 +69,9 @@ are attributed to you rather than to an anonymous pod identity. See
 
 Two separate controls decide what a knowledge base can reach, and both are yours from the start:
 
-- **Network access** — the hosts it may reach. Every knowledge base starts on **Trusted defaults**
-  (GitHub, npm, PyPI, Anthropic and other common hosts). Afterwards, under **Agent Setup** →
+- **Network access** — the hosts it may reach. A knowledge base starts on **Trusted defaults**
+  (GitHub, npm, PyPI, Anthropic and other common hosts) unless its kit sets otherwise; the create page
+  shows which, read-only, under **Network access**. Afterwards, under **Agent Setup** →
   **Network access**, you can switch it to **Strict default-deny**, where every new host needs your
   approval before a request goes through — so you review each one as it comes up — or allow just the
   specific hosts you want and nothing else.
@@ -81,9 +82,10 @@ So if you want it locked down: keep the connections list short, then tighten the
 to **Strict default-deny**, so you approve each host as it comes up, or to a named list of hosts and
 nothing else. See [network access](../core-concepts/network-access.md) for how rules and approvals work.
 
-!!! note "Why it starts on trusted defaults"
-    A new knowledge base installs its kit from GitHub moments after it's created, so creation
-    always uses the trusted preset — tighten it once the base is up rather than before.
+!!! note "Tighten it once the base is up"
+    You can't change the preset while creating — the kit decides what the agent starts on. A new
+    knowledge base installs its kit from GitHub moments after it's created, so tighten the rules once
+    the base is up rather than before.
 
 ## 1. Create the base
 

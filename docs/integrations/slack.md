@@ -76,7 +76,10 @@ A conversation does nothing until it's **bound** to an agent. The quickest path 
     tells you as much before you confirm.
 
 The same command binds a group DM or a 1:1 DM with the bot; see
-[how the agent is triggered](#how-the-agent-is-triggered) for what each surface needs.
+[how the agent is triggered](#how-the-agent-is-triggered) for what each surface needs. A group DM has to
+include the bot from the start — Slack doesn't let an app join one later — so binding a group DM the bot
+isn't in is refused. Start a new group DM that includes the **DAM** app, or move the conversation to a
+private channel and invite the bot there.
 
 | Command | What it does |
 |---------|--------------|
@@ -85,17 +88,22 @@ The same command binds a group DM or a 1:1 DM with the bot; see
 | `/dam default [agent]` | Make an agent the one that unnamed mentions reach — the agent's owner only |
 | `/dam ambient [agent] on\|off` | Turn ambient mode on or off for one agent |
 | `/dam ambient [agent]` | Report whether ambient mode is currently on |
+| `/dam whisper [agent] "message"` | Ask an agent something privately — only you see its answer |
+| `/dam whisper [agent]` | Open a private conversation with an agent in your DM with the bot |
+| `/dam delete <message link> [reason]` | Remove one of your agent's posts — the agent's owner only |
 
 The agent name is needed only where more than one is connected in the conversation. A bare `/dam`
 prints the usage help.
 
 !!! note "When `/dam login` is required"
-    Talking to the agent never needs a linked account. Linking only authorizes the *management*
-    commands — `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>`. `/dam bind` links
-    you automatically, so if that's how you connected the conversation you're already set; **if you
-    bound from the CLI, you were never linked**, and those commands will ask you to run
-    `/dam login` first. Reading the current state with a bare `/dam ambient` or a bare `/dam default`
-    never needs a link. `/dam logout` unlinks.
+    Talking to the agent never needs a linked account, and neither does a whisper. Linking authorizes
+    the *management* commands — `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, and
+    `/dam delete` — and, for an agent's owner, it's also what lets the agent
+    [post beyond its own conversations](#what-else-to-expect). `/dam bind` links you automatically,
+    so if that's how you connected the conversation you're already set; **if you bound from the CLI,
+    you were never linked**, and those commands will ask you to run `/dam login` first. Reading the
+    current state with a bare `/dam ambient` or a bare `/dam default` never needs a link.
+    `/dam logout` unlinks.
 
 !!! info "Bindings are many-to-many"
     One agent can be connected to **several conversations at once** — channels, group DMs, and DMs in
@@ -104,7 +112,8 @@ prints the usage help.
     one is already connected *adds* to it rather than replacing it, and Slack tells you who's already
     there before you confirm. See [Several agents in one conversation](#several-agents-in-one-conversation).
 
-    The only bind that's refused is the **same agent twice** in the same conversation.
+    A bind is never refused because the conversation already has an agent — only because it already
+    has **that same agent**.
 
     Conversations never bleed into each other: threads and sessions belong to the conversation they
     happened in, so a reply can't surface in another one. `/dam unbind` releases only the
@@ -164,6 +173,40 @@ first.
 **Handing a message over.** An agent that judges a teammate better placed to answer can pass the
 message to it, and that agent replies in the thread itself. A handed-over message can't be handed on
 again, and attachments don't travel with it — the receiving agent gets the text.
+
+## Whispering to an agent
+
+Anyone in a connected conversation can reach one of its agents privately with `/dam whisper` — no
+linked account needed.
+
+- **`/dam whisper "message"`** sends one message. The answer appears right there, visible only to you.
+- **`/dam whisper`** on its own opens a thread in your DM with the bot. Reply in that thread to keep
+  talking to the agent; nobody in the original conversation sees it.
+
+With no name, the whisper goes to the conversation's [default agent](#several-agents-in-one-conversation);
+put the agent's name first to pick another (`/dam whisper Ops "is staging up?"`). The message has to be
+in quotes — unquoted text is read as an agent name, so a message you forgot to quote is refused rather
+than sent.
+
+!!! warning "Private from the conversation, not from the agent's owner"
+    A whisper is kept out of the channel, but it's still a conversation with the agent — and, as the bot
+    tells you when it opens one, *"Like every conversation with an agent, its owner can read it."*
+
+## Deleting an agent's post
+
+An agent's posts carry no delete button. To remove one, its **owner** runs `/dam delete` with the post's
+link (Slack's **Copy link** on the message), optionally followed by a reason:
+
+```
+/dam delete https://….slack.com/archives/C0…/p… wrong numbers, rerunning
+```
+
+You confirm in a dialog, where the reason is already filled in and can be edited. The post is removed for
+everyone; the agent's session keeps what it wrote. Where the post was a reply in a thread, the agent is
+told in that session, along with your reason if you gave one — the confirmation says when it will be.
+
+Only the agent's owner can delete its posts, and DAM has to be able to tell you're the owner, so the
+command needs your account [linked](#connect-a-channel-dam-bind). Anyone else is refused.
 
 ## Ambient mode
 
@@ -249,21 +292,36 @@ withheld, along with why.
   as context — so the conversation continues, but the earlier reasoning is gone.
 - **Threads run in parallel.** Several conversations with the same agent at once is fine. Within
   one thread, messages are handled in order rather than concurrently.
-- **A burst of messages gets one answer.** Write a thought across three messages and the agent waits
-  for you to finish, then answers all of them together — rather than replying to the first fragment
-  before you've made your point. Something you add while it's already working is handed to the
-  in-flight turn where the harness supports that, so you still get one reply; otherwise it becomes the
-  next turn rather than a second answer racing the first. A message with an attachment always gets its
+- **A burst of messages gets one answer.** Write a thought across three messages — in a DM, or in a
+  thread — and the agent waits for you to finish, then answers all of them together, rather than
+  replying to the first fragment before you've made your point. Something you add while it's already
+  working is handed to the in-flight turn where the harness supports that, so you still get one reply;
+  otherwise it becomes the next turn rather than a second answer racing the first. A message with an attachment always gets its
   own turn, and holds back anything behind it so nothing arrives out of order.
-  Bursts are grouped **per conversation** — in a thread, or per sender in a channel — so two people
-  raising different things are still answered separately.
-- **Fresh sessions get context.** A new top-level thread is given the channel's recent messages — up to
-  about fifty — and picking up inside an existing thread injects up to fifty of that thread's replies.
-  The window is deliberately short.
-- **A thread the agent returns to catches up.** Picking a thread back up, it's also given whatever
-  arrived since its own last turn there — so a conversation that carried on without it, or that another
-  connected agent answered in the meantime, isn't invisible to it. Best-effort: after a platform
-  restart a resuming turn may get no catch-up at all. Channel and DM turns are unaffected.
+- **Bursts are grouped per conversation.** In a channel or group DM, each top-level mention starts a
+  conversation of its own, with its own session and its own reply thread — so two separate requests are
+  answered separately, and neither waits on the other. Inside a thread, a reply that mentions the agent
+  joins the conversation already running there, whoever sends it, so a correction reaches the agent
+  while it can still act on it. Only in a 1:1 DM, where no mention is needed, do separate top-level
+  messages run together into one burst.
+- **Fresh sessions get context, labelled for what it is.** A conversation started at the top level of a
+  channel is given the channel's recent messages — up to about fifty — as background rather than as
+  something to answer; in a DM, that's your earlier exchange with the agent. Picking up inside an
+  existing thread injects up to fifty of that thread's replies, as the conversation being answered. The
+  window is deliberately short.
+- **The agent can read a thread it wasn't in.** A channel's recent messages don't include the replies
+  inside its threads, so a message that started a thread is marked as having replies, and the agent can
+  go and read that thread — paging back through a long one; an extremely long thread may be only partly
+  readable, and the agent is told when it is. It can read only threads it was shown this way, in a
+  conversation still connected to it, and only for a while afterwards. Reading a thread doesn't change
+  where the agent can post.
+- **A conversation the agent returns to catches up.** Picking a thread back up — or, in ambient mode,
+  the channel it reads along with — it's also given whatever arrived since its own last turn there, so a
+  conversation that carried on without it, or that another connected agent answered in the meantime,
+  isn't invisible to it. Messages already part of the turn it's on aren't presented as missed, and if a
+  turn fails, the messages it held come back in the next one. Best-effort: after a platform restart, the
+  catch-up starts from the agent's own last post there instead, or from a recent window where there
+  isn't one.
 - **Ambient adds a channel-level session** for top-level messages, alongside the per-thread ones.
 
 ## What else to expect
@@ -298,15 +356,29 @@ withheld, along with why.
   recorded in [Activity](../core-concepts/network-access.md#where-approvals-appear); allowing it there writes the
   rule the agent picks up on its next attempt. With a session of your own open, the request holds and
   resolves as usual.
+- **Nobody is there to answer a permission prompt, either.** If the agent's harness is set to ask
+  before running a tool, that question is refused on a Slack turn rather than left waiting, so the
+  tool doesn't run. What an agent can do in a channel is what its permission setting already lets it
+  do unasked. The platform's own tools — the ones it replies with — are let through where the harness
+  allows it; Bob's **Ask every time** setting warns that a Bob agent can't reply in a channel, so give
+  a channel-bound agent a setting that doesn't ask before the tools it needs. This is separate from
+  network approvals, above.
 
 !!! tip "How the agent posts"
     Proactive posts work through two built-in tools the agent calls itself: `describe_channel`
     (list the chats it can post to) and `send_channel_message` (post text, optionally with a
-    single file attached — a large file is refused). Nothing to configure — but the agent can only
-    post where the DAM bot is already a member, so a channel it hasn't been invited to is refused.
-    And an agent bound in **more than one** Slack workspace can post only into conversations it's
-    already bound to — a new channel or a DM with someone is refused, since a channel or person only
-    means something inside one workspace.
+    single file attached — a large file is refused). Nothing to configure, but there are limits on
+    where it can reach beyond its own bound conversations:
+
+    - It can post only where the DAM bot is already a member, so a channel the bot hasn't been
+      invited to is refused.
+    - It can reach only channels **its owner** is a member of, public or private, and only those are
+      in its list of chats. That's checked through your linked Slack account: until you've run
+      `/dam login` (or bound a conversation with `/dam bind`), it can't reach any channel beyond its
+      bound ones. DMs and group DMs aren't affected by this.
+    - An agent bound in **more than one** Slack workspace can post only into conversations it's bound
+      to, or the one it's answering right now — a new channel or a DM with someone is refused, since
+      a channel or person only means something inside one workspace.
 
     A reply from a Slack user to one of these posts is routed by that conversation's own binding.
     An agent can also open a DM with someone, but that DM isn't bound by the post — for their
@@ -348,7 +420,10 @@ with `/dam bind`.
 
 Once connected, a channel is shown **by name** — `#team-eng` rather than a raw `C0…` id — on the agent's
 row and wherever its channels are listed. You still connect it *by* id; the name is just how it's
-displayed afterwards, and the id shows instead where the name isn't known.
+displayed afterwards, and the id shows instead where the name isn't known. A connected DM reads as
+*DM with* the person, and a group DM as *Group DM with* its members. A channel that has since been
+deleted, or a private one the bot was removed from, says on the Slack card that it's no longer available
+in Slack, with a hint to disconnect it.
 
 From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
 connected — each with whether ambient is on, and a **Default** badge where this agent is the one
@@ -396,7 +471,7 @@ already in.
 | Binding refused as already connected | That **same** agent is already connected here — binding a *different* one is allowed and adds it |
 | A mention with no name reached nobody | The conversation has no [default agent](#several-agents-in-one-conversation) — its owner can set one with `/dam default <agent>` |
 | The wrong agent answered | Start the message with the agent's name; an unknown or ambiguous name falls back to the default |
-| "Link your account first" on `unbind`, `ambient`, or `default` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
+| "Link your account first" on `unbind`, `ambient`, `default`, or `delete` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
 | An attached file was ignored | You'll have had a private note saying why — usually over a size cap, or a picture format the agent can't read |

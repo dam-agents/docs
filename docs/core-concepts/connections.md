@@ -8,13 +8,13 @@ Three of the tabs in DAM **Settings** are easy to confuse. They do different thi
 
 | Tab | What it's for | Example |
 |-----|---------------|---------|
-| **Providers** | The **model** that powers an agent. Every agent needs one. | Anthropic, OpenAI, IBM LiteLLM ETE Proxy, Bob Shell |
+| **Providers** | The **model** that powers an agent. Every agent needs one. | Anthropic, OpenAI, IBM LiteLLM ETE Proxy, Bob Shell, AWS Bedrock |
 | **Connections** | Credentials and tools that let the agent **act on external services** on your behalf. | GitHub, a custom-header API, an MCP server |
 | **API keys** | Tokens that let **you or your automation** drive the DAM platform itself via the API/CLI. | A scoped key for a CI pipeline |
 
 (Settings also has **Account**, **Appearance**, and **Usage** tabs.)
 
-The rest of this page covers **Connections**. Providers live on the **Providers** tab, where you can also update or remove a saved key; you pick one for an agent while creating it (see [Create your LiteLLM key](../reference/litellm-key.md)). API keys are covered in [the CLI reference](../reference/cli.md).
+The rest of this page covers **Connections**. Providers live on the **Providers** tab, where you can also update or remove a saved key; you pick one for an agent while creating it (see [Create your LiteLLM key](../reference/litellm-key.md)). **AWS Bedrock** is for Claude Code and Pi agents: it takes a Bedrock API key and the region its models are served from, and the model is optional. API keys are covered in [the CLI reference](../reference/cli.md).
 
 ## How It Works
 
@@ -64,7 +64,7 @@ if you don't own the org an owner has to approve or complete it.
     Where there's no install to do, use a **personal access token** or **your own GitHub App** for
     private repos instead.
 
-Once that's in place, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI (via `GH_TOKEN` auto-set).
+Once that's in place, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI with no login of its own.
 
 #### Connecting your own GitHub App
 
@@ -92,6 +92,17 @@ When you sign in with **GitHub.com**, commits the agent makes are attributed to 
 That write is a convenience, not a guarantee: if GitHub doesn't answer when the connection is made, the
 connection still succeeds and the git config is simply left alone. If commits come out attributed to the
 pod's default identity rather than yours, set `user.name` and `user.email` in the agent yourself.
+
+#### Two GitHub accounts on one agent
+
+An agent can hold more than one GitHub connection to the same host — say your own sign-in and a bot's
+GitHub App. With two or more, `gh` is set up with every one of them as a separate account, and the agent
+can move between them with `gh auth switch`. It acts as the one added to it first unless you pick another:
+the agent's own **Connections** panel shows which account it acts as on that host, with an
+**Act as &lt;name&gt; by default** button for each of the others.
+
+Only the default account's identity goes into the agent's git config, so with two GitHub.com sign-ins,
+commits are attributed to whichever one the agent acts as by default.
 
 ## API Key Connections
 
@@ -137,9 +148,25 @@ up later as a Slack call that fails, not as an error when you connect.
 ### Kubernetes / OpenShift
 
 Connect a cluster with its **API server URL** and a service-account token (plus the **Cluster CA
-certificate**, if its endpoint isn't publicly trusted). Your agent gets a working `kubectl` / `oc` —
+certificate**, if its endpoint isn't publicly trusted). Your agent gets a working `kubectl` —
 the token itself never reaches the agent, so it can't leak from there. Connect several clusters and
 they compose.
+
+### Object Storage
+
+An **Object Storage** card on the **Apps** tab connects any S3-compatible bucket store with an HMAC key
+pair: give it the **Endpoint URL** (an `https://` address, host only), the **Access key ID** and
+**Secret access key**, and optionally a **Signing region** and a **Bucket** to confine it to one bucket.
+DAM checks the keys against the endpoint before saving, and **Update keys** in the connection's **⋯**
+menu later replaces both at once. The agent never holds them: the gateway signs the agent's requests to
+that endpoint on the way out, and the agent gets an AWS profile already pointed at it. With two or more
+Object Storage connections, the agent's **Connections** panel shows which one it uses by default, with a
+**Use &lt;name&gt; by default** button for each of the others, and the agent can name another with
+`--profile`.
+
+!!! warning "Use read-only keys for read-only access"
+    The agent can do anything the keys allow. To keep an agent to reading, give it keys that can only
+    read.
 
 For a service without a prebuilt template, use the **Custom Headers** tab → **New** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
 
@@ -152,19 +179,30 @@ Under **Connections → MCP servers**, click **New**, then give the server a nam
 does, the button becomes **Create + Authorize** and walks you through the server's sign-in. An
 **Advanced configuration** section lets you pin your own OAuth client or a header credential instead.
 
+For an MCP server that runs on your own machine rather than at a public URL, run it as a
+[satellite](satellites.md) instead: it connects out to DAM and then appears on this same tab.
+
 !!! info "Built-in vs. connected tools"
     Every agent already has built-in tools for managing its own skills, channels, and schedules — those need no setup and are noted on each feature's page. MCP server connections are how you add *more* tools on top of those.
 
 ## Managing Connections
 
 - **View** — **Settings → Connections** lists everything you've connected, grouped by service. Each
-  agent has its own **Connections** panel listing just what's been granted to it.
+  agent has its own **Connections** panel listing just what's been granted to it. Slack and GitHub.com
+  connections also say whose account they act as — **Acts as** the person and workspace for Slack, the
+  login for GitHub — once DAM has looked that up.
 - **Remove from one agent** — in the **agent's own** Connections panel, a connection's **⋯** menu →
   **Remove from this agent** revokes it there and leaves it available elsewhere. That item is about the
   grant, so it only appears where there is one — you won't find it under Settings.
 - **Delete everywhere** — **⋯** → **Delete this connection** removes it for every agent. DAM confirms first and lists the agents that will lose it.
 - **Per-user** — your connections are yours alone, never shared with teammates.
 - **Granted per agent** — a connection you own reaches an agent only once you grant it there. Connect once under Settings, then grant it to each agent that should use it.
+- **Two accounts of one service** — an agent can hold two connections to the same service as long as
+  DAM can tell their requests apart, as it can for two GitHub accounts. Where it can't, the second one
+  reads **Can't add** in the catalogue you open from that agent, and hovering it names the connection
+  already signing in to that host: remove that one from the agent first. A connection you create from
+  there that clashes this way is created but not added, and an agent that already holds such a pair
+  warns about it in its **Connections** panel.
 - **Rotating a key** — when an API-key or custom-header connection's value rotates upstream, update it in place rather than disconnecting and reconnecting: the connection's **⋯** menu → **Update credential**, or `dam connection update`. The connection keeps its name and all its agent grants, and nothing restarts.
 - **Rotating an OAuth client secret** — an OAuth connection you created with **your own** client id and
   secret also offers a rotation item, labelled **Update client secret**, for when that secret changes at

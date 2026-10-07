@@ -30,7 +30,7 @@ Precedence: CLI flag > environment variable > config file.
 **Global flags:**
 
 - `--server <url>` — override the configured server URL for a single call. Available on every networked command **except `dam auth status` and the `dam auth token` subcommands**, which use the configured active host.
-- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `version`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, or `agent create-interactive`. (`file list` does have it.)
+- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `version`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, `agent create-interactive`, `satellite mcp`, or `satellite shell`. (`file list` does have it.)
 
 Precedence for the server URL is flag > `DAM_SERVER` > config file > **error** — there is no default server.
 
@@ -121,9 +121,11 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 - `--timeout <seconds>` — how long to wait for OAuth authorization (default 300)
 - `-c, --config <key=value>` — set an optional template config input (repeatable), e.g. `--config model=premium-shell`; values are validated against the template's declared inputs.
 
-Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
+Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`, or **Object Storage**'s `--endpoint`/`--bucket`/`--access-key-id`/`--secret-access-key`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
 
 `connection update` replaces a connection's **stored secret** in place. What that means depends on the connection: the injected value for an API key or custom-header integration, or an OAuth connection's own client secret where it carries one. A connection that stores no credential has nothing to update. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively — a multi-line secret can't be typed at the prompt, so use `--value "$(cat secret.txt)"`.
+
+An **Object Storage** connection holds a key pair rather than one secret, so `update` rotates both at once: pass `--access-key-id` and `--secret-access-key` instead of `--value`, or answer the prompts. The new pair is checked against the storage endpoint first, and a pair it rejects replaces nothing.
 
 Use `update` to replace a *secret you hold*, and `reauth` to replace *expired OAuth tokens*.
 
@@ -135,6 +137,41 @@ dam connection reauth conn-61cc7b9137b0 --no-browser   # print the URL instead o
 ```
 
 Flags: `--no-browser`, `--timeout <seconds>` (default 300), `--json`, `--server <url>`. A connection that stores its own secret has no login flow — `reauth` refuses it and points you at `connection update` instead.
+
+### Satellites
+
+!!! warning "Experimental"
+    Satellites are experimental, and the commands below may change.
+
+A satellite is a machine outside DAM, such as your laptop or a build box, that offers tools to your agents. You start it on that machine with `dam satellite`. It connects out to DAM, so nothing has to reach in. See [Satellites](../core-concepts/satellites.md).
+
+```bash
+dam satellite mcp -- <command...>          # Offer the tools of an MCP server started on this machine
+dam satellite mcp --url localhost:8080     # ...or of one that's already running
+dam satellite shell "<pattern>"            # Offer a fixed set of permitted commands as one tool
+dam satellite list                         # Your satellites, with their state, tools and agents
+dam satellite grant <satellite> <agent>    # Let an agent call a satellite's tools
+dam satellite revoke <satellite> <agent>   # Stop it again
+dam satellite jobs <satellite>             # The calls a satellite has run
+dam satellite cancel <satellite> <job>     # Ask a satellite to stop a job
+dam satellite rm <satellite>               # Remove a satellite and every grant to it (confirms)
+```
+
+- `mcp` and `shell` stay in the foreground and serve until you stop them. The first Ctrl+C drains, so running jobs finish and report back. A second Ctrl+C kills them. Both take `--name` (the name agents see), `--description` and `--max-concurrent`. Without `--name`, the satellite is named after the server or command it offers, or `user@hostname`.
+- `mcp` starts the server you name after `--`, or forwards to one already listening with `--url`. A bare `host:port` means `http://host:port/mcp`. `--header "Name: value"` (repeatable) is sent to a `--url` server, and `--cwd` sets a started server's working directory. A started server inherits your shell's environment. Its tools are offered as they are, and the server decides what each call may do.
+- `shell` takes one usage line per permitted command, as an argument or on stdin. A `#` starts that line's description, and a trailing `[max=N timeout=D cwd=PATH]` sets limits for that command alone. `--cwd` and `--timeout` set the defaults. The machine refuses any call that matches none of the lines. That text is the whole allowlist, so to change it, restart the command:
+
+    ```bash
+    dam satellite shell --name gpu-box --cwd /srv --timeout 6h <<'EOF'
+    ./process.sh (sales.db|events.db)  # Process a database
+    ./train.sh ./data/**/*.db          # Train  [max=1 timeout=2h]
+    EOF
+    ```
+
+- No agent can call a satellite's tools until you grant it the satellite. `grant` and `revoke` take any of your agents by name or ID.
+- `cancel` only asks: a command that's already running may still finish.
+- `rm` doesn't stop commands already running on the machine. The running `dam satellite` stops taking new work, and you can start it again to register it anew. It confirms on a TTY; pass `--yes` non-interactively.
+- `list` and `jobs` take `--json`.
 
 ### Network access
 
@@ -204,7 +241,7 @@ dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of se
 - **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one, and so does connecting a *different* agent to a channel that already has one — a conversation can hold several agents (see [Slack](../integrations/slack.md#several-agents-in-one-conversation)). Note the in-chat `/dam bind` is stricter: it refuses an agent already connected to that conversation rather than updating it.
 - **There's no `default` subcommand.** Which agent unnamed mentions reach is set in-chat with `/dam default <agent>`.
 - `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
-- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link.
+- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, and `/dam delete` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link. Your agent needs it, though, to post on its own into a channel it isn't connected to: it may reach only channels you're a member of, and until you've linked it can't reach any.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/bind` — Telegram's commands are bare, not namespaced under `/dam` — rather than through this command group.
 
 ### Approvals
@@ -272,6 +309,10 @@ On **`update`**, `--quiet-window` **replaces all** existing windows rather than 
 
 `delete` takes `-y, --yes` to skip the confirmation prompt and **requires it on a non-TTY** — without it the command refuses and exits non-zero whatever the id. Past the confirmation it's idempotent: an unknown id exits 0. `enable`/`disable` are idempotent too and need no confirmation. Schedule ids come from `dam schedule list`.
 
+`get` adds a **Stopped** line, with the reason, for an enabled schedule that has no next run: a rule that has run out of occurrences, say, or quiet hours that cover every remaining one.
+
+There's no CLI command to fire a schedule on demand. Use **Run now** in the schedule's **⋯** menu in the agent's **Schedules** panel.
+
 ### Terminal Sessions
 
 ```bash
@@ -318,7 +359,8 @@ dam run cancel <agent> <session-id>               # Cancel a run in flight
 
 **A dropped connection doesn't lose the run.** The turn is running on the agent, not in your terminal,
 so the CLI reconnects with backoff, reloads the session, and finishes from the agent's own record of
-the run — printing only the text it hasn't already printed. That's also why a run record lives on the
+the run — printing only the text it hasn't already printed. If the agent itself went down mid-run, the
+run won't finish: the CLI says so and exits non-zero, and you run it again. That's also why a run record lives on the
 agent: **delete the session and the record goes with it**, so treat `run get` as a way to collect a
 result soon after, not as durable history.
 

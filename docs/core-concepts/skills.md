@@ -96,7 +96,7 @@ pull request — follow the link if you want to close it yourself.
 ## Included with sandbox image
 
 Some images ship with skills already inside them, so a fresh agent is useful immediately. Which
-ones you get depends on the agent's image — an [optimization framework](agents.md#experiments-knowledge-bases-and-frameworks)
+ones you get depends on the agent's image — an [optimization framework](agents.md#knowledge-bases-and-frameworks)
 image carries the skill that drives its framework, for instance.
 
 These are **read-only**. You can't publish them, and editing one only earns it a **Modified** badge,
@@ -108,9 +108,7 @@ An update moves each of these skills on to the version the new image ships, and 
 no longer carries. One you've edited is the exception: once it reads **Modified** it's treated as yours,
 and an image update leaves it exactly as you left it.
 
-This group only appears when there's something in it, so don't read its absence as a problem: on some
-images every skill that came with the agent is a feature skill, and they're all listed under
-[From platform features](#from-platform-features) instead.
+This group only appears when there's something in it.
 
 ## From platform features
 
@@ -119,10 +117,12 @@ works. Those are collected under **From platform features**, with the descriptio
 platform ships these so a feature works. They are managed for you — you cannot edit or delete them
 here.*
 
-Each row carries a badge naming the feature it belongs to — **Schedules**, **Invocations**,
-**Experiments**, or **Model providers** — so it's clear why a skill you didn't ask for is present. Where
-the feature has a section of its own in the left nav, the badge is a shortcut to it: **Schedules** opens
-the agent's schedules, **Model providers** opens its connections. The other two are labels only.
+Each row carries a badge naming the feature it belongs to — **Schedules**,
+[**Sub-agents**](sub-agents.md), **Model providers**, **GitHub accounts**, or **Object Storage** — so
+it's clear why a skill you didn't ask for is present. Where the feature has a section of its own in the
+left nav, the badge is a shortcut to it: **Schedules** opens the agent's schedules, and **Model
+providers**, **GitHub accounts** and **Object Storage** open its connections. **Sub-agents** is a label
+only.
 
 They behave like anything else that came with the image — read-only, no publishing, no delete — and the
 same **Modified** badge appears if the files on disk drift from what shipped. The practical point is

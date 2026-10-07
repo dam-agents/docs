@@ -88,7 +88,7 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ## Setup
 
-1. **Create a Claude Code agent** — on **Home**, **Create agent** and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code --provider <your-provider>` from the CLI
+1. **Create a Claude Code agent** — on **Home**, **Create agent** (on a brand-new account, choose **Start from scratch instead** in the starter kits it opens) and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code --provider <your-provider>` from the CLI
 2. **Add your provider** — configure IBM LiteLLM ETE Proxy or Anthropic with your API key
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
 4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the agent's **Agent Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
@@ -114,7 +114,8 @@ Onboarding is a short **interactive dialog** — the agent checks out its own de
     A schedule the agent created isn't editable in the UI, though: because the agent owns it, its
     **Schedules** section says so and points you back to chat. So **ask the agent** to change when it
     runs — that's the intended route, and it can delete and recreate the schedule itself. You can still
-    pause or delete it from the panel yourself. See [Schedules](../core-concepts/schedules.md).
+    pause or delete it from the panel yourself, and **Run now** in its menu fires it once without moving
+    its next run. See [Schedules](../core-concepts/schedules.md).
 
 !!! tip "Files live in `work/`, not a subfolder"
     The agent's state files (`CONFIG.md`, `MEMORY.md`, `REVIEWS.md`, `reviews/`) live **directly in `work/`** — not in a `code-guardian/` subfolder. If you're upgrading from an older setup that nested the checkout under `work/code-guardian/`, re-onboard from a fresh agent rather than moving files by hand.

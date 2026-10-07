@@ -39,8 +39,9 @@ little:
 3. **Provider** — your IBM LiteLLM or Anthropic connection.
 4. **Connections** — a GitHub connection if you want one (see above).
 
-Then **Create agent from this kit**. You don't choose network access while creating: the agent starts
-on **Trusted defaults**, which already covers GitHub, PyPI and npm, and you can change it afterwards.
+Then **Create agent from this kit**. You don't choose network access while creating: the page's
+read-only **Network access** box shows the agent starts on the platform default, **Trusted sites only**,
+which already covers GitHub, PyPI and npm, and you can change it afterwards.
 
 !!! tip "Allow the target's hosts before a long run"
     If building or exercising the target reaches a host outside the defaults, that request is held for

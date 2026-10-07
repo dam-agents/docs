@@ -78,7 +78,7 @@ When your agent tries to reach a service for the first time:
 
 1. The request hits the gateway
 2. The gateway checks if there's a matching egress rule
-3. If no rule exists, the request is **held** and the approval appears in **Activity**, the bell at the top right of every page — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded there instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
+3. If no rule exists, the request is **held** and the approval appears in **Activity**, opened from the **Activity** button at the top right of every page — unless the turn came from a channel with no session of yours attached, in which case it's refused straight away and recorded there instead (see [Network & Approvals](../core-concepts/network-access.md#approvals))
 4. You decide: **Allow once** (releases just this call), **Allow permanently** (a lasting rule for that host/method/path), **Allow all of &lt;host&gt;** (a host-level rule), **Deny this request**, or **Deny permanently**.
 
 From the CLI the same choices are `dam approval approve` / `deny` — note that the **bare** verb is durable and writes a permanent rule, while `--once` actions only the held call. See the [CLI reference](cli.md#approvals).
@@ -94,7 +94,7 @@ Binding a conversation to an agent is what authorizes it. There is one access mo
 3. The sender is recorded by Slack user id and labelled in the prompt, so a multi-person conversation stays attributable (a 1:1 DM isn't labelled — there's only one human in it)
 4. The **binding owner's** Terms of Use acceptance gates every turn — the terms bind the party whose credentials run the work, not whoever typed
 
-Linking your messenger identity (`/dam login`) is never needed to drive a turn. It authorizes only the in-chat management commands — `/dam unbind`, `/dam ambient on|off`, and `/dam default <agent>`. The read-only forms, a bare `/dam ambient` or a bare `/dam default`, need no link either. (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
+Linking your messenger identity (`/dam login`) is never needed to drive a turn, or to whisper to an agent with `/dam whisper`. It authorizes the in-chat management commands — `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, and `/dam delete` — and an owner's link is also what lets their agents post into Slack channels beyond their own bindings, which they can do only where that owner is a member. The read-only forms, a bare `/dam ambient` or a bare `/dam default`, need no link either. (`/dam bind` needs no prior link; the bind flow signs you in as part of connecting the agent.)
 
 Telegram works the same way: with no workspace to anchor per-user identity, consent attaches to the conversation.
 

@@ -17,8 +17,8 @@ The session inherits the agent's full environment: the egress proxy, the credent
 - For the editor modes: `code` (or `code-insiders`) / `zed` on your `PATH`.
 
 !!! note "Custom images need `sshd`"
-    SSH only works on images that ship an SSH server. Every stock image does, because the
-    base image includes one — but if you [build a custom image](../guides/custom-image.md) from
+    SSH only works on images that ship an SSH server. Every stock image does, so a
+    [custom image](../guides/custom-image.md) built on one does too — but if you build from
     something else, or strip `openssh-server` out, `dam ssh` has nothing to connect to.
 
 ## Open a shell
