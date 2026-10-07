@@ -9,6 +9,14 @@ open **Nous**. The kit brings Nous pre-installed on its own image, so you create
 and give it your brief in a message. That agent is built for campaigns and nothing else — for ordinary
 coding, use a different agent.
 
+This 90-second demo walks through a whole campaign, from picking the kit to the finished report:
+
+<video controls preload="metadata" poster="../../assets/nous-demo-poster.jpg" style="width: 100%; max-width: 880px; border-radius: 8px; margin: 1rem 0;">
+  <source src="../../assets/nous-demo.mp4" type="video/mp4">
+  Your browser doesn't support embedded video.
+  <a href="../../assets/nous-demo.mp4">Download the demo</a> instead.
+</video>
+
 ## What you need
 
 - **A provider.** The kit runs on **IBM LiteLLM** or **Anthropic** — the provider picker offers only

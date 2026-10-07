@@ -58,7 +58,7 @@ Once connected, the key is saved and reused — the next time you create an agen
 Prefer to watch? This covers the whole process end to end.
 
 <video controls preload="metadata" style="width: 100%; max-width: 880px; border-radius: 8px; margin: 1rem 0;">
-  <source src="../assets/litellm-key.mp4" type="video/mp4">
+  <source src="../../assets/dam-litellm-key.mp4" type="video/mp4">
   Your browser doesn't support embedded video.
-  <a href="../assets/litellm-key.mp4">Download the walkthrough</a> instead.
+  <a href="../../assets/dam-litellm-key.mp4">Download the walkthrough</a> instead.
 </video>
