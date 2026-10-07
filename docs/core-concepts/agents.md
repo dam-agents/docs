@@ -166,7 +166,8 @@ faster on this input set" — and it authors the run, drives the framework, and 
 
 Which of these your install offers is up to your operator, so the **Research** shelf on **Starter
 Kits** is the list to trust — **EvoX**, a self-evolving optimizer from the same project as AdaEvolve,
-ships switched off, for instance. Each kit's page links its own documentation.
+ships switched off, for instance. Each kit's page links its own documentation, and Nous has a guide of
+its own: [Run Nous campaigns](../guides/run-nous.md).
 
 ## Managing agents
 
