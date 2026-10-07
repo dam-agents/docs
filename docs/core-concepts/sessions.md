@@ -81,16 +81,17 @@ session's row menu, behind a confirm — right-clicking or long-pressing the row
 
 !!! note "An older agent shows polled data"
     Sessions and files normally update live. An agent still running an image from before that shipped
-    can't push updates, so DAM falls back to polling and says so above the conversation: *Live updates
-    need a newer agent runtime — showing polled data.* Everything still works, just less promptly. Where
-    an update for the agent's image is available the notice offers it right there; where none is yet, it
-    tells you that too, so a stale notice isn't something you can act on and fail.
+    can't push updates, so DAM falls back to polling and says so at the top of the chat page's sidebar,
+    above the session list: *Live updates need a newer agent runtime — showing polled data.* Everything
+    still works, just less promptly. Where an update for the agent's image is available the notice offers
+    it right there; where none is yet, it tells you that too, so a stale notice isn't something you can
+    act on and fail.
 
 !!! note "An older agent may also be missing configuration"
     Where an agent's runtime is too old to accept something you granted it — network access, credentials,
-    files, MCP servers, skills — the conversation says which kinds it's **running without**, and its row
-    and chat header carry a **Missing config** badge. As above, the notice offers **Update** where an
-    image update exists and says so plainly where none does.
+    files, MCP servers, skills — a notice in the same place says which kinds it's **running without**,
+    and its row and chat header carry a **Missing config** badge. As above, the notice offers **Update**
+    where an image update exists and says so plainly where none does.
 
 !!! tip "How much of the message you can see"
     Message times can be absent rather than wrong. Where the harness keeps its own history, reopening an

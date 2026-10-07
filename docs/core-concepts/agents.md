@@ -304,8 +304,8 @@ catch up in one action rather than a visit per agent.
 
 An agent can also be behind in a way that costs it something silently. Where its runtime is too old to
 accept configuration you granted it — network access, credentials, files, MCP servers, skills — it
-carries a **Missing config** warning badge on its row and in its chat header, and the conversation says
-which kinds it's running without. Where an image update exists, **Update** is offered right there; where
+carries a **Missing config** warning badge on its row and in its chat header, and a notice at the top of
+the chat page's sidebar, above the session list, says which kinds it's running without. Where an image update exists, **Update** is offered right there; where
 none is yet, it tells you that instead, so the warning is never something you can act on and fail.
 
 ### Delete
