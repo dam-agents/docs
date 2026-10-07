@@ -78,8 +78,9 @@ Phases are long, and the run log only writes between them, so ask the agent for 
 reading the log.
 
 If the agent is connected to a [Slack channel](../integrations/slack.md) or
-[Telegram chat](../integrations/telegram.md) when it launches a campaign, it reports each design and
-findings summary into that thread as the campaign reaches it. Delivery is best-effort: a hiccup never
+[Telegram chat](../integrations/telegram.md) when it launches a campaign, it posts each design and
+findings summary to that channel or chat as a new message, as the campaign reaches it. The summaries
+don't land in the thread where you started the campaign. Delivery is best-effort: a hiccup never
 blocks the run.
 
 !!! warning "Those summaries aren't asking you anything"
