@@ -102,7 +102,7 @@ The mode suffix is one of `ssh`, `code`, or `zed`.
 dam ssh configure my-agent
 ```
 
-It prints the alias — `dam-` plus the name or ID you passed, e.g. `dam-my-agent` — and example `ssh` / `code` / `zed` invocations. Under the hood `dam` keeps its host entries in its own config file and adds a single `Include` line to your `~/.ssh/config` — it never rewrites your existing SSH config.
+It prints the alias — `dam-` plus the name or ID you passed, lowercased, with any character other than a letter, digit, `.`, `_` or `-` turned into `-`, so `My Agent` becomes `dam-my-agent` — and example `ssh` / `code` / `zed` invocations. Under the hood `dam` keeps its host entries in its own config file and adds a single `Include` line to your `~/.ssh/config` — it never rewrites your existing SSH config.
 
 Configure or clean up in bulk:
 
