@@ -34,9 +34,9 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Software factory**: Agents that work on a team's repositories unattended: picking up issues, opening and reviewing pull requests, and asking a person when they need one. The DAM team is proving it on DAM's own repository first. Tracked in [#3679](https://github.com/dam-agents/dam/issues/3679){:target="_blank"}.
 
-- **GitHub as a channel**: Talk to an agent from GitHub: @-mention it in an issue or pull request and it replies there, the way it does in Slack today. Tracked in [#3482](https://github.com/dam-agents/dam/issues/3482){:target="_blank"}.
-
 ## Later
+
+- **GitHub as a channel**: Talk to an agent from GitHub: @-mention it in an issue or pull request and it replies there, the way it does in Slack today. Tracked in [#3482](https://github.com/dam-agents/dam/issues/3482){:target="_blank"}.
 
 - **Interactive artifacts**: Artifacts that do more than display. A page you publish can call back to the agent that made it, so a dashboard can refresh itself or a form can kick off work. Private artifacts come first. Sharing interactive pages with others comes later, and it will never give viewers your agent's connections or credentials. Tracked in [#2884](https://github.com/dam-agents/dam/issues/2884){:target="_blank"}.
 
