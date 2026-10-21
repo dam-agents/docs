@@ -6,6 +6,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 ## Now
 
+- **Dead-simple first run**: Sign in and start chatting right away. New users get a ready-made agent with a starter Curve Bender budget, so there's no provider key to set up first. The budget shows in the UI, and you can switch to your own provider at any time.
+
 - **New agent runtime (microVMs)**: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one.
 
 - **Starter kits**: Ready-made setups for a specific job, such as reviewing code, keeping a knowledge base, or acting as a personal assistant. A kit brings the skills, connections, channels and schedules the job needs, so you start from a working agent rather than a blank one. See [Agents](../core-concepts/agents.md).
@@ -17,8 +19,6 @@ DAM is a research project, and real users drive its direction. Much of what we b
 - **Internal deployment**: A deployment of DAM that can reach systems inside IBM's network, GitHub Enterprise included. It runs alongside the current deployment, not instead of it.
 
 ## Next
-
-- **Onboarding & first-run experience**: A shorter, simpler path to your first working agent, so you get value sooner. Plus an optional guided experience for getting started with DAM.
 
 - **Delegating work to sub-agents**: Handing work to other agents becomes a dependable, visible capability. An agent can split a task across sub-agents and pick the harness and model for each one, for example to run one prompt on two harnesses and compare the answers. You watch the whole tree, with each sub-agent's status and cost, and limits apply to the tree as a whole. A sub-agent that needs a person can ask you without holding up the others.
 
