@@ -12,9 +12,9 @@ Join [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24)
 
 File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"} so they don't get lost in a channel scroll. For corrections to these docs, open an issue on the [docs repo](https://github.ibm.com/dam-agents/docs/issues){:target="_blank"}.
 
-## Request Access
+## Getting Access
 
-Don't have access yet? [Join the waitlist](https://ibm.biz/dam-waitlist){:target="_blank"}. The form lets you request access for teammates as well as yourself.
+Any IBMer can sign in to [DAM](https://ibm.biz/dam-agents){:target="_blank"} — there's no waitlist.
 
 You'll also need a model provider key — see [Create your LiteLLM key](litellm-key.md).
 

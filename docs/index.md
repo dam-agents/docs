@@ -7,8 +7,7 @@
 <p class="welcome-lead">Run long-lived AI agents in isolated pods, with runtime credential injection, scheduled triggers, and Slack-native access.</p>
 
 <div class="welcome-cta" markdown>
-[Join the waitlist →](https://ibm.biz/dam-waitlist){:target="_blank" .md-button .md-button--primary}
-[Launch DAM](https://ibm.biz/dam-agents){:target="_blank" .md-button}
+[Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
 </div>
 
 </div>
@@ -29,7 +28,7 @@ It's for **IBM Research engineers and researchers** who run agent workloads — 
 
 ## Start building
 
-Off the waitlist? Pick your entry point.
+Pick your entry point.
 
 <div class="grid cards" markdown>
 
