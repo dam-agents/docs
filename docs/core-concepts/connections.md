@@ -8,7 +8,7 @@ Three of the tabs in DAM **Settings** are easy to confuse. They do different thi
 
 | Tab | What it's for | Example |
 |-----|---------------|---------|
-| **Providers** | The **model** that powers an agent. Every agent needs one. | Anthropic, OpenAI, IBM LiteLLM ETE Proxy, Bob Shell, AWS Bedrock |
+| **Providers** | The **model** that powers an agent. Every agent needs one. | Anthropic, OpenAI, IBM LiteLLM ETE Proxy, Curve Bender, Bob Shell, AWS Bedrock |
 | **Connections** | Credentials and tools that let the agent **act on external services** on your behalf. | GitHub, a custom-header API, an MCP server |
 | **API keys** | Tokens that let **you or your automation** drive the DAM platform itself via the API/CLI. | A scoped key for a CI pipeline |
 

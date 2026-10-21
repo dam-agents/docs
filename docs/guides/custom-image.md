@@ -255,7 +255,7 @@ kits first). Everything is on one page, **Create an agent**, filled top to botto
     ```
 
 3. **Provider** — every agent needs one to power its model. The options are **IBM LiteLLM ETE Proxy**,
-   **Bob Shell**, **Anthropic**, **OpenAI**, and **AWS Bedrock**. Match it to your agent: an
+   **Curve Bender**, **Bob Shell**, **Anthropic**, **OpenAI**, and **AWS Bedrock**. Match it to your agent: an
    OpenAI-compatible harness needs an OpenAI-compatible provider.
 4. **Connections** — attach any credentials your agent needs. If it calls an external service, that's
    where you attach the credential and allow its host — see
