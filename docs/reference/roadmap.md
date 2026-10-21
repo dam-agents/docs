@@ -10,7 +10,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **New agent runtime (microVMs)**: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one. Tracked in [#4357](https://github.com/dam-agents/dam/issues/4357){:target="_blank"}.
 
-- **Starter kits**: Ready-made setups for a specific job, such as reviewing code, keeping a knowledge base, or acting as a personal assistant. A kit brings the skills, connections, channels and schedules the job needs, so you start from a working agent rather than a blank one. See [Agents](../core-concepts/agents.md). Tracked in [#3576](https://github.com/dam-agents/dam/issues/3576){:target="_blank"}.
+- **Starter kits**: Ready-made setups for a specific job, such as reviewing code, keeping a knowledge base, or acting as a personal assistant. A kit brings the skills, connections, channels and schedules the job needs, so you start from a working agent rather than a blank one. You can also add your own kits, without an admin changing the platform. See [Agents](../core-concepts/agents.md). Tracked in [#5067](https://github.com/dam-agents/dam/issues/5067){:target="_blank"}, [#3576](https://github.com/dam-agents/dam/issues/3576){:target="_blank"}.
 
 - **Use DAM from your own agent**: Drive DAM from the agent you already work in, such as Claude Code or Codex on your laptop. It learns DAM's command line from a skill, so it can create agents, start runs and manage connections for you. Secrets stay out of its hands: you enter them yourself. Tracked in [#5502](https://github.com/dam-agents/dam/issues/5502){:target="_blank"}.
 
@@ -19,6 +19,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 - **Internal deployment**: A deployment of DAM that can reach systems inside IBM's network, GitHub Enterprise included. It runs alongside the current deployment, not instead of it. Tracked in [#3755](https://github.com/dam-agents/dam/issues/3755){:target="_blank"}.
 
 ## Next
+
+- **Start from Slack**: Create your account and your first agent without leaving Slack. Tracked in [#5058](https://github.com/dam-agents/dam/issues/5058){:target="_blank"}.
 
 - **Delegating work to sub-agents**: Handing work to other agents becomes a dependable, visible capability. An agent can split a task across sub-agents and pick the harness and model for each one, for example to run one prompt on two harnesses and compare the answers. You watch the whole tree, with each sub-agent's status and cost, and limits apply to the tree as a whole. A sub-agent that needs a person can ask you without holding up the others. Tracked in [#3419](https://github.com/dam-agents/dam/issues/3419){:target="_blank"}.
 
@@ -36,7 +38,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 ## Later
 
-- **GitHub as a channel**: Talk to an agent from GitHub: @-mention it in an issue or pull request and it replies there, the way it does in Slack today. Tracked in [#3482](https://github.com/dam-agents/dam/issues/3482){:target="_blank"}.
+- **Triggers and GitHub as a channel**: Agents that start work when something happens, not only on a schedule: a label on an issue, a review request, a failing check, or a message from GitHub, Slack or a webhook. A cheap check runs first, so a trigger that finds nothing costs no model time. You can also @-mention an agent in a GitHub issue or pull request and it replies there, the way it does in Slack today. Tracked in [#3623](https://github.com/dam-agents/dam/issues/3623){:target="_blank"} and [#3482](https://github.com/dam-agents/dam/issues/3482){:target="_blank"}.
 
 - **Interactive artifacts**: Artifacts that do more than display. A page you publish can call back to the agent that made it, so a dashboard can refresh itself or a form can kick off work. Private artifacts come first. Sharing interactive pages with others comes later, and it will never give viewers your agent's connections or credentials. Tracked in [#2884](https://github.com/dam-agents/dam/issues/2884){:target="_blank"}.
 
