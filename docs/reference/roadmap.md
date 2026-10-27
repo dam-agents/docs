@@ -18,6 +18,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Internal deployment**: A deployment of DAM that can reach systems inside IBM's network, GitHub Enterprise included. It runs alongside the current deployment, not instead of it. Tracked in [#3755](https://github.com/dam-agents/dam/issues/3755){:target="_blank"}.
 
+- **Security for sensitive work**: Teams with sensitive data should be able to trust an agent because the platform keeps it safe, not because they checked every setting by hand. We're working through the open questions: which rules DAM enforces in code and which it hands to agents as policy; letting you say an agent works with confidential data, so DAM locks down its network and connections to match; agents that act with each person's own access instead of one shared account; and what an agent in a shared Slack channel can share, and with whom. First up are hard rules, such as which models an agent may use once it holds a given connection. Tracked in [#4166](https://github.com/dam-agents/dam/issues/4166){:target="_blank"}, [#3323](https://github.com/dam-agents/dam/issues/3323){:target="_blank"}.
+
 ## Next
 
 - **Start from Slack**: Create your account and your first agent without leaving Slack. Tracked in [#5058](https://github.com/dam-agents/dam/issues/5058){:target="_blank"}.
