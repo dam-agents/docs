@@ -79,6 +79,7 @@ nav:
     - Building knowledge bases: guides/building-knowledge-bases.md
     - Automate PR review: guides/code-review.md
     - Run Nous campaigns: guides/run-nous.md
+    - Kubernetes cluster health monitor: guides/k8s-cluster-health.md
   - Core Concepts:
     - The building blocks: core-concepts/building-blocks.md
     - Agents: core-concepts/agents.md
