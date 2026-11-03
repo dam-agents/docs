@@ -48,7 +48,10 @@ Answer the interview and approve the design. When it finishes, push the reposito
 ## Share it
 
 !!! note "Coming soon"
-    Sharing your own starter kit in DAM, so others can create an agent from it without an admin changing the platform configuration, is in progress ([dam#5067](https://github.com/dam-agents/dam/issues/5067)). Until it ships, **Starter Kits** lists only the kits your install's operator has added.
+    Both ways of sharing your own kit are on their way:
+
+    - **Share by link.** Not every kit has to be listed for everyone in **Starter Kits**. Make the repository public and send its link. Your teammate pastes it into **Use a kit from a link** on **Starter Kits**, sees everything the kit sets up, and is told nobody on the platform reviewed it, before creating the agent.
+    - **Add it to Starter Kits.** List your kit in **Starter Kits** for everyone, without an admin changing the platform configuration ([dam#5067](https://github.com/dam-agents/dam/issues/5067)).
 
 ## Check your kit as you write it
 
