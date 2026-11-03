@@ -80,6 +80,7 @@ nav:
     - Automate PR review: guides/code-review.md
     - Run Nous campaigns: guides/run-nous.md
     - Kubernetes cluster health monitor: guides/k8s-cluster-health.md
+    - Create your own starter kit: guides/create-starter-kit.md
   - Core Concepts:
     - The building blocks: core-concepts/building-blocks.md
     - Agents: core-concepts/agents.md

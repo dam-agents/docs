@@ -247,6 +247,8 @@ the agent is still onboarding.
     on your own **Starter Kits** page as the authority. Where an install has no catalogue configured,
     the page says so and points you at starting from scratch.
 
+To publish an agent of your own as a kit, see [Create your own starter kit](../guides/create-starter-kit.md).
+
 ### Configure
 
 From the agent's page, the left nav has these sections:
