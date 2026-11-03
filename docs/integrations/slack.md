@@ -25,22 +25,31 @@ Connecting a Slack conversation to an agent lets you:
 
 ## Is DAM in your Slack workspace?
 
-Everything on this page needs DAM's Slack app installed in the workspace you're working in. Not every
-workspace has it, and the tell is that there's nothing to connect to: no **DAM** app to invite to a
-channel, and `/dam` isn't a command your workspace knows.
+To use DAM in a Slack workspace, the DAM Slack app must first be installed in that workspace. Not
+every workspace has it installed.
 
-To get it installed, request it through the Slack workflow in
-[#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}. Start it
-either way:
+**How to tell if DAM is installed:**
 
-- Send `/slack-request` in #dam-community.
-- Open the **Workflows** tab at the top of the channel and pick the Slack request workflow.
+- You can invite the **DAM** app to a channel.
+- The `/dam` command is available in your workspace.
 
-The DAM team takes it from there.
+If neither is available, you'll need to request an installation.
 
-The **Slack** connection needs the app in your workspace too, and it's a different thing from a
-binding: it signs the agent into **your own Slack account**, so it acts as you — reading *and* posting,
-anywhere you can. See [Connections](../core-concepts/connections.md#slack).
+**How to request installation:**
+
+1. Go to [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
+2. Start the Slack request workflow using either method:
+    - Send `/slack-request` in the channel.
+    - Open the **Workflows** tab at the top of the channel and select the Slack request workflow.
+3. Submit the request. The DAM team will follow up with a one-time installation link to add DAM to
+   your workspace.
+
+Once installed, you'll be able to invite DAM to channels and use the `/dam` command in that workspace.
+
+!!! note
+    Installing the DAM app in a workspace is separate from setting up a Slack connection. A Slack
+    connection authenticates an agent as your own Slack account, allowing it to read and post
+    messages wherever you have access. See [Connections](../core-concepts/connections.md#slack).
 
 ## Who can drive the agent
 
