@@ -66,7 +66,7 @@ Everything's on one page — **Create an agent** — top to bottom:
 
 - **Name** — what you'll call it, pre-filled so you can leave it.
 - **Image** — the harness that runs inside the pod. Pick a card: **Claude Code**, **Codex**, **PI
-  Agent**, or **IBM Bob** — or *use a custom image* to bring your own ([Building a custom image](../guides/custom-image.md)). Choose **Claude Code** to follow along.
+  Agent**, or **IBM Bob** — or *use a custom image* to bring your own. Choose **Claude Code** to follow along.
 - **Provider** — the model provider. Not connected yet? Connect it right here and paste your key — no
   trip to Settings.
 - **Connections** — grant the credentials this agent may use, like **GitHub** for working against your

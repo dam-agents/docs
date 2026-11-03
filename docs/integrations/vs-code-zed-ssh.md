@@ -18,7 +18,7 @@ The session inherits the agent's full environment: the egress proxy, the credent
 
 !!! note "Custom images need `sshd`"
     SSH only works on images that ship an SSH server. Every stock image does, so a
-    [custom image](../guides/custom-image.md) built on one does too — but if you build from
+    custom image built on one does too — but if you build from
     something else, or strip `openssh-server` out, `dam ssh` has nothing to connect to.
 
 ## Open a shell
@@ -72,7 +72,7 @@ ssh -L 8080:localhost:3000 dam-my-agent    # forward a port
 
 !!! note
     `scp` and `sftp` need an `sftp-server` binary in the image. Every stock image has one; a
-    [custom image](../guides/custom-image.md) built from a slimmer base may not, in which case `ssh` and
+    custom image built from a slimmer base may not, in which case `ssh` and
     port-forwarding still work but file transfer doesn't.
 
 ## Choosing the client (`-x` / `--exec`)

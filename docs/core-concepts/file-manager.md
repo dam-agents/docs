@@ -78,4 +78,4 @@ disabled and says so.
     Everything under `/home/agent` — your work, `$HOME`, installed language packages — comes back
     after a sleep, **except `~/.cache`**, which is cleared on every wake. Software installed
     *outside* your home directory (system packages, `/usr/local`) does not survive either. Bake
-    those into a [custom image](../guides/custom-image.md) instead.
+    those into a custom image instead.

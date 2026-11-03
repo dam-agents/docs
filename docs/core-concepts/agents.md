@@ -102,7 +102,7 @@ since it's the difference between an always-on agent and one that may be interru
 
 !!! tip "Bake long-term dependencies into an image"
     Anything your agent needs permanently — system packages, tools installed at runtime — should go
-    into a [custom image](../guides/custom-image.md), or it will vanish on the next hibernation.
+    into a custom image, or it will vanish on the next hibernation.
 
 ## Compute budget and resources
 
@@ -138,8 +138,6 @@ Each agent runs one **harness** — the AI software inside the pod:
 | Codex | OpenAI Codex coding agent |
 | PI Agent | Pi coding agent with multi-LLM support |
 | IBM Bob | Bob shell agent (Anthropic, Mistral, Granite) |
-
-Want to bring your own? See the [Building a Custom Image](../guides/custom-image.md) guide.
 
 ## Knowledge bases and frameworks
 
@@ -185,8 +183,7 @@ Every agent is created the same way, from **Home**. There are two routes in, and
 From scratch, the page asks for:
 
 - **Name** — what you'll call it. It comes pre-filled, so you can accept it and move on.
-- **Image** — the AI software inside the pod: Claude Code, Codex, PI Agent, or IBM Bob. To bring your
-  own image instead of a listed card, see [Building a Custom Image](../guides/custom-image.md).
+- **Image** — the AI software inside the pod: Claude Code, Codex, PI Agent, or IBM Bob.
 - **Provider** — the model provider. Not connected yet? Connect it right here rather than in Settings.
 - **Connections** — the credentials this agent may use, like GitHub for working against your repos.
 - **Lifecycle** — **Hibernate when idle** or **Always on**, as described
