@@ -29,9 +29,14 @@ Everything on this page needs DAM's Slack app installed in the workspace you're 
 workspace has it, and the tell is that there's nothing to connect to: no **DAM** app to invite to a
 channel, and `/dam` isn't a command your workspace knows.
 
-To get it installed, submit the
-[DAM Slack request form](https://ibm.biz/dam-slack-request){:target="_blank"}. The DAM team takes it
-from there.
+To get it installed, request it through the Slack workflow in
+[#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}. Start it
+either way:
+
+- Send `/slack-request` in #dam-community.
+- Open the **Workflows** tab at the top of the channel and pick the Slack request workflow.
+
+The DAM team takes it from there.
 
 The **Slack** connection needs the app in your workspace too, and it's a different thing from a
 binding: it signs the agent into **your own Slack account**, so it acts as you — reading *and* posting,
