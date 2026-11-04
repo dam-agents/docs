@@ -6,7 +6,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 ## Now
 
-- **Dead-simple first run**: Sign in and start chatting right away. New users get a ready-made agent with a starter Curve Bender budget, so there's no provider key to set up first. The budget shows in the UI, and you can switch to your own provider at any time. You'll also be able to create your account and your first agent without leaving Slack. Tracked in [#5055](https://github.com/dam-agents/dam/issues/5055){:target="_blank"}, [#5058](https://github.com/dam-agents/dam/issues/5058){:target="_blank"}.
+- **Dead-simple first run**: Sign in and start chatting right away. Your first agent is a personal assistant, made from a starter kit and running on a starter Curve Bender budget, so there's no provider key to set up first. The budget shows in the UI, and you can switch to your own provider at any time. Tracked in [#5055](https://github.com/dam-agents/dam/issues/5055){:target="_blank"}, [#5690](https://github.com/dam-agents/dam/issues/5690){:target="_blank"}.
 
 - **New agent runtime (microVMs)**: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one. Tracked in [#4357](https://github.com/dam-agents/dam/issues/4357){:target="_blank"}.
 
@@ -21,6 +21,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 - **Self-serve telemetry data**: Pull everything DAM records about your own agents, meaning traces, logs and costs, and build your own tooling on it outside DAM. You only ever see your own agents' data, and the content of your conversations is never included. Usage questions get answered without waiting on a person: ask a telemetry agent in Slack, or open a dashboard that stays current. The first version is built but sits behind a feature flag, so most users can't see it yet. We're working on turning it on for everyone. Tracked in [#3486](https://github.com/dam-agents/dam/issues/3486){:target="_blank"}.
 
 ## Next
+
+- **Start from Slack**: Create your account and reach your personal assistant without leaving Slack. Tracked in [#5058](https://github.com/dam-agents/dam/issues/5058){:target="_blank"}.
 
 - **Delegating work to sub-agents**: Handing work to other agents becomes a dependable, visible capability. An agent can split a task across sub-agents and pick the harness and model for each one, for example to run one prompt on two harnesses and compare the answers. You watch the whole tree, with each sub-agent's status and cost, and limits apply to the tree as a whole. A sub-agent that needs a person can ask you without holding up the others. Tracked in [#3419](https://github.com/dam-agents/dam/issues/3419){:target="_blank"}.
 
