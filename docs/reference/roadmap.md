@@ -34,6 +34,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Cost & performance optimization**: Ways to decide what an agent's work costs before it happens: run each task on a model that fits it, skip work that would find nothing, and set spending limits the platform enforces. Plus clearer answers to "why is my agent slow or expensive?" Tracked in [#4032](https://github.com/dam-agents/dam/issues/4032){:target="_blank"}, [#3322](https://github.com/dam-agents/dam/issues/3322){:target="_blank"}.
 
+- **Microsoft 365**: Agents that work with your Microsoft 365 account. Meeting transcripts come first, so an agent can pull action items and decisions out of your meetings. Email and calendar follow, so a morning brief knows your day and meeting prep finds the meeting and who is in it. This depends on IBM security clearance, which we are working through. Tracked in [#4405](https://github.com/dam-agents/dam/issues/4405){:target="_blank"}.
+
 - **Software factory**: Agents that work on a team's repositories unattended: picking up issues, opening and reviewing pull requests, and asking a person when they need one. The DAM team is proving it on DAM's own repository first. Tracked in [#3679](https://github.com/dam-agents/dam/issues/3679){:target="_blank"}.
 
 ## Later
@@ -43,6 +45,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 - **Interactive artifacts**: Artifacts that do more than display. A page you publish can call back to the agent that made it, so a dashboard can refresh itself or a form can kick off work. Private artifacts come first. Sharing interactive pages with others comes later, and it will never give viewers your agent's connections or credentials. Tracked in [#2884](https://github.com/dam-agents/dam/issues/2884){:target="_blank"}.
 
 - **Smart platform**: A built-in assistant inside DAM. It answers questions about the platform, knows the state of your agents, and over time explains problems and helps with setup. Tracked in [#3587](https://github.com/dam-agents/dam/issues/3587){:target="_blank"}.
+
+- **Memory across agents**: What you teach one agent, such as your preferences, rules and context, can carry over to your other agents, and a team can share what it agrees on. You see what is remembered and can trim it. This is still exploratory: we want to learn whether memory solves the problem before we decide what DAM builds and what it leaves to memory services. Tracked in [#6286](https://github.com/dam-agents/dam/issues/6286){:target="_blank"}.
 
 - **AI <> human collaboration in meetings**: Agents that work alongside people in meetings. This is still exploratory. The first step is a Meeting assistant starter kit: it learns from the transcripts of a meeting series and proposes the agenda before each meeting. Tracked in [#3643](https://github.com/dam-agents/dam/issues/3643){:target="_blank"}.
 
