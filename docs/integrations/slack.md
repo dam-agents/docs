@@ -38,9 +38,7 @@ If neither is available, you'll need to request an installation.
 **How to request installation:**
 
 1. Go to [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
-2. Start the Slack request workflow using either method:
-    - Send `/slack-request` in the channel.
-    - Open the **Workflows** tab at the top of the channel and select the Slack request workflow.
+2. Open the **Workflows** tab at the top of the channel and select the **Slack request** workflow.
 3. Submit the request. The DAM team will follow up with a one-time installation link to add DAM to
    your workspace.
 

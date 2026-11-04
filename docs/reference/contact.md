@@ -23,4 +23,4 @@ You'll also need a model provider key — see [Create your LiteLLM key](litellm-
 
 ## DAM in Your Slack Workspace
 
-Using DAM in Slack — connecting a channel to an agent, or acting in Slack through a Slack connection — needs DAM's Slack app installed in that workspace, and not every workspace has it. To request it, send `/slack-request` in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}, or open the **Workflows** tab at the top of the channel. See [Is DAM in your Slack workspace?](../integrations/slack.md#is-dam-in-your-slack-workspace).
+Using DAM in Slack — connecting a channel to an agent, or acting in Slack through a Slack connection — needs DAM's Slack app installed in that workspace, and not every workspace has it. To request it, open the **Workflows** tab at the top of [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"} and select the **Slack request** workflow. See [Is DAM in your Slack workspace?](../integrations/slack.md#is-dam-in-your-slack-workspace).
