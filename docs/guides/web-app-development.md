@@ -47,7 +47,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ### Provider
 
-- **IBM LiteLLM ETE Proxy** — the agent needs model access to function
+- **IBM ETE LiteLLM Proxy** — the agent needs model access to function
 
 ### Connections
 

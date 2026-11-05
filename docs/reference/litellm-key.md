@@ -1,6 +1,6 @@
 # Create your LiteLLM key
 
-DAM can use the **IBM LiteLLM ETE Proxy** as a model provider. To use it, you'll need an API key from the **external** LiteLLM proxy.
+DAM can use the **IBM ETE LiteLLM Proxy** as a model provider. To use it, you'll need an API key from the **external** LiteLLM proxy.
 
 ## Before you start
 
@@ -47,7 +47,7 @@ The key looks like `sk-...`.
 In DAM, the model provider is configured as part of creating an agent.
 
 1. Start creating an agent — **Create agent** on **Home** — and scroll to **Provider**
-2. In the provider list, select **IBM LiteLLM ETE Proxy**
+2. In the provider list, select **IBM ETE LiteLLM Proxy**
 3. Paste your LiteLLM API key
 4. Continue setting up the agent
 

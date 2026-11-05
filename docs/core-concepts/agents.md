@@ -134,10 +134,10 @@ Each agent runs one **harness** — the AI software inside the pod:
 
 | Harness | Best For |
 |---------|----------|
-| Claude Code | General-purpose coding, debugging, refactoring (Anthropic) |
+| Claude | Claude Code — general-purpose coding, debugging, refactoring (Anthropic) |
 | Codex | OpenAI Codex coding agent |
-| PI Agent | Pi coding agent with multi-LLM support |
-| IBM Bob | Bob shell agent (Anthropic, Mistral, Granite) |
+| Pi | Pi coding agent with multi-LLM support |
+| Bob | Bob shell agent (Anthropic, Mistral, Granite) |
 
 ## Knowledge bases and frameworks
 
@@ -159,14 +159,13 @@ faster on this input set" — and it authors the run, drives the framework, and 
 - **OpenEvolve** <span>Evolutionary code optimization — evolves programs against a fitness function you define.</span>
 - **ShinkaEvolve** <span>Sample-efficient evolutionary program optimization, for when each evaluation is costly.</span>
 - **GEPA** <span>Reflective prompt and text optimization, rather than optimization of code itself.</span>
-- **K-Search** <span>LLM-driven GPU kernel optimization, with each candidate evaluated on Modal.</span>
 - **AdaEvolve** <span>Multi-island adaptive code and algorithm optimization, from the SkyDiscover project.</span>
 
 </div>
 
 Which of these your install offers is up to your operator, so the **Research** shelf on **Starter
 Kits** is the list to trust — **EvoX**, a self-evolving optimizer from the same project as AdaEvolve,
-ships switched off, for instance. Each kit's page links its own documentation, and Nous has a guide of
+ships switched off, for instance, and so does **K-Search**, for GPU kernel optimization. Each kit's page links its own documentation, and Nous has a guide of
 its own: [Run Nous campaigns](../guides/run-nous.md).
 
 ## Managing agents
@@ -183,7 +182,7 @@ Every agent is created the same way, from **Home**. There are two routes in, and
 From scratch, the page asks for:
 
 - **Name** — what you'll call it. It comes pre-filled, so you can accept it and move on.
-- **Image** — the AI software inside the pod: Claude Code, Codex, PI Agent, or IBM Bob.
+- **Image** — the AI software inside the pod: **Claude**, **Codex**, **Pi**, or **Bob**.
 - **Provider** — the model provider. Not connected yet? Connect it right here rather than in Settings.
 - **Connections** — the credentials this agent may use, like GitHub for working against your repos.
 - **Lifecycle** — **Hibernate when idle** or **Always on**, as described
@@ -302,6 +301,7 @@ All of these preserve the workspace and configuration exactly like hibernation �
 
 If an agent's pod restarts on its own while you have DAM open, a notice says so, naming the cause where
 it's known: one that ran out of memory says so and suggests a larger size under **Compute resources**;
+one that ran out of storage says so and suggests deleting files it no longer needs or requesting more;
 otherwise it says the agent crashed and restarted. You're told once per restart, and not afterwards about
 a restart that happened while you were away.
 
@@ -317,9 +317,15 @@ page header, and on its row in the agents list. Hover it to see which image vers
 ships, and a **See what changed** link where the harness publishes release notes; click it to confirm
 and apply.
 
-Applying is always explicit and changes only the image. An agent that's **hibernating**, or parked
-over budget, applies it the next time it starts; anything else restarts to apply it, so in-flight work
-is interrupted. The confirmation tells you which case you're in.
+Applying changes only the image. An agent that's **hibernating**, or parked over budget, applies it the
+next time it starts; anything else restarts to apply it, so in-flight work is interrupted. The
+confirmation tells you which case you're in.
+
+If you don't apply it, DAM moves an agent made from a template onto the template's current image by
+itself, without interrupting it: a hibernated or parked agent at once, a running one once it next
+hibernates, and an **Always on** one once it's been quiet for a while with nothing connected. If the
+agent won't start on the new image, DAM moves it back and doesn't try that image again. An agent made
+from a custom image or a starter kit is never moved.
 
 Where **more than one** agent is behind, the list carries a banner counting them, with **Update all** to
 catch up in one action rather than a visit per agent.

@@ -9,7 +9,7 @@ chat drives the agent under the **agent's own** credentials, with no login neede
 [who can drive the agent](slack.md#who-can-drive-the-agent).
 
 What differs is everything around it — Telegram has no identity linking, so **group admin** is the
-gate on the in-chat commands; messages relay as text only; there's no ambient mode; and a first
+gate on the in-chat commands; messages relay as text only; and a first
 message to a sleeping agent gets no heads-up — Telegram just goes quiet until the agent is up, where
 Slack tells you it's waking.
 
@@ -27,8 +27,10 @@ Slack tells you it's waking.
 |---------|--------------|
 | `/bind` | Connect one of your agents to this chat (group admins only) |
 | `/unbind` | Release the binding (group admins only) |
+| `/ambient on\|off` | Turn ambient mode on or off in a group (group admins only) |
+| `/ambient` | Report whether ambient mode is on |
 
-Both are published to Telegram's own command menu, so typing `/` in the chat lists them with a
+All three are published to Telegram's own command menu, so typing `/` in the chat lists them with a
 description — there's no separate help command to find. In a group with more than one bot, address a
 command to this one as `/bind@<botname>`.
 
@@ -60,10 +62,18 @@ connecting itself always happens in the chat, with `/bind`.
 | Surface | What triggers a reply |
 |---------|----------------------|
 | **DM** | Every message |
-| **Group** | An `@mention` — after the first one, follow-ups in that chat are picked up too (the agent decides whether to answer) |
+| **Group** | An `@mention` of the bot, or a reply to one of its messages. With [ambient mode](#ambient-mode) on, every message (the agent decides whether to answer) |
 
 Unbound **groups stay silent**, so the bot doesn't spam every chat it's been added to. In an unbound
 **DM** it replies *"This chat isn't connected to an agent. An admin needs to send `/bind`."*
+
+### Ambient mode
+
+Ambient mode is **off** by default, so in a group the agent answers only messages that mention it or
+reply to it. A group admin turns it on with `/ambient on` — the agent then reads every message in the
+chat and may chime in without being mentioned — and back off with `/ambient off`. It doesn't apply in a
+DM, where every message already reaches the agent. If the bot has Telegram's **Group Privacy** setting
+on, Telegram doesn't show it un-addressed messages, and turning ambient on tells you so.
 
 !!! warning "Inbound is text only"
     Telegram messages relay as **text**. Images and other attachments are not passed to the agent —
@@ -77,8 +87,9 @@ Unbound **groups stay silent**, so the bot doesn't spam every chat it's been add
 
 **One chat, one session.** A Telegram chat maps to a single persistent session, so a group
 conversation continues in one place rather than splitting per reply — unlike
-[Slack](slack.md#how-sessions-work), where each thread gets its own session. (In a forum group each
-topic counts as its own chat, so it binds and sessions separately.) Ambient mode is Slack-only.
+[Slack](slack.md#how-sessions-work), where each thread gets its own session. (In a forum group the
+binding covers the whole group — `/bind` in any topic connects all of them — but each topic keeps its
+own session.)
 
 **A burst of messages gets one answer**, as on [Slack](slack.md#how-sessions-work): the agent waits
 for a short pause, then answers everything that arrived together. Something sent while it's already
@@ -100,7 +111,7 @@ it. Unlike Slack, it can't reach a chat it isn't connected to.
 | "Only group admins can `/unbind`" | Ask a chat admin to run `/unbind` in the chat |
 | "This chat is already connected to an agent" | Send `/unbind` first, then bind again |
 | "This chat isn't connected to an agent" | Run `/bind` to connect one of your agents |
-| Bot silent in a group | Make sure you `@mention` it, and that the chat is bound |
+| Bot silent in a group | Make sure you `@mention` it or reply to it, and that the chat is bound — or turn on `/ambient` |
 | The login link didn't work | It expires after ~10 minutes — send `/bind` again |
 | An attached image was ignored | Telegram relays text only. Paste the content instead |
 | Asked to accept Terms of Use in a DM, or silence in a group | Whoever bound the chat must accept the terms in DAM before any turn runs — turns use that person's consent, not yours. A DM says so; in a group nothing is posted and the bot just stays quiet |

@@ -13,11 +13,12 @@ Each agent has an allowlist of external services it can reach.
 | Path | URL path pattern (defaults to `*`) | `/repos/*` |
 | Verdict | `allow` or `deny`. The most specific rule wins, so a deny rule can carve an exception out of a broad allow | `allow` |
 
-!!! info "The port doesn't narrow what matches"
-    A rule's port is recorded and displayed, but requests are matched on the **bare hostname** — the
-    port is stripped before the rule lookup. So `api.prod.example:6443` matches that host on any
-    port, and you cannot allow one port while denying another. What the port *does* do is make the
-    rule a narrowed one, which is what triggers the gateway restart described below.
+!!! info "A rule covers one port"
+    A rule with a port covers only that port. A rule without one covers only the standard port — 443
+    for HTTPS, 80 for plain HTTP — so allowing a host never opens its other services: to reach
+    `api.prod.example:6443`, the rule has to name `:6443`. An approval for a request on another port
+    writes a rule carrying that port. A port also makes the rule a narrowed one, which is what
+    triggers the gateway restart described below.
 
 !!! info "A wildcard stands for exactly one label"
     `*.pkg.dev` covers `us-docker.pkg.dev`, and **not** `a.b.pkg.dev` — the same rule a wildcard TLS
@@ -133,8 +134,10 @@ The default is always deny:
 !!! info "Some hosts never prompt"
     A small set of platform-provided upstreams — the object store behind the artifact library, for
     instance — is allowed ahead of your rules, so those requests never raise an approval and never
-    appear in Activity. You don't need a rule for them, and you can't deny them with one. Everything your
-    agent reaches on its own behalf goes through the rules and approvals above.
+    appear in Activity. You don't need a rule for them, and you can't deny them with one. The same goes for the
+    hosts your agent's model-provider connection needs: they're let through even over a deny rule,
+    so a rule can't cut an agent off from its own model. Everything else your agent reaches goes
+    through the rules and approvals above.
 
 ## Where approvals appear
 

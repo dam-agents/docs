@@ -23,7 +23,7 @@ kit is a ready-made configuration, and there's a good one for most jobs — but 
 Everything is then on one page — **Create an agent** — filled top to bottom:
 
 1. **Name** — what you'll call it. It comes pre-filled, so you can leave it.
-2. **Image** — the harness that runs inside the pod. Pick the **Claude Code** card.
+2. **Image** — the harness that runs inside the pod. Pick the **Claude** card.
 3. **Provider** — the model provider. Not connected yet? Connect it **right here** — paste your key
    inline, no trip to Settings.
 4. **Connections** *(optional)* — grant credentials the agent may use. For working against your repos,
@@ -85,21 +85,21 @@ complete login. Pass `--no-browser` if you'd rather open the URL yourself.
 
 ### Step 3: Create a Claude Code Agent
 
-Scripted. Both flags are required: `--template` names the harness (list them with `dam template list`)
-and `--provider` names a model-provider connection by id or unique name (list them with
-`dam connection list`):
+Scripted. `--provider` names a model-provider connection by id or unique name (list them with
+`dam connection list`); leave it off and DAM grants your preferred provider. The agent starts on
+Claude Code, and each session can pick another harness:
 
 ```bash
-dam agent create my-agent --template claude-code --provider "My provider"
+dam agent create my-agent --provider "My provider"
 ```
 
 Wait for it to reach running state:
 
 ```bash
-dam agent create my-agent --template claude-code --provider "My provider" --wait
+dam agent create my-agent --provider "My provider" --wait
 ```
 
-A missing, unknown, ambiguous or non-provider `--provider` fails **before** any agent is created, so a
+An unknown, ambiguous or non-provider `--provider` fails **before** any agent is created, so a
 wrong flag costs you nothing but the error.
 
 Or run the interactive setup, which walks you through the name, template selection, and credentials:

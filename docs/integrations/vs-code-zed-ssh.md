@@ -70,6 +70,10 @@ sftp dam-my-agent                          # interactive sftp
 ssh -L 8080:localhost:3000 dam-my-agent    # forward a port
 ```
 
+`dam ssh connect` passes anything after `--` straight to `ssh` too, so a one-off tunnel or remote
+command needs no configured alias: `dam ssh connect my-agent -- -L 8080:localhost:3000 -N`. That works
+in ssh mode only — the editor modes refuse extra arguments.
+
 !!! note
     `scp` and `sftp` need an `sftp-server` binary in the image. Every stock image has one; a
     custom image built from a slimmer base may not, in which case `ssh` and
@@ -102,7 +106,7 @@ The mode suffix is one of `ssh`, `code`, or `zed`.
 dam ssh configure my-agent
 ```
 
-It prints the alias — `dam-` plus the name or ID you passed, lowercased, with any character other than a letter, digit, `.`, `_` or `-` turned into `-`, so `My Agent` becomes `dam-my-agent` — and example `ssh` / `code` / `zed` invocations. Under the hood `dam` keeps its host entries in its own config file and adds a single `Include` line to your `~/.ssh/config` — it never rewrites your existing SSH config.
+It prints the alias — `dam-` plus the agent's **name**, whether you passed its name or its ID, lowercased, with any character other than a letter, digit, `.`, `_` or `-` turned into `-`, so `My Agent` becomes `dam-my-agent` — and example `ssh` / `code` / `zed` invocations. Under the hood `dam` keeps its host entries in its own config file and adds a single `Include` line to your `~/.ssh/config` — it never rewrites your existing SSH config.
 
 Configure or clean up in bulk:
 
@@ -117,9 +121,7 @@ entries (and its `Include` line once empty).
 
 !!! warning "`--all` prunes more than deleted agents"
     There is one managed config for all your hosts, so an `--all` run drops entries for agents on
-    every *other* server you use. It also writes aliases from agent **names**, so an entry you
-    created by ID (`dam ssh configure agent-…`) is pruned and re-added under the name. Re-run
-    `--all` per host, or configure those agents individually.
+    every *other* server you use. Re-run `--all` per host, or configure those agents individually.
 
 ## Keeping agents awake
 

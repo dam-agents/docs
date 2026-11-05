@@ -19,7 +19,7 @@ This 90-second demo walks through a whole campaign, from picking the kit to the 
 
 ## What you need
 
-- **A provider.** The kit runs on **IBM LiteLLM**, **Curve Bender** or **Anthropic** — the provider picker
+- **A provider.** The kit runs on **IBM ETE LiteLLM Proxy**, **CurveBender** or **Anthropic** — the provider picker
   offers only those three. See [Create your LiteLLM key](../reference/litellm-key.md).
 - **A GitHub connection** — optional. You need one to clone a **private** target, or to push results
   back. Any GitHub or GitHub Enterprise connection satisfies it: the OAuth sign-in, a personal access
@@ -36,7 +36,7 @@ little:
 
 1. **Name** — something you'll recognize in the agents list.
 2. **Harness** — fixed, because the kit brings its own image.
-3. **Provider** — your IBM LiteLLM, Curve Bender or Anthropic connection.
+3. **Provider** — your IBM ETE LiteLLM Proxy, CurveBender or Anthropic connection.
 4. **Connections** — a GitHub connection if you want one (see above).
 
 Then **Create agent from this kit**. You don't choose network access while creating: the page's

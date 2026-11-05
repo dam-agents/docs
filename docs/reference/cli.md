@@ -30,7 +30,7 @@ Precedence: CLI flag > environment variable > config file.
 **Global flags:**
 
 - `--server <url>` — override the configured server URL for a single call. Available on every networked command **except `dam auth status` and the `dam auth token` subcommands**, which use the configured active host.
-- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `version`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, `agent create-interactive`, `satellite mcp`, or `satellite shell`. (`file list` does have it.)
+- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, `agent create-interactive`, `satellite mcp`, or `satellite shell`. (`file list` does have it.)
 
 Precedence for the server URL is flag > `DAM_SERVER` > config file > **error** — there is no default server.
 
@@ -76,16 +76,22 @@ dam auth token revoke key-abcdef12                  # revoke a key; rejected on 
 ```bash
 dam agent list                                   # List your agents (default command)
 dam agent get <name-or-id>                        # Show one agent's details
-dam agent create <name> --template <id> --provider <id-or-name>          # Create an agent
-dam agent create <name> --template <id> --provider <id-or-name> --wait  # Block until it reaches running
+dam agent create <name>                          # Create an agent
+dam agent create <name> --provider <id-or-name> --wait  # Pick its provider; block until it reaches running
 dam agent create-interactive                     # Interactive setup: name + template + credentials (TTY-only)
 dam agent delete <name-or-id>                     # Delete an agent and all its persistent data (confirms)
 dam agent delete <name-or-id> --yes               # Delete without confirmation
 dam agent restart <name-or-id>                    # Restart the pod (persistent volumes survive)
+dam agent update <name-or-id> --harness <name> --model <provider>/<model>  # Set its default harness and model
+dam agent models <name-or-id>                     # List the models its providers offer
+dam agent disable <name-or-id>                    # Put it to sleep; nothing wakes it until you enable it
+dam agent enable <name-or-id>                     # Let it wake again on its next use
 ```
 
-- `create` flags: `--template <id>` (**required**), `--provider <id-or-name>` (**required**), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
-- `--provider` names a **model-provider connection**, by connection id or by a name unique among your providers — `dam connection list` shows both. A missing, unknown, ambiguous, non-provider or inactive selection is refused **before** the agent is created, so a wrong flag costs nothing. Resolving a *name* reads your connections, which needs `credentials:read`; pass a connection id to create with `agents:manage` alone. `dam agent create-interactive` collects the provider for you and needs neither flag.
+- `create` flags: `--template <id>` (defaults to the install's default template), `--provider <id-or-name>` (defaults to your preferred provider — the one `dam connection list --providers` marks `preferred`), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
+- `--provider` names a **model-provider connection**, by connection id or by a name unique among your providers — `dam connection list` shows both. An unknown, ambiguous, non-provider or inactive `--provider` is refused **before** the agent is created, so a wrong flag costs nothing. Resolving a *name* reads your connections, which needs `credentials:read`; pass a connection id to create with `agents:manage` alone. `dam agent create-interactive` collects the provider for you and needs neither flag.
+- The harness is picked per session, so `create` doesn't take one. `update` sets the agent's defaults: `--harness`, `--model` (named the way `dam agent models` lists them), `--setting id=value` (repeatable), and `--kind chat|channel|scheduled` to say which default you're setting (default `chat`). It also grants or removes providers with `--provider` / `--remove-provider`; removing one that a default used moves that default and says so.
+- A disabled agent reads `disabled` in `list` and `get`, and nothing — a schedule, a message, a session — wakes it until `dam agent enable`.
 - `--wait` is available on `create` and `restart`; pair with `--timeout` to change the 120s default.
 - `--json` on `list`, `get`, `delete`, and `restart` for machine-readable output.
 
@@ -106,9 +112,10 @@ dam connection templates                          # List provider templates you 
 dam connection list                               # List your connections
 dam connection list <agent>                       # List the connections granted to one agent
 dam connection connect <provider-or-url>          # Create a connection from a template or MCP server URL
-dam connection update <id-or-name>                # Rotate a header connection's stored secret (prompts securely)
+dam connection update <id-or-name>                # Rotate a connection's stored secret (on a DAM web page)
 dam connection reauth <id-or-name>                # Re-run login and consent for an OAuth connection
-dam connection disconnect <id-or-name>            # Remove a connection (deletes the stored credential)
+dam connection test <id-or-name>                  # Re-check a connection's stored credential
+dam connection disconnect <id-or-name>            # Remove a connection (deletes the stored credential; confirms, -y to skip)
 dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable; at least one)
 dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; at least one; idempotent)
 ```
@@ -117,15 +124,16 @@ dam connection revoke <agent> --connection <id>   # Revoke connections from an a
 
 - `--name <name>` — connection name (defaults to a slug of the template name or the MCP host)
 - `--auth oauth|none` — MCP auth mode (auto-detected by default)
-- `--no-browser` — for any OAuth connection, print the consent URL instead of opening a browser
+- `--no-browser` — print the consent or secret-entry link instead of opening a browser
+- `--prompt` — type a missing secret at a hidden terminal prompt instead of on a web page
 - `--timeout <seconds>` — how long to wait for OAuth authorization (default 300)
 - `-c, --config <key=value>` — set an optional template config input (repeatable), e.g. `--config model=premium-shell`; values are validated against the template's declared inputs.
 
-Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`, or **Object Storage**'s `--endpoint`/`--bucket`/`--access-key-id`/`--secret-access-key`. Run `dam connection connect <provider> --help` for the set that applies; omitted secrets are prompted for securely.
+Provider templates also declare their own required inputs, each exposed as its own flag — e.g. `--host`/`--url`, `--client-id`/`--client-secret`, `--header-name`/`--value`/`--value-format`/`--env-name`, `--ca-data`, or **Object Storage**'s `--endpoint`/`--bucket`/`--access-key-id`/`--secret-access-key`. Run `dam connection connect <provider> --help` for the set that applies. Leave a secret off and the command opens a DAM web page where you enter it (sign in as the same user; the link works once), then waits for it to be saved; other missing inputs are prompted for.
 
-`connection update` replaces a connection's **stored secret** in place. What that means depends on the connection: the injected value for an API key or custom-header integration, or an OAuth connection's own client secret where it carries one. A connection that stores no credential has nothing to update. It prompts securely on a TTY; pass `--value <secret>` when running non-interactively — a multi-line secret can't be typed at the prompt, so use `--value "$(cat secret.txt)"`.
+`connection update` replaces a connection's **stored secret** in place. What that means depends on the connection: the injected value for an API key or custom-header integration, or an OAuth connection's own client secret where it carries one. A connection that stores no credential has nothing to update. Without `--value`, `update` opens a DAM web page where you enter the new secret — a multi-line key works there too — and waits until it's saved. Pass `--prompt` to type it at a hidden terminal prompt instead (an OAuth client secret is always asked for there), `--no-browser` to print the link, or `--value <secret>` from a script.
 
-An **Object Storage** connection holds a key pair rather than one secret, so `update` rotates both at once: pass `--access-key-id` and `--secret-access-key` instead of `--value`, or answer the prompts. The new pair is checked against the storage endpoint first, and a pair it rejects replaces nothing.
+An **Object Storage** connection holds a key pair rather than one secret, so `update` rotates both at once: pass `--access-key-id` and `--secret-access-key` instead of `--value`, or enter both on the page. The new pair is checked against the storage endpoint first, and a pair it rejects replaces nothing.
 
 Use `update` to replace a *secret you hold*, and `reauth` to replace *expired OAuth tokens*.
 
@@ -240,8 +248,8 @@ dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of se
 - `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**. Against a server too old to understand ambient, the connect **fails loudly** rather than silently landing mentions-only.
 - **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one, and so does connecting a *different* agent to a channel that already has one — a conversation can hold several agents (see [Slack](../integrations/slack.md#several-agents-in-one-conversation)). Note the in-chat `/dam bind` is stricter: it refuses an agent already connected to that conversation rather than updating it.
 - **There's no `default` subcommand.** Which agent unnamed mentions reach is set in-chat with `/dam default <agent>`.
-- `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only and ambient is Slack-only.
-- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, and `/dam delete` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link. Your agent needs it, though, to post on its own into a channel it isn't connected to: it may reach only channels you're a member of, and until you've linked it can't reach any.
+- `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only, and Telegram's ambient mode is switched in the chat with `/ambient`.
+- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, `/dam whisper <agent> on|off`, `/dam ignore`, `/dam unignore`, and `/dam delete` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link. Your agent needs it, though, to post on its own into a channel it isn't connected to: it may reach only channels you're a member of, and until you've linked it can't reach any.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/bind` — Telegram's commands are bare, not namespaced under `/dam` — rather than through this command group.
 
 ### Approvals
@@ -283,6 +291,7 @@ Manage time-triggered tasks (schedules) attached to an agent — the CLI equival
 dam schedule list <agent>              # List the schedules attached to an agent
 dam schedule get <schedule-id>         # Show one schedule, expanded
 dam schedule create <agent> --name <name> --task <task> --daily 22:00   # Create an RRULE schedule
+dam schedule create <agent> --name <name> --task <task> --once --at "2026-11-05 09:00"   # A one-time task (or --now)
 dam schedule update <schedule-id> --task "New prompt"   # Update name/task/recurrence/timezone/etc.
 dam schedule enable <schedule-id>      # Enable a schedule (idempotent)
 dam schedule disable <schedule-id>     # Disable a schedule (idempotent)
@@ -296,12 +305,15 @@ dam schedule reset-session <schedule-id>   # Reset the session a continuous sche
 - `--every <interval>` — run every N minutes (`Nm`) or hours (`Nh`)
 - `--rrule <body>` — a raw RFC 5545 RRULE body (e.g. `FREQ=WEEKLY;BYDAY=MO;BYHOUR=7;BYMINUTE=0`)
 
+Or pass `--once` with `--at "YYYY-MM-DD HH:MM"` (in `--timezone`) or `--now` for a task that runs one time, in a fresh session. A one-time task takes none of the recurrence, quiet-window, session-mode or precheck flags.
+
 Additional flags (on both `create` and `update`):
 
 - `--weekdays <days>` — limit `--daily`/`--every` to specific days, e.g. `MO,WE,FR`. Can't combine with `--rrule`, whose body carries its own `BYDAY`. On `update` it only applies while you're rebuilding the recurrence, so pass it together with `--daily` or `--every` — you can't narrow the days of an existing schedule on its own
 - `--timezone <tz>` — IANA timezone (defaults to the host's zone)
 - `--quiet-window <HH:MM-HH:MM>` — suppress fires inside a window (repeatable)
 - `--session-mode <fresh|continuous>` — new session per fire, or one shared session. Defaults to `fresh` on `create`; on `update`, omitting it leaves the stored value unchanged
+- `--harness <name>` / `--model <provider>/<model id>` / `--setting id=value` — what the schedule's sessions run on, instead of the agent's defaults
 - `--precheck <command>` — a shell command that decides whether each fire actually runs. See [Prechecks](../core-concepts/schedules.md#prechecks). `update` also takes `--precheck-none` to remove one
 - `--json` — emit the schedule as JSON (available on every subcommand)
 
@@ -323,7 +335,7 @@ dam chat <agent> --reset               # Kill the existing PTY and start fresh
 dam session list <agent>               # List all sessions for an agent (`dam session <agent>` works too)
 ```
 
-`dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness. On disconnect, the CLI prints a `dam chat --resume` command for easy reattach. Short flags: `-c` (`--continue`), `-r` (`--resume`).
+`dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness, so to leave, close the terminal. If the connection drops, the CLI reconnects to the same session by itself; when the session ends or it can't reconnect, it prints a `dam chat <agent> --resume <id>` command. It prints that command when it attaches too, and waits a few seconds first — press Enter to connect at once, or pass `--no-pause`. Short flags: `-c` (`--continue`), `-r` (`--resume`).
 
 ### Headless runs
 
@@ -381,6 +393,7 @@ result soon after, not as durable history.
 dam ssh connect <agent>                # Open an SSH session to an agent
 dam ssh connect <agent> -x code        # Launch VS Code Remote-SSH against the agent
 dam ssh connect <agent> -x zed         # Launch Zed against the agent
+dam ssh connect <agent> -- -L 8080:localhost:8080 -N   # Pass extra arguments to ssh (ssh mode only)
 dam ssh configure <agent>              # Write SSH host config for an agent (no launch)
 dam ssh configure -a, --all            # Reconcile the active host's agents (prunes every other entry)
 dam ssh configure --clear              # Remove all dam-managed SSH host config
@@ -398,7 +411,7 @@ dam file get <agent> <remote-path>     # Download a single file from the agent
 dam file put <agent> <local> <remote>  # Upload a single file to the agent
 ```
 
-**Import** bundles local paths into a gzipped tar and uploads them. Each path lands at `work/<basename>` on the agent, replacing any existing entry at that path. Excluded by basename at every level: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. A symlink passed **as a `<path>` argument** is rejected and the import fails; symlinks found **inside** an imported directory are **skipped, not followed**. Use `-y, --yes` to skip the confirm (required on non-TTY).
+**Import** bundles local paths into a gzipped tar and uploads them. Each path is merged into `work/<basename>` on the agent: matching files are overwritten and files already there that aren't in the bundle are kept. A bundled file that would land where a directory exists refuses the whole import. Excluded by basename at every level: `node_modules`, `.venv`, `__pycache__`, `.DS_Store`. A symlink passed **as a `<path>` argument** is rejected and the import fails; symlinks found **inside** an imported directory are **skipped, not followed**. Use `-y, --yes` to skip the confirm (required on non-TTY).
 
 **File list** shows a directory's immediate children; the path defaults to the workspace root. Files and directories are both listed, with a trailing `/` marking a directory. Pass `-R, --recursive` to walk the whole subtree instead — paths come back workspace-relative and sorted, with empty directories included. `--json` emits each entry as `{ path, type }`, the same either way.
 
@@ -433,7 +446,8 @@ dam terms accept --expect-version <v>   # Fail if the server's version differs f
 
 ```bash
 dam ping             # Reach the configured server and check compatibility
-dam version          # Print the local CLI version and (best-effort) the server's
+dam version          # Print the local CLI version, the server's, and the latest on npm
+dam update           # Update the CLI to the latest stable release (alias: dam upgrade)
 dam --version        # Show CLI version
 dam --help           # Show help
 ```
@@ -450,4 +464,4 @@ The CLI probes the server's version before each networked command, and there are
 - **Behind the server, but at or above its advertised minimum** — a warning on stderr, and the command proceeds.
 - **Below the minimum** — networked commands hard-fail with an upgrade prompt. Informational commands still run: `dam version` reports the same verdict but always exits 0, so you can diagnose the mismatch.
 
-If the server advertises no minimum, the hard-fail never triggers. Run `npm install -g @dam-agents/cli@latest` to update.
+If the server advertises no minimum, the hard-fail never triggers. Run `dam update` (or `npm install -g @dam-agents/cli@latest`) to update.

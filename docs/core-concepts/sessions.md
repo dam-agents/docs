@@ -177,7 +177,11 @@ Use terminal for:
 
 ### Reconnection
 
-If you lose connection (close tab, network drop), the terminal isn't killed just because you left:
+If the connection drops while you're watching, the terminal reconnects to the same session by itself,
+showing **Reconnecting terminal…** with the reason and the attempt; **Stop** gives up. It doesn't retry
+when the agent isn't running or the sign-in is refused, and it does give up eventually.
+
+If you leave (close the tab, lose the network), the terminal isn't killed just because you left:
 
 - Reattach within **~30 seconds** and you always get the session back, scrollback included.
 - Past that, the terminal survives as long as it's still **producing output** — a running build or a
@@ -197,7 +201,8 @@ dam chat my-agent --reset       # Kill the PTY and start it fresh
 `--continue` needs exactly one open **terminal** session. With none it tells you to start one; with
 several it lists their ids and asks you to name one with `--resume`. Resuming a *chat* session in the
 terminal switches its mode, so the CLI confirms before it does — declining leaves the session alone.
-On disconnect the CLI prints a ready-to-paste resume command.
+On a dropped connection the CLI reconnects to the same session by itself; when the session ends or it
+can't reconnect, it prints a ready-to-paste resume command.
 
 ## When to Use Which
 

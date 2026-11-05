@@ -44,7 +44,7 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ### Provider
 
-- **IBM LiteLLM ETE Proxy** — the agent needs model access to function
+- **IBM ETE LiteLLM Proxy** — the agent needs model access to function
 
 ### Connections
 
@@ -56,7 +56,7 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ## Setup
 
-1. **Create a Claude Code agent** — on **Home**, **Create agent** (on a brand-new account, choose **Start from scratch instead** in the starter kits it opens) and pick the **Claude Code** image in the Web UI, or `dam agent create <name> --template claude-code --provider <your-provider>` from the CLI
+1. **Create a Claude Code agent** — on **Home**, **Create agent** (on a brand-new account, choose **Start from scratch instead** in the starter kits it opens) and pick the **Claude** card in the Web UI, or `dam agent create <name> --provider <your-provider>` from the CLI
 2. **Add your provider** — configure IBM LiteLLM with your API key
 3. **Add a GitHub connection** — on **Settings → Connections**, click **New** to open the **Connection catalogue**, then on the **Apps** tab click **New** on the **GitHub** card. Pick **Authorize with GitHub**, or **Connect with a personal access token** if you prefer a token
 4. **Clone the Link Guardian repo** — in your agent session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into `work/`

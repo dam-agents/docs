@@ -102,6 +102,9 @@ private channel and invite the bot there.
 | `/dam ambient [agent]` | Report whether ambient mode is currently on |
 | `/dam whisper [agent] "message"` | Ask an agent something privately — only you see its answer |
 | `/dam whisper [agent]` | Open a private conversation with an agent in your DM with the bot |
+| `/dam whisper [agent] on\|off` | Turn whispers to one of your agents on or off — the agent's owner only |
+| `/dam ignore [message link]` | Stop the agents here from answering one app's or webhook's posts; on its own, list the apps ignored |
+| `/dam unignore <app>` | Let an ignored app's posts reach the agents here again |
 | `/dam delete <message link> [reason]` | Remove one of your agent's posts — the agent's owner only |
 
 The agent name is needed only where more than one is connected in the conversation. A bare `/dam`
@@ -109,12 +112,12 @@ prints the usage help.
 
 !!! note "When `/dam login` is required"
     Talking to the agent never needs a linked account, and neither does a whisper. Linking authorizes
-    the *management* commands — `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, and
-    `/dam delete` — and, for an agent's owner, it's also what lets the agent
+    the *management* commands — `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`,
+    `/dam whisper <agent> on|off`, `/dam ignore`, `/dam unignore`, and `/dam delete` — and, for an agent's owner, it's also what lets the agent
     [post beyond its own conversations](#what-else-to-expect). `/dam bind` links you automatically,
     so if that's how you connected the conversation you're already set; **if you bound from the CLI,
     you were never linked**, and those commands will ask you to run `/dam login` first. Reading the
-    current state with a bare `/dam ambient` or a bare `/dam default` never needs a link.
+    current state with a bare `/dam ambient`, `/dam default` or `/dam ignore` never needs a link.
     `/dam logout` unlinks.
 
 !!! info "Bindings are many-to-many"
@@ -141,6 +144,14 @@ prints the usage help.
 | **Channel** | An `@mention` of the bot |
 | **Group DM** | An `@mention` of the bot |
 | **1:1 DM** | **Every message** — a DM is already addressed to the bot, so no mention is needed |
+
+Posts by other apps, webhooks and other agents reach an agent the same way a person's do — a mention,
+or anything in an ambient channel. An agent never answers its own posts, and a run of app and agent
+posts with nobody in between stops starting turns until a person posts again. To stop the agents in a
+conversation answering one app at all, run `/dam ignore` with a link to one of its posts.
+
+Inside a thread the agent is part of, a reply that doesn't tag it won't reach it while ambient is off.
+The first time you do that in a thread, you get a private note saying so.
 
 Editing an earlier message doesn't re-trigger a reply. Replies land in a thread, unless the agent
 chooses Slack's *also send to channel*, which surfaces the post in both places.
@@ -199,6 +210,10 @@ With no name, the whisper goes to the conversation's [default agent](#several-ag
 put the agent's name first to pick another (`/dam whisper Ops "is staging up?"`). The message has to be
 in quotes — unquoted text is read as an agent name, so a message you forgot to quote is refused rather
 than sent.
+
+An agent's owner can turn whispers off with `/dam whisper <agent> off` — for every conversation the
+agent is in — and back on with `on`. While they're off a whisper is refused, and a whisper thread
+that's already open ends at its next message.
 
 !!! warning "Private from the conversation, not from the agent's owner"
     A whisper is kept out of the channel, but it's still a conversation with the agent — and, as the bot
@@ -319,7 +334,8 @@ withheld, along with why.
 - **Fresh sessions get context, labelled for what it is.** A conversation started at the top level of a
   channel is given the channel's recent messages — up to about fifty — as background rather than as
   something to answer; in a DM, that's your earlier exchange with the agent. Picking up inside an
-  existing thread injects up to fifty of that thread's replies, as the conversation being answered. The
+  existing thread injects up to fifty of that thread's most recent replies, plus the message that started
+it, as the conversation being answered. The
   window is deliberately short.
 - **The agent can read a thread it wasn't in.** A channel's recent messages don't include the replies
   inside its threads, so a message that started a thread is marked as having replies, and the agent can
@@ -341,7 +357,8 @@ withheld, along with why.
 - **A working status while it thinks.** On a mention or DM you'll usually see the agent's live
   status — thinking, the tool it's currently running, or waking. It rides Slack's assistant-status
   surface and shows nothing where the workspace can't display it. Ambient turns show no status,
-  since nobody summoned it.
+  since nobody summoned it. Where Slack offers a **Stop** button on that status, pressing it ends the
+  turn — allowed for whoever asked or the agent's owner; anyone else is told they can't.
 - **The first message wakes a sleeping agent.** If it's hibernated, expect a delay of up to a
   minute or two. The initial heads-up is private to whoever sent the message. Where the agent is slower
   than that, the turn **keeps waiting** rather than giving up, and the thread says so —
@@ -355,8 +372,8 @@ withheld, along with why.
   Slack, it's asked **once** to post it, and what you see is the answer rather than an apology. If
   something already went wrong visibly in the thread, the agent knows you saw that and answers
   accordingly. An agent that deliberately had nothing to say isn't prodded.
-- **Every post is signed.** Under each message the agent posts, Slack shows *<agent name> - Powered
-  by DAM* as a link. One bot posts for every agent, so the name is how you tell them apart. Anyone
+- **Every post is signed.** Each message the agent posts opens with its emoji and its name in bold,
+  and under it Slack shows *<agent name> - Powered by DAM* as a link. One bot posts for every agent, so the name is how you tell them apart. Anyone
   can follow the link — it lands on the agent's public page, described below, not in the
   conversation; from there someone with a DAM account can **Open in DAM** to reach the thread's
   session itself.
@@ -387,7 +404,9 @@ withheld, along with why.
     - It can reach only channels **its owner** is a member of, public or private, and only those are
       in its list of chats. That's checked through your linked Slack account: until you've run
       `/dam login` (or bound a conversation with `/dam bind`), it can't reach any channel beyond its
-      bound ones. DMs and group DMs aren't affected by this.
+      bound ones. Group DMs aren't affected by this.
+    - A DM has its own limit: the agent can message only its owner, the person in a 1:1 DM it's
+      connected to, or a member of a channel it's connected to. Anyone else is refused.
     - An agent bound in **more than one** Slack workspace can post only into conversations it's bound
       to, or the one it's answering right now — a new channel or a DM with someone is refused, since
       a channel or person only means something inside one workspace.
@@ -483,7 +502,7 @@ already in.
 | Binding refused as already connected | That **same** agent is already connected here — binding a *different* one is allowed and adds it |
 | A mention with no name reached nobody | The conversation has no [default agent](#several-agents-in-one-conversation) — its owner can set one with `/dam default <agent>` |
 | The wrong agent answered | Start the message with the agent's name; an unknown or ambiguous name falls back to the default |
-| "Link your account first" on `unbind`, `ambient`, `default`, or `delete` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
+| "Link your account first" on `unbind`, `ambient`, `default`, `whisper … on\|off`, `ignore`, `unignore`, or `delete` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
 | An attached file was ignored | You'll have had a private note saying why — usually over a size cap, or a picture format the agent can't read |

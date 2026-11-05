@@ -117,7 +117,7 @@ works. Those are collected under **From platform features**, with the descriptio
 platform ships these so a feature works. They are managed for you — you cannot edit or delete them
 here.*
 
-Each row carries a badge naming the feature it belongs to — **Schedules**,
+Each row carries a badge naming the feature it belongs to — such as **Schedules**,
 [**Sub-agents**](sub-agents.md), **Model providers**, **GitHub accounts**, or **Object Storage** — so
 it's clear why a skill you didn't ask for is present. Where the feature has a section of its own in the
 left nav, the badge is a shortcut to it: **Schedules** opens the agent's schedules, and **Model

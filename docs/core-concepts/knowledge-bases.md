@@ -37,7 +37,7 @@ what it brings; **Use this Starter Kit** takes you to **Create an agent** with m
 in.
 
 Name it, pick a **Harness**, and choose a **Provider**. The harness list is the same one any agent
-chooses from and Claude Code is preselected, but a **custom image** isn't offered for a kit — so a
+chooses from and **Claude** is preselected, but a **custom image** isn't offered for a kit — so a
 knowledge base runs one of the listed harnesses. **Repository** shows what the kit seeds your workspace
 from, and **Connections** lists anything it needs. You don't choose network access here: the read-only
 **Network access** box shows the preset the agent starts on — the trusted defaults unless the kit sets
