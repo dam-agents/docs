@@ -20,6 +20,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Self-serve telemetry data**: Pull everything DAM records about your own agents, meaning traces, logs and costs, and build your own tooling on it outside DAM. You only ever see your own agents' data, and the content of your conversations is never included. Usage questions get answered without waiting on a person: ask a telemetry agent in Slack, or open a dashboard that stays current. The first version is built but sits behind a feature flag, so most users can't see it yet. We're working on turning it on for everyone. Tracked in [#3486](https://github.com/dam-agents/dam/issues/3486){:target="_blank"}.
 
+- **Cost optimization**: Spending limits the platform enforces, a model per schedule and skipping scheduled runs that would find nothing are already in. Now the focus is telling you where to save, not just what you spent. An agent that spends regularly gets offered a cost review: it looks at its own spend and runs, then suggests what to change, such as a cheaper model for a nightly job, handing work to a smaller model, or trimming what it loads on every call. We are also learning which usage patterns point to waste, so the review finds the biggest savings first, and making it clearer why an agent is slow or expensive. Tracked in [#4032](https://github.com/dam-agents/dam/issues/4032){:target="_blank"}, [#3322](https://github.com/dam-agents/dam/issues/3322){:target="_blank"}, [#6312](https://github.com/dam-agents/dam/issues/6312){:target="_blank"}, [#5976](https://github.com/dam-agents/dam/issues/5976){:target="_blank"}, [#5385](https://github.com/dam-agents/dam/issues/5385){:target="_blank"}.
+
 ## Next
 
 - **Start from Slack**: Create your account and reach your personal assistant without leaving Slack. Tracked in [#5058](https://github.com/dam-agents/dam/issues/5058){:target="_blank"}.
@@ -33,8 +35,6 @@ DAM is a research project, and real users drive its direction. Much of what we b
 - **Shared agents and workspaces**: Working on one agent with other people. You'll be able to give someone a role on your agent, invite a co-builder, or hand the agent over to a new owner. Tracked in [#3218](https://github.com/dam-agents/dam/issues/3218){:target="_blank"}.
 
 - **Background work that keeps running after you leave**: Clear, predictable rules for what keeps running when you close the page or disconnect, and a way to see and control it. Tracked in [#4416](https://github.com/dam-agents/dam/issues/4416){:target="_blank"}.
-
-- **Cost & performance optimization**: Ways to decide what an agent's work costs before it happens: run each task on a model that fits it, skip work that would find nothing, and set spending limits the platform enforces. Plus clearer answers to "why is my agent slow or expensive?" Tracked in [#4032](https://github.com/dam-agents/dam/issues/4032){:target="_blank"}, [#3322](https://github.com/dam-agents/dam/issues/3322){:target="_blank"}.
 
 - **Microsoft 365**: Agents that work with your Microsoft 365 account. Meeting transcripts come first, so an agent can pull action items and decisions out of your meetings. Email and calendar follow, so a morning brief knows your day and meeting prep finds the meeting and who is in it. This depends on IBM security clearance, which we are working through. Tracked in [#4405](https://github.com/dam-agents/dam/issues/4405){:target="_blank"}.
 
