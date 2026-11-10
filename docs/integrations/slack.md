@@ -264,9 +264,9 @@ What to expect when it's on:
   agent treats a message that simply calls it by name — *DAM*, *dam*, or the agent's own name — as
   addressed to it, and answers as it would a mention. That only applies while ambient is on: in a
   mentions-only channel a typed name is never delivered at all, so nothing is quietly missed.
-- **It's asked to open with an emoji reaction** when it picks a message up — a quiet signal that
-  notifies nobody. That's the agent's own judgement rather than an automatic acknowledgement, so
-  a missing reaction doesn't reliably mean it passed on the message.
+- **It may react instead of replying** when an emoji says enough by itself — agreement, "done",
+  "this is a bug". A reaction notifies nobody, and it isn't a pickup signal: the agent is asked
+  not to react just to show it saw a message, so a missing reaction doesn't mean it passed on one.
 - **It replies in a thread** under the message it's answering. The follow-up conversation runs as
   an ordinary thread from there.
 - **It follows the channel**, rather than starting cold on each message, so it can pick up on
