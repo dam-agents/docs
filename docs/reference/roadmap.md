@@ -36,7 +36,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Background work that keeps running after you leave**: Clear, predictable rules for what keeps running when you close the page or disconnect, and a way to see and control it. Tracked in [#4416](https://github.com/dam-agents/dam/issues/4416){:target="_blank"}.
 
-- **Microsoft 365**: Agents that work with your Microsoft 365 account. Meeting transcripts come first, so an agent can pull action items and decisions out of your meetings. Email and calendar follow, so a morning brief knows your day and meeting prep finds the meeting and who is in it. This depends on IBM security clearance, which we are working through. Tracked in [#4405](https://github.com/dam-agents/dam/issues/4405){:target="_blank"}.
+- **Microsoft 365**: Agents that work with your Microsoft 365 account. Meeting transcripts come first, so an agent can pull action items and decisions out of your meetings. Email and calendar follow, so a morning brief knows your day and meeting prep finds the meeting and who is in it. On the IBM hosted deployment, this waits on an IBM security review. The open source platform is not affected. Tracked in [#4405](https://github.com/dam-agents/dam/issues/4405){:target="_blank"}.
 
 - **Software factory**: Agents that work on a team's repositories unattended: picking up issues, opening and reviewing pull requests, and asking a person when they need one. The DAM team is proving it on DAM's own repository first. Tracked in [#3679](https://github.com/dam-agents/dam/issues/3679){:target="_blank"}.
 
