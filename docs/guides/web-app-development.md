@@ -47,7 +47,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
 
 ### Provider
 
-- **IBM ETE LiteLLM Proxy** — the agent needs model access to function
+- **A model provider that serves Claude**, such as **Anthropic** (on the IBM hosted deployment, the IBM ETE LiteLLM Proxy) — the agent needs model access to function
 
 ### Connections
 
@@ -67,7 +67,7 @@ State lives entirely in GitHub labels — no external database. A heartbeat lock
    is private, expand **Private registry** in the same card and enter its **Server**, **Username**, and
    **Password**. Once it starts, the agent
    operates from its bundled playbook and skills — you don't clone anything by hand.
-2. **Add your provider** — configure IBM LiteLLM with your API key
+2. **Add your provider** — configure your model provider with your API key
 3. **Add a GitHub connection** — OAuth or a personal access token with access to your target repository, so `gh` can authenticate
 4. **Start a chat session** — tell the agent what you want to build. On first run it reads its `work/config.json`; if that's missing it asks you for the configuration (the target `owner/repo`), then verifies the repo's default branch and required labels before starting.
 

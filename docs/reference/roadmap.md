@@ -6,7 +6,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 ## Now
 
-- **Dead-simple first run**: Sign in and start chatting right away. Your first agent is a personal assistant, made from a starter kit and running on a starter Curve Bender budget, so there's no provider key to set up first. The budget shows in the UI, and you can switch to your own provider at any time. Tracked in [#5055](https://github.com/dam-agents/dam/issues/5055){:target="_blank"}, [#5690](https://github.com/dam-agents/dam/issues/5690){:target="_blank"}.
+- **Dead-simple first run**: Sign in and start chatting right away. Your first agent is a personal assistant, made from a starter kit and running on a starter model budget (CurveBender on the IBM hosted deployment), so there's no provider key to set up first. The budget shows in the UI, and you can switch to your own provider at any time. Tracked in [#5055](https://github.com/dam-agents/dam/issues/5055){:target="_blank"}, [#5690](https://github.com/dam-agents/dam/issues/5690){:target="_blank"}.
 
 - **New agent runtime (microVMs)**: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one. Tracked in [#4357](https://github.com/dam-agents/dam/issues/4357){:target="_blank"}.
 
@@ -14,7 +14,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Satellite agents**: Give your agents tools that run on a machine outside DAM, such as your laptop or a server. The machine connects out to DAM, so nothing has to reach in. Only the agents you add it to can use it. Satellites cover some cases of reaching systems DAM can't; the internal deployment below covers others. Tracked in [#3575](https://github.com/dam-agents/dam/issues/3575){:target="_blank"}.
 
-- **Internal deployment**: A deployment of DAM that can reach systems inside IBM's network, GitHub Enterprise included. It runs alongside the current deployment, not instead of it. Tracked in [#3755](https://github.com/dam-agents/dam/issues/3755){:target="_blank"}.
+- **Internal deployment (IBM hosted)**: A second IBM hosted deployment of DAM that can reach systems inside IBM's network, GitHub Enterprise included. It runs alongside the current hosted deployment, not instead of it. This is about IBM's own deployment; the open source platform can already be deployed wherever you need it. Tracked in [#3755](https://github.com/dam-agents/dam/issues/3755){:target="_blank"}.
 
 - **Security for sensitive work**: Teams with sensitive data should be able to trust an agent because the platform keeps it safe, not because they checked every setting by hand. We're working through the open questions: which rules DAM enforces in code and which it hands to agents as policy; letting you say an agent works with confidential data, so DAM locks down its network and connections to match; agents that act with each person's own access instead of one shared account; and what an agent in a shared Slack channel can share, and with whom. First up are hard rules, such as which models an agent may use once it holds a given connection. Tracked in [#6016](https://github.com/dam-agents/dam/issues/6016){:target="_blank"}, [#3323](https://github.com/dam-agents/dam/issues/3323){:target="_blank"}, [#4166](https://github.com/dam-agents/dam/issues/4166){:target="_blank"}.
 

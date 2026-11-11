@@ -25,3 +25,7 @@ mkdocs gh-deploy
 ## Contributing
 
 Corrections and improvements are welcome. Open an issue or a pull request on this repository.
+
+## License
+
+[Apache-2.0](LICENSE), the same as the main DAM repository.

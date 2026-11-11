@@ -1,10 +1,10 @@
 <div class="welcome-hero" markdown>
 
-<p class="welcome-eyebrow">IBM Research</p>
+<p class="welcome-eyebrow">Open source, from IBM Research</p>
 
 # Welcome to DAM
 
-<p class="welcome-lead">Run long-lived AI agents in isolated pods, with runtime credential injection, scheduled triggers, and Slack-native access.</p>
+<p class="welcome-lead">An open platform for long-lived AI agents. Any harness, any model, on Kubernetes.</p>
 
 <div class="welcome-cta" markdown>
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
@@ -20,7 +20,7 @@
 
 ## What is DAM?
 
-**DAM is IBM Research's platform for running long-lived AI agents.** An agent runs in its own isolated pod with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, artifacts, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
+**DAM is an open platform for running long-lived AI agents, built at IBM Research.** An agent runs in its own microVM with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, artifacts, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
 
 ## Two ways to run DAM
 
@@ -52,7 +52,7 @@
 
 ## What problem does it solve, and for whom?
 
-It's for **IBM Research engineers and researchers** who run agent workloads — and the **teams and leaders** who want the good ones to spread. Across IBM, people have built genuinely useful agents and workflows, but most live on one laptop and each new team rebuilds the same infrastructure — running agents, managing credentials, scheduling, storing results — before it can even start. So the work rarely compounds. DAM turns that infrastructure into shared building blocks no one has to rebuild: a practice proven in one place can be picked up everywhere, and new ones — from any team, or the wider industry — get captured once and made available to all.
+It's for **engineers and researchers** who run agent workloads — and the **teams and leaders** who want the good ones to spread. In most organizations, people have built genuinely useful agents and workflows, but most live on one laptop and each new team rebuilds the same infrastructure — running agents, managing credentials, scheduling, storing results — before it can even start. So the work rarely compounds. DAM turns that infrastructure into shared building blocks no one has to rebuild: a practice proven in one place can be picked up everywhere, and new ones — from any team, or the wider industry — get captured once and made available to all.
 
 ## Start building
 
