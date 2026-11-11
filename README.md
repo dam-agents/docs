@@ -1,6 +1,11 @@
 # DAM Docs
 
-Internal documentation for the IBM-hosted DAM service.
+User documentation for [DAM](https://github.com/dam-agents/dam), an open platform for long-lived AI agents.
+
+These docs describe DAM as it runs on the IBM hosted deployment. If you deploy DAM yourself, the
+concepts and features are the same, but sign-in, model providers, and the server URL are whatever
+your deployment configures. See the [deployment guide](https://github.com/dam-agents/dam#run-your-own)
+in the main repository.
 
 ## Local dev
 
@@ -17,4 +22,10 @@ The site is built locally and deployed to the `gh-pages` branch. GitHub Pages se
 mkdocs gh-deploy
 ```
 
-This builds the site and pushes it to `gh-pages`. The live site at https://pages.github.ibm.com/dam-agents/docs/ updates within seconds.
+## Contributing
+
+Corrections and improvements are welcome. Open an issue or a pull request on this repository.
+
+## License
+
+[Apache-2.0](LICENSE), the same as the main DAM repository.
