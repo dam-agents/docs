@@ -54,4 +54,4 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 ## Have a request?
 
-Feature requests and feedback are welcome in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}, or file them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"}.
+Feature requests and feedback are welcome on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"}. IBMers can also post in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.

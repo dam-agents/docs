@@ -16,6 +16,8 @@ Requires Node 20 or later.
 dam config set server https://dam.res.ibm.com/
 ```
 
+This is the IBM hosted deployment. On your own deployment, set `server` to its URL.
+
 `server` is the only key `dam config set` accepts. Config is stored at `~/.config/dam/config.toml` (or `$XDG_CONFIG_HOME/dam/`); credentials are stored separately at `~/.local/state/dam/auth.toml` (mode 0600).
 
 **Environment variables:**
