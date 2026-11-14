@@ -78,11 +78,12 @@ Requires Node 20 or later.
 ### Step 2: Configure and Log In
 
 ```bash
-dam config set server https://dam.res.ibm.com/
+dam config set server <server-url>
 dam auth login
 ```
 
-`https://dam.res.ibm.com/` is the IBM hosted deployment. On your own deployment, use its URL instead.
+For the IBM hosted deployment, `<server-url>` is the address [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"}
+opens in your browser. On your own deployment, use its URL instead.
 
 A browser window opens to authenticate. The CLI prints a user code — confirm it in the browser to
 complete login. Pass `--no-browser` if you'd rather open the URL yourself.
