@@ -2,13 +2,25 @@
 
 DAM is designed so that even a fully compromised agent cannot leak your credentials or reach services you haven't approved.
 
+## How it fits together
+
+- **Each agent is its own microVM.** On the IBM hosted deployment every agent runs as a persistent
+  microVM, booted from its image. Its home directory lives on the machine's disk and survives
+  hibernation, restarts and image updates; see [What survives hibernation](../core-concepts/agents.md#what-survives-hibernation).
+- **A credential gateway beside each agent.** All of the agent's outbound traffic goes through it, and
+  it is the only place your tokens exist (below).
+- **The control plane.** An API server serves the web UI, the CLI and the Slack and Telegram
+  integrations, relays your chat to the agent, and decides every held network request. A controller
+  creates and updates the agents and their gateways. Sign-in goes through the deployment's identity
+  provider, and records such as channel bindings and schedules are kept in a database.
+
 ## Credential Isolation
 
 Your tokens and API keys are never visible to your agent — they're injected on the network wire by a separate secure gateway.
 
 ### The Gateway Model
 
-Every agent is paired with its own **credential gateway** — a separate, hardened environment that handles credential injection:
+Every agent reaches the internet only through a **credential gateway** — a separate, hardened environment that handles credential injection. By default each agent has a gateway of its own:
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -42,6 +54,7 @@ Every agent is paired with its own **credential gateway** — a separate, harden
 - **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
 - **All your agents:** Any agent you own can be granted your connected credentials.
+- **Sub-agents:** A sub-agent gets the network access of the agent that started it, never its credentials. It holds only the connections it was granted itself.
 
 ### Token Management
 
@@ -70,7 +83,7 @@ This means:
 
 - **Data exfiltration** — a compromised agent cannot send your code or data to arbitrary servers
 - **Unauthorized API calls** — the agent can't use services you haven't approved
-- **Lateral movement** — agents are isolated from each other and from internal infrastructure
+- **Lateral movement** — agents are isolated from other people's agents and from internal infrastructure. Your own agents run on one shared host per owner, so the strongest boundary is between owners, not between your own agents
 
 ### The Approval Flow
 

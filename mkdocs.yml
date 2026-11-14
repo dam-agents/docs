@@ -1,5 +1,9 @@
 site_name: DAM
 site_url: https://dam-agents.github.io/docs/
+site_description: Documentation for DAM, an open platform for running long-lived AI agents, built at IBM Research.
+repo_url: https://github.com/dam-agents/docs
+repo_name: dam-agents/docs
+edit_uri: edit/main/docs/
 
 theme:
   name: material
@@ -30,6 +34,7 @@ theme:
     - search.highlight
     - content.tabs.link
     - content.code.copy
+    - content.action.edit
     - header.autohide
 
 extra_css:
@@ -62,7 +67,7 @@ markdown_extensions:
 docs_dir: docs
 site_dir: site
 
-# Kept in the repo but deliberately out of the nav. These two read as generic
+# Kept in the repo but deliberately out of the nav. These read as generic
 # "yet another coding tool" walkthroughs; retained for anyone holding a direct link.
 not_in_nav: |
   getting-started/welcome.md
@@ -85,15 +90,14 @@ nav:
     - The building blocks: core-concepts/building-blocks.md
     - Agents: core-concepts/agents.md
     - Sessions: core-concepts/sessions.md
-    - Sub-agents: core-concepts/sub-agents.md
     - Connections: core-concepts/connections.md
-    - Satellites (experimental): core-concepts/satellites.md
-    - Network & approvals: core-concepts/network-access.md
-    - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md
-    - File manager: core-concepts/file-manager.md
-    - Knowledge bases: core-concepts/knowledge-bases.md
     - Artifacts: core-concepts/artifacts.md
+    - Skills: core-concepts/skills.md
+    - File manager: core-concepts/file-manager.md
+    - Network & approvals: core-concepts/network-access.md
+    - Sub-agents: core-concepts/sub-agents.md
+    - Satellites (experimental): core-concepts/satellites.md
   - Integrations:
     - Slack: integrations/slack.md
     - Telegram: integrations/telegram.md

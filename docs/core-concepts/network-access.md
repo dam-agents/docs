@@ -141,6 +141,12 @@ The default is always deny:
 
 ## Where approvals appear
 
+<figure class="tour-shot" markdown>
+![The Activity panel showing an agent asking to reach a new host, with an Allow button](../assets/network-approval.png)
+<figcaption>A waiting approval in Activity. Allow, or open the ⋮ menu for the other choices.</figcaption>
+</figure>
+
+
 Approvals live in **Activity**, the panel the **Activity** button at the top right of every page
 opens. The button shows a count while approvals are waiting, so check it when an agent seems stuck —
 it may be waiting for you. You're pointed there two other ways too. A new approval pops up briefly

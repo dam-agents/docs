@@ -131,7 +131,7 @@ are dropped when you sign out or switch user, which is the one case where retry 
 
 ### Environment variables
 
-Environment variables you set in the agent's Environment editor are persisted separately and delivered to the running agent, applied on the agent's **next turn** — editing env does not restart the pod. User-typed env shadows env that comes from connections when the names collide.
+Environment variables you set in the agent's Environment editor are persisted separately and delivered to the running agent, applied on the agent's **next turn** — editing env does not restart the agent. User-typed env shadows env that comes from connections when the names collide.
 
 Whether a turn already in flight is disturbed depends on what you changed. **Adding or removing a variable** interrupts a turn still running about a minute after you save, so the new set can take effect. **Changing only a value** never interrupts a running turn — it applies at the next turn boundary.
 

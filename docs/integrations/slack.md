@@ -28,8 +28,9 @@ Connecting a Slack conversation to an agent lets you:
 To use DAM in a Slack workspace, the DAM Slack app must first be installed in that workspace. Not
 every workspace has it installed.
 
-On your own deployment, you create and install the Slack app yourself; see the
-[deployment guide](https://github.com/dam-agents/dam#run-your-own){:target="_blank"}. The steps below
+On your own deployment, you create and install the Slack app yourself; see
+[Slack integration](https://github.com/dam-agents/dam/blob/main/docs/configuration.md#slack-integration){:target="_blank"}
+in the deployment docs. The steps below
 are for the IBM hosted deployment.
 
 **How to tell if DAM is installed:**
@@ -459,6 +460,11 @@ displayed afterwards, and the id shows instead where the name isn't known. A con
 *DM with* the person, and a group DM as *Group DM with* its members. A channel that has since been
 deleted, or a private one the bot was removed from, says on the Slack card that it's no longer available
 in Slack, with a hint to disconnect it.
+
+<figure class="tour-shot" markdown>
+![An agent's Channels section with the Slack Channel card and a Connect channel button](../assets/slack-channels.png)
+<figcaption>An agent's **Channels** section.</figcaption>
+</figure>
 
 From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
 connected — each with whether ambient is on, and a **Default** badge where this agent is the one

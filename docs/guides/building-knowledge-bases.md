@@ -58,7 +58,7 @@ You get three things at once, which is why this is worth doing on day one rather
 The connection handles both halves of this, so there's nothing to configure inside the agent. The
 credentials never sit in the workspace — they're injected into its outbound requests, so `git push`
 just works. And if you connected **GitHub.com**, the connection also sets the commit author, so commits
-are attributed to you rather than to an anonymous pod identity. See
+are attributed to you rather than to an anonymous default identity. See
 [connections](../core-concepts/connections.md) for which connection types set the author.
 
 !!! tip "Make the repo private"
@@ -312,7 +312,7 @@ knowledge behind it changes.
 ### Let other people's agents read it
 
 An artifact is a snapshot of one answer. If you want colleagues asking their *own* questions of the
-base, [share the base itself](../core-concepts/knowledge-bases.md#sharing-one-with-your-team): under
+base, share the base itself: under
 **Agent Setup** → **Knowledge**, pick the folders to publish and hand out the `kbshare_…` link. Their
 agents get read-only access — they can search and read what you published, and change nothing.
 

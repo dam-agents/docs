@@ -83,7 +83,7 @@ dam agent create <name> --provider <id-or-name> --wait  # Pick its provider; blo
 dam agent create-interactive                     # Interactive setup: name + template + credentials (TTY-only)
 dam agent delete <name-or-id>                     # Delete an agent and all its persistent data (confirms)
 dam agent delete <name-or-id> --yes               # Delete without confirmation
-dam agent restart <name-or-id>                    # Restart the pod (persistent volumes survive)
+dam agent restart <name-or-id>                    # Restart the agent (persistent volumes survive)
 dam agent update <name-or-id> --harness <name> --model <provider>/<model>  # Set its default harness and model
 dam agent models <name-or-id>                     # List the models its providers offer
 dam agent disable <name-or-id>                    # Put it to sleep; nothing wakes it until you enable it

@@ -30,6 +30,12 @@ client secret you supplied yourself is the one part that stays yours to replace 
 
 ### GitHub
 
+<figure class="tour-shot" markdown>
+![The Connection catalogue, with GitHub, GitHub Enterprise and other apps on the Apps tab](../assets/connections-catalogue.png)
+<figcaption>The Connection catalogue, opened from Settings → Connections.</figcaption>
+</figure>
+
+
 DAM integrates with GitHub.com and with any GitHub Enterprise host you supply, and there are three ways
 to connect either one:
 
@@ -91,7 +97,7 @@ When you sign in with **GitHub.com**, commits the agent makes are attributed to 
 
 That write is a convenience, not a guarantee: if GitHub doesn't answer when the connection is made, the
 connection still succeeds and the git config is simply left alone. If commits come out attributed to the
-pod's default identity rather than yours, set `user.name` and `user.email` in the agent yourself.
+agent's default identity rather than yours, set `user.name` and `user.email` in the agent yourself.
 
 #### Two GitHub accounts on one agent
 
@@ -221,4 +227,4 @@ For an MCP server that runs on your own machine rather than at a public URL, run
 
 ## Security
 
-Tokens live in a separate gateway pod your agent cannot reach. Network policy enforces this boundary at the cluster level. See [Architecture](../reference/architecture.md) for the full model.
+Tokens live in a separate gateway your agent cannot reach. Network policy enforces this boundary at the cluster level. See [Architecture](../reference/architecture.md) for the full model.

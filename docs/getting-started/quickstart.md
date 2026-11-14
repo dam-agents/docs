@@ -5,8 +5,7 @@ Launch a Claude Code agent in the cloud in minutes.
 Prefer the command line? [Jump to CLI quickstart](#cli).
 
 !!! note "This quickstart uses the IBM hosted deployment"
-    The hosted deployment requires IBM VPN access. If you're outside an IBM office, connect to VPN
-    before starting. If the site won't load, check your VPN connection first.
+    The hosted deployment requires IBM VPN access.
 
     Running your own deployment? Use its URL and sign-in instead, and the steps are the same. See the
     [deployment guide](https://github.com/dam-agents/dam#run-your-own){:target="_blank"} to set one up.
@@ -26,11 +25,11 @@ kit is a ready-made configuration, and there's a good one for most jobs — but 
 Everything is then on one page — **Create an agent** — filled top to bottom:
 
 1. **Name** — what you'll call it. It comes pre-filled, so you can leave it.
-2. **Image** — the harness that runs inside the pod. Pick the **Claude** card.
+2. **Image** — the harness that runs inside the agent. Pick the **Claude** card.
 3. **Provider** — the model provider. Not connected yet? Connect it **right here** — paste your key
    inline, no trip to Settings.
 4. **Connections** *(optional)* — grant credentials the agent may use. For working against your repos,
-   add **GitHub** (for `github.com`) or **GitHub Enterprise** (for `github.ibm.com`) so it can clone,
+   add **GitHub** (for `github.com`) or **GitHub Enterprise** (for an Enterprise host, such as `github.ibm.com` for IBMers) so it can clone,
    push branches, and open PRs.
 
 The rest of the page — **Lifecycle**, **Knowledge bases**, **Channels** — can all be left as it is and
@@ -49,6 +48,12 @@ Home you started from. Your agent provisions in a few seconds and you land strai
     through what it needs in its first message. See [starter kits](../core-concepts/agents.md#starter-kits).
 
 ### Step 3: Start Working
+
+<figure class="tour-shot" markdown>
+![An agent chat: your message, the steps the agent took, and its reply](../assets/quickstart-chat.png)
+<figcaption>The chat. Each step the agent takes shows as a line you can expand.</figcaption>
+</figure>
+
 
 Type your first message:
 
@@ -83,7 +88,7 @@ dam config set server https://dam.res.ibm.com/
 dam auth login
 ```
 
-`https://dam.res.ibm.com/` is the IBM hosted deployment. On your own deployment, use its URL instead.
+That's the IBM hosted deployment. On your own deployment, use its URL instead.
 
 A browser window opens to authenticate. The CLI prints a user code — confirm it in the browser to
 complete login. Pass `--no-browser` if you'd rather open the URL yourself.
