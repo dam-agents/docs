@@ -56,6 +56,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Agents in your meetings**: A team's agent takes part in its meetings. It prepares an agenda from what it knows, follows the meeting, and afterwards records decisions and action items and follows up on them. The team decides when it joins and what it keeps. This is still exploratory. Tracked in [#6627](https://github.com/dam-agents/dam/issues/6627){:target="_blank"}.
 
+- **Agent-written changes that do what you approved**: Before an agent implements a change, you approve the behavior it must deliver, as checks that run on their own. The agent can't pass by weakening those checks, and before merge an independent run shows the change passes them unchanged. This builds on the software factory and is still exploratory. Tracked in [#6558](https://github.com/dam-agents/dam/issues/6558){:target="_blank"}.
+
 ## Have a request?
 
 Feature requests and feedback are welcome on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"}. IBMers can also post in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
