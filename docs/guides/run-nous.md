@@ -19,9 +19,9 @@ This 90-second demo walks through a whole campaign, from picking the kit to the 
 
 ## What you need
 
-- **A provider.** The kit runs on **Anthropic**, and on the IBM hosted deployment also on **IBM ETE LiteLLM
-  Proxy** or **CurveBender** — the provider picker offers only these. For the IBM proxy, see
-  [Create your LiteLLM key](../reference/litellm-key.md).
+- **A provider.** On the IBM hosted deployment, the kit runs on **IBM ETE LiteLLM Proxy** or **CurveBender**
+  (see [Create your LiteLLM key](../reference/litellm-key.md)). Self-hosting? It runs on **Anthropic**.
+  The provider picker offers only these.
 - **A GitHub connection** — optional. You need one to clone a **private** target, or to push results
   back. Any GitHub or GitHub Enterprise connection satisfies it: the OAuth sign-in, a personal access
   token or a GitHub App. See [Connections](../core-concepts/connections.md).
@@ -37,7 +37,7 @@ little:
 
 1. **Name** — something you'll recognize in the agents list.
 2. **Harness** — fixed, because the kit brings its own image.
-3. **Provider** — your Anthropic connection, or on the IBM hosted deployment your IBM ETE LiteLLM Proxy or CurveBender connection.
+3. **Provider** — your IBM ETE LiteLLM Proxy or CurveBender connection (self-hosting: your Anthropic connection).
 4. **Connections** — a GitHub connection if you want one (see above).
 
 Then **Create agent from this kit**. You don't choose network access while creating: the page's

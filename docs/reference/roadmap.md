@@ -12,11 +12,11 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Starter kits that are easy to choose, set up and grow with**: Pick the right kit quickly, get it set up in a few short turns, and keep shaping the agent afterwards: add or remove a kit, and ask it for more than its main job. Tracked in [#6576](https://github.com/dam-agents/dam/issues/6576){:target="_blank"}.
 
-- **New agent runtime (microVMs)**: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one. Tracked in [#4357](https://github.com/dam-agents/dam/issues/4357){:target="_blank"}.
+- **New agent runtime (microVMs)** — *Just shipped*: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one. Tracked in [#4357](https://github.com/dam-agents/dam/issues/4357){:target="_blank"}.
 
 - **Use DAM from your own agent**: Drive DAM from the agent you already work in, such as Claude Code or Codex on your laptop. It learns DAM's command line from a skill, so it can create agents, start runs and manage connections for you. Secrets stay out of its hands: you enter them yourself. Tracked in [#5502](https://github.com/dam-agents/dam/issues/5502){:target="_blank"}.
 
-- **Satellite agents**: Give your agents tools that run on a machine outside DAM, such as your laptop or a server. The machine connects out to DAM, so nothing has to reach in. Only the agents you add it to can use it. Satellites cover some cases of reaching systems DAM can't; the internal deployment below covers others. Tracked in [#3575](https://github.com/dam-agents/dam/issues/3575){:target="_blank"}.
+- **Satellite agents** — *Just shipped*: Give your agents tools that run on a machine outside DAM, such as your laptop or a server. The machine connects out to DAM, so nothing has to reach in. Only the agents you add it to can use it. Satellites cover some cases of reaching systems DAM can't; the internal deployment below covers others. Tracked in [#3575](https://github.com/dam-agents/dam/issues/3575){:target="_blank"}.
 
 - **Internal deployment (IBM hosted)**: A second IBM hosted deployment of DAM that can reach systems inside IBM's network, GitHub Enterprise included. It runs alongside the current hosted deployment, not instead of it. This is about IBM's own deployment; the open source platform can already be deployed wherever you need it. Tracked in [#3755](https://github.com/dam-agents/dam/issues/3755){:target="_blank"}.
 
