@@ -54,7 +54,7 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Memory across agents**: What you teach one agent, such as your preferences, rules and context, can carry over to your other agents, and a team can share what it agrees on. You see what is remembered and can trim it. This is still exploratory: we want to learn whether memory solves the problem before we decide what DAM builds and what it leaves to memory services. Tracked in [#6286](https://github.com/dam-agents/dam/issues/6286){:target="_blank"}.
 
-- **AI <> human collaboration in meetings**: Agents that work alongside people in meetings. This is still exploratory. The first step is a Meeting assistant starter kit: it learns from the transcripts of a meeting series and proposes the agenda before each meeting. Tracked in [#3643](https://github.com/dam-agents/dam/issues/3643){:target="_blank"}.
+- **Agents in your meetings**: A team's agent takes part in its meetings. It prepares an agenda from what it knows, follows the meeting, and afterwards records decisions and action items and follows up on them. The team decides when it joins and what it keeps. This is still exploratory. Tracked in [#6627](https://github.com/dam-agents/dam/issues/6627){:target="_blank"}.
 
 ## Have a request?
 
