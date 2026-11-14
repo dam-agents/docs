@@ -49,6 +49,12 @@ Home you started from. Your agent provisions in a few seconds and you land strai
 
 ### Step 3: Start Working
 
+<figure class="tour-shot" markdown>
+![An agent chat: your message, the steps the agent took, and its reply](../assets/quickstart-chat.png)
+<figcaption>The chat. Each step the agent takes shows as a line you can expand.</figcaption>
+</figure>
+
+
 Type your first message:
 
 ```

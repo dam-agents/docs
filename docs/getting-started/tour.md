@@ -15,7 +15,7 @@ The real map, though, is the **left sidebar** — it's the whole platform, top t
 is this tour's order.
 
 <figure class="tour-shot" markdown>
-![The DAM home page with the left-sidebar nav](../assets/tour-home.png)
+![The DAM Home page: an approvals banner, compute and spend cards, and the list of agents](../assets/tour-home.png)
 <figcaption>The Home page. The left sidebar is the whole platform — see what each item is below.</figcaption>
 </figure>
 
@@ -216,8 +216,8 @@ with a knowledge graph, **Plain Wiki** for plain markdown notes you could read s
 workspace.
 
 <figure class="tour-shot" markdown>
-![A DAM knowledge base — sources on the left, synthesized answers with citations in the main panel](../assets/home-anchor.png)
-<figcaption>A knowledge base answering with citations back to the source.</figcaption>
+![The Knowledge shelf on Starter Kits, with LLM Wiki, Plain Wiki and other knowledge kits](../assets/tour-knowledge-kits.png)
+<figcaption>The Knowledge shelf on Starter Kits, where every knowledge base starts.</figcaption>
 </figure>
 
 → [Building knowledge bases](../guides/building-knowledge-bases.md)

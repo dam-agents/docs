@@ -461,6 +461,11 @@ displayed afterwards, and the id shows instead where the name isn't known. A con
 deleted, or a private one the bot was removed from, says on the Slack card that it's no longer available
 in Slack, with a hint to disconnect it.
 
+<figure class="tour-shot" markdown>
+![An agent's Channels section with the Slack Channel card and a Connect channel button](../assets/slack-channels.png)
+<figcaption>An agent's **Channels** section.</figcaption>
+</figure>
+
 From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
 connected — each with whether ambient is on, and a **Default** badge where this agent is the one
 unnamed mentions reach — and **Connect channel** adds another by its channel id.

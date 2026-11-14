@@ -30,6 +30,12 @@ client secret you supplied yourself is the one part that stays yours to replace 
 
 ### GitHub
 
+<figure class="tour-shot" markdown>
+![The Connection catalogue, with GitHub, GitHub Enterprise and other apps on the Apps tab](../assets/connections-catalogue.png)
+<figcaption>The Connection catalogue, opened from Settings → Connections.</figcaption>
+</figure>
+
+
 DAM integrates with GitHub.com and with any GitHub Enterprise host you supply, and there are three ways
 to connect either one:
 
