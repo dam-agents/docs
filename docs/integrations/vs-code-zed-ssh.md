@@ -139,7 +139,7 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
     That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in **Activity** in the web UI, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
 
 ??? question "Host key warnings"
-    `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the in-pod host key authenticates nothing extra — and because it lives on the agent's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.
+    `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the agent's own host key authenticates nothing extra — and because it lives on the agent's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.
 
 ??? question "The shell starts but `git` / network calls fail"
     The agent's environment is replayed into each SSH session on connect. If you added a connection or credential *after* opening the session, reconnect to pick it up — the environment is refreshed per connection, not live within one.

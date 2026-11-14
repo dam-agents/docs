@@ -104,7 +104,7 @@ git fetch -q && git log --oneline HEAD..origin/main | grep -q .
 
 Two honest limits. The agent still **wakes** to run the check, so this saves the turn rather than the
 wake — but a fire the Precheck declines doesn't hold the agent awake afterwards, so a frequent check
-won't stop it hibernating. And the Precheck is a plain shell command in the agent's pod: it can't do
+won't stop it hibernating. And the Precheck is a plain shell command in the agent's sandbox: it can't do
 anything the agent couldn't already do itself.
 
 Prechecks are also available from the CLI (`--precheck`, and `--precheck-none` to remove one) and to the

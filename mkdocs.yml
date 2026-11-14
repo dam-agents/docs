@@ -1,5 +1,9 @@
 site_name: DAM
 site_url: https://dam-agents.github.io/docs/
+site_description: Documentation for DAM, an open platform for running long-lived AI agents, built at IBM Research.
+repo_url: https://github.com/dam-agents/docs
+repo_name: dam-agents/docs
+edit_uri: edit/main/docs/
 
 theme:
   name: material
@@ -30,6 +34,7 @@ theme:
     - search.highlight
     - content.tabs.link
     - content.code.copy
+    - content.action.edit
     - header.autohide
 
 extra_css:
@@ -62,7 +67,7 @@ markdown_extensions:
 docs_dir: docs
 site_dir: site
 
-# Kept in the repo but deliberately out of the nav. These two read as generic
+# Kept in the repo but deliberately out of the nav. These read as generic
 # "yet another coding tool" walkthroughs; retained for anyone holding a direct link.
 not_in_nav: |
   getting-started/welcome.md

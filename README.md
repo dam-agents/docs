@@ -16,11 +16,8 @@ mkdocs serve
 
 ## Deploy
 
-The site is built locally and deployed to the `gh-pages` branch. GitHub Pages serves from that branch.
-
-```
-mkdocs gh-deploy
-```
+Every push to `main` builds the site with `mkdocs build --strict` and publishes it to GitHub Pages
+(`.github/workflows/pages.yml`). There is nothing to deploy by hand.
 
 ## Contributing
 

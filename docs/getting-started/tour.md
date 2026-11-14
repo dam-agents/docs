@@ -35,11 +35,11 @@ features below are built from the same pieces.
 
 <div class="grid cards" markdown>
 
-- :material-robot-outline: **Coding agents**
+- :material-robot-outline: **Agents**
 
     ---
 
-    An AI harness in its own pod — reads and writes code, runs commands, acts on your services. The core of DAM.
+    An AI harness in its own sandbox — reads and writes code, runs commands, acts on your services. The core of DAM.
 
 - :material-book-open-variant: **Knowledge bases**
 
@@ -51,9 +51,9 @@ features below are built from the same pieces.
 
 ---
 
-## 1. Coding agents
+## 1. Agents
 
-A **coding agent** is what you'll use most, and it's where every building block shows up. Let's create
+An **agent** is what you'll use most, and it's where every building block shows up. Let's create
 one and then walk through the pieces it's made of.
 
 ### Create it
@@ -65,7 +65,7 @@ it's covered [below](#2-starter-kits). Take the long way once, to see what the p
 Everything's on one page — **Create an agent** — top to bottom:
 
 - **Name** — what you'll call it, pre-filled so you can leave it.
-- **Image** — the harness that runs inside the pod. Pick a card: **Claude**, **Codex**, **Pi**, or
+- **Image** — the harness that runs inside the agent. Pick a card: **Claude**, **Codex**, **Pi**, or
   **Bob** — or *use a custom image* to bring your own. Choose **Claude** to follow along.
 - **Provider** — the model provider. Not connected yet? Connect it right here and paste your key — no
   trip to Settings.
@@ -87,7 +87,7 @@ agents, and you tune it afterwards.
 </figure>
 
 Create it and you land straight in the agent's **chat**. What you got is more than a chat box: an
-**isolated Linux pod** with a persistent `~/work` workspace, its own credential boundary, and its own
+**isolated Linux sandbox** with a persistent `~/work` workspace, its own credential boundary, and its own
 network rules — and it's **long-running**, so it keeps working after you close your laptop, hibernates
 when idle to save compute, and wakes when there's work to do.
 
@@ -95,7 +95,7 @@ when idle to save compute, and wakes when there's work to do.
 
 ### What makes up an agent
 
-A coding agent is assembled from a handful of reusable pieces. Each one below is *what it is* and *how
+An agent is assembled from a handful of reusable pieces. Each one below is *what it is* and *how
 it works*. Nothing to set up here — the goal is to understand what each feature is for.
 
 #### Sessions — how you work with it
@@ -118,7 +118,7 @@ authenticate by OAuth sign-in or a fine-grained personal access token scoped to 
 choose.
 
 The important part is what the agent *never* gets: the credential lives in a hardened gateway that
-injects it onto outbound requests, so the raw token never enters the pod. Connecting a service and
+injects it onto outbound requests, so the raw token never enters the agent's sandbox. Connecting a service and
 *granting* it to an agent are two steps — a connection exists once, then you hand it to each agent that
 should use it.
 
@@ -211,7 +211,7 @@ of digging through Slack scroll-back. Your other agents can read from it too, so
 the team already knows. The same shape covers a personal brain, a shared project base, or a team's
 memory.
 
-You create one from the **Knowledge** shelf on **Starter Kits** — **LLM Wiki** for a structured wiki
+You create one from the **Knowledge** shelf on **Starter Kits** — **LLM Wiki** for a structured knowledge base
 with a knowledge graph, **Plain Wiki** for plain markdown notes you could read straight out of the
 workspace.
 

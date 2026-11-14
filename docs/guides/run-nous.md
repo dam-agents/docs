@@ -27,7 +27,7 @@ This 90-second demo walks through a whole campaign, from picking the kit to the 
   token or a GitHub App. See [Connections](../core-concepts/connections.md).
 
 The agent holds no model credentials of its own. Its model calls, `git` and `gh` all authenticate
-through the platform, so there is never an API key in the pod and nothing should ever ask you for one.
+through the platform, so there is never an API key in the agent and nothing should ever ask you for one.
 
 ## Create the agent
 
@@ -96,7 +96,7 @@ blocks the run.
     anyway, the agent tells you the campaign is already proceeding — or, if it stopped after a restart,
     resumes it.
 
-If the pod restarts for another reason — an image update, an eviction, a crash — campaign state
+If the agent restarts for another reason — an image update, an eviction, a crash — campaign state
 lives on the agent's persistent workspace. The next time you message the agent, it resumes the campaign
 from its last checkpoint.
 

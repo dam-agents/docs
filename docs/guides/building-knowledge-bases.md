@@ -58,7 +58,7 @@ You get three things at once, which is why this is worth doing on day one rather
 The connection handles both halves of this, so there's nothing to configure inside the agent. The
 credentials never sit in the workspace — they're injected into its outbound requests, so `git push`
 just works. And if you connected **GitHub.com**, the connection also sets the commit author, so commits
-are attributed to you rather than to an anonymous pod identity. See
+are attributed to you rather than to an anonymous default identity. See
 [connections](../core-concepts/connections.md) for which connection types set the author.
 
 !!! tip "Make the repo private"

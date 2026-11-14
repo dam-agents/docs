@@ -28,8 +28,9 @@ Connecting a Slack conversation to an agent lets you:
 To use DAM in a Slack workspace, the DAM Slack app must first be installed in that workspace. Not
 every workspace has it installed.
 
-On your own deployment, you create and install the Slack app yourself; see the
-[deployment guide](https://github.com/dam-agents/dam#run-your-own){:target="_blank"}. The steps below
+On your own deployment, you create and install the Slack app yourself; see
+[Slack integration](https://github.com/dam-agents/dam/blob/main/docs/configuration.md#slack-integration){:target="_blank"}
+in the deployment docs. The steps below
 are for the IBM hosted deployment.
 
 **How to tell if DAM is installed:**

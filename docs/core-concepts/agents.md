@@ -6,9 +6,9 @@ An **agent** is a running AI assistant with its own persistent workspace, creden
 
 When you create an agent, DAM provisions:
 
-- **A compute pod** — an isolated Linux environment running the AI harness
+- **An isolated sandbox** — its own Linux environment running the AI harness
 - **A persistent workspace** — a `~/work` directory that survives restarts and hibernation
-- **A credential gateway** — a paired security pod that injects your tokens on the wire
+- **A credential gateway** — a separate, hardened component that injects your tokens on the wire
 - **Network isolation** — the agent can only reach services you explicitly allow
 
 Each agent is independent. You can run several at once, each with a different harness and configuration.
@@ -26,15 +26,15 @@ Starting → Running → Hibernating → Hibernated → Starting → ...
 
 | State | What's happening |
 |-------|-----------------|
-| **Starting** | Pod is scaling up from hibernated, stopped, or newly created. |
-| **Preparing workspace** | A one-time workspace setup step is still running. The pod is already up — it just isn't usable until that finishes. |
-| **Running** | Pod is active, ready to chat. Reserves compute against your budget. In the agents list and on the agent's own page this splits into **Working** (a turn in flight) and **Idle** (up, with nothing running). |
-| **Hibernating** | Pod is scaling down — the short window after you pause or stop it, before it reports down. |
-| **Hibernated** | Pod scaled to zero after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
+| **Starting** | The agent is starting up from hibernated, stopped, or newly created. |
+| **Preparing workspace** | A one-time workspace setup step is still running. The agent is already up — it just isn't usable until that finishes. |
+| **Running** | The agent is active, ready to chat. Reserves compute against your budget. In the agents list and on the agent's own page this splits into **Working** (a turn in flight) and **Idle** (up, with nothing running). |
+| **Hibernating** | The agent is shutting down — the short window after you pause or stop it, before it reports down. |
+| **Hibernated** | Shut down after being idle. Workspace and configuration preserved. No compute cost. Wakes automatically on next use. |
 | **Paused** | You put it to sleep now instead of waiting for the idle timeout. Frees its budget immediately, and wakes automatically on next use — like an on-demand hibernate. |
 | **Stopped** | A hard stop. Stays down and **does not wake on its own** — you must **Start** it (a scheduled run will also start it). Frees its budget. |
 | **Over budget** | Can't start yet because your compute budget is full. It waits; a deliberate start — the **Start** button, opening the agent, or a schedule fire — retries the gate once other agents free up room. An **Always on** agent is the exception: it starts itself as soon as room frees. See [Compute budget](#compute-budget-and-resources). |
-| **Error** | Pod failed to start or encountered a fatal issue. |
+| **Error** | The agent failed to start or encountered a fatal issue. |
 
 !!! note "The status pill collapses some of these"
     Hibernating, hibernated, paused, and stopped all show as **Hibernating**, and an agent waiting
@@ -130,7 +130,7 @@ agent goes quiet. **Request more** beside it goes wherever your operator points 
 
 ## Available Harnesses
 
-Each agent runs one **harness** — the AI software inside the pod:
+Each agent runs one **harness** — the AI software inside the agent:
 
 | Harness | Best For |
 |---------|----------|
@@ -181,7 +181,7 @@ Every agent is created the same way, from **Home**. There are two routes in, and
 From scratch, the page asks for:
 
 - **Name** — what you'll call it. It comes pre-filled, so you can accept it and move on.
-- **Image** — the AI software inside the pod: **Claude**, **Codex**, **Pi**, or **Bob**.
+- **Image** — the AI software inside the agent: **Claude**, **Codex**, **Pi**, or **Bob**.
 - **Provider** — the model provider. Not connected yet? Connect it right here rather than in Settings.
 - **Connections** — the credentials this agent may use, like GitHub for working against your repos.
 - **Lifecycle** — **Hibernate when idle** or **Always on**, as described
@@ -298,7 +298,7 @@ brings the agent back:
 
 All of these preserve the workspace and configuration exactly like hibernation — see [What Survives Hibernation](#what-survives-hibernation).
 
-If an agent's pod restarts on its own while you have DAM open, a notice says so, naming the cause where
+If an agent restarts on its own while you have DAM open, a notice says so, naming the cause where
 it's known: one that ran out of memory says so and suggests a larger size under **Compute resources**;
 one that ran out of storage says so and suggests deleting files it no longer needs or requesting more;
 otherwise it says the agent crashed and restarted. You're told once per restart, and not afterwards about

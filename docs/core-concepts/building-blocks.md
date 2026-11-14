@@ -4,7 +4,7 @@ Every agent in DAM is assembled from the same reusable pieces — compute, crede
 
 <div class="rows" markdown>
 
-- **Isolated compute + persistent workspace** <span>A long-running Linux pod with a `~/work` directory that survives restarts and hibernation — the agent keeps working after you close your laptop. See [Agents](../core-concepts/agents.md).</span>
+- **Isolated compute + persistent workspace** <span>A long-running, isolated Linux sandbox with a `~/work` directory that survives restarts and hibernation — the agent keeps working after you close your laptop. See [Agents](../core-concepts/agents.md).</span>
 - **Network boundary & credential gateway** <span>The agent reaches only the services you allow, through a hardened gateway that holds your tokens and injects them on the wire — it never sees the raw credential. See [Network & Approvals](../core-concepts/network-access.md).</span>
 - **Connections** <span>Wire in the accounts an agent acts through — GitHub, API keys, and more — without it ever seeing your tokens. See [Connections](../core-concepts/connections.md).</span>
 - **Skills** <span>Packaged instructions that teach an agent a capability — plan a feature, draft a PRD, file an issue — installed once and reused. See [Skills](../core-concepts/skills.md).</span>
