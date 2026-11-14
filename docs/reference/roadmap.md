@@ -8,6 +8,10 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Dead-simple first run**: Sign in and start chatting right away. Your first agent is a personal assistant, made from a starter kit and running on a starter model budget (CurveBender on the IBM hosted deployment), so there's no provider key to set up first. The budget shows in the UI, and you can switch to your own provider at any time. Tracked in [#5055](https://github.com/dam-agents/dam/issues/5055){:target="_blank"}, [#5690](https://github.com/dam-agents/dam/issues/5690){:target="_blank"}.
 
+- **Slack as a first-class place to work**: Get started with DAM, talk to your agents and get work done entirely in Slack, without hidden commands or a trip to the web app. That means finding what DAM can do without remembering commands, knowing which agent you're talking to, messages that never go missing, an install that works for anyone in the workspace, and agent posts that look right and can ask you things the way the web chat does. Tracked in [#6573](https://github.com/dam-agents/dam/issues/6573){:target="_blank"}.
+
+- **Starter kits that are easy to choose, set up and grow with**: Pick the right kit quickly, get it set up in a few short turns, and keep shaping the agent afterwards: add or remove a kit, and ask it for more than its main job. Tracked in [#6576](https://github.com/dam-agents/dam/issues/6576){:target="_blank"}.
+
 - **New agent runtime (microVMs)**: Agents move to a VM-based runtime. The aim: an agent that starts in moments instead of making you wait, sizing you no longer have to pick up front, and agents that can run containers, so you can build and test real systems inside one. Tracked in [#4357](https://github.com/dam-agents/dam/issues/4357){:target="_blank"}.
 
 - **Use DAM from your own agent**: Drive DAM from the agent you already work in, such as Claude Code or Codex on your laptop. It learns DAM's command line from a skill, so it can create agents, start runs and manage connections for you. Secrets stay out of its hands: you enter them yourself. Tracked in [#5502](https://github.com/dam-agents/dam/issues/5502){:target="_blank"}.
