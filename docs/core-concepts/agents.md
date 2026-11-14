@@ -244,6 +244,12 @@ the agent is still onboarding.
 
 To publish an agent of your own as a kit, see [Create your own starter kit](../guides/create-starter-kit.md).
 
+
+<figure class="tour-shot" markdown>
+![A starter kit's detail page showing what it includes, with Use this Starter Kit and Start from scratch instead](../assets/starter-kit-detail.png)
+<figcaption>A kit's detail page, before you create anything.</figcaption>
+</figure>
+
 ### Configure
 
 From the agent's page, the left nav has these sections:
@@ -262,6 +268,16 @@ From the agent's page, the left nav has these sections:
 - **Schedules** — run recurring tasks
 - **Artifacts** — files the agent has published
 - **Usage** — this agent's model spend for a calendar month, broken down by model and by day. It includes work the agent delegated to other agents.
+
+<figure class="tour-shot" markdown>
+![An agent's Agent Setup section: name, image, provider and lifecycle](../assets/agent-setup.png)
+<figcaption>**Agent Setup**, the first section of the agent's page.</figcaption>
+</figure>
+
+<figure class="tour-shot" markdown>
+![An agent's Usage section: total cost, API calls, tokens, spend by model and spend by day](../assets/agent-usage.png)
+<figcaption>**Usage** for one agent.</figcaption>
+</figure>
 
 ### Ways in
 

@@ -4,6 +4,12 @@ Connect your accounts so your agent can act on your behalf — without ever seei
 
 ## Providers, Connections & API Keys
 
+<figure class="tour-shot" markdown>
+![Settings → Providers with IBM ETE LiteLLM Proxy, CurveBender, Bob Shell, Anthropic, OpenAI and AWS Bedrock](../assets/settings-providers.png)
+<figcaption>**Settings → Providers**.</figcaption>
+</figure>
+
+
 Three of the tabs in DAM **Settings** are easy to confuse. They do different things:
 
 | Tab | What it's for | Example |
@@ -17,6 +23,12 @@ Three of the tabs in DAM **Settings** are easy to confuse. They do different thi
 The rest of this page covers **Connections**. Providers live on the **Providers** tab, where you can also update or remove a saved key; you pick one for an agent while creating it (see [Create your LiteLLM key](../reference/litellm-key.md)). **AWS Bedrock** is for Claude Code and Pi agents: it takes a Bedrock API key and the region its models are served from, and the model is optional. API keys are covered in [the CLI reference](../reference/cli.md).
 
 ## How It Works
+
+<figure class="tour-shot" markdown>
+![An agent's Connections section listing a GitHub, a Slack account and an MCP server connection](../assets/agent-connections.png)
+<figcaption>The connections one agent holds.</figcaption>
+</figure>
+
 
 Connection credentials (OAuth tokens and API keys) are stored outside your agent and injected onto outbound requests by a paired gateway that sits between the agent and the internet. The agent never holds the raw token — even if compromised, it can't leak your keys.
 

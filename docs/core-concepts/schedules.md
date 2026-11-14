@@ -4,6 +4,12 @@ Run your agent on a recurring basis without manual intervention.
 
 ## Overview
 
+<figure class="tour-shot" markdown>
+![An agent's Schedules section with three schedules, each showing when it repeats and when it runs next](../assets/schedules-list.png)
+<figcaption>An agent's **Schedules** section.</figcaption>
+</figure>
+
+
 Schedules let you define automated tasks that fire on a timer:
 
 - Daily PR reviews at 9am
@@ -11,6 +17,12 @@ Schedules let you define automated tasks that fire on a timer:
 - Hourly data sync checks
 
 ## Creating a Schedule
+
+<figure class="tour-shot" markdown>
+![The Create a new Schedule form: name, repeat, time, days, timezone, quiet hours and prompt](../assets/schedule-form.png)
+<figcaption>The schedule form.</figcaption>
+</figure>
+
 
 1. Open your agent's **Schedules** panel
 2. Click **Create Schedule**
@@ -134,6 +146,12 @@ for it to come back, then lapses. So a brief outage still gets its run, but an a
 longer won't hand you a burst of catch-up runs when it finally wakes.
 
 ## Viewing History
+
+<figure class="tour-shot" markdown>
+![A schedule opened with View details, showing its task, next run, last run, timezone and session mode](../assets/schedule-details.png)
+<figcaption>**View details** on a schedule.</figcaption>
+</figure>
+
 
 **View results** on a schedule lists the sessions it has produced — open one to see what happened on
 that run. A **fresh** schedule accumulates one session per run; a **continuous** schedule has a single
