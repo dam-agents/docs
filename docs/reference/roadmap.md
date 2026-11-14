@@ -58,6 +58,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Agent-written changes that do what you approved**: Before an agent implements a change, you approve the behavior it must deliver, as checks that run on their own. The agent can't pass by weakening those checks, and before merge an independent run shows the change passes them unchanged. This builds on the software factory and is still exploratory. Tracked in [#6558](https://github.com/dam-agents/dam/issues/6558){:target="_blank"}.
 
+- **The right model and harness for the work**: Ask whether your agent runs on the right model and harness for what it actually does, and get an answer backed by evidence: a cheaper setup that does the same job, or a stronger one where the work needs it. Nothing changes until you agree, and switching is easy. Still exploratory. Tracked in [#6525](https://github.com/dam-agents/dam/issues/6525){:target="_blank"}.
+
 ## Have a request?
 
 Feature requests and feedback are welcome on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"}. IBMers can also post in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}.
