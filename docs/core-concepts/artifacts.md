@@ -45,6 +45,11 @@ directly, so big files never pass through the conversation.
 Agents can read the library back too — any artifact, at its current or a past version — so a report
 one agent published can be picked up by another without passing through the conversation.
 
+<figure class="tour-shot" markdown>
+![An artifact open in the panel beside a chat, with Edit, Share, Source and fullscreen buttons](../assets/artifact-panel.png)
+<figcaption>An artifact open beside the conversation.</figcaption>
+</figure>
+
 When an agent publishes something, it links it in chat — opening that link previews the artifact
 beside the conversation, so you can read a report or click through a dashboard without leaving the
 session. Where the artifact renders as a page, **Open fullscreen** in that panel gives it the whole
@@ -135,6 +140,12 @@ you **uploaded** has no publishing agent, so it doesn't offer the action at all.
     publishing one.
 
 ## Sharing
+
+<figure class="tour-shot" markdown>
+![The Share dialog with Private, Restricted and Public options and a copyable link](../assets/artifact-share.png)
+<figcaption>The sharing dialog.</figcaption>
+</figure>
+
 
 Artifacts start **private**. Every row wears a badge saying which it is — **Private**, **Restricted** or
 **Public** — and **the badge is the control**: click it to open the sharing dialog. **Share** in the

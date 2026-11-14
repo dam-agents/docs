@@ -6,6 +6,12 @@ where you see and manage them.
 
 ## The three kinds of skill
 
+<figure class="tour-shot" markdown>
+![An agent's Skills section with Created in this agent and Sourced from GitHub groups](../assets/agent-skills.png)
+<figcaption>An agent's **Skills** section.</figcaption>
+</figure>
+
+
 Every skill in the panel arrived one of three ways, and the panel groups them accordingly. Which
 group a skill is in decides what you can do with it, so this is the first thing to get straight:
 
