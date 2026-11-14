@@ -1,5 +1,9 @@
 # Create your LiteLLM key
 
+!!! note "IBM hosted deployment only"
+    The IBM ETE LiteLLM Proxy is available to IBMers on the IBM hosted deployment. On your own
+    deployment, connect any provider it supports, such as Anthropic, OpenAI, or AWS Bedrock.
+
 DAM can use the **IBM ETE LiteLLM Proxy** as a model provider. To use it, you'll need an API key from the **external** LiteLLM proxy.
 
 ## Before you start

@@ -1,5 +1,5 @@
 site_name: DAM
-site_url: https://pages.github.ibm.com/dam-agents/docs/
+site_url: https://dam-agents.github.io/docs/
 
 theme:
   name: material

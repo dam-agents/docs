@@ -1,6 +1,6 @@
 # Contact
 
-## Slack
+## Slack (IBMers)
 
 Join [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"} on IBM Slack for:
 
@@ -8,18 +8,25 @@ Join [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24)
 - Feature requests and feedback
 - Announcements and updates
 
+## Questions and discussion
+
+Ask questions and share what you're building in [GitHub Discussions](https://github.com/dam-agents/dam/discussions){:target="_blank"}.
+
 ## Bugs and Feature Requests
 
-File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"} so they don't get lost in a channel scroll. For corrections to these docs, open an issue on the [docs repo](https://github.ibm.com/dam-agents/docs/issues){:target="_blank"}.
+File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issues){:target="_blank"} so they don't get lost in a channel scroll. For corrections to these docs, open an issue on the [docs repo](https://github.com/dam-agents/docs/issues){:target="_blank"}.
 
 ## Getting Access
 
-Any IBMer can sign in to [DAM](https://ibm.biz/dam-agents){:target="_blank"} — there's no waitlist.
+**Open source:** deploy DAM on your own Kubernetes cluster with the
+[deployment guide](https://github.com/dam-agents/dam#run-your-own){:target="_blank"}.
+
+**IBMers:** any IBMer can sign in to [DAM](https://ibm.biz/dam-agents){:target="_blank"} — there's no waitlist.
 
 You'll also need a model provider key — see [Create your LiteLLM key](litellm-key.md).
 
 !!! note "Can't reach DAM?"
-    DAM requires the standard IBM VPN. If the site won't load at all, check that first.
+    The IBM hosted deployment requires the standard IBM VPN. If the site won't load at all, check that first.
 
 ## DAM in Your Slack Workspace
 
