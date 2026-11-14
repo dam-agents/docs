@@ -24,9 +24,9 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Software factory**: Agents that work on a team's repositories unattended: picking up issues, opening and reviewing pull requests, and asking a person when they need one. The DAM team is proving it on DAM's own repository first. Tracked in [#3679](https://github.com/dam-agents/dam/issues/3679){:target="_blank"}.
 
-## Next
-
 - **Start from Slack**: Create your account and reach your personal assistant without leaving Slack. Tracked in [#5058](https://github.com/dam-agents/dam/issues/5058){:target="_blank"}.
+
+## Next
 
 - **Delegating work to sub-agents**: Handing work to other agents becomes a dependable, visible capability. An agent can split a task across sub-agents and pick the harness and model for each one, for example to run one prompt on two harnesses and compare the answers. You watch the whole tree, with each sub-agent's status and cost, and limits apply to the tree as a whole. A sub-agent that needs a person can ask you without holding up the others. Tracked in [#3419](https://github.com/dam-agents/dam/issues/3419){:target="_blank"}.
 
