@@ -13,7 +13,7 @@ Every agent in DAM is assembled from the same reusable pieces — compute, crede
 - **Sessions** <span>Persistent chat and terminal conversations with an agent — the thread survives across restarts and hibernation. See [Sessions](../core-concepts/sessions.md).</span>
 - **Files & memory** <span>Browse, edit, and upload files in the persistent workspace that holds the agent's configuration and memory across sessions. See [File Manager](../core-concepts/file-manager.md).</span>
 - **Artifacts** <span>Finished outputs an agent publishes to keep — a report, a dashboard, a generated page, a data file — that outlive any single run. See [Artifacts](../core-concepts/artifacts.md).</span>
-- **Knowledge bases** <span>An agent whose job is to hold a body of knowledge you chat with, answering with citations back to the source. See [Knowledge Bases](../core-concepts/knowledge-bases.md).</span>
+- **Knowledge bases** <span>An agent whose job is to hold a body of knowledge you chat with, answering with citations back to the source. See [Building knowledge bases](../guides/building-knowledge-bases.md).</span>
 - **Starter kits** <span>The blocks above, pre-assembled into a ready-made agent you create in one step and it sets itself up. See [Starter kits](../core-concepts/agents.md#starter-kits).</span>
 
 </div>

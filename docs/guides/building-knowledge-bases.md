@@ -312,7 +312,7 @@ knowledge behind it changes.
 ### Let other people's agents read it
 
 An artifact is a snapshot of one answer. If you want colleagues asking their *own* questions of the
-base, [share the base itself](../core-concepts/knowledge-bases.md#sharing-one-with-your-team): under
+base, share the base itself: under
 **Agent Setup** → **Knowledge**, pick the folders to publish and hand out the `kbshare_…` link. Their
 agents get read-only access — they can search and read what you published, and change nothing.
 

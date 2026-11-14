@@ -220,4 +220,4 @@ workspace.
 <figcaption>A knowledge base answering with citations back to the source.</figcaption>
 </figure>
 
-→ [Knowledge bases](../core-concepts/knowledge-bases.md)
+→ [Building knowledge bases](../guides/building-knowledge-bases.md)

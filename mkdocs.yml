@@ -85,15 +85,14 @@ nav:
     - The building blocks: core-concepts/building-blocks.md
     - Agents: core-concepts/agents.md
     - Sessions: core-concepts/sessions.md
-    - Sub-agents: core-concepts/sub-agents.md
     - Connections: core-concepts/connections.md
-    - Satellites (experimental): core-concepts/satellites.md
-    - Network & approvals: core-concepts/network-access.md
-    - Skills: core-concepts/skills.md
     - Schedules: core-concepts/schedules.md
-    - File manager: core-concepts/file-manager.md
-    - Knowledge bases: core-concepts/knowledge-bases.md
     - Artifacts: core-concepts/artifacts.md
+    - Skills: core-concepts/skills.md
+    - File manager: core-concepts/file-manager.md
+    - Network & approvals: core-concepts/network-access.md
+    - Sub-agents: core-concepts/sub-agents.md
+    - Satellites (experimental): core-concepts/satellites.md
   - Integrations:
     - Slack: integrations/slack.md
     - Telegram: integrations/telegram.md

@@ -144,8 +144,7 @@ Each agent runs one **harness** — the AI software inside the pod:
 A knowledge base isn't a separate kind of agent — it's an ordinary agent with a capability layered on.
 It's set up to build and maintain a body of knowledge you chat with: feed it sources and it answers with
 citations back to where the answer came from. You create one from a [starter kit](#starter-kits) under
-**Knowledge**. See [Knowledge bases](knowledge-bases.md) and the
-[Capture team knowledge](../guides/building-knowledge-bases.md) guide.
+**Knowledge**. See the [Building knowledge bases](../guides/building-knowledge-bases.md) guide.
 
 Rather than write an optimization loop from scratch, you can run an established **framework**. Each is
 offered as a [starter kit](#starter-kits) under **Research**, and each brings its own image — so you
@@ -188,7 +187,7 @@ From scratch, the page asks for:
 - **Lifecycle** — **Hibernate when idle** or **Always on**, as described
   [above](#automatic-hibernation).
 - **Knowledge bases** — paste share links to give this agent read-only access to
-  [knowledge bases](knowledge-bases.md) someone has published.
+  [knowledge bases](../guides/building-knowledge-bases.md#let-other-peoples-agents-read-it) someone has published.
 - **Channels** — connect it to **Slack Channel** or **Telegram Chat** as you create it, rather than
   afterwards. Each row explains the difference between the two: a channel means the agent answers *as
   itself*, where a Slack connection means it acts *as you*. The rows only appear for a messenger your
