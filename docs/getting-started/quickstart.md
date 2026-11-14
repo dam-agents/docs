@@ -5,8 +5,7 @@ Launch a Claude Code agent in the cloud in minutes.
 Prefer the command line? [Jump to CLI quickstart](#cli).
 
 !!! note "This quickstart uses the IBM hosted deployment"
-    The hosted deployment requires IBM VPN access. If you're outside an IBM office, connect to VPN
-    before starting. If the site won't load, check your VPN connection first.
+    The hosted deployment requires IBM VPN access.
 
     Running your own deployment? Use its URL and sign-in instead, and the steps are the same. See the
     [deployment guide](https://github.com/dam-agents/dam#run-your-own){:target="_blank"} to set one up.
