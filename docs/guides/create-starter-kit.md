@@ -13,7 +13,7 @@ Give it one sentence about what the agent should do. It then:
 1. **Interviews you** about the job: the unit of work, what the agent reads and writes, whether it runs on a schedule or answers in a channel, who it talks to, and what it costs to run.
 2. **Proposes a design** and waits for your approval. It writes no files before you approve.
 3. **Writes the repository**: `kit.yaml`, the agent's `CLAUDE.md`, an onboarding runbook the agent follows on its first session, a README, procedure docs and scripts, a version and changelog, and CI.
-4. **Validates it** against the same rules the platform checks when it reads a kit, so a mistake is caught before anyone uses the kit.
+4. **Checks it** with a validation script for the mistakes a kit most often has, such as a kit the catalog can't list, and adds the same checks to the repository's CI. The platform's own schema stays the final check.
 5. **Hands you a checklist** for the next steps.
 
 The skill is built for shared, unattended agents: a team's triage bot, a scheduled report, a channel helper. It isn't meant for a personal assistant.
