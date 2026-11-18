@@ -84,13 +84,13 @@ Besides the DAM team's built-in kits, the **Starter Kits** page lists the kits i
       # ...existing kits...
       - url: https://github.com/<you>/<repo>
         publisher:
-          name: Your Name
+          name: Jane Doe
           url: https://github.com/<you>
     ```
 
     - `url` is your kit's repository. Don't put a branch or a version in it.
-    - `publisher.name` is the name the kit shows under its title, as **By Your Name**. It can be a person or a team, up to 80 characters.
-    - `publisher.url` is optional. It must start with `https://`. In the kit's window, your name links to it. Your GitHub profile is a good choice.
+    - `publisher.name` is exactly what users see on the kit's card and in its window, as **By Jane Doe**. Use your full name, or your team's name, so people recognize who built the kit. Write it as plain text, not a GitHub handle: your GitHub profile goes in `publisher.url`. Up to 80 characters.
+    - `publisher.url` is optional and must start with `https://`. In the kit's window, your name links to it. Your GitHub profile is a good choice.
 
 3. Open a pull request. Say what the kit does and who it's for. CI checks `catalog.yaml` against the catalog's schema.
 4. Once a maintainer merges it, your kit appears on **Starter Kits** at the platform's next catalog refresh, within about 10 minutes. No redeploy is needed.
