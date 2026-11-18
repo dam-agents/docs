@@ -204,21 +204,21 @@ A **starter kit** is a ready-made agent configuration: a harness, skills, schedu
 channels bundled together, sometimes with a repository of its own. **Starter Kits** in the sidebar
 lists what your install offers, grouped as **Software**, **Knowledge**, **Productivity** and
 **Research**, and searchable. Each kit says who publishes it: **By DAM** with a check mark for the DAM
-team's kits, or **By &lt;name&gt;** for a kit a user contributed. Open one to see exactly what it brings before you commit, then **Use this
-Starter Kit** — or **Start from scratch instead**.
+team's kits, or **By &lt;name&gt;** for a kit a user contributed. To start with no kit, pick **The
+Generalist**, which needs no setup.
 
-Creating from a kit asks you for less, because the kit has answered most of it. What it brings is
-marked as the kit's, so you can tell its choices from yours: the **Harness** it runs on (fixed, where
-the kit brings its own image), a **Provider**, the **Repository** it seeds your workspace from, the
-**Schedules** it registers — adjust or skip any of them — and the **Connections** it needs, with required
-ones called out so you know what it can't work without. A kit's repository, where it has one, is shown
-but can't be removed: the agent always starts with it.
+Open a kit to see exactly what it brings before you commit. Its window shows the harness and model it
+runs on, the **Repository** it seeds your workspace from, and its skills. You don't pick a provider: the
+platform uses one of yours that the kit can run on. Under **You'll set up** are the **Connections** it
+needs, with required ones called out so you know what it can't work without, the **Schedules** it
+registers — adjust or skip any of them — and the channels you can talk to it in. You can rename the
+agent and change its avatar there too. Then click **Use this starter kit**.
 
 **Network access** is shown too, read-only: the preset the agent starts on — the trusted defaults
 unless the kit sets its own — and any rules the kit adds on top. A kit can ask for more than the
 defaults, up to **Full web access**, so this is where you see that before you create. It's a starting
 point, not a lock: you change it in the agent's **Network access** settings afterwards, where the kit's
-rules are marked *from the starter kit*. Then **Create agent from this kit**.
+rules are marked *from the starter kit*.
 
 A kit usually opens a **first session** as soon as the agent exists, where the agent asks you for the
 handful of things only you can supply and does the rest itself. While that's unfinished the agent
@@ -240,8 +240,8 @@ the agent is still onboarding.
 
 !!! note "Which kits you see is up to your operator"
     The catalogue is configured per install and can move without a platform release, so treat the list
-    on your own **Starter Kits** page as the authority. Where an install has no catalogue configured,
-    the page says so and points you at starting from scratch.
+    on your own **Starter Kits** page as the authority. **The Generalist** is always there, even when
+    an install lists no other kits.
 
 To import a kit for yourself from its link, or to contribute a kit to **Starter Kits** for everyone, see
 [Create your own starter kit](../guides/create-starter-kit.md#share-it).
