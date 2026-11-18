@@ -203,7 +203,8 @@ afterwards from the agent's page, see [Configure](#configure).
 A **starter kit** is a ready-made agent configuration: a harness, skills, schedules, connections and
 channels bundled together, sometimes with a repository of its own. **Starter Kits** in the sidebar
 lists what your install offers, grouped as **Software**, **Knowledge**, **Productivity** and
-**Research**, and searchable. Open one to see exactly what it brings before you commit, then **Use this
+**Research**, and searchable. Each kit says who publishes it: **By DAM** with a check mark for the DAM
+team's kits, or **By &lt;name&gt;** for a kit a user contributed. Open one to see exactly what it brings before you commit, then **Use this
 Starter Kit** — or **Start from scratch instead**.
 
 Creating from a kit asks you for less, because the kit has answered most of it. What it brings is
@@ -242,7 +243,8 @@ the agent is still onboarding.
     on your own **Starter Kits** page as the authority. Where an install has no catalogue configured,
     the page says so and points you at starting from scratch.
 
-To publish an agent of your own as a kit, see [Create your own starter kit](../guides/create-starter-kit.md).
+To import a kit for yourself from its link, or to contribute a kit to **Starter Kits** for everyone, see
+[Create your own starter kit](../guides/create-starter-kit.md#share-it).
 
 
 <figure class="tour-shot" markdown>
