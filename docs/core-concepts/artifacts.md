@@ -65,6 +65,31 @@ agent also shows the artifacts it produced.
 
 An agent can only publish into its own owner's library, and attribution can't be spoofed.
 
+## Interactive pages
+
+An HTML artifact can be **interactive**: its buttons talk to the agent that published it. Ask the
+agent for one — "a dashboard of my open issues with a button to triage each one" — and it builds the
+page and marks it interactive. It shows an **Interactive** badge in the library.
+
+An interactive page can do two things:
+
+- **Send the agent a prompt.** A button types a request into the chat for you. This works in the
+  docked panel inside that agent's chat, where the open conversation gets the prompt and the reply
+  shows up there as usual. Opened anywhere else, a plain button tells you to *open this artifact in
+  its agent's chat to use this button*. A page can also be built to send each prompt to a session of
+  its own; that session runs unattended, so nobody answers its permission prompts.
+- **Read and change the agent's data.** The page can ask a small server the agent runs in its own
+  sandbox, so the page and the agent work from the same state — a to-do list you tick off in the
+  page and the agent reads back, for example. The agent starts that server itself. After the agent
+  has been idle and asleep, the page gets no answer until the agent starts it again — ask the agent
+  in chat.
+
+**Set model** in the page's **⋯** menu picks the model the sessions its prompts open run on.
+**Use agent default** clears the pick, and the page follows the agent's model for channels again.
+
+Only the latest version of a page can send prompts or requests; older versions can't. To share an
+interactive page, see [Sharing](#sharing): it can never be public.
+
 ## Editing one yourself
 
 You don't have to ask the agent to fix a typo. **Edit source** — in an artifact's **⋯** menu, and in the
@@ -173,7 +198,10 @@ private or public again.
 
 An **interactive** page — one whose buttons can ask its agent to do something — carries an
 **Interactive** badge and can **never be public**. Share it **Restricted**, and the people you name can
-use its buttons too, acting through your agent and your accounts. Only you can add people to an interactive page's list, in this dialog.
+use its buttons too, acting through your agent and your accounts. Only you can add people to an interactive page's list, in this dialog. A viewer's
+prompt starts a session of their own on your agent, named after them and the page, so you can see
+who asked for what; they see only the page, not the agent's reply. The dialog warns you that viewers
+can read and change the agent's data and that the agent sees their email.
 
 !!! warning "A public link is the access control"
     A **public** share URL contains an unguessable random token, and **that token is the only thing
