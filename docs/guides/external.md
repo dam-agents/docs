@@ -18,7 +18,7 @@ DAM makes its CA available to your tools at startup, so common HTTP clients — 
 
 ### 2. A credential, created in the UI
 
-On the **Connections** page click **New**, open the **Custom Headers** tab, and click **New** on the card:
+On the **Connections** page click **Add connection**, open the **Custom headers** tab, and click **New** on the card:
 
 - **Name:** lowercase letters, digits and single hyphens, e.g. `my-tool-key`
 - **Host:** the host your tool calls, e.g. `api.example.com`
@@ -30,7 +30,7 @@ On the **Connections** page click **New**, open the **Custom Headers** tab, and 
   still allowed and the real key still injected on the wire. What you lose is the variable your tool
   reads to know what to send, so fill it in whenever your tool gets its key from the environment
 
-Then add it to the agent from its **My connections** panel. (You can add it to an existing agent — no need to recreate it.) Adding the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. A rule for one host doesn't cover its subdomains unless you say so — `files.example.com` needs its own rule even if `api.example.com` is already allowed, or a `*.example.com` rule to cover both.
+Then add it to the agent under **Configure agent → Connections**. (You can add it to an existing agent — no need to recreate it.) Adding the connection **automatically allows its configured host** on the agent's egress, so there's no separate Network access step for that host. Only *additional* hosts your tool calls need a manual rule under **Network access**. A rule for one host doesn't cover its subdomains unless you say so — `files.example.com` needs its own rule even if `api.example.com` is already allowed, or a `*.example.com` rule to cover both.
 
 ### 3. How the key reaches your tool
 

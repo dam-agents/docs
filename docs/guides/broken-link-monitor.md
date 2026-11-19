@@ -48,17 +48,17 @@ State is persisted on a volume between runs — the agent remembers what it foun
 
 ### Connections
 
-- **GitHub** or **GitHub Enterprise** — the agent clones repos (read) and manages issues (write). The default GitHub connection uses OAuth (scopes `repo`, `read:user`, `user:email`). If you'd rather use a token, click **New** on **Settings → Connections** to open the **Connection catalogue**, then on the **Apps** tab click **New** on the **GitHub** card and pick **Connect with a personal access token** instead of **Authorize with GitHub**.
+- **GitHub** or **GitHub Enterprise** — the agent clones repos (read) and manages issues (write). The default GitHub connection uses OAuth (scopes `repo`, `read:user`, `user:email`). If you'd rather use a token, click **Add connection** on **Settings → Connections** to open the **Connection catalog**, then on the **Apps** tab click **New** on the **GitHub** card and pick **Connect with a personal access token** instead of **Authorize with GitHub**.
 
 ### Network Access
 
-**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface in Activity.
+**Allow everything** — this agent checks external URLs across the internet to verify links are alive, so it needs broad outbound access. Alternatively, use **Trusted defaults** and approve hosts as they surface in **Approvals** (the bell icon).
 
 ## Setup
 
-1. **Create a Claude Code agent** — on **Home**, **Create agent** (on a brand-new account, choose **Start from scratch instead** in the starter kits it opens) and pick the **Claude** card in the Web UI, or `dam agent create <name> --provider <your-provider>` from the CLI
+1. **Create a Claude Code agent** — on **Home**, click **Create agent** (it's created at once and opens in its chat), then pick Claude in the harness-and-model picker under the message box. Or from the CLI: `dam agent create <name> --provider <your-provider> --harness claude-code`
 2. **Add your provider** — configure the IBM ETE LiteLLM Proxy (or, self-hosting, a provider such as Anthropic) with your API key
-3. **Add a GitHub connection** — on **Settings → Connections**, click **New** to open the **Connection catalogue**, then on the **Apps** tab click **New** on the **GitHub** card. Pick **Authorize with GitHub**, or **Connect with a personal access token** if you prefer a token
+3. **Add a GitHub connection** — on **Settings → Connections**, click **Add connection** to open the **Connection catalog**, then on the **Apps** tab click **New** on the **GitHub** card. Pick **Authorize with GitHub**, or **Connect with a personal access token** if you prefer a token. After you sign in, choose what the connection reaches (**Full access**, or **Choose account, repositories and permissions**) and click **Create connection**
 4. **Clone the Link Guardian repo** — in your agent session, clone [github.com/dam-agents/link-guardian](https://github.com/dam-agents/link-guardian) into `work/`
 5. **Run the first session** — the agent will ask you which org/repos to watch and save the configuration
 6. **Create a schedule** — set it to run daily so the agent checks links automatically

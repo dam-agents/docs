@@ -19,7 +19,6 @@ staging folders (`.import-staging-…`) are hidden too. Ordinary repo noise like
 |--------|-------------|
 | Browse | Navigate the directory tree |
 | View | Read file contents with syntax highlighting, or as a rendered preview (images, PDF, SVG, Markdown, HTML) |
-| Fullscreen | Open a rendered preview at full size in a dialog via the **Open fullscreen** button |
 | Edit | Modify files directly in the browser |
 | Upload | Add files from your local machine to the workspace |
 | Download | Save workspace files to your local machine |
@@ -38,8 +37,6 @@ The built-in editor supports:
 SVG, Markdown and HTML files open rendered; **Source** flips to the underlying text and **Preview** flips
 back. An SVG that begins with an XML declaration — `<?xml version="1.0"?>`, which many drawing tools
 write at the top of one — renders like any other.
-
-When viewing a file that renders (image, PDF, SVG, Markdown, or HTML), an **Open fullscreen** button opens the rendered preview at full size in a dialog — it's offered only while the rendered view is showing. Press **Escape** or the close button to leave it; switching to another file also returns you to the side panel.
 
 ## Publishing a file as an artifact
 
@@ -66,12 +63,13 @@ disabled and says so.
 
 ## Key Notes
 
-- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: **Edit**, **Download**, **Rename**, **Delete**; for a folder: **New file…**, **New folder…**, **Upload files here…**, **Rename**, **Delete**
+- Each row has an action menu (the hover **⋯** button or right-click) with context-appropriate actions — for a file: **Edit**, **Download**, **Rename**, **Delete file**; for a folder: **New file…**, **New folder…**, **Upload files here…**, **Rename**, **Delete folder**
 - **Move by drag and drop** — drag a file or folder onto a destination folder in the tree to move it there (a folder can't be moved into itself or its own subtree)
 - **Uploading files** lands them in the folder you upload *into* — use a folder's **Upload files here…** action, or drag them onto it. If a file of that name already exists, you're asked before it's overwritten.
 - **Uploading a whole folder** is a bulk import instead: it merges into `/home/agent/work` — files at the same path are overwritten, and everything else already there is kept. If a file in the upload would land where a folder already exists, the whole import is refused and nothing changes. Nothing is filtered on the way up — the folder goes as it sits, `node_modules` and `.venv` included — so prune it first, or use `dam import`, which skips `node_modules`, `.venv`, `__pycache__` and `.DS_Store` for you. Either way `.git` is kept.
 - Files modified in chat sessions appear immediately in the File Manager (and vice versa)
 - The workspace is shared across all sessions for an agent
+- `AGENTS.md` at the top of the tree holds the platform's instructions and opens read-only; put your own instructions in `work/AGENTS.md`
 - Files you attach to a chat message are saved under your home directory, grouped by session, and handed to the agent as a path it can read — they don't land in your working directory
 
 !!! note "What survives hibernation"

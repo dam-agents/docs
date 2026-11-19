@@ -4,7 +4,7 @@
 hypothesis-driven experiment **campaigns** against a software system. Its own documentation covers what
 a campaign is and how Nous works. This guide covers running it on DAM.
 
-Nous is offered as a starter kit: open **Starter Kits** in the sidebar, pick the **Research** shelf, and
+Nous is offered as a starter kit: open **Starter kits** in the sidebar, pick the **Research** tab, and
 open **Nous**. The kit brings Nous pre-installed on its own image, so you create an agent from the kit
 and give it your brief in a message. That agent is built for campaigns and nothing else — for ordinary
 coding, use a different agent.
@@ -20,8 +20,10 @@ This 90-second demo walks through a whole campaign, from picking the kit to the 
 ## What you need
 
 - **A provider.** On the IBM hosted deployment, the kit runs on **IBM ETE LiteLLM Proxy** or **CurveBender**
-  (see [Create your LiteLLM key](../reference/litellm-key.md)). Self-hosting? It runs on **Anthropic**.
-  The provider picker offers only these.
+  (see [Create your LiteLLM key](../reference/litellm-key.md)). CurveBender's models are currently only
+  approved for [restricted use cases](https://cb-docs-curvebender.apps.fmaas-backend.fmaas.res.ibm.com/ai-platform-incubation/cb_docs/getting-started/model-usage-guidance/){:target="_blank"}
+  (an IBM-internal page for IBMers). Self-hosting? It runs on **Anthropic**. You don't pick one: when you
+  create the agent, it's given one of your provider connections that Claude runs on.
 - **A GitHub connection** — optional. You need one to clone a **private** target, or to push results
   back. Any GitHub or GitHub Enterprise connection satisfies it: the OAuth sign-in, a personal access
   token or a GitHub App. See [Connections](../core-concepts/connections.md).
@@ -31,29 +33,23 @@ through the platform, so there is never an API key in the agent and nothing shou
 
 ## Create the agent
 
-Open the kit and click **Use this Starter Kit**. Its page lists what it brings under **Included** and
-what it needs from you under **You'll set up**. On the **Create an agent** page you're asked for very
-little:
-
-1. **Name** — something you'll recognize in the agents list.
-2. **Harness** — fixed, because the kit brings its own image.
-3. **Provider** — your IBM ETE LiteLLM Proxy or CurveBender connection (self-hosting: your Anthropic connection).
-4. **Connections** — a GitHub connection if you want one (see above).
-
-Then **Create agent from this kit**. You don't choose network access while creating: the page's
-read-only **Network access** box shows the agent starts on the platform default, **Trusted sites only**,
-which already covers GitHub, PyPI and npm, and you can change it afterwards.
+Open the kit. Its window shows the new agent's name, which you can change, and a **Harness: Claude**
+line: the harness is fixed because the kit brings its own image. Below that it lists what the kit brings
+and, under **You'll set up**, a GitHub connection marked optional: pick one of yours or add one (see
+above). There's no provider to choose, and no network choice either: the **Network access** section shows
+the agent starts on **Trusted sites only**, which already covers GitHub, PyPI and npm, and you can change
+it afterwards. Then click **Use this starter kit**.
 
 !!! tip "Allow the target's hosts before a long run"
     If building or exercising the target reaches a host outside the defaults, that request is held for
-    your approval in **Activity** and denied if nobody answers in time — which an overnight run will hit.
+    your approval in **Approvals** (the bell icon) and denied if nobody answers in time — which an overnight run will hit.
     Add the rules up front on the agent's **Network access** section instead. See
     [Network & approvals](../core-concepts/network-access.md).
 
-There's no **Lifecycle** choice to make here, and that's deliberate: the kit creates the agent
-**Always on**, so it never hibernates while idle. A campaign launched in the background therefore runs
-to completion on its own — you don't have to keep a session, terminal or SSH connection open. The
-trade-off is that it holds its compute the whole time, so stop the agent when you're done with it.
+Like any agent, this one rests after a while with nothing to do and wakes when you next use it, but it
+launches every campaign as work that holds it awake until the campaign ends. A campaign started in the
+background therefore runs to completion on its own — you don't have to keep a session, terminal or SSH
+connection open.
 
 ## Your first campaign
 

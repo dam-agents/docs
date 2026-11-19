@@ -22,8 +22,11 @@ agent can also choose each sub-agent's harness and model, for instance a cheaper
 step, or the same task on two models to compare. It can hand work off directly, or write a script that
 fans a lot of work out. Both show up the same way in the chat.
 
-A sub-agent runs its task to the end without asking you anything, so a good request gives it
-everything it needs up front.
+A sub-agent can stop on a question for you, when it needs a decision only you can make. Its row then
+reads **Needs your answer**, and you answer in the chat's message box, which names the sub-agent the
+answer goes to. **Later** puts the question aside, and it stays above the message box. Without an
+answer, the sub-agent goes ahead on a default it named. A good request still gives it everything it
+needs up front.
 
 ## What you see
 
@@ -34,16 +37,21 @@ task and its status:
 | Status | Meaning |
 |--------|---------|
 | **Working** | It's running the task. |
-| **Waiting for room** | It's waiting for compute to free up in your budget, and starts on its own once there's room. |
+| **Waiting for room** | It's waiting for memory to free up, and starts on its own once there's room. |
+| **Needs your answer** | It asked you a question and waits for your answer. |
 | **Done** | It reported a result. |
 | **Failed** | It ended without a result. The row says why. |
+| **Stopped** | You, or the agent that started it, stopped it. The row says who. |
 
 Expand a row to see the **Prompt** it was given, its **Result** once done, and two actions:
 
 - **Open conversation** opens the sub-agent's conversation beside the chat, read-only. It's available
   once the sub-agent has reported. While it's still working, the button is disabled. Occasionally a
-  conversation isn't kept, and the button says so.
-- **Stop** ends a running sub-agent after you confirm. It's removed, and the agent gets a failed result.
+  conversation isn't kept, and the button says so. From a finished one, **Continue in new chat**
+  opens a new chat with the agent that carries the sub-agent's prompt and result into your first
+  message.
+- **Stop** ends a running sub-agent after you confirm, together with every sub-agent it started. It's
+  removed, and the agent gets a failed result. The agent that started a sub-agent can stop it too.
 
 A sub-agent that delegates further shows its own sub-agents nested inside its row. The block stays in
 the conversation after the sub-agents are gone, so you can come back to the results later.
@@ -57,11 +65,9 @@ A sub-agent is removed shortly after it reports. It also fails and is removed if
 time limit the agent gave it, if a setup step fails, or if it restarts. Deleting the agent that
 started it fails its running sub-agents and removes them.
 
-While an agent has sub-agents running, it doesn't hibernate, even if nobody is chatting with it.
-Stopping or pausing it still works. If the agent handed work off directly and ended its turn before a
-sub-agent finished, the result arrives later as a new turn in the conversation, and wakes the agent if
-it needs to. A stopped agent
-isn't started for it. The result waits until you start the agent again.
+While an agent has sub-agents running, it doesn't hibernate, even if nobody is chatting with it. If the
+agent handed work off directly and ended its turn before a sub-agent finished, the result arrives later
+as a new turn in the conversation, and wakes the agent if it needs to.
 
 ## What a sub-agent can use
 

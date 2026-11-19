@@ -28,7 +28,7 @@ there to make a DAM feature work rather than to teach your agent a task — see
 [From platform features](#from-platform-features). Both are read-only either way.
 
 A **search box** at the top of the panel searches every connected source at once, and the line beneath
-it counts what you have — *12 skills · 3 connected sources · 5 on* — or how many match while you're
+it counts what you have — *12 skills · 3 connected sources · 5 enabled* — or how many match while you're
 searching.
 
 The panel is read-only unless the agent is **running** — a stopped, paused, restarting or unreachable
@@ -103,7 +103,9 @@ pull request — follow the link if you want to close it yourself.
 
 Some images ship with skills already inside them, so a fresh agent is useful immediately. Which
 ones you get depends on the agent's image — an [optimization framework](agents.md#knowledge-bases-and-frameworks)
-image carries the skill that drives its framework, for instance.
+image carries the skill that drives its framework, for instance. Every agent's image includes
+**platform-docs**, so you can ask your own agent how DAM works: it answers from DAM's source and these
+docs as of the release the agent runs.
 
 These are **read-only**. You can't publish them, and editing one only earns it a **Modified** badge,
 meaning the files on disk now differ from the copy the image shipped. They aren't yours to delete
@@ -190,7 +192,7 @@ active, the button narrows to the matches instead — *Enable 4 matching*.
     **Re-scan**.
 
 Each source card's **⋯** menu holds **Re-scan** (re-read the repo now — the card shows when its list
-was last scanned), **View repo**, and, for a source you added, **Remove source**.
+was last scanned), **View on GitHub**, and, for a source you added, **Remove source**.
 
 If you add your own source pointing at a repo the platform already provides, yours takes over the
 listing; remove yours and the platform entry reappears.

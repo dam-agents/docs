@@ -19,43 +19,39 @@ Schedules let you define automated tasks that fire on a timer:
 ## Creating a Schedule
 
 <figure class="tour-shot" markdown>
-![The Create a new Schedule form: name, repeat, time, days, timezone, quiet hours and prompt](../assets/schedule-form.png)
+![The schedule form: name, repeat, time, days, timezone, quiet hours and prompt](../assets/schedule-form.png)
 <figcaption>The schedule form.</figcaption>
 </figure>
 
 
 1. Open your agent's **Schedules** panel
-2. Click **Create Schedule**
+2. Click **Create schedule**
 3. Configure:
     - **Name** — what the schedule is called in the panel
-    - **Run** — Daily, Hourly, Every N minutes, or Custom (RRULE). Hourly and Every-N-minutes ask for the interval; Daily asks for a time, picked in half-hour steps. For all but Custom you also pick which days of the week apply (e.g. weekdays only).
-    - **Timezone** — defaults to your browser's and can be any IANA zone. Schedules fire at that local wall-clock time year-round, adjusting across daylight saving.
-    - **Quiet hours** — time windows when the schedule is suppressed. Each window has its own switch, so you can turn one off without deleting it.
     - **Prompt** — what the agent should do when it wakes
-    - **Session type** — Fresh or Continuous (see [Session Modes](#session-modes) below)
-    - **Precheck (optional)** — a command that decides whether this fire runs at all (see
-      [Prechecks](#prechecks) below)
+    - **Repeat** — Daily, Hourly, Every N minutes, or Custom rule (RRULE). Hourly and Every N minutes ask for the interval; Daily asks for a time, picked in half-hour steps. For all but Custom rule you also pick which days of the week apply (e.g. weekdays only).
+    - **Timezone** — defaults to your browser's and can be any IANA zone. Schedules fire at that local wall-clock time year-round, adjusting across daylight saving.
+    - Under **More options**:
+        - **Session type** — Fresh or Continuous (see [Session Modes](#session-modes) below)
+        - **Quiet hours** — time windows when the schedule is suppressed. Each window has its own switch, so you can turn one off without deleting it.
+        - **Precheck (optional)** — a command that decides whether this fire runs at all (see
+          [Prechecks](#prechecks) below)
+        - **Session title (optional)** — shown in the session list instead of a title derived from the prompt
 4. Click **Create**
 
 !!! tip "Your agent can manage schedules itself"
     The agent has built-in tools to manage its own schedules — `list_schedules`, `create_schedule`, `toggle_schedule`, and `delete_schedule`, plus `schedule_once` for a task that runs one time. These create **persistent** schedules that run on the platform, survive restarts, and show up in this panel — distinct from any in-session timers a harness sets for itself, which vanish when the session ends.
 
-!!! note "Some schedules can't be edited in the panel"
+!!! note "Cron schedules and agent-made schedules"
     Schedules you create in the panel always carry a timezone. Schedules defined with a raw cron
     expression (which an agent may do) run in **UTC** and ignore quiet hours — so a 9am-local cron
-    drifts by an hour when daylight saving changes.
+    drifts by an hour when daylight saving changes. **Edit schedule** on one shows its **Cron
+    expression (UTC)**, and offers **Convert to the new format**, which shows the next runs before and
+    after so you can check the timing.
 
-    Cron schedules **and any schedule your agent created for itself** can't be *edited* in the panel.
-    **Edit schedule** still opens; instead of the form it explains which of the two applies:
-
-    - **"This schedule is managed by the agent"** — the agent created it, so changes belong in chat,
-      and the dialog offers an **Open chat** button. Editing it here risks putting it out of step with
-      the agent.
-    - **"This schedule uses the older cron format"** — the editor only works with the newer format and
-      can't show this schedule's timing without rewriting it, so delete it and create a new one to
-      change its cadence.
-
-    Either way you can still pause, delete, or [run](#running-one-now) them from the panel, and reset
+    **Any schedule your agent created for itself** can't be *edited* in the panel. **Edit schedule**
+    says *"This schedule is managed by the agent"* — changes belong in chat — and offers an **Open
+    chat** button. You can still pause, delete, or [run](#running-one-now) it from the panel, and reset
     the session on a continuous one.
 
 ## Session Modes
@@ -135,13 +131,11 @@ Suppress schedule fires during specific time windows. Suppressed runs are **drop
 
 A window may cross midnight (10pm–7am works as written), and it uses the same timezone as the schedule, so it holds across daylight saving. If your quiet hours would swallow *every* run, the schedule won't save — the same refusal applies from the CLI and to schedules your agent creates for itself, so an impossible cadence fails loudly instead of going quietly dead.
 
-## Sleeping and stopped agents
+## Sleeping agents
 
-A schedule fire **wakes a hibernated agent** automatically — you don't need to keep it running. It
-also restarts an agent you stopped by hand: stopping an agent does not pause its schedules, and the
-UI warns you about this at stop time.
+A schedule fire **wakes a sleeping agent** automatically — you don't need to keep it running.
 
-A fire that can't reach the agent right away — it's erroring, or over budget — waits about an hour
+A fire that can't reach the agent right away — it's erroring, or waiting for memory — waits about an hour
 for it to come back, then lapses. So a brief outage still gets its run, but an agent that stays down
 longer won't hand you a burst of catch-up runs when it finally wakes.
 
@@ -158,10 +152,10 @@ that run. A **fresh** schedule accumulates one session per run; a **continuous**
 session you can revisit. **View details** expands the schedule to show its next and last run, whether
 that last run succeeded, its timezone, its session mode, and its [Precheck](#prechecks) if it has one.
 
-Past runs are recorded **in the agent**, so a **stopped** agent can't list them. Rather than looking
-broken, **View results** says so and offers **Start agent** right there; the last run and whether it
-succeeded are shown either way. On a running agent that can't be read, **Try again** retries, and a
-schedule that has never fired says **No runs yet**.
+Past runs are recorded **in the agent**, so an agent that isn't running can't list them. Rather than
+looking broken, **View results** says *Past runs are recorded in the agent* and offers to start it right
+there; the last run and whether it succeeded are shown either way. On a running agent that can't be read,
+**Retry** tries again, and a schedule that has never fired says **No runs yet**.
 
 A session a schedule produced also carries **how long the agent worked** on it, on its row in the
 sessions list — a single run's time, a running total across a continuous schedule's fires, or that it's

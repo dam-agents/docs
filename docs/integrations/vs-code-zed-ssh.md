@@ -13,7 +13,7 @@ The session inherits the agent's full environment: the egress proxy, the credent
 
 - The `dam` CLI installed and logged in — see the [CLI reference](../reference/cli.md) (`dam auth login`).
 - The OpenSSH client (`ssh`, `ssh-keygen`) on your machine. Present by default on macOS and Linux.
-- An agent that isn't stopped. Connecting wakes a hibernated agent automatically; a **stopped** one has to be started first. (An open SSH connection then keeps it awake — see [Keeping agents awake](#keeping-agents-awake) below.)
+- An agent you can reach. Connecting wakes an idle agent automatically. (An open SSH connection then keeps it awake — see [Keeping agents awake](#keeping-agents-awake) below.)
 - For the editor modes: `code` (or `code-insiders`) / `zed` on your `PATH`.
 
 !!! note "Custom images need `sshd`"
@@ -31,12 +31,15 @@ This drops you into a login shell on the agent, starting in the home directory `
 workspace the agent works in is `~/work` — `cd ~/work` to get there; the editor modes below open it
 directly. Exit with `exit` or `Ctrl-D`.
 
-**VS Code / Zed (local)**, offered beside the message box on a session with no messages yet, gives you
-the same commands pre-filled with the agent's ID.
+**VS Code and Zed**, one of the cards an empty chat offers, shows the same commands with the agent
+filled in.
 
 Unlike the web terminal, SSH has no one-viewer limit: a shell and an editor window can be connected
 to the same agent at once, each with its own independent connection. SSH connections aren't
 sessions, so they don't appear in the agent's session list.
+
+For a shell without leaving the browser, the web terminal's menu offers **Shell**: a plain login shell
+on the agent, with no harness or model.
 
 You can reference the agent by **name** or by **ID** (`agent-…`), the same as every other `dam` command.
 
@@ -136,7 +139,7 @@ An open SSH connection counts as activity — like `dam chat` or the web termina
     `dam ssh connect` hands off to the client you selected. Install the client (OpenSSH for `ssh`, VS Code for `-x code`, Zed for `-x zed`) and make sure it's on your `PATH`.
 
 ??? question "VS Code pops a network-approval prompt on first connect"
-    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request in **Activity** in the web UI, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
+    That's the VS Code server download. `dam` tries to pre-approve those hosts, but if it couldn't (e.g. your account can't edit network rules), approve the request under **Approvals** (the bell icon) in the web UI, or add `update.code.visualstudio.com` and `vscode.download.prss.microsoft.com` under the agent's **Network access**.
 
 ??? question "Host key warnings"
     `dam ssh` intentionally disables host-key checking. The connection is already authenticated and encrypted by the WebSocket tunnel, so the agent's own host key authenticates nothing extra — and because it lives on the agent's own volume, replacing that volume would otherwise trigger spurious "host identification changed" failures. You won't see `known_hosts` prompts.

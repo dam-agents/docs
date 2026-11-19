@@ -71,7 +71,6 @@ site_dir: site
 # "yet another coding tool" walkthroughs; retained for anyone holding a direct link.
 not_in_nav: |
   getting-started/welcome.md
-  guides/web-app-development.md
   guides/broken-link-monitor.md
   guides/external.md
 

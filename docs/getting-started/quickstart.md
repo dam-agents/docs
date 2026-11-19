@@ -18,32 +18,24 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 
 ### Step 2: Create an Agent
 
-On **Home**, click **Create agent**. On a brand-new account that offers you the starter kits first — a
-kit is a ready-made configuration, and there's a good one for most jobs — but for this quickstart choose
-**Start from scratch instead**.
+On **Home**, click **Create agent**. Your agent is created straight away, and you land in its chat.
 
-Everything is then on one page — **Create an agent** — filled top to bottom:
+1. **Provider** — no model provider connected yet? The chat asks you to **Connect an LLM provider**
+   first.
+2. **Harness and model** — the picker under the message box shows what this chat runs on. To follow
+   along with Claude Code, open it and pick **Claude** and a model.
+3. **Connections** *(optional)* — to work against your repos, open **Configure agent** and add
+   **GitHub** (for `github.com`) or **GitHub Enterprise** (for an Enterprise host, such as
+   `github.ibm.com` for IBMers) under **Connections**, so it can clone, push branches, and open PRs.
 
-1. **Name** — what you'll call it. It comes pre-filled, so you can leave it.
-2. **Image** — the harness that runs inside the agent. Pick the **Claude** card.
-3. **Provider** — the model provider. Not connected yet? Connect it **right here** — paste your key
-   inline, no trip to Settings.
-4. **Connections** *(optional)* — grant credentials the agent may use. For working against your repos,
-   add **GitHub** (for `github.com`) or **GitHub Enterprise** (for an Enterprise host, such as `github.ibm.com` for IBMers) so it can clone,
-   push branches, and open PRs.
-
-The rest of the page — **Lifecycle**, **Knowledge bases**, **Channels** — can all be left as it is and
-changed later.
+Everything else can be left as it is and changed later.
 
 !!! note
     No provider key yet? See [Create your LiteLLM key](../reference/litellm-key.md) — it covers which proxy
     to use and how to scope the key.
 
-Click **Create agent** at the bottom of the page — the button that finishes this page, not the one on
-Home you started from. Your agent provisions in a few seconds and you land straight in its chat.
-
 !!! tip "Or skip the choices entirely"
-    **Browse starter kits** on Home offers ready-made agents — a code reviewer, a knowledge base, a
+    **Browse starter kits** on Home (**Start from a kit** on a brand-new account) offers ready-made agents — a code reviewer, a knowledge base, a
     personal assistant — each bringing its own skills, schedules and connections, and each walking you
     through what it needs in its first message. See [starter kits](../core-concepts/agents.md#starter-kits).
 
@@ -62,8 +54,8 @@ Clone github.com/my-org/my-project and give me a summary
 of the codebase architecture.
 ```
 
-Or, on a session with no messages yet, use **Terminal (browser)** beside the message box to launch the
-full Claude Code interactive TUI.
+Or, on a session with no messages yet, use **Web terminal** under the message box and pick **Claude**
+to launch the full Claude Code interactive TUI.
 
 !!! tip "Want the full tour?"
     This gets you one working agent. To see the rest of the platform — connections, skills, schedules,
@@ -96,17 +88,18 @@ complete login. Pass `--no-browser` if you'd rather open the URL yourself.
 ### Step 3: Create a Claude Code Agent
 
 Scripted. `--provider` names a model-provider connection by id or unique name (list them with
-`dam connection list`); leave it off and DAM grants your preferred provider. The agent starts on
-Claude Code, and each session can pick another harness:
+`dam connection list`); leave it off and DAM grants your preferred provider. `--harness claude-code`
+starts it on Claude Code; leave it off and it starts on your default harness. Each session can pick
+another harness:
 
 ```bash
-dam agent create my-agent --provider "My provider"
+dam agent create my-agent --provider "My provider" --harness claude-code
 ```
 
 Wait for it to reach running state:
 
 ```bash
-dam agent create my-agent --provider "My provider" --wait
+dam agent create my-agent --provider "My provider" --harness claude-code --wait
 ```
 
 An unknown, ambiguous or non-provider `--provider` fails **before** any agent is created, so a

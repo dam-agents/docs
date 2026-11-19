@@ -42,19 +42,20 @@ lifecycle — creating, updating, organizing into folders, and setting sharing �
 configuring first. Text content up to **2 MB** is sent inline; anything larger or binary is uploaded
 directly, so big files never pass through the conversation.
 
-Agents can read the library back too — any artifact, at its current or a past version — so a report
-one agent published can be picked up by another without passing through the conversation.
+Agents can read back what they published, at its current or a past version. An agent sees only its
+own artifacts: another agent's, and anything you uploaded, reads as not found to it.
 
 <figure class="tour-shot" markdown>
-![An artifact open in the panel beside a chat, with Edit, Share, Source and fullscreen buttons](../assets/artifact-panel.png)
+![An artifact open in the panel beside a chat](../assets/artifact-panel.png)
 <figcaption>An artifact open beside the conversation.</figcaption>
 </figure>
 
 When an agent publishes something, it links it in chat — opening that link previews the artifact
 beside the conversation, so you can read a report or click through a dashboard without leaving the
-session. Where the artifact renders as a page, **Open fullscreen** in that panel gives it the whole
-window for a dashboard too dense to read in a column; the panel says it's *Opened in fullscreen*
-until you come back. **Source** switches to the underlying text instead.
+session. The panel's top bar keeps the main actions: the version switcher, **Share**, **Download** and
+**Open in new tab**, which opens the artifact on a page of its own in the app, private ones included.
+The rest are under **⋮**, including **Rename**, **Move**, **Edit source**, **Start a new session**,
+**View source**, **Set expiration** and **Delete artifact**.
 
 You can also upload a file yourself with **Upload artifact**, or publish a file straight out of an agent's
 workspace — see [the File Manager](file-manager.md#publishing-a-file-as-an-artifact).
@@ -64,13 +65,38 @@ agent also shows the artifacts it produced.
 
 An agent can only publish into its own owner's library, and attribution can't be spoofed.
 
+## Interactive pages
+
+An HTML artifact can be **interactive**: its buttons talk to the agent that published it. Ask the
+agent for one — "a dashboard of my open issues with a button to triage each one" — and it builds the
+page and marks it interactive. It shows an **Interactive** badge in the library.
+
+An interactive page can do two things:
+
+- **Send the agent a prompt.** A button types a request into the chat for you. This works in the
+  docked panel inside that agent's chat, where the open conversation gets the prompt and the reply
+  shows up there as usual. Opened anywhere else, a plain button tells you to *open this artifact in
+  its agent's chat to use this button*. A page can also be built to send each prompt to a session of
+  its own; that session runs unattended, so nobody answers its permission prompts.
+- **Read and change the agent's data.** The page can ask a small server the agent runs in its own
+  sandbox, so the page and the agent work from the same state — a to-do list you tick off in the
+  page and the agent reads back, for example. The agent starts that server itself. After the agent
+  has been idle and asleep, the page gets no answer until the agent starts it again — ask the agent
+  in chat.
+
+**Set model** in the page's **⋯** menu picks the model the sessions its prompts open run on.
+**Use agent default** clears the pick, and the page follows the agent's model for channels again.
+
+Only the latest version of a page can send prompts or requests; older versions can't. To share an
+interactive page, see [Sharing](#sharing): it can never be public.
+
 ## Editing one yourself
 
-You don't have to ask the agent to fix a typo. **Edit** — in an artifact's **⋯** menu, and in the
+You don't have to ask the agent to fix a typo. **Edit source** — in an artifact's **⋯** menu, and in the
 artifact once it's open — edits the text in place and saves it as a **new version**, exactly as an agent's
 own update would: same share link, same version history.
 
-Three things make an artifact editable, and the menu simply leaves **Edit** out otherwise:
+Three things make an artifact editable, and the menu simply leaves **Edit source** out otherwise:
 
 - It's **text** — anything but a binary file.
 - It's the **current** version. Pin an older one to read it and editing is off; come back to the latest
@@ -79,8 +105,7 @@ Three things make an artifact editable, and the menu simply leaves **Edit** out 
   to edit here.
 
 If someone else — or the agent — published a new version while you were typing, your save **stops and
-tells you** rather than quietly burying theirs: *this artifact has a newer version — overwrite it with
-your changes?* Say yes and yours becomes the latest; say no and nothing is saved, so you can reopen the
+tells you** rather than quietly burying theirs: *Overwrite the newer version?* Say yes and yours becomes the latest; say no and nothing is saved, so you can reopen the
 newer one and redo your edit on top. An unsaved edit is guarded too: navigating away asks before
 discarding it.
 
@@ -100,11 +125,11 @@ content is a different kind of file.
 
 ## Folders
 
-Group artifacts into folders to keep a library browsable. Create one with **New folder** in the
-Artifacts page header, beside **Upload artifact**. Folders are a **single flat level** — no nesting.
+Group artifacts into folders to keep a library browsable. Create one with **New folder** at the top of the
+Artifacts list, beside **Upload artifact**. Folders are a **single flat level** — no nesting.
 Deleting a folder does **not** delete the artifacts inside it; they become ungrouped.
 
-File something into one with **Move to folder…** in its **⋯** menu, or drag the row onto the folder.
+File something into one with **Move** in its **⋯** menu, or drag the row onto the folder.
 **Rename** in the same menu changes the title.
 
 Your folders show up wherever an agent's artifacts are listed, not just on the library page: the
@@ -115,29 +140,28 @@ because they're what makes a folder look wrong when it isn't:
 - The count is **that agent's** artifacts, not the folder's whole contents — the same folder shows
   different numbers beside two different agents, and anything you filed there from elsewhere isn't
   counted.
-- **Every folder you've made is listed even when that agent has put nothing in it**, so there's always
-  somewhere to drop a row — an empty one just starts collapsed. You can drag an artifact into a folder
-  straight from the chat panel without opening the library.
+- Beside a chat the panel has two tabs, **This agent** and **All**. **This agent** lists only the
+  folders holding that agent's artifacts, and every folder appears while you drag a row, so there's
+  always somewhere to drop it. **All** lists every folder you've made. You can drag an artifact into a
+  folder straight from the chat panel without opening the library.
 
-The three sections beside a chat — **Sessions**, **Files** and **Artifacts** — all start **open**, and
-each remembers whether you collapsed it, so the sidebar comes back the way you had it. Where two of them
+The sections beside a chat — **Files** and **Artifacts** — each remember whether you collapsed them, so the sidebar comes back the way you had it. Where two of them
 are open, the divider between them can be dragged to change how they share the height, and that's
 remembered too. A panel won't shrink past a readable minimum, and a collapsed panel has no divider.
 
 ## Picking work back up from one
 
 An artifact is usually the end of a piece of work, but it's a reasonable place to start the next one.
-**Start a new session** — in the row's **⋯** menu, and in the preview dialog and docked panel while
-you're looking at the current version — opens a fresh chat **with the agent that published it**, with a
+**Start a new session** — in the row's **⋯** menu, and in the open artifact's **⋮** menu
+while you're on the current version — opens a fresh chat **with the agent that published it**, with a
 reference to the artifact already in the message box.
 
 Nothing runs until you send: you read the line, add what you want done, and send it yourself. An artifact
 you **uploaded** has no publishing agent, so it doesn't offer the action at all.
 
-!!! note "An empty library has no header buttons"
-    **New folder** and **Upload artifact** appear once there's something in the library. Until then the
-    page is an empty state pointing you at your agents — so the first artifact comes from an agent
-    publishing one.
+!!! note "An empty library"
+    Until you have an artifact, the Artifacts page shows what one looks like, with **Ask an agent for
+    one** and **Upload artifact**.
 
 ## Sharing
 
@@ -147,11 +171,11 @@ you **uploaded** has no publishing agent, so it doesn't offer the action at all.
 </figure>
 
 
-Artifacts start **private**. Every row wears a badge saying which it is — **Private**, **Restricted** or
-**Public** — and **the badge is the control**: click it to open the sharing dialog. **Share** in the
+Artifacts start **private**. Every row starts with an icon for who can open it (hover for **Private**,
+**Restricted** or **Public**), and **the icon is the control**: click it to open the sharing dialog. **Share** in the
 artifact's **⋯** menu and a **Share** button in the opened artifact get you to the same place. The link is
-served from a separate share domain, so a shared artifact can never reach your DAM session. Once an
-artifact is public, a copy-link control sits beside the badge.
+served from a separate share domain, so a shared artifact can never reach your DAM session. The dialog's
+**Share link** field copies the link.
 
 The dialog offers three choices for who can open it:
 
@@ -168,9 +192,16 @@ addresses rather than DAM accounts, so you can invite someone who has never sign
 need an account your organization's identity provider admits, since an email on the list doesn't
 create one.
 
-Only *you* can make an artifact restricted, in this dialog. An agent's own sharing tools offer private
-and public, and refuse any sharing change to an artifact that's already restricted — so an agent can
-neither widen a restricted link nor edit who's on it.
+An agent can share an artifact with named people too, when you ask, and add or remove viewers — and so
+can `dam artifact share`. But a restricted artifact stays restricted there: only this dialog makes it
+private or public again.
+
+An **interactive** page — one whose buttons can ask its agent to do something — carries an
+**Interactive** badge and can **never be public**. Share it **Restricted**, and the people you name can
+use its buttons too, acting through your agent and your accounts. Only you can add people to an interactive page's list, in this dialog. A viewer's
+prompt starts a session of their own on your agent, named after them and the page, so you can see
+who asked for what; they see only the page, not the agent's reply. The dialog warns you that viewers
+can read and change the agent's data and that the agent sees their email.
 
 !!! warning "A public link is the access control"
     A **public** share URL contains an unguessable random token, and **that token is the only thing
@@ -206,7 +237,7 @@ An expiry is **retention, not link lifetime**. This is the one thing worth readi
     Once the expiry passes, the link reports itself as expired and you can still renew it. After a
     **7-day grace period** the content is permanently deleted, every version with it.
 
-Because it's retention rather than sharing, it lives apart from the share link: **Delete after…** in an
+Because it's retention rather than sharing, it lives apart from the share link: **Set expiration** in an
 artifact's **⋯** menu offers **Never delete**, *Delete in 1 hour*, *1 day*, *7 days*, or *30 days* —
 plus **Keep current date** once one is set. It applies to a private artifact just as much as a public
 one, so you can schedule a cleanup without ever sharing the thing.
