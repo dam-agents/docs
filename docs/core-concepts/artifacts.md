@@ -87,8 +87,24 @@ An interactive page can do two things:
 **Set model** in the page's **⋯** menu picks the model the sessions its prompts open run on.
 **Use agent default** clears the pick, and the page follows the agent's model for channels again.
 
-Only the latest version of a page can send prompts or requests; older versions can't. To share an
-interactive page, see [Sharing](#sharing): it can never be public.
+Only the latest version of a page can send prompts or requests; older versions can't.
+
+### Sharing an interactive page with your team
+
+Share an interactive page **Restricted** and name the people who may use it — it can never be public.
+They sign in to open the link, then use the page just as you do: its buttons send your agent prompts,
+and it reads and changes your agent's data. Anyone not on the list can't open it.
+
+**Your agent always knows who is using the page.** Every call the page makes tells the agent's server
+whether it's you or a viewer, with the person's identity and email. So one page can serve a whole
+team and keep each person's data apart — a sign-up sheet that records who signed up, or a tracker
+where each person sees their own items. A viewer's prompt arrives in a session of its own on your
+agent, named after them and the page, so you can see who asked for what. The viewer sees only the
+page, not the agent's reply, so the agent answers them through the page.
+
+Viewers act through **your** agent and **your** accounts, so only name people you'd trust with them.
+Only you can add viewers, in the Share dialog; the agent and the CLI can remove viewers but never
+add them. Remove someone, or make the page private, and their next click stops working.
 
 ## Editing one yourself
 
@@ -198,10 +214,9 @@ private or public again.
 
 An **interactive** page — one whose buttons can ask its agent to do something — carries an
 **Interactive** badge and can **never be public**. Share it **Restricted**, and the people you name can
-use its buttons too, acting through your agent and your accounts. Only you can add people to an interactive page's list, in this dialog. A viewer's
-prompt starts a session of their own on your agent, named after them and the page, so you can see
-who asked for what; they see only the page, not the agent's reply. The dialog warns you that viewers
-can read and change the agent's data and that the agent sees their email.
+use its buttons too, acting through your agent and your accounts; your agent knows which of them is
+calling. The dialog warns you that viewers can read and change the agent's data and that the agent
+sees their email. See [Sharing an interactive page with your team](#sharing-an-interactive-page-with-your-team).
 
 !!! warning "A public link is the access control"
     A **public** share URL contains an unguessable random token, and **that token is the only thing
