@@ -84,14 +84,14 @@ Deduplication is built in — the agent embeds a SHA marker in every review and 
 
 ### Network Access
 
-**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears in Activity for them.
+**Trusted defaults** (recommended) — covers GitHub and common package registries. Slack nudges need no egress rule: they leave through the platform itself, not the open internet, so no approval appears in **Approvals** for them.
 
 ## Setup
 
-1. **Create a Claude Code agent** — on **Home**, **Create agent** (on a brand-new account, choose **Start from scratch instead** in the starter kits it opens) and pick the **Claude** card in the Web UI, or `dam agent create <name> --provider <your-provider>` from the CLI
+1. **Create a Claude Code agent** — on **Home**, click **Create agent** (it's created at once and opens in its chat), then pick Claude in the harness-and-model picker under the message box. Or from the CLI: `dam agent create <name> --provider <your-provider> --harness claude-code`
 2. **Add your provider** — configure the IBM ETE LiteLLM Proxy (or, self-hosting, a provider such as Anthropic) with your API key
 3. **Add the GitHub connection** — connect the **dedicated bot account** described under [Connections](#connections) above, with review access to the target repo
-4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Environment** in the agent's **Agent Setup** section or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
+4. **Set the target repo** — set the `GITHUB_REPO` environment variable to the repo you want reviewed (e.g., `my-org/my-project`), under **Configure agent → Environment vars** or with `--env GITHUB_REPO=my-org/my-project` at create time; if you skip it, the agent asks for the slug at the start of onboarding and stores it in its config. Optionally set `GITHUB_REPO_WORK` to a separate repo that backs the agent's persistent `work/` state.
 5. **Onboard the agent** — send it the onboarding runbook as your **first message** and let it set itself up (see below)
 6. **Connect Slack** (optional) — only needed if you want the PR Shepherd nudging; you opt in during onboarding
 

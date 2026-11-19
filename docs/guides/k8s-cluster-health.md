@@ -133,29 +133,23 @@ kubectl get secret dam-agent-token -n health-agent \
 
 ## Setup
 
-1. **Create an agent from scratch** — on **Home**, click **Create agent** (no need to pick any of the starter kits), and name it (e.g. `Cluster Health Monitor`).
+1. **Create an agent** — on **Home**, click **Create agent**. It's created at once and opens in its chat. To rename it (e.g. `Cluster Health Monitor`), open **Configure agent** and use the **Rename** icon next to its name.
 
-2. **Configure image and provider** — select the image that matches your configured provider.
-
-3. **Add and grant the Kubernetes connection** — in the **Connections** section on the create page, click **Add connection** (or select **New connection** from the catalogue), open the **Apps** tab, and select **Kubernetes / OpenShift**. Fill in:
+2. **Add and grant the Kubernetes connection** — under **Configure agent → Connections**, click **Add connection**, open the **Apps** tab of the **Connection catalog**, and click **New** on **Kubernetes / OpenShift**. Fill in:
    - **Name** — a name to identify the connection
    - **API server URL** — the output from `kubectl cluster-info` above (must be a DNS hostname)
    - **Secret value** — the base64-decoded token from above
    - **Cluster CA certificate** — optional; only needed if your API server uses a private CA (prompted automatically at save time if required)
 
-   Click **Save** and select the connection so it is granted at agent creation.
+   Click **Create**, and make sure the connection is added to this agent.
 
-4. **Configure lifecycle** — select **Hibernate when idle** and set a short idle timeout (e.g. 5 minutes) so the agent frees compute between runs.
-
-5. Click **Create agent** and wait for the creation to complete.
-
-6. **Create the schedule** — click **⋮ → Configure agent**, open the **Schedules** panel, and click **Create Schedule**.
+3. **Create the schedule** — in **Configure agent**, open the **Schedules** panel, and click **Create schedule**.
    Set:
    - **Name**: `cluster-health`
    - **Repeat**: **Every N minutes**, with **Every** = `15` (or `5` for a faster demo cadence)
    - **Prompt**: paste the task prompt from [The Artifact](#the-artifact) section below
 
-7. **Fire the first run immediately** — click **⋮ → Run now** on the schedule card. You do not need to wait for the next scheduled occurrence.
+4. **Fire the first run immediately** — open the schedule card's **⋮** menu and choose **Run now**. You do not need to wait for the next scheduled occurrence.
 
 ## The Artifact
 
@@ -290,7 +284,7 @@ Click it to preview the HTML page inline.
 
 !!! tip "Making the report shareable"
     The artifact is private by default — only you can see it in the app.
-    To share it, click the **Private** badge on the artifact row and choose **Public**.
+    To share it, click the lock icon on the artifact row to open the sharing dialog and make it **Public**.
     A link appears that anyone can open in a browser, no sign-in required.
     Treat a public link as public: anyone with it can view the report.
 
@@ -304,19 +298,17 @@ Because the agent updates the same artifact on every run, the share link stays s
 | Active cluster monitoring | Every N minutes | Every = 15 |
 | Low-traffic or dev cluster | Daily | Chosen Time + Timezone (e.g. 08:00 UTC) |
 
-Set the cadence in the schedule's **Edit schedule** form (options include **Daily**, **Hourly**, **Every N minutes**, and **Custom (RRULE)**).
+Set the cadence in the schedule's **Edit schedule** form (options include **Daily**, **Hourly**, **Every N minutes**, and **Custom rule**).
 
-!!! tip "Set a short hibernate timeout to save cost"
-    The default **Hibernate when idle** timeout is 60 minutes, so on a 15-minute cadence the agent never stays idle long enough to hibernate and holds compute continuously.
-    Under **Configure agent → Lifecycle**, set a short **Hibernate when idle** timeout (e.g. 5 minutes) so the agent hibernates shortly after each run finishes.
-    You can also stop the agent manually; a scheduled run will still start the agent, and it will hibernate after the idle timeout once the run completes.
+!!! tip "Idle agents sleep on their own"
+    Between runs the agent sleeps to save resources, and each scheduled run wakes it again. There is nothing to set.
 
 ## Viewing Past Reports
 
 Each schedule run produces a new **version** of the artifact, not a new artifact.
 To see the history, open the artifact and click the version list in the top bar — each entry shows when it was published and how large it was.
 
-The sessions that produced each version can be accessed via the **View results** button on the schedule card (the **⋮** menu holds **Run now**, **Edit schedule**, **Reset session**, and **Delete schedule**).
+The sessions that produced each version can be accessed via the **View results** button on the schedule card (the **⋮** menu holds **Run now**, **Edit schedule** and **Delete schedule**, plus **Reset session** on a Continuous schedule).
 Open any session to see the raw output from that run.
 
 ## Security

@@ -17,7 +17,7 @@ Each agent has an allowlist of external services it can reach.
     A rule with a port covers only that port. A rule without one covers only the standard port — 443
     for HTTPS, 80 for plain HTTP — so allowing a host never opens its other services: to reach
     `api.prod.example:6443`, the rule has to name `:6443`. An approval for a request on another port
-    writes a rule carrying that port. A port also makes the rule a narrowed one, which is what
+    writes a rule carrying that port. A port other than 443 also makes the rule a narrowed one, which is what
     triggers the gateway restart described below.
 
 !!! info "A wildcard stands for exactly one label"
@@ -31,7 +31,7 @@ wins. So an allow on `(host, GET, *)` beats a deny on `(host, *, /v1/admin)` —
 rely on a deny rule to carve out a path.
 
 !!! note "Narrowing a rule usually restarts the gateway"
-    A host-only rule is cheap. Adding a method, path, or port means the agent's network gateway has
+    A host-only rule is cheap. Adding a method, a path, or a port other than 443 means the agent's network gateway has
     to inspect that host's traffic more closely, which restarts the gateway (**~5–15 seconds**) for
     that **agent only**. The agent keeps running throughout — its outbound requests are briefly
     interrupted. DAM asks you to confirm before saving such a rule, and tells you when no restart is
@@ -44,8 +44,8 @@ rely on a deny rule to carve out a path.
 ### How Rules Are Created
 
 1. **From connections** — granting GitHub to an agent allows `api.github.com`, `github.com`, and `raw.githubusercontent.com` there. Granting GitHub Enterprise allows the host you specify plus its `api.<host>`. Creating the connection under Settings writes no rules on its own; they arrive with the grant, and are withdrawn when you remove it.
-2. **From approvals** — choosing **Allow permanently** on an approval creates a rule
-3. **Manually** — add rules directly under **Network access** in the agent's **Agent Setup** section
+2. **From approvals** — choosing **Always allow…** on an approval creates a rule
+3. **Manually** — add rules directly under **Network access** in **Configure agent**
 4. **From a starter kit** — a [starter kit](agents.md#starter-kits) can pick the agent's preset,
    including one that allows everything, and add rules of its own. Creating from the kit shows both in
    a read-only **Network access** section before you create the agent, so check it there. Afterwards
@@ -70,21 +70,21 @@ from a connection or a starter kit, are left alone.
 When an agent tries to reach a service not in its allowlist:
 
 1. The request is **held** (paused, not rejected)
-2. The approval appears in **Activity** — see [Where approvals appear](#where-approvals-appear)
+2. The approval appears in **Approvals** — see [Where approvals appear](#where-approvals-appear)
 3. You choose a verdict:
 
 | Verdict | Effect |
 |---------|--------|
 | **Allow once** | This request proceeds; future requests prompt again |
-| **Allow permanently** | Creates a lasting egress rule for that host/method/path |
+| **Always allow…** | Creates a lasting egress rule for that host/method/path |
 | **Allow all of &lt;host&gt;** | Creates a host-level rule (all methods/paths on that host). Offered on network prompts only — tool-call prompts have no host |
-| **Deny this request** | Blocks just this request; future requests prompt again |
-| **Deny permanently** | Creates a lasting deny rule; this and every future matching request fail |
+| **Deny** | Blocks just this request; future requests prompt again |
+| **Always deny…** | Creates a lasting deny rule; this and every future matching request fail |
 
-Allow-once is the card's own button, labelled just **Allow**; the other four are under the **⋮** beside
+**Allow once** is the card's own button; the other four are under the **⋮** beside
 it, along with **Network settings** to go and edit the agent's rules directly instead.
 
-Where a verdict would change what the gateway inspects, a **Restart network gateway?** confirmation
+Where a verdict would change what the gateway inspects, a **Restart network access?** confirmation
 appears first, naming the hosts affected and confirming with **Allow & restart** or
 **Deny & restart**. If nothing would restart, no confirmation appears — see
 [Egress Rules](#egress-rules). *Allow all of &lt;host&gt;* writes a host-wide rule, so it never
@@ -94,11 +94,10 @@ If an equivalent rule already exists with the opposite verdict, the verdict is r
 resolved, and you're pointed at the agent's network rules to change it there.
 
 !!! warning "From the CLI, the bare verb is durable"
-    `dam approval approve <id>` **writes a permanent allow rule** for a network request — the
-    equivalent of *Allow permanently*. Pass `--once` for *Allow once*, or `--entire-host` for
+    `dam approval approve <id>` **writes a permanent allow rule** for a network request — the equivalent of *Always allow…*. Pass `--once` for *Allow once*, or `--entire-host` for
     *Allow all of &lt;host&gt;* (network requests only, and not combinable with `--once`).
-    `dam approval deny <id>` is durable the same way — *Deny permanently* — with `--once` for
-    *Deny this request*. Tool-call approvals never write an egress rule. See the
+    `dam approval deny <id>` is durable the same way — *Always deny…* — with `--once` for
+    *Deny*. Tool-call approvals never write an egress rule. See the
     [CLI reference](../reference/cli.md#approvals).
 
 ### Timeout
@@ -111,13 +110,13 @@ If no one responds within **30 minutes** (your operator can change this), the re
     terminal, or SSH session is attached, it's refused straight away instead of waiting out the
     window. The agent is told to name the host and point at you rather than retry into the same wall.
 
-    The request is still recorded, so it appears in Activity as usual and allowing it there
+    The request is still recorded, so it appears in Approvals as usual and allowing it there
     permanently writes the rule the agent picks up on its next attempt. If you *do* have a session
     open on that agent, a channel turn holds and resolves normally.
 
 !!! tip "If a prompt timed out"
-    A prompt that timed out leaves Activity, because the request has already failed. To let the
-    agent through next time, **Add rule** under the agent's **Network access**, or find the prompt
+    A prompt that timed out leaves Approvals, because the request has already failed. To let the
+    agent through next time, **Create rule** under the agent's **Network access**, or find the prompt
     with `dam approval list --status expired` and run a bare `dam approval approve <id>`. That still
     writes the rule, and the agent succeeds on its next attempt.
 
@@ -134,7 +133,7 @@ The default is always deny:
 !!! info "Some hosts never prompt"
     A small set of platform-provided upstreams — the object store behind the artifact library, for
     instance — is allowed ahead of your rules, so those requests never raise an approval and never
-    appear in Activity. You don't need a rule for them, and you can't deny them with one. The same goes for the
+    appear in Approvals. You don't need a rule for them, and you can't deny them with one. The same goes for the
     hosts your agent's model-provider connection needs: they're let through even over a deny rule,
     so a rule can't cut an agent off from its own model. Everything else your agent reaches goes
     through the rules and approvals above.
@@ -142,34 +141,21 @@ The default is always deny:
 ## Where approvals appear
 
 <figure class="tour-shot" markdown>
-![The Activity panel showing an agent asking to reach a new host, with an Allow button](../assets/network-approval.png)
-<figcaption>A waiting approval in Activity. Allow, or open the ⋮ menu for the other choices.</figcaption>
+![An agent asking to reach a new host, with an Allow once button](../assets/network-approval.png)
+<figcaption>A waiting approval. Allow once, or open the ⋮ menu for the other choices.</figcaption>
 </figure>
 
 
-Approvals live in **Activity**, the panel the **Activity** button at the top right of every page
-opens. The button shows a count while approvals are waiting, so check it when an agent seems stuck —
-it may be waiting for you. You're pointed there two other ways too. A new approval pops up briefly
-naming the agent, and clicking it opens Activity straight on the approvals. And while any are waiting,
-**Home** shows a banner counting them, which opens Activity.
-
-- Approvals aren't mixed into Activity's list of session activity from chats, channels, and schedules.
-  An **approvals waiting** summary at the top of that list opens them, as does the **Needs attention**
-  filter; the view's back arrow returns you to the full list.
-- Two filters narrow the list: one by status — **All**, **Needs attention**, **In progress**,
-  **Unread** — and one by where the activity came from — **Chat**, **Slack**, **Telegram**,
-  **Schedule**, **Terminal**.
+Approvals wait in **Approvals**, the bell icon. It shows a count while
+something needs you, so check it when an agent seems stuck — it may be waiting for you. A new approval
+pops up briefly naming the agent, and clicking it opens Approvals, as does the banner on **Home** while
+any are waiting. Identical requests share one card, and **Deny all** denies every one shown.
 
 !!! note
     An approval you've just answered stays on screen showing what you chose, rather than vanishing as
     you click.
 
-Session cards stay until you **dismiss** them, rather than disappearing the moment you've looked at
-the session — so Activity is a list you clear, not one that clears itself behind you. Cards for
-finished work age out after a week either way. Where a session
-produced [artifacts](artifacts.md), the card carries them as chips that open the preview directly, up to
-three with **+N more** for the rest.
-
-Activity is remembered **for you, not for the browser you cleared it in**: dismiss a card on your laptop
-and it stays dismissed on your phone. It also answers for an agent that's **hibernated** — an agent
-doesn't have to be up for its activity to be listed.
+**Activity**, in the left sidebar, lists your sessions from chats, channels and schedules. Two filters
+narrow it: one by status — **All**, **Needs attention**, **In progress**, **Unread** — and one by where
+the session came from — **Chat**, **Slack**, **Telegram**, **Artifact page**, **Schedule**,
+**Terminal**.

@@ -9,7 +9,7 @@ network, that offers tools to your agents. It connects out to DAM over HTTPS, so
 no open port and no inbound firewall rule. A satellite is yours alone, and only the agents you add it to
 can call its tools.
 
-## Two kinds of satellite
+## Three kinds of satellite
 
 You start a satellite on the machine itself, with the `dam` CLI:
 
@@ -20,6 +20,11 @@ You start a satellite on the machine itself, with the `dam` CLI:
   offers them to agents as a single tool. The machine checks every call against those lines and refuses
   anything that matches none of them. The first word of each line has to be a fixed program, so an agent
   can never choose what runs, and the command is run directly rather than through a shell.
+- **One directory.** `dam satellite files --root <dir>` lets an agent list and inspect what's in that
+  directory and copy files, or slices of large ones, into its own workspace; `--upload` lets it write
+  back too. A folder comes down as one tar file. The file contents never enter the agent's context.
+  Paths stay inside `--root`, links are never followed, and `/` and your home directory are refused.
+  One transfer carries up to 5 GiB.
 
 ```bash
 dam satellite shell --name gpu-box --cwd /srv --timeout 6h <<'EOF'
@@ -28,7 +33,7 @@ dam satellite shell --name gpu-box --cwd /srv --timeout 6h <<'EOF'
 EOF
 ```
 
-Either way the command stays in the foreground and serves until you stop it. Whatever it runs inherits
+Each command stays in the foreground and serves until you stop it. Whatever it runs inherits
 the environment of the shell you started it from, so start it from one that holds only what you're
 happy for the agent to use. The usage-line syntax and every flag are in the
 [CLI reference](../reference/cli.md#satellites).
@@ -42,7 +47,7 @@ operate your agents. See [the CLI reference](../reference/cli.md#authentication)
 Once a satellite has connected, and not before, it shows up in a **Satellites** card under
 **Settings → Connections** and on the **MCP servers** tab of the connection catalogue.
 
-To give an agent its tools, open the agent's **Connections** panel, click **New**, go to the
+To give an agent its tools, open the agent's **Connections** panel, click **Add connection**, go to the
 **MCP servers** tab, and click **Add to agent** on the satellite. The same catalogue is offered while
 you create an agent. From the command line, `dam satellite grant <satellite> <agent>` does the same. The
 agent picks up the tools the next time its harness starts.

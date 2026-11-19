@@ -12,9 +12,9 @@ and no harness involvement — just a login shell. See the
 
 Open your agent in the DAM UI and type a message. A new session is created automatically.
 
-- **Resume** — click any previous session in the sidebar to continue
-- **New chat session** — **New** in the sidebar; starts fresh conversation context (workspace files
-  are unchanged)
+- **Resume** — each agent's sessions are listed under it in the left sidebar; click one to continue
+- **New chat session** — the **New session** icon on the agent's row in the sidebar; starts fresh
+  conversation context (workspace files are unchanged)
 - **History** — scroll up to see the conversation including tool calls and file changes. A session
   opens on its most recent stretch and loads older parts as you scroll back. A very long session's
   history is eventually trimmed from the front; where that's happened, the top of the conversation
@@ -51,11 +51,11 @@ working on their own:
 | Animated dots | Busy. On a chat session, the agent is working the turn; on a terminal session, the program in it produced output in the last second or so. |
 | Slower green dots | The agent has **background work** running in that session — something it kicked off and left going between turns. Hover for what's running. |
 | Solid dot ("Needs your approval") | Blocked waiting for you to approve an action. Takes priority over working. |
-| Bold title | Unread — activity since you last opened it (chat sessions only). |
+| Dot and bold title | Unread — activity since you last opened it (chat sessions only). |
 | Pencil icon | You have an unsent **draft** in that session. |
 | Terminal icon | A terminal (PTY) session, which has no agent turn of its own. |
 | Clock icon | A session created by a schedule. |
-| `#` icon | A channel (Slack/Telegram) session; a superscript **A** marks a channel's ambient reader — Slack only. |
+| Slack or Telegram icon | A channel session. |
 
 A session with no title yet shows `(no title · <id>)` in muted italics, and stays that way however
 much unread activity it has — the bold-for-unread styling needs a title.
@@ -66,13 +66,14 @@ That's separate from the longer window on
 [network approvals](network-access.md#approvals), which wait for you in Activity until that window
 runs out and are then denied.
 
-An idle chat session waiting on you shows no marker at all. The sidebar also has a filter over
-**Chats**, **Scheduled**, **Channels**, **Runs**, and **Terminal** (all on by default),
-and **New**, which opens a chat session straight away — a terminal starts from the launch options
-beside the message box (see [Terminal Sessions](#terminal-sessions)). **Delete session** is in a
-session's row menu, behind a confirm — right-clicking or long-pressing the row offers the same item.
-The list starts with your most recent sessions; where there are more, **Show older sessions** at the
-bottom loads the next batch.
+An idle chat session waiting on you shows no marker at all. Each agent's row in the sidebar has a
+**Filter sessions** menu, by status (**All**, **Needs attention**, **In progress**, **Unread**) and by
+type (**Chat**, **Slack**, **Telegram**, **Artifact page**, **Schedule**, **Terminal**), and the
+**New session** icon, which opens a chat session straight away — a terminal starts from the launch
+options under the message box (see [Terminal Sessions](#terminal-sessions)). **Delete session** is in
+a session's row menu, behind a confirm — right-clicking or long-pressing the row offers the same item.
+The list starts with an agent's most recent sessions; where there are more, **View more** loads the
+next batch.
 
 !!! note "Sending while the agent isn't ready"
     A message you send before the agent can take it is queued and delivered once it can — most often
@@ -87,17 +88,17 @@ bottom loads the next batch.
 
 !!! note "An older agent shows polled data"
     Sessions and files normally update live. An agent still running an image from before that shipped
-    can't push updates, so DAM falls back to polling and says so at the top of the chat page's sidebar,
-    above the session list: *Live updates need a newer agent runtime — showing polled data.* Everything
-    still works, just less promptly. Where an update for the agent's image is available the notice offers
-    it right there; where none is yet, it tells you that too, so a stale notice isn't something you can
-    act on and fail.
+    can't push updates, so DAM falls back to polling. Where an update for the agent's image is
+    available, a notice above the conversation says so — *This agent's version is too old for live
+    updates, so the session list and files can take a few seconds to update.* — and offers **Update**.
+    Everything still works, just less promptly.
 
 !!! note "An older agent may also be missing configuration"
     Where an agent's runtime is too old to accept something you granted it — network access, credentials,
-    files, MCP servers, skills — a notice in the same place says which kinds it's **running without**,
-    and its row and chat header carry a **Missing config** badge. As above, the notice offers **Update**
-    where an image update exists and says so plainly where none does.
+    files, MCP servers, skills — a notice above the conversation says which kinds it's **running
+    without**, and its row and chat header carry a **Missing config** badge. The notice offers
+    **Update** where an image update exists, and says *No runtime update is available yet.* where none
+    does.
 
 !!! tip "How much of the message you can see"
     Message times can be absent rather than wrong. Where the harness keeps its own history, reopening an
@@ -137,31 +138,27 @@ Whether a turn already in flight is disturbed depends on what you changed. **Add
 
 ### Model settings
 
-The **Model** settings panel sets per-agent harness defaults. They apply to **new sessions only**; sessions already underway keep the settings they started with, unless you switch a session's model from chat (below).
+A new chat picks its harness and model in the picker under the message box. It starts on the agent's
+**Default model**, which you set under **Providers** on the agent's page, beside **Model for channels**
+and **Model for schedules**. A session already underway shows its model in the same place: click it to
+switch **this session** to another model, while the agent's default stays as it was. If a switch fails,
+a message says why. **Configure defaults** under a new chat goes straight to **Providers**. While the
+agent is waiting on a permission prompt, chat hides the model line until you've answered.
 
-The panel lives on the agent's home page, under **Agent Setup**. Chat names a model under the composer:
-the open session's own where the harness reports it, otherwise the agent's default. Click it for a
-**Current model** note. On some harnesses the note also lists the models this session can switch to:
-pick one and **this session** switches in place, while the panel's default for new sessions stays as it
-was. If a switch fails, a message says why. **Configure model** goes straight to the panel to change the
-default. While the agent is waiting on a permission prompt, chat hides the model line until you've
-answered.
-
-Which settings appear, and what they're called, depends on the harness — Claude Code offers a model, a permission mode, and a reasoning-effort level; others offer fewer, and some expose no model settings at all — and some choices are hidden for models that don't support them.
-
-Every setting also offers **Default** — *determined by harness settings* — which is what it reads when
-you haven't chosen anything, and what to pick to hand a choice back to the harness. Changing the model
-clears any companion setting the new model doesn't support, rather than leaving an invalid pair in
-place.
-
-While the agent is asleep the panel is read-only, with a **Start agent to edit** action. What it shows then depends on what's on record: normally the last-known values, but an agent that has **never run** has nothing to show at all and says so — settings are resolved when it starts, so the page fills in after the first start.
+Which other settings appear, and what they're called, depends on the harness. Where a harness offers
+more than one way to approve tool calls, a **Tool approval** picker beside the model sets it for that
+session: **Always ask**, **Auto mode**, or **Bypass**. Settings the harness keeps for the whole agent
+appear under **Model settings** on the agent's **General** page, and some choices are hidden for models
+that don't support them. Opening that panel starts the agent if it's asleep, since its settings are read
+from the running agent.
 
 ## Terminal Sessions
 
 Terminal sessions give you PTY-based shell access to the agent's environment — the same interactive TUI
-you'd get running the harness locally. Start one with **Terminal (browser)**, beside the message box on
-a session you haven't sent anything in yet — alongside **Terminal (local)** and
-**VS Code / Zed (local)**, which hand you a copyable command for your own machine instead.
+you'd get running the harness locally. Start one with **Web terminal**, under the message box on a
+session you haven't sent anything in yet, and pick a harness, or **Shell** for a plain login shell.
+Alongside it, **CLI and SSH** and **VS Code and Zed** hand you a copyable command for your own machine
+instead.
 
 Use terminal for:
 

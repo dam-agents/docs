@@ -48,10 +48,10 @@ The login link expires after about 10 minutes — send `/bind` again if you miss
 
 Send `/unbind` in the chat to release the binding; the bot confirms in the chat.
 
-You can also disconnect from DAM: open the agent, go to **Channels**, and click **Disconnect** on
-the chat in the Telegram card. The bot posts a farewell note in the chat before the binding goes. The
-card lists the chats already connected and links the bot so you can add it somewhere new — but
-connecting itself always happens in the chat, with `/bind`.
+You can also disconnect from DAM: open the agent, go to **Channels**, and open the chat's **⋯** menu
+in the Telegram list and choose **Disconnect**. The bot posts a farewell note in the chat before the
+binding goes. The list shows the chats already connected, and **Add Telegram chat** shows the steps
+with a link to the bot — but connecting itself always happens in the chat, with `/bind`.
 
 !!! note "If Telegram isn't listed"
     Channels only shows what your operator has set up. Where Telegram isn't wired up, its card isn't

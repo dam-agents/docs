@@ -14,13 +14,13 @@ Three of the tabs in DAM **Settings** are easy to confuse. They do different thi
 
 | Tab | What it's for | Example |
 |-----|---------------|---------|
-| **Providers** | The **model** that powers an agent. Every agent needs one. | IBM ETE LiteLLM Proxy and CurveBender on the IBM hosted deployment; Anthropic, OpenAI, AWS Bedrock, Bob Shell |
+| **Providers** | The **model** that powers an agent. Every agent needs one. | IBM ETE LiteLLM Proxy and CurveBender on the IBM hosted deployment (CurveBender's models are currently only approved for [restricted use cases](https://cb-docs-curvebender.apps.fmaas-backend.fmaas.res.ibm.com/ai-platform-incubation/cb_docs/getting-started/model-usage-guidance/){:target="_blank"}, an IBM-internal page for IBMers); Anthropic, OpenAI, AWS Bedrock, Bob Shell |
 | **Connections** | Credentials and tools that let the agent **act on external services** on your behalf. | GitHub, a custom-header API, an MCP server |
 | **API keys** | Tokens that let **you or your automation** drive the DAM platform itself via the API/CLI. | A scoped key for a CI pipeline |
 
-(Settings also has **Account**, **Appearance**, and **Usage** tabs.)
+(Settings also has **Account**, **Appearance**, **Profiles**, **Usage** and **Schedules** tabs, plus **About DAM**.)
 
-The rest of this page covers **Connections**. Providers live on the **Providers** tab, where you can also update or remove a saved key; you pick one for an agent while creating it (see [Create your LiteLLM key](../reference/litellm-key.md)). **AWS Bedrock** is for Claude Code and Pi agents: it takes a Bedrock API key and the region its models are served from, and the model is optional. API keys are covered in [the CLI reference](../reference/cli.md).
+The rest of this page covers **Connections**. Providers live on the **Providers** tab, where you can also update or remove a saved key. At the top of that tab, **Default for new agents** sets what a new agent starts on, and each agent's own **Providers** page changes its default (see [Create your LiteLLM key](../reference/litellm-key.md)). **AWS Bedrock** is for Claude Code and Pi agents: it takes a Bedrock API key and the region its models are served from, and the model is optional. API keys are covered in [the CLI reference](../reference/cli.md).
 
 ## How It Works
 
@@ -43,19 +43,19 @@ client secret you supplied yourself is the one part that stays yours to replace 
 ### GitHub
 
 <figure class="tour-shot" markdown>
-![The Connection catalogue, with GitHub, GitHub Enterprise and other apps on the Apps tab](../assets/connections-catalogue.png)
-<figcaption>The Connection catalogue, opened from Settings → Connections.</figcaption>
+![The Connection catalog, with GitHub, GitHub Enterprise and other apps on the Apps tab](../assets/connections-catalogue.png)
+<figcaption>The Connection catalog, opened from Settings → Connections.</figcaption>
 </figure>
 
 
 DAM integrates with GitHub.com and with any GitHub Enterprise host you supply, and there are three ways
 to connect either one:
 
-1. Go to **Settings → Connections** and click **New** to open the **Connection catalogue**
+1. Go to **Settings → Connections** and click **Add connection** to open the **Connection catalog**
 2. On the **Apps** tab, click **New** on the **GitHub** card (or **GitHub Enterprise**). One pane —
    **Connect GitHub** — offers all three methods together; pick one and its fields appear below it
-3. Fill them in and submit: **Continue to GitHub** hands off to GitHub's own sign-in, while **Create
-   token** and **Connect app** save without leaving DAM
+3. Fill them in and submit: **Continue to GitHub** hands off to GitHub's own sign-in, while **Connect**
+   (for a token) and **Connect app** save without leaving DAM
 
 | Method | What you supply | Reach for it when |
 |--------|-----------------|-------------------|
@@ -68,19 +68,34 @@ A **GitHub Enterprise** connection asks for the hostname as well, whichever meth
 #### Authorizing is only half of the OAuth route
 
 Signing in confirms who you are — on its own it doesn't grant access to your repositories, which is why
-the form tells you **2 steps required for successful connection**. The second step is installing the DAM
-app on the organization that owns the repos you want, choosing which of its repositories DAM may read
-and write. An active connection that still needs it carries a button on its row to go and install (the
-label uses whatever name your operator has given the platform). That's done once per organization, and
-if you don't own the org an owner has to approve or complete it.
+the form tells you to sign in with GitHub, then install the DAM app on each account whose repositories
+agents need. Installing it is where you choose which of an organization's repositories DAM may read and
+write. Once you're signed in, the sign-in's card shows which accounts the app is installed on: **Install
+the app** while it's installed nowhere yet, and **Install on another account** at the end of the list of
+accounts. That's done once per organization, and if you don't own the org an owner has to approve or
+complete it.
 
 !!! note "No install button?"
-    It takes three things. The connection has to be **active** — one still waiting on authorization
-    offers **Authorize** in its **⋯** menu instead. Your operator has to have registered DAM as a GitHub
+    It takes three things. The sign-in has to be **active** — one still waiting on authorization
+    offers **Sign in** on its card instead. Your operator has to have registered DAM as a GitHub
     *App* rather than a plain OAuth app. And it has to be *that* app you authorized through: supply an
     OAuth client id of your own and there's nothing for DAM to offer, because it doesn't know your app.
     Where there's no install to do, use a **personal access token** or **your own GitHub App** for
     private repos instead.
+
+#### Choosing what a connection reaches
+
+A GitHub sign-in or app installation isn't itself something an agent holds. Right after you make one,
+DAM asks **What should this connection reach?**:
+
+- **Choose account, repositories and permissions** (for an app installation, **Choose repositories and
+  permissions**) narrows it. This is the default.
+- **Full access** reaches everything the sign-in or installation can.
+- **Don't make a connection yet** keeps the sign-in or installation on its own, so you make each
+  connection from it when an agent needs one.
+
+Then click **Create connection**. In **Settings → Connections**, each sign-in or installation is a card,
+and **New connection** on it makes another connection with its own reach, for a different agent.
 
 Once that's in place, your agent can clone private repos, push branches, create PRs, and use the `gh` CLI with no login of its own.
 
@@ -95,12 +110,11 @@ Then give DAM the app's **App ID**, **Installation ID**, and **Private key (PEM)
 including the BEGIN/END lines, or its base64 encoding. The key is verified by minting an installation
 token before anything is stored, so a wrong one is refused rather than saved.
 
-By default the connection can do everything that installation can. To narrow it, **Read installation**
-lists what the installation actually holds: tick the repositories this connection should reach (tick
-nothing and it reaches all of them), and set a level per permission (leave them all off and it keeps
-every permission the app was granted). A permission can't be set higher than the installation holds it,
-so this only ever narrows. Where the installation has more repositories than can be listed, you name
-them instead.
+Narrowing is the default: **Read installation** lists what the installation actually holds, and you
+choose the repositories and permissions this connection should have from it. A permission can't be set
+higher than the installation holds it, so this only ever narrows. Where the installation has more
+repositories than can be listed, you name them instead. Reaching everything is a separate **Full
+access** choice, never what you get by ticking nothing.
 
 Afterwards, **Edit repositories & permissions** in the connection's **⋯** menu revisits that scope, and
 **Update private key** rotates the key.
@@ -126,7 +140,7 @@ commits are attributed to whichever one the agent acts as by default.
 
 For services that use a static API key rather than OAuth, connect a prebuilt template:
 
-1. Go to **Settings → Connections** → **New** to open the **Connection catalogue**, then on the **Apps** tab pick the service (e.g. **Modal**)
+1. Go to **Settings → Connections** → **Add connection** to open the **Connection catalog**, then on the **Apps** tab pick the service (e.g. **Modal**)
 2. Fill in the fields the service asks for — the key, plus anything else on the form (Modal also wants its **Token ID**) — and click **Create**
 
 Model providers aren't here — they live on the **Providers** tab (see above).
@@ -186,7 +200,7 @@ Object Storage connections, the agent's **Connections** panel shows which one it
     The agent can do anything the keys allow. To keep an agent to reading, give it keys that can only
     read.
 
-For a service without a prebuilt template, use the **Custom Headers** tab → **New** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
+For a service without a prebuilt template, use the **Custom headers** tab → **New** to inject any header (e.g. `Authorization: Bearer …`) on requests to a host you specify. See [Calling an External Service](../guides/external.md).
 
 ## MCP Servers
 
@@ -196,6 +210,9 @@ Under **Connections → MCP servers**, click **New**, then give the server a nam
 `https://mcp.acme.internal/sse`). DAM checks the URL and works out whether it needs OAuth — if it
 does, the button becomes **Create + Authorize** and walks you through the server's sign-in. An
 **Advanced configuration** section lets you pin your own OAuth client or a header credential instead.
+
+The same tab has a built-in **Figma** card: give the connection a name and click **Continue to Figma** to
+sign in. There's no URL to enter. Agents then read designs through Figma's own MCP server.
 
 For an MCP server that runs on your own machine rather than at a public URL, run it as a
 [satellite](satellites.md) instead: it connects out to DAM and then appears on this same tab.
@@ -208,7 +225,8 @@ For an MCP server that runs on your own machine rather than at a public URL, run
 - **View** — **Settings → Connections** lists everything you've connected, grouped by service. Each
   agent has its own **Connections** panel listing just what's been granted to it. Slack and GitHub.com
   connections also say whose account they act as — **Acts as** the person and workspace for Slack, the
-  login for GitHub — once DAM has looked that up.
+  login for GitHub — once DAM has looked that up. On Settings → Connections, each row also says **Used by
+  N agents** (click it to see their names) or **Not used by any agent**.
 - **Remove from one agent** — in the **agent's own** Connections panel, a connection's **⋯** menu →
   **Remove from this agent** revokes it there and leaves it available elsewhere. That item is about the
   grant, so it only appears where there is one — you won't find it under Settings.
@@ -232,6 +250,10 @@ For an MCP server that runs on your own machine rather than at a public URL, run
   tokens: the connection keeps its name and every agent grant. `dam connection reauth` does the same from
   the CLI. A connection still waiting on its first authorization reads **Authorizing…** instead of
   **Expired**, and offers **Authorize** in its **⋯** menu rather than a button on the row.
+- **GitHub cards** — a GitHub sign-in shows its state on its card: **Expired** with **Sign in again**,
+  or **Not finished** with **Sign in**. An app installation whose key no longer works offers **Add a new
+  key**. When GitHub refuses one connection but its sign-in still works, that row reads **GitHub refused
+  this access** and offers **Choose access again**.
 - **Which repair you get** — **Re-authenticate** is the OAuth repair; there is no login to re-run for a
   key, so an API-key or custom-header connection offers **Update credential** instead. In practice a
   plain API-key connection doesn't go stale on its own: DAM has no expiry to read for one, so it stays

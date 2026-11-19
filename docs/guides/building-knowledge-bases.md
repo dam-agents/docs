@@ -70,8 +70,8 @@ are attributed to you rather than to an anonymous default identity. See
 Two separate controls decide what a knowledge base can reach, and both are yours from the start:
 
 - **Network access** — the hosts it may reach. A knowledge base starts on **Trusted defaults**
-  (GitHub, npm, PyPI, Anthropic and other common hosts) unless its kit sets otherwise; the create page
-  shows which, read-only, under **Network access**. Afterwards, under **Agent Setup** →
+  (GitHub, npm, PyPI, Anthropic and other common hosts) unless its kit sets otherwise; the kit's window
+  shows which, read-only, under **Network access**. Afterwards, under **Configure agent** →
   **Network access**, you can switch it to **Strict default-deny**, where every new host needs your
   approval before a request goes through — so you review each one as it comes up — or allow just the
   specific hosts you want and nothing else.
@@ -89,7 +89,7 @@ nothing else. See [network access](../core-concepts/network-access.md) for how r
 
 ## 1. Create the base
 
-Open **Starter Kits** and pick the **Knowledge** shelf. Two kits build a knowledge base — **LLM Wiki**
+Open **Starter kits** and pick the **Knowledge** tab. Two kits build a knowledge base — **LLM Wiki**
 and **Plain Wiki** — and which you choose is the one decision you can't undo later, so it's worth
 knowing what each actually installs.
 
@@ -273,7 +273,7 @@ first line.
 
 ### Have it read Slack itself
 
-The **Slack** card in the connection catalogue's **Apps** tab is a different thing from the binding
+The **Slack** card in the connection catalog's **Apps** tab is a different thing from the binding
 above: it connects *your* Slack account, so the base can search, read, post, and react as you. It's
 backed by Slack's own MCP server, so it arrives as a set of tools the agent calls.
 
@@ -362,15 +362,7 @@ of inactivity** and wakes on the next thing that needs it — a mention in Slack
 schedule firing. Nothing is lost when it sleeps; the workspace comes back untouched. But a wake takes a
 moment, so the first question after a quiet spell can be slow to answer.
 
-For a base a team leans on all day, that wait is worth removing. Under **Agent Setup** → **Lifecycle**,
-switch it from **Hibernate when idle** to **Always on** — it then never hibernates and answers
-immediately, every time.
-
-!!! warning "An always-on base holds its compute"
-    A never-hibernating agent reserves its share of your compute budget even while idle, and DAM won't
-    reclaim that room to start something else — it keeps it away from your other agents. Choose it for a
-    base your team genuinely queries all day; leave the default on a personal one, where a few seconds'
-    wake is no bother.
+There's no setting that keeps a base awake: every agent sleeps when it has been idle for a while.
 
 ## A personal base
 

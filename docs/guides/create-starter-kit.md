@@ -49,14 +49,14 @@ Answer the interview and approve the design. When it finishes, push the reposito
 
 There are two separate ways to use a kit you built:
 
-- **Import it in the UI, just for you.** Paste the kit's link into **Import from link** on **Starter Kits** and create an agent from it. Only you see it. Nothing is added to Starter Kits for anyone else, and no review or admin is involved.
-- **Contribute it for everyone, by pull request.** Add the kit to the [dam-agents/dam-starter-kits](https://github.com/dam-agents/dam-starter-kits) catalog, which our deployment reads. Once your pull request is merged, the kit is on everyone's **Starter Kits** page, marked **By &lt;your name&gt;** so users can tell it from the DAM team's kits, which read **By DAM**.
+- **Import it in the UI, just for you.** Paste the kit's link into **Import from link** on **Starter kits** and create an agent from it. Only you see it. Nothing is added to Starter kits for anyone else, and no review or admin is involved.
+- **Contribute it for everyone, by pull request.** Add the kit to the [dam-agents/dam-starter-kits](https://github.com/dam-agents/dam-starter-kits) catalog, which our deployment reads. Once your pull request is merged, the kit is on everyone's **Starter kits** page, marked **By &lt;your name&gt;** so users can tell it from the DAM team's kits, which read **By DAM**.
 
 Both need the kit's repository to be **public on github.com**, with `kit.yaml` at its root. If the kit seeds the agent from another repository, that one must be public on github.com too.
 
 | | Import from link | Contribute by pull request |
 |---|---|---|
-| Who sees it | Only the person who imports the link | Everyone on the deployment, on the **Starter Kits** page |
+| Who sees it | Only the person who imports the link | Everyone on the deployment, on the **Starter kits** page |
 | Review | None. The person importing it reviews it | The catalog's maintainers review your pull request |
 | Shown as | A kit that's not in a catalog, which nobody on the platform reviewed | A user-contributed kit, **By &lt;your name&gt;** |
 | Available | Right away | Once your pull request is merged |
@@ -66,15 +66,15 @@ Start by importing the kit yourself to try it. Contribute it when it's ready for
 ### Import from link (just for you)
 
 1. Push the kit to a public repository on github.com.
-2. Open **Starter Kits**, click **Import from link** beside the search, and paste the repository's link, for example `https://github.com/<you>/<repo>`. Link to the repository itself, not to a branch or a folder in it.
+2. Open **Starter kits**, click **Import from link** beside the search, paste the repository's link, for example `https://github.com/<you>/<repo>`, in the **Import a starter kit** dialog, and click **Open kit**. Link to the repository itself, not to a branch or a folder in it.
 
 The kit opens with everything it sets up, a notice that nobody on the platform reviewed it, the repository and commit it was read from, and its install command and environment. The agent is created from the exact commit you saw.
 
-An imported kit is not saved, and it never appears in the **Starter Kits** list, for you or anyone else. To use it again, import the link again. A teammate can do the same with your link, or with the address of the kit's page, which can itself be shared.
+An imported kit is not saved, and it never appears in the **Starter kits** list, for you or anyone else. To use it again, import the link again. A teammate can do the same with your link, or with the address of the kit's page, which can itself be shared.
 
-### Contribute it to Starter Kits (for everyone)
+### Contribute it to Starter kits (for everyone)
 
-Besides the DAM team's built-in kits, the **Starter Kits** page lists the kits in the [dam-agents/dam-starter-kits](https://github.com/dam-agents/dam-starter-kits) catalog. To add yours, open a pull request there that lists your repository and names you as its publisher.
+Besides the DAM team's built-in kits, the **Starter kits** page lists the kits in the [dam-agents/dam-starter-kits](https://github.com/dam-agents/dam-starter-kits) catalog. To add yours, open a pull request there that lists your repository and names you as its publisher.
 
 1. Push the kit to a public repository on github.com. Before you open the pull request, check that it works: create an agent from it with **Import from link**.
 2. Fork [dam-agents/dam-starter-kits](https://github.com/dam-agents/dam-starter-kits) and add an entry to the end of the `kits:` list in `catalog.yaml`:
@@ -93,7 +93,7 @@ Besides the DAM team's built-in kits, the **Starter Kits** page lists the kits i
     - `publisher.url` is optional and must start with `https://`. In the kit's window, your name links to it. Your GitHub profile is a good choice.
 
 3. Open a pull request. Say what the kit does and who it's for. CI checks `catalog.yaml` against the catalog's schema.
-4. Once a maintainer merges it, your kit appears on **Starter Kits** at the platform's next catalog refresh, within about 10 minutes. No redeploy is needed.
+4. Once a maintainer merges it, your kit appears on **Starter kits** at the platform's next catalog refresh, within about 10 minutes. No redeploy is needed.
 
 !!! important "Always add `publisher` for your own kit"
     A catalog entry without `publisher` is shown as a kit from the DAM team. Only the catalog entry sets who published a kit. `kit.yaml` has no field for it, so a kit can't claim to be the team's.
@@ -105,7 +105,7 @@ You don't need another pull request for an update. Push to your repository's def
 - New agents are created from the new commit after the next catalog refresh.
 - If your kit seeds the agent from a repository and doesn't pin the seed to a commit, agents already created from it get a **Kit update** offer when that branch moves. Their owners choose which changes to take. Add a `VERSION` and a `CHANGELOG.md` so they see what changed.
 
-To change your name or link, or to remove your kit from Starter Kits, open a pull request that edits or deletes your entry in `catalog.yaml`.
+To change your name or link, or to remove your kit from Starter kits, open a pull request that edits or deletes your entry in `catalog.yaml`.
 
 ## Check your kit as you write it
 

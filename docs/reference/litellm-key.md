@@ -46,16 +46,13 @@ The full key is shown **only once**, at creation time.
 
 The key looks like `sk-...`.
 
-## Step 4: Add the Key When You Create an Agent
+## Step 4: Add the Key in DAM
 
-In DAM, the model provider is configured as part of creating an agent.
+1. In DAM, open **Settings → Providers** and click **IBM ETE LiteLLM Proxy**
+2. Paste your LiteLLM API key and click **Save**
+3. To start new agents on it, pick it under **Default for new agents** at the top of the same tab. An existing agent switches on its own **Providers** page.
 
-1. Start creating an agent — **Create agent** on **Home** — and scroll to **Provider**
-2. In the provider list, select **IBM ETE LiteLLM Proxy**
-3. Paste your LiteLLM API key
-4. Continue setting up the agent
-
-Once connected, the key is saved and reused — the next time you create an agent you can pick the same provider without pasting it again. You can manage your provider keys any time in DAM settings.
+The key is saved once and reused by every agent you give it to. You can update or remove it any time on the same tab.
 
 ## Video Walkthrough
 

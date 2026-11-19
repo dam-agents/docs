@@ -32,7 +32,7 @@ Precedence: CLI flag > environment variable > config file.
 **Global flags:**
 
 - `--server <url>` — override the configured server URL for a single call. Available on every networked command **except `dam auth status` and the `dam auth token` subcommands**, which use the configured active host.
-- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth status`, `auth token revoke`, `ping`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, `agent create-interactive`, `satellite mcp`, or `satellite shell`. (`file list` does have it.)
+- `--json` — emit machine-readable JSON instead of the default table/summary. Available on most read and mutate commands; handy for scripting. Not available on `auth login`, `auth logout`, `auth token revoke`, `ping`, `dam ssh`, `chat`, `file get`, `file put`, `config set`, `agent create-interactive`, `satellite mcp`, `satellite shell`, or `satellite files`. (`file list` does have it.)
 
 Precedence for the server URL is flag > `DAM_SERVER` > config file > **error** — there is no default server.
 
@@ -41,7 +41,8 @@ Precedence for the server URL is flag > `DAM_SERVER` > config file > **error** �
 ```bash
 dam auth login       # Authenticate via OAuth 2.0 Device Authorization Grant
 dam auth logout      # Clear local credentials and best-effort revoke the refresh token
-dam auth status      # List configured hosts, their credential source, and the active server
+dam auth status      # List your saved servers, their credential source and session, and the active one
+dam auth switch <server>  # Make a saved server the active one, without signing in again
 ```
 
 Login uses the OAuth 2.0 Device Authorization Grant — you'll see a URL and code to confirm in your browser. Tokens are stored locally and refreshed automatically.
@@ -66,7 +67,7 @@ dam auth token list                                 # list your keys (plaintext 
 dam auth token revoke key-abcdef12                  # revoke a key; rejected on the next request
 ```
 
-- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. Omit `--scope` and you get `agents:operate` alone; a key always carries at least one scope. The valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, and `credentials:manage`. `--agent` defaults to every agent you own.
+- `--name <name>` is required. `--scope <scope...>` and `--agent <agent-id...>` each take several values after one flag (`--scope agents:read agents:operate`), and repeating the flag works too — both forms add up. Omit `--scope` and you get `agents:operate` alone; a key always carries at least one scope. The valid values are `agents:read`, `agents:operate`, `agents:manage`, `credentials:read`, `credentials:manage`, and `satellites:serve`. `--agent` defaults to every agent you own.
 - `--expires <iso>` takes an ISO 8601 timestamp.
 - The plaintext token is shown only at creation — copy it immediately, it cannot be recovered.
 - Minted keys carry a **`pk_`** prefix and can be used directly as `DAM_TOKEN`. API-key principals cannot mint further keys.
@@ -79,21 +80,20 @@ dam auth token revoke key-abcdef12                  # revoke a key; rejected on 
 dam agent list                                   # List your agents (default command)
 dam agent get <name-or-id>                        # Show one agent's details
 dam agent create <name>                          # Create an agent
-dam agent create <name> --provider <id-or-name> --wait  # Pick its provider; block until it reaches running
+dam agent create <name> --provider <id-or-name> --wait  # Start it on one provider; block until it reaches running
+dam agent create <name> --kit <kit>              # Create it from a starter kit (see Starter kits below)
 dam agent create-interactive                     # Interactive setup: name + template + credentials (TTY-only)
 dam agent delete <name-or-id>                     # Delete an agent and all its persistent data (confirms)
 dam agent delete <name-or-id> --yes               # Delete without confirmation
-dam agent restart <name-or-id>                    # Restart the agent (persistent volumes survive)
+dam agent restart <name-or-id>                    # Restart the agent (its home survives)
 dam agent update <name-or-id> --harness <name> --model <provider>/<model>  # Set its default harness and model
 dam agent models <name-or-id>                     # List the models its providers offer
-dam agent disable <name-or-id>                    # Put it to sleep; nothing wakes it until you enable it
-dam agent enable <name-or-id>                     # Let it wake again on its next use
 ```
 
-- `create` flags: `--template <id>` (defaults to the install's default template), `--provider <id-or-name>` (defaults to your preferred provider — the one `dam connection list --providers` marks `preferred`), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`.
+- `create` flags: `--template <id>` (defaults to the install's default template), `--provider <id-or-name>`, `--harness <name>`, `--model <provider>/<model id>`, `--setting id=value` (repeatable; needs `--model`), `--description <text>`, `--env KEY=VAL` (repeatable), `--wait`, `--timeout <seconds>` (default 120), `--json`. The output names the provider it granted and what the agent starts on.
+- A named `--provider` is the only provider the agent is granted, and it starts on a harness that provider runs. Without one, it gets your preferred provider, the one `dam connection list --providers` marks `preferred`.
 - `--provider` names a **model-provider connection**, by connection id or by a name unique among your providers — `dam connection list` shows both. An unknown, ambiguous, non-provider or inactive `--provider` is refused **before** the agent is created, so a wrong flag costs nothing. Resolving a *name* reads your connections, which needs `credentials:read`; pass a connection id to create with `agents:manage` alone. `dam agent create-interactive` collects the provider for you and needs neither flag.
-- The harness is picked per session, so `create` doesn't take one. `update` sets the agent's defaults: `--harness`, `--model` (named the way `dam agent models` lists them), `--setting id=value` (repeatable), and `--kind chat|channel|scheduled` to say which default you're setting (default `chat`). It also grants or removes providers with `--provider` / `--remove-provider`; removing one that a default used moves that default and says so.
-- A disabled agent reads `disabled` in `list` and `get`, and nothing — a schedule, a message, a session — wakes it until `dam agent enable`.
+- `update` sets the agent's defaults: `--harness`, `--model` (named the way `dam agent models` lists them), `--setting id=value` (repeatable), `--profile <name-or-id>` to run the chat default on one of your profiles, and `--kind chat|channel|scheduled` to say which default you're setting (default `chat`). `--name` renames the agent. It also grants or removes providers with `--provider` / `--remove-provider`; removing one that a default used moves that default and says so.
 - `--wait` is available on `create` and `restart`; pair with `--timeout` to change the 120s default.
 - `--json` on `list`, `get`, `delete`, and `restart` for machine-readable output.
 
@@ -104,6 +104,18 @@ dam template list    # List agent templates available on the active host
 ```
 
 Templates are read-only from the CLI — your operator decides which ones the host offers.
+
+### Starter kits
+
+```bash
+dam kit list                    # The starter kits on the active host
+dam kit show <kit>              # What a kit sets up and what it needs from you
+dam kit changes <agent>         # What the next version of an agent's kit changes
+dam kit update <agent>          # Take the newer version of the agent's kit
+dam kit skip <agent>            # Skip the newer version; the next one is offered again
+```
+
+`dam kit show` lists each thing the kit needs, with the `dam` command that sets it up. `dam agent create <name> --kit <kit>` creates an agent from a kit, as the web app does: `--connection <id-or-name>` grants a connection the kit needs, `--slack-channel <id>` binds a Slack channel, and `--skip-schedule <name>` leaves out one of its schedules (each repeatable). The kit decides the provider, harness, model, description and env, so those flags are refused with `--kit`; change them with `dam agent update` afterwards.
 
 ### Connections
 
@@ -120,7 +132,11 @@ dam connection test <id-or-name>                  # Re-check a connection's stor
 dam connection disconnect <id-or-name>            # Remove a connection (deletes the stored credential; confirms, -y to skip)
 dam connection grant <agent> --connection <id>    # Grant one or more connections to an agent (repeatable; at least one)
 dam connection revoke <agent> --connection <id>   # Revoke connections from an agent (repeatable; at least one; idempotent)
+dam connection default <agent> --connection <id-or-name>  # Which of an agent's accounts on one host it acts as by default
+dam connection scope <id-or-name>                 # Show or limit the account, repositories and permissions a GitHub connection reaches
 ```
+
+When an agent holds several GitHub accounts on one host, or several Object Storage connections, `dam connection list <agent>` marks the one it acts as in a DEFAULT column; `dam connection default` changes it.
 
 `connection connect` takes either a provider template id (see `dam connection templates`) or an MCP server URL (`https://…`). `dam connection templates` lists only the ids `connect` accepts directly — MCP-category templates are left out on purpose, since MCP servers are added by URL instead. Useful flags:
 
@@ -159,6 +175,7 @@ A satellite is a machine outside DAM, such as your laptop or a build box, that o
 dam satellite mcp -- <command...>          # Offer the tools of an MCP server started on this machine
 dam satellite mcp --url localhost:8080     # ...or of one that's already running
 dam satellite shell "<pattern>"            # Offer a fixed set of permitted commands as one tool
+dam satellite files --root <dir>           # Let agents read one directory (--upload: write to it too)
 dam satellite list                         # Your satellites, with their state, tools and agents
 dam satellite grant <satellite> <agent>    # Let an agent call a satellite's tools
 dam satellite revoke <satellite> <agent>   # Stop it again
@@ -167,7 +184,7 @@ dam satellite cancel <satellite> <job>     # Ask a satellite to stop a job
 dam satellite rm <satellite>               # Remove a satellite and every grant to it (confirms)
 ```
 
-- `mcp` and `shell` stay in the foreground and serve until you stop them. The first Ctrl+C drains, so running jobs finish and report back. A second Ctrl+C kills them. Both take `--name` (the name agents see), `--description` and `--max-concurrent`. Without `--name`, the satellite is named after the server or command it offers, or `user@hostname`.
+- `mcp`, `shell` and `files` stay in the foreground and serve until you stop them. The first Ctrl+C drains, so running jobs finish and report back. A second Ctrl+C kills them. All three take `--name` (the name agents see), `--description` and `--max-concurrent`. Without `--name`, the satellite is named after the server, command or directory it offers, or `user@hostname`.
 - `mcp` starts the server you name after `--`, or forwards to one already listening with `--url`. A bare `host:port` means `http://host:port/mcp`. `--header "Name: value"` (repeatable) is sent to a `--url` server, and `--cwd` sets a started server's working directory. A started server inherits your shell's environment. Its tools are offered as they are, and the server decides what each call may do.
 - `shell` takes one usage line per permitted command, as an argument or on stdin. A `#` starts that line's description, and a trailing `[max=N timeout=D cwd=PATH]` sets limits for that command alone. `--cwd` and `--timeout` set the defaults. The machine refuses any call that matches none of the lines. That text is the whole allowlist, so to change it, restart the command:
 
@@ -178,6 +195,7 @@ dam satellite rm <satellite>               # Remove a satellite and every grant 
     EOF
     ```
 
+- `files` offers one directory: agents can list and inspect it and copy a file, a slice of one, or a whole folder as one tar into their own workspace. With `--upload` they can also write into it, and an existing file is replaced only when the call asks to overwrite. Every path stays inside `--root`, links are never followed, and `/` and your home directory are refused. One transfer carries up to 5 GiB.
 - No agent can call a satellite's tools until you grant it the satellite. `grant` and `revoke` take any of your agents by name or ID.
 - `cancel` only asks: a command that's already running may still finish.
 - `rm` doesn't stop commands already running on the machine. The running `dam satellite` stops taking new work, and you can start it again to register it anew. It confirms on a TTY; pass `--yes` non-interactively.
@@ -247,11 +265,11 @@ dam channel slack disconnect <agent> --channel-id <C0…>     # Unbind one of se
 
 - A conversation may hold **several** agents, and an agent may hold **several** Slack bindings at once — the pairing is what's unique, so the same agent can't join one conversation twice. `disconnect` takes `--channel-id` to say which binding to release; it is required once the agent has more than one connected, and optional when it has just one. `disconnect` is idempotent — an agent that isn't connected exits 0.
 - **The binding is the authorization**: anyone Slack admits to the conversation drives the agent, and every turn runs under the **agent's own** credentials. There is no per-person mode and no allow-list. See [Who can drive the agent](../integrations/slack.md#who-can-drive-the-agent).
-- `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and ambient is **off**. Against a server too old to understand ambient, the connect **fails loudly** rather than silently landing mentions-only.
-- **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change ambient mode from the CLI — no disconnect needed. Connecting a *further* channel to the same agent adds a binding instead of replacing one, and so does connecting a *different* agent to a channel that already has one — a conversation can hold several agents (see [Slack](../integrations/slack.md#several-agents-in-one-conversation)). Note the in-chat `/dam bind` is stricter: it refuses an agent already connected to that conversation rather than updating it.
+- `--ambient` starts the binding in [ambient mode](../integrations/slack.md#ambient-mode) — the agent reads along and may reply without being mentioned. Omit it and a new binding starts with ambient **off**. Against a server too old to understand ambient, the connect **fails loudly** rather than silently landing mentions-only.
+- **Re-running `connect` for the same agent and channel updates that binding in place**, which is how you change its modes from the CLI — no disconnect needed. It changes only the modes you name — `--ambient`/`--no-ambient`, and `--history`/`--no-history`, which lets the agent read the channel's older messages and threads — and a mode you leave out keeps its setting. Connecting a *further* channel to the same agent adds a binding instead of replacing one, and so does connecting a *different* agent to a channel that already has one — a conversation can hold several agents (see [Slack](../integrations/slack.md#several-agents-in-one-conversation)). Note the in-chat `/dam bind` is stricter: it refuses an agent already connected to that conversation rather than updating it.
 - **There's no `default` subcommand.** Which agent unnamed mentions reach is set in-chat with `/dam default <agent>`.
 - `dam channel list` prints `TYPE`, `IDENTIFIER`, and `AMBIENT`. Telegram rows show no identifier or ambient state — the bot token is write-only, and Telegram's ambient mode is switched in the chat with `/ambient`.
-- **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, `/dam whisper <agent> on|off`, `/dam ignore`, `/dam unignore`, and `/dam delete` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link. Your agent needs it, though, to post on its own into a channel it isn't connected to: it may reach only channels you're a member of, and until you've linked it can't reach any.
+- **A new binding needs your Slack account linked, and you and the bot both in the channel.** The CLI doesn't link it for you: run `/dam login` once in Slack. **Binding from the CLI doesn't link your Slack identity**, which the in-chat `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`, `/dam whisper <agent> on|off`, `/dam ignore`, `/dam unignore`, and `/dam delete` all require. Run `/dam login` once in the channel. Driving the agent itself never needs a link. Your agent needs it, though, to post on its own into a channel it isn't connected to: it may reach only channels you're a member of, and until you've linked it can't reach any.
 - [Telegram](../integrations/telegram.md) chats bind in-chat via `/bind` — Telegram's commands are bare, not namespaced under `/dam` — rather than through this command group.
 
 ### Approvals
@@ -270,9 +288,9 @@ dam approval deny <id> --once                           # Deny only this held ca
 
 - `list` flags: `--status pending|resolved|expired|all` (default `pending`), `--limit <n>` (1–500).
 - `--once` and `--entire-host` are mutually exclusive.
-- The web UI offers the same choices in **Activity** under different names: bare `approve` is
-  **Allow permanently**, `--once` is **Allow once**, `--entire-host` is **Allow all of &lt;host&gt;**,
-  `deny --once` is **Deny this request**, and bare `deny` is **Deny permanently**.
+- The web UI offers the same choices under **Approvals** (the bell icon) with other names: `--once` is
+  **Allow once**, bare `approve` is **Always allow…**, `--entire-host` is **Allow all of &lt;host&gt;**,
+  `deny --once` is **Deny**, and bare `deny` is **Always deny…**.
 
 !!! warning "Bare `approve` and `deny` are durable"
     For a **network** request, `dam approval approve <id>` writes a **permanent allow rule** — egress
@@ -316,6 +334,7 @@ Additional flags (on both `create` and `update`):
 - `--quiet-window <HH:MM-HH:MM>` — suppress fires inside a window (repeatable)
 - `--session-mode <fresh|continuous>` — new session per fire, or one shared session. Defaults to `fresh` on `create`; on `update`, omitting it leaves the stored value unchanged
 - `--harness <name>` / `--model <provider>/<model id>` / `--setting id=value` — what the schedule's sessions run on, instead of the agent's defaults
+- `--profile <name-or-id>` — run it on one of your profiles instead; replaces `--harness`, `--model` and `--setting`
 - `--precheck <command>` — a shell command that decides whether each fire actually runs. See [Prechecks](../core-concepts/schedules.md#prechecks). `update` also takes `--precheck-none` to remove one
 - `--json` — emit the schedule as JSON (available on every subcommand)
 
@@ -335,6 +354,8 @@ dam chat <agent> --continue            # Reattach to the most recent terminal se
 dam chat <agent> --resume <session-id> # Resume a specific session
 dam chat <agent> --reset               # Kill the existing PTY and start fresh
 dam session list <agent>               # List all sessions for an agent (`dam session <agent>` works too)
+dam session show <agent> <session-id>  # A session's messages and tool calls, and whether a turn is running
+dam session show <agent> <session-id> --follow   # ...and keep printing new ones until stopped
 ```
 
 `dam chat` connects your terminal directly to the agent's interactive TUI over WebSocket. Keystrokes (including Ctrl+C) pass through to the remote harness, so to leave, close the terminal. If the connection drops, the CLI reconnects to the same session by itself; when the session ends or it can't reconnect, it prints a `dam chat <agent> --resume <id>` command. It prints that command when it attaches too, and waits a few seconds first — press Enter to connect at once, or pass `--no-pause`. Short flags: `-c` (`--continue`), `-r` (`--resume`).
@@ -366,8 +387,7 @@ dam run cancel <agent> <session-id>               # Cancel a run in flight
   says so and names the `dam run get` command to pick the result up later — **the turn keeps going on
   the agent**.
 - `--session <id>` continues a session rather than starting one, so a script can hold a thread across
-  several runs.
-- `run get` prints the recorded reply, `--json` gives you the raw payload, and `-w, --wait` blocks
+  several runs.- `run get` prints the recorded reply, `--json` gives you the raw payload, and `-w, --wait` blocks
   until the turn ends. A session that never finished a headless run here — or whose record has since
   been evicted — reports that rather than an empty answer.
 
@@ -418,6 +438,19 @@ dam file put <agent> <local> <remote>  # Upload a single file to the agent
 **File list** shows a directory's immediate children; the path defaults to the workspace root. Files and directories are both listed, with a trailing `/` marking a directory. Pass `-R, --recursive` to walk the whole subtree instead — paths come back workspace-relative and sorted, with empty directories included. `--json` emits each entry as `{ path, type }`, the same either way.
 
 **File get/put** operate on single files. `file get` writes to `basename(remote-path)` in the current directory by default; use `-o, --output <path>` to choose the local path, `--stdout` to stream to stdout instead of writing a file, and `--overwrite` to clobber an existing local file. If `-o` names an existing **directory**, the file lands inside it under its remote basename, and `--overwrite` is ignored with `--stdout`. `file put` takes `--overwrite` to clobber an existing remote file.
+
+### Artifacts
+
+See and change who can open an [artifact](../core-concepts/artifacts.md) you own.
+
+```bash
+dam artifact share <artifact-id>                     # Show who can open it
+dam artifact share <artifact-id> --add ada@example.com   # Share it with a named person (repeatable)
+dam artifact share <artifact-id> --remove ada@example.com   # Take someone off the list (repeatable)
+dam artifact share <artifact-id> --private           # Make a public artifact private
+```
+
+Adding a person makes the artifact restricted to its viewers. Only the web app's Share dialog turns a restricted artifact private or public again. On an interactive page you can only remove viewers here; add them in the Share dialog.
 
 ### Usage metrics
 

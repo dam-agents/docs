@@ -101,10 +101,13 @@ private channel and invite the bot there.
 | Command | What it does |
 |---------|--------------|
 | `/dam bind` | Connect one of your agents to this conversation |
+| `/dam who` | List the agents connected here: who owns each, what it's for, what it reads, and how to reach it — only you see it |
 | `/dam unbind [agent]` | Release a binding — allowed for whoever bound it, or the agent's owner |
 | `/dam default [agent]` | Make an agent the one that unnamed mentions reach — the agent's owner only |
 | `/dam ambient [agent] on\|off` | Turn ambient mode on or off for one agent |
 | `/dam ambient [agent]` | Report whether ambient mode is currently on |
+| `/dam history [agent] on\|off` | Let one agent read this conversation's older messages and threads, or stop it |
+| `/dam history [agent]` | Report whether channel history is on |
 | `/dam whisper [agent] "message"` | Ask an agent something privately — only you see its answer |
 | `/dam whisper [agent]` | Open a private conversation with an agent in your DM with the bot |
 | `/dam whisper [agent] on\|off` | Turn whispers to one of your agents on or off — the agent's owner only |
@@ -113,15 +116,18 @@ private channel and invite the bot there.
 | `/dam delete <message link> [reason]` | Remove one of your agent's posts — the agent's owner only |
 
 The agent name is needed only where more than one is connected in the conversation. A bare `/dam`
-prints the usage help.
+opens a private menu of the agents here, with buttons for what you're allowed to do with each.
+Commands run only as `/dam …`: a mention that reads like a command still goes to the agent as a
+message, and you get a private tip naming the `/dam` form.
 
 !!! note "When `/dam login` is required"
     Talking to the agent never needs a linked account, and neither does a whisper. Linking authorizes
-    the *management* commands — `/dam unbind`, `/dam ambient on|off`, `/dam default <agent>`,
+    the *management* commands — `/dam unbind`, `/dam ambient on|off`, `/dam history on|off`, `/dam default <agent>`,
     `/dam whisper <agent> on|off`, `/dam ignore`, `/dam unignore`, and `/dam delete` — and, for an agent's owner, it's also what lets the agent
     [post beyond its own conversations](#what-else-to-expect). `/dam bind` links you automatically,
-    so if that's how you connected the conversation you're already set; **if you bound from the CLI,
-    you were never linked**, and those commands will ask you to run `/dam login` first. Reading the
+    so if that's how you connected the conversation you're already set. Connecting a channel from the
+    DAM UI or the CLI needs your Slack account linked already, and you and the bot both have to be in
+    the channel. Reading the
     current state with a bare `/dam ambient`, `/dam default` or `/dam ignore` never needs a link.
     `/dam logout` unlinks.
 
@@ -151,14 +157,17 @@ prints the usage help.
 | **1:1 DM** | **Every message** — a DM is already addressed to the bot, so no mention is needed |
 
 Posts by other apps, webhooks and other agents reach an agent the same way a person's do — a mention,
-or anything in an ambient channel. An agent never answers its own posts, and a run of app and agent
-posts with nobody in between stops starting turns until a person posts again. To stop the agents in a
+or anything in an ambient channel. An agent never answers its own posts, and when agents and apps post
+too often in one conversation, their posts stop starting turns there for a few minutes, and the
+conversation gets a notice saying so. A person's posts still start turns. To stop the agents in a
 conversation answering one app at all, run `/dam ignore` with a link to one of its posts.
 
 Inside a thread the agent is part of, a reply that doesn't tag it won't reach it while ambient is off.
-The first time you do that in a thread, you get a private note saying so.
+If you're new to DAM in Slack, you may get a private note saying so once the thread has gone quiet.
 
-Editing an earlier message doesn't re-trigger a reply. Replies land in a thread, unless the agent
+Editing a message you sent the agent passes the new text on: if it already answered, it answers
+again in the same session. In an ambient conversation, an edit gives the agents reading along another
+chance to chime in, and adding a tag of the bot by editing counts as a mention. Replies land in a thread, unless the agent
 chooses Slack's *also send to channel*, which surfaces the post in both places.
 
 Mentioning or DMing an **unbound** conversation gets you a private, sender-only note — in a DM or
@@ -337,11 +346,15 @@ withheld, along with why.
   while it can still act on it. Only in a 1:1 DM, where no mention is needed, do separate top-level
   messages run together into one burst.
 - **Fresh sessions get context, labelled for what it is.** A conversation started at the top level of a
-  channel is given the channel's recent messages — up to about fifty — as background rather than as
+  channel is given the channel's recent messages — up to about a hundred — as background rather than as
   something to answer; in a DM, that's your earlier exchange with the agent. Picking up inside an
   existing thread injects up to fifty of that thread's most recent replies, plus the message that started
 it, as the conversation being answered. The
   window is deliberately short.
+- **Channel history goes further back, where you allow it.** Turn on **Channel history** for an agent,
+  in the channel's settings in DAM or with `/dam history on`, and from its next session it can read the
+  conversation's older messages and threads when an answer needs them. It reads them through the bot.
+  What it reads lands in its sessions, which its owner can see. It's set per agent.
 - **The agent can read a thread it wasn't in.** A channel's recent messages don't include the replies
   inside its threads, so a message that started a thread is marked as having replies, and the agent can
   go and read that thread — paging back through a long one; an extremely long thread may be only partly
@@ -387,7 +400,7 @@ it, as the conversation being answered. The
 - **A blocked network request won't stall the turn.** Nobody in the channel can answer an approval, so
   with no chat, terminal, or SSH session of your own open on the agent, the request is refused
   straight away — and instead of going quiet, the agent tells you which host it needed. It's still
-  recorded in [Activity](../core-concepts/network-access.md#where-approvals-appear); allowing it there writes the
+  recorded in [Approvals](../core-concepts/network-access.md#where-approvals-appear); allowing it there writes the
   rule the agent picks up on its next attempt. With a session of your own open, the request holds and
   resolves as usual.
 - **Nobody is there to answer a permission prompt, either.** If the agent's harness is set to ask
@@ -399,9 +412,8 @@ it, as the conversation being answered. The
   network approvals, above.
 
 !!! tip "How the agent posts"
-    Proactive posts work through two built-in tools the agent calls itself: `describe_channel`
-    (list the chats it can post to) and `send_channel_message` (post text, optionally with a
-    single file attached — a large file is refused). Nothing to configure, but there are limits on
+    Proactive posts work through the agent's built-in channel tools: it can list the chats it can
+    post to and post text, optionally with a single file attached (a large file is refused). Nothing to configure, but there are limits on
     where it can reach beyond its own bound conversations:
 
     - It can post only where the DAM bot is already a member, so a channel the bot hasn't been
@@ -447,28 +459,28 @@ tell an owner from a stranger.
 
 ## Other ways to bind
 
-You can also connect a channel as you **create** the agent — the **Channels** section of
-**Create an agent** offers **Slack Channel** and **Telegram Chat**, so an agent can be reachable from
+You can also connect a channel as you **create** an agent from a starter kit — its **Channels**
+section offers **Slack** and **Telegram**, so an agent can be reachable from
 Slack before you've ever opened its chat. See [Create](../core-concepts/agents.md#create).
 
 Otherwise, connect a **channel** from the DAM UI or the CLI at any time. DMs and group DMs bind in-chat
 with `/dam bind`.
 
 Once connected, a channel is shown **by name** — `#team-eng` rather than a raw `C0…` id — on the agent's
-row and wherever its channels are listed. You still connect it *by* id; the name is just how it's
-displayed afterwards, and the id shows instead where the name isn't known. A connected DM reads as
+row and wherever its channels are listed. The id shows instead where the name isn't known. A connected DM reads as
 *DM with* the person, and a group DM as *Group DM with* its members. A channel that has since been
 deleted, or a private one the bot was removed from, says on the Slack card that it's no longer available
 in Slack, with a hint to disconnect it.
 
 <figure class="tour-shot" markdown>
-![An agent's Channels section with the Slack Channel card and a Connect channel button](../assets/slack-channels.png)
+![An agent's Channels section with the Slack channel card](../assets/slack-channels.png)
 <figcaption>An agent's **Channels** section.</figcaption>
 </figure>
 
 From the **UI**, open the agent and go to **Channels**. The Slack card lists the channels already
 connected — each with whether ambient is on, and a **Default** badge where this agent is the one
-unnamed mentions reach — and **Connect channel** adds another by its channel id.
+unnamed mentions reach — and **Add Slack channel** opens a picker of the channels you and the bot are
+both in, where you can search by name or paste a channel ID.
 A connected channel's **⋯** menu offers **Edit** (to flip ambient) and **Disconnect**. The channel
 itself can't be swapped for a different one: connect the channel you want and disconnect this one.
 
@@ -512,7 +524,7 @@ already in.
 | Binding refused as already connected | That **same** agent is already connected here — binding a *different* one is allowed and adds it |
 | A mention with no name reached nobody | The conversation has no [default agent](#several-agents-in-one-conversation) — its owner can set one with `/dam default <agent>` |
 | The wrong agent answered | Start the message with the agent's name; an unknown or ambiguous name falls back to the default |
-| "Link your account first" on `unbind`, `ambient`, `default`, `whisper … on\|off`, `ignore`, `unignore`, or `delete` | Run `/dam login` once in the channel, then retry — expected if you bound from the CLI |
+| "Link your account first" on `unbind`, `ambient`, `default`, `whisper … on\|off`, `history`, `ignore`, `unignore`, or `delete` | Run `/dam login` once in the channel, then retry |
 | Can't unbind | Only the person who bound the conversation, or the agent's owner, can release it |
 | Agent replies to things nobody asked it | Ambient mode is on — `/dam ambient off` for mentions-only |
 | An attached file was ignored | You'll have had a private note saying why — usually over a size cap, or a picture format the agent can't read |
