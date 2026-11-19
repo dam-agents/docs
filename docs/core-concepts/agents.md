@@ -204,7 +204,7 @@ the agent's name in its chat — opens the agent's page. Its left nav has these 
 The image is fixed at creation — the only change to it is the [update](#updating-the-image) below.
 
 <figure class="tour-shot" markdown>
-![An agent's Usage section: total cost, API calls, tokens, spend by model and spend by day](../assets/agent-usage.png)
+![An agent's Usage section: API spend, spend by day, API calls, tokens in and out, and spend by model, provider and session type](../assets/agent-usage.png)
 <figcaption>**Usage** for one agent.</figcaption>
 </figure>
 

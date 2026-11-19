@@ -52,7 +52,7 @@ own artifacts: another agent's, and anything you uploaded, reads as not found to
 
 When an agent publishes something, it links it in chat — opening that link previews the artifact
 beside the conversation, so you can read a report or click through a dashboard without leaving the
-session. The panel's top bar keeps the main actions: the version switcher, **Share**, **Download** and
+session. The panel's top bar keeps the main actions: the version switcher, the sharing button (it shows who can open the artifact: **Private**, **Restricted** or **Public**), **Download** and
 **Open in new tab**, which opens the artifact on a page of its own in the app, private ones included.
 The rest are under **⋮**, including **Rename**, **Move**, **Edit source**, **Start a new session**,
 **View source**, **Set expiration** and **Delete artifact**.
