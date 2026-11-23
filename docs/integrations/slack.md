@@ -414,16 +414,16 @@ it, as the conversation being answered. The
 !!! tip "How the agent posts"
     Proactive posts work through the agent's built-in channel tools: it can list the chats it can
     post to and post text, optionally with a single file attached (a large file is refused). Nothing to configure, but there are limits on
-    where it can reach beyond its own bound conversations:
+    where it can post:
 
-    - It can post only where the DAM bot is already a member, so a channel the bot hasn't been
-      invited to is refused.
-    - It can reach only channels **its owner** is a member of, public or private, and only those are
-      in its list of chats. That's checked through your linked Slack account: until you've run
-      `/dam login` (or bound a conversation with `/dam bind`), it can't reach any channel beyond its
-      bound ones. Group DMs aren't affected by this.
+    - It starts posts and threads only in the conversations it's **connected to**, and only those
+      are in its list of chats. A channel you or the DAM bot happen to be in isn't enough: the people
+      there never connected the agent, so any other channel or group DM is refused. To have it post
+      somewhere new, bind that conversation to it.
     - A DM has its own limit: the agent can message only its owner, the person in a 1:1 DM it's
-      connected to, or a member of a channel it's connected to. Anyone else is refused.
+      connected to, or a member of a channel it's connected to. Anyone else is refused. Messaging
+      its owner is checked through your linked Slack account, so run `/dam login` once (or bind a
+      conversation with `/dam bind`) if you want it to DM you.
     - An agent bound in **more than one** Slack workspace can post only into conversations it's bound
       to, or the one it's answering right now — a new channel or a DM with someone is refused, since
       a channel or person only means something inside one workspace.
