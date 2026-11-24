@@ -7,10 +7,11 @@
 <p class="welcome-lead">An open platform for long-lived AI agents. Any harness, any model, on Kubernetes.</p>
 
 <div class="welcome-cta" markdown>
-[Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
-[:material-slack: Ask in #dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank" .md-button}
-[:material-pulse: DAM status](https://ibm.biz/dam-status){:target="_blank" .md-button}
+[Launch DAM for IBMers →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
+[:material-source-branch: Deploy it yourself](https://github.com/dam-agents/dam#run-your-own){:target="_blank" .md-button}
 </div>
+
+<p class="welcome-ibm">IBMers on the IBM hosted deployment: get help in <a href="https://ibm.enterprise.slack.com/archives/C0B3F03NB24" target="_blank">#dam-community</a> on IBM Slack, and check <a href="https://ibm.biz/dam-status" target="_blank">DAM status</a> if something isn't working.</p>
 
 </div>
 

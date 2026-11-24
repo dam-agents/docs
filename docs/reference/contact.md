@@ -1,8 +1,8 @@
 # Contact
 
-!!! tip "Is something not working?"
-    Check [**ibm.biz/dam-status**](https://ibm.biz/dam-status){:target="_blank"} first. It shows whether DAM
-    and the services your agents use are working, what's affected by an ongoing incident, and known issues.
+!!! tip "IBMers: is something not working?"
+    Check [**ibm.biz/dam-status**](https://ibm.biz/dam-status){:target="_blank"} first. It shows whether the IBM hosted
+    deployment and the services your agents use are working, what's affected by an ongoing incident, and known issues.
     It updates every hour.
 
 ## Slack (IBMers)
