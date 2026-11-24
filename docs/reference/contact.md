@@ -1,5 +1,10 @@
 # Contact
 
+!!! tip "Is something not working?"
+    Check [**ibm.biz/dam-status**](https://ibm.biz/dam-status){:target="_blank"} first. It shows whether DAM
+    and the services your agents use are working, what's affected by an ongoing incident, and known issues.
+    It updates every hour.
+
 ## Slack (IBMers)
 
 Join [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"} on IBM Slack for:
@@ -26,7 +31,8 @@ File them on [github.com/dam-agents/dam](https://github.com/dam-agents/dam/issue
 You'll also need a model provider key — see [Create your LiteLLM key](litellm-key.md).
 
 !!! note "Can't reach DAM?"
-    The IBM hosted deployment requires the standard IBM VPN. If the site won't load at all, check that first.
+    The IBM hosted deployment requires the standard IBM VPN. If the site won't load at all, check that first,
+    then check [ibm.biz/dam-status](https://ibm.biz/dam-status){:target="_blank"}.
 
 ## DAM in Your Slack Workspace
 
