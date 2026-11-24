@@ -153,6 +153,10 @@ dam session list my-agent      # List sessions
 
 ## Next Steps
 
+!!! tip "Stuck?"
+    Ask in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"} on IBM Slack. If something stops working,
+    check [ibm.biz/dam-status](https://ibm.biz/dam-status){:target="_blank"} to see whether it's a known problem.
+
 - **[Build a knowledge base](../guides/building-knowledge-bases.md)** — a personal brain, a project base, or a team's memory you can ask
 - **[Run code reviews automatically](../guides/code-review.md)** — set up an agent that reviews every PR
 - **[Add Slack](../integrations/slack.md)** — let your team interact with shared agents

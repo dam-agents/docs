@@ -8,6 +8,8 @@
 
 <div class="welcome-cta" markdown>
 [Launch DAM →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
+[:material-slack: Ask in #dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank" .md-button}
+[:material-pulse: DAM status](https://ibm.biz/dam-status){:target="_blank" .md-button}
 </div>
 
 </div>
@@ -33,6 +35,8 @@
     Sign in with your IBM login at [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"}.
     There's no cluster to manage, and it includes IBM internal model endpoints and integrations.
     These docs describe this deployment.
+    Get help in [#dam-community](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"}, and check
+    [ibm.biz/dam-status](https://ibm.biz/dam-status){:target="_blank"} if something isn't working.
 
 - :material-source-branch: **Open source: deploy DAM yourself**
 
