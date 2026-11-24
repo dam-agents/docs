@@ -74,6 +74,6 @@ disabled and says so.
 
 !!! note "What survives hibernation"
     Everything under `/home/agent` — your work, `$HOME`, installed language packages — comes back
-    after a sleep, **except `~/.cache`**, which is cleared on every wake. Software installed
-    *outside* your home directory (system packages, `/usr/local`) does not survive either. Bake
-    those into a custom image instead.
+    after a sleep. Software installed *outside* your home directory (system packages, `/usr/local`)
+    survives a sleep too, but a platform update that replaces the system image starts it over, and
+    `/tmp` is emptied at every start. Bake what you need for good into a custom image.

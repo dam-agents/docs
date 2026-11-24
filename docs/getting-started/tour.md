@@ -1,16 +1,28 @@
 # DAM new user tour
 
 Welcome to DAM. This tour gives you a quick look at what you can do with DAM and how the pieces fit
-together. We'll start at Home, then explore agents and knowledge bases.
+together. We'll start with Dammy, then Home, then explore agents and knowledge bases.
+
+## Meet Dammy, your first agent
+
+The first time you sign in, you land in a chat with **Dammy**, the personal agent everyone gets. It
+greets you by name and offers a few ideas to try: an **Artifact**, a **Schedule**, a **Knowledge base**,
+a **Skill**, and a question about DAM. Clicking an idea only fills in the message box, so nothing runs
+until you send it.
+
+Dammy learns how you work, one task at a time. Tell it what you do and what you'd like taken off your
+plate, and it gets you to a first result: a deck made your way, a report that arrives every morning, or
+notes on your project you can ask questions about.
+
+Dammy is an ordinary agent. It's in your agent list, and you can rename it, connect services to it, or
+give it schedules like any other. Once you've used it, signing in takes you to Home.
 
 ## Start on the home page
 
 **Home** shows your agents, with their memory and storage under **Agents** and **API spend** at a
 glance, and a banner whenever an approval is waiting on you; the banner opens the **Approvals** panel
 (the bell icon) — see [where approvals appear](../core-concepts/network-access.md#where-approvals-appear).
-Sessions in progress, and ones with something new, collect under **Activity** in the left sidebar. (On
-a brand-new account with no agents yet, Home is a welcome that puts you straight into creating your
-first one instead.)
+Sessions in progress, and ones with something new, collect under **Activity** in the left sidebar.
 
 The real map, though, is the **left sidebar** — it's the whole platform, top to bottom. Under the items
 below it lists your **Agents**, each with its sessions, and **Activity**.
@@ -64,7 +76,9 @@ most things up for you. Take the long way once, to see what the pieces are.)
 
 The agent is created straight away, and you land in its chat:
 
-- **Provider** — no model provider connected yet? The chat asks you to **Connect an LLM provider**.
+- **Provider** — on the IBM hosted deployment there's nothing to connect: an agent with no provider of
+  its own runs on CurveBender, IBM-hosted open-source models. Self-hosting without a shared provider?
+  The chat asks you to **Connect an LLM provider**.
 - **Harness and model** — the picker under the message box shows what the chat runs on. Pick a
   harness, such as **Claude**, **Codex**, **Pi** or **Bob**, and a model. Choose **Claude** to follow
   along.

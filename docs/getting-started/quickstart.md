@@ -1,6 +1,6 @@
 # Quickstart
 
-Launch a Claude Code agent in the cloud in minutes.
+Create your first agent in the cloud in minutes.
 
 Prefer the command line? [Jump to CLI quickstart](#cli).
 
@@ -18,10 +18,11 @@ Navigate to [ibm.biz/dam-agents](https://ibm.biz/dam-agents){:target="_blank"} a
 
 ### Step 2: Create an Agent
 
-On **Home**, click **Create agent**. Your agent is created straight away, and you land in its chat.
+Go to **Home** and click **Create agent**. Your agent is created straight away, and you land in its chat.
 
-1. **Provider** — no model provider connected yet? The chat asks you to **Connect an LLM provider**
-   first.
+1. **Provider** — on the IBM hosted deployment there's nothing to connect: an agent with no provider of
+   its own runs on CurveBender, IBM-hosted open-source models, and a notice above the message box says
+   so. Self-hosting without a shared provider? The chat asks you to **Connect an LLM provider** first.
 2. **Harness and model** — the picker under the message box shows what this chat runs on. To follow
    along with Claude Code, open it and pick **Claude** and a model.
 3. **Connections** *(optional)* — to work against your repos, open **Configure agent** and add
@@ -31,8 +32,8 @@ On **Home**, click **Create agent**. Your agent is created straight away, and yo
 Everything else can be left as it is and changed later.
 
 !!! note
-    No provider key yet? See [Create your LiteLLM key](../reference/litellm-key.md) — it covers which proxy
-    to use and how to scope the key.
+    Want Claude or another model that CurveBender doesn't serve? See [Create your LiteLLM key](../reference/litellm-key.md) —
+    it covers which proxy to use and how to scope the key.
 
 !!! tip "Or skip the choices entirely"
     **Browse starter kits** on Home (**Start from a kit** on a brand-new account) offers ready-made agents — a code reviewer, a knowledge base, a

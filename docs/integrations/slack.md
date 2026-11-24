@@ -390,8 +390,9 @@ it, as the conversation being answered. The
   Slack, it's asked **once** to post it, and what you see is the answer rather than an apology. If
   something already went wrong visibly in the thread, the agent knows you saw that and answers
   accordingly. An agent that deliberately had nothing to say isn't prodded.
-- **Every post is signed.** Each message the agent posts opens with its emoji and its name in bold,
-  and under it Slack shows *<agent name> - Powered by DAM* as a link. One bot posts for every agent, so the name is how you tell them apart. Anyone
+- **Every post is signed.** Each message the agent posts ends with its avatar emoji and a
+  *Sent by <agent name>* link, and where the workspace allows it, the post shows the agent's name and
+  avatar as the sender. One bot posts for every agent, so the name is how you tell them apart. Anyone
   can follow the link — it lands on the agent's public page, described below, not in the
   conversation; from there someone with a DAM account can **Open in DAM** to reach the thread's
   session itself.

@@ -53,13 +53,13 @@ to connect either one:
 
 1. Go to **Settings → Connections** and click **Add connection** to open the **Connection catalog**
 2. On the **Apps** tab, click **New** on the **GitHub** card (or **GitHub Enterprise**). One pane —
-   **Connect GitHub** — offers all three methods together; pick one and its fields appear below it
+   **Connect GitHub** (or **Connect GitHub Enterprise**) — offers all three methods together; pick one and its fields appear below it
 3. Fill them in and submit: **Continue to GitHub** hands off to GitHub's own sign-in, while **Connect**
    (for a token) and **Connect app** save without leaving DAM
 
 | Method | What you supply | Reach for it when |
 |--------|-----------------|-------------------|
-| **Authorize with GitHub** | Nothing — unless your operator hasn't registered an OAuth app for everyone, in which case a client id and secret of your own | You want the quickest route, and the agent acting as you |
+| **Authorize with GitHub** (**Authorize with GitHub Enterprise** on the Enterprise card) | Nothing — unless your operator hasn't registered an OAuth app for everyone, in which case a client id and secret of your own | You want the quickest route, and the agent acting as you |
 | **Connect with a personal access token** | A fine-grained token you create on GitHub | You want to scope access to just the repos you choose — the simplest route to private repos |
 | **Connect your GitHub App** | An app id, installation id, and the app's private key | You'd rather agents act as a bot your organization owns |
 
@@ -147,7 +147,7 @@ Model providers aren't here — they live on the **Providers** tab (see above).
 
 ### Slack
 
-A **Slack** card in the catalogue's **Apps** tab connects your own Slack account, so the agent can
+A **Slack Account** card in the catalogue's **Apps** tab connects your own Slack account, so the agent can
 search, read, post, and react in Slack as you. It's backed by Slack's own MCP server, so it arrives as
 a set of tools the agent calls.
 

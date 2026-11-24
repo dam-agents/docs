@@ -54,7 +54,7 @@ Every agent reaches the internet only through a **credential gateway** — a sep
 - **Per-user:** Your credentials are yours alone — no other team member can read them or reuse them directly. Note that binding an agent to a channel lets everyone in that conversation drive the agent *using* those credentials; see [Agents in a Channel](#agents-in-a-channel).
 - **Per-service:** Each connected service (GitHub, Anthropic, etc.) is stored separately.
 - **All your agents:** Any agent you own can be granted your connected credentials.
-- **Sub-agents:** A sub-agent gets the network access of the agent that started it, never its credentials. It holds only the connections it was granted itself.
+- **Sub-agents:** A sub-agent runs on one of its parent's model providers. By default that's the only connection it holds; the parent can also give it all of its own connections, or a chosen few, when it starts the sub-agent. Like any agent, it never sees the raw credentials.
 
 ### Token Management
 

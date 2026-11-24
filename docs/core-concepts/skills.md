@@ -51,9 +51,9 @@ Two ways to make your own:
 - **Write it in the workspace.** A skill is a directory containing a `SKILL.md` — YAML frontmatter
   with `name` and `description`, then the instructions — plus any supporting files (templates,
   examples, scripts). Create it with the [file manager](file-manager.md) or just ask your agent to.
-- **Upload Markdown.** The Add-source dialog has an **Upload .md files** tab that turns each file you
-  give it into its own skill. Dropping `.md` files straight onto the Skills panel opens that tab with
-  them already staged. A file over **2 MB**, or a batch over **5 MB** in total, is skipped with a
+- **Upload Markdown.** **Upload skill**, in the **Created in this agent** group, opens an
+  **Upload skills** dialog that turns each file you give it into its own skill. Dropping `.md` files
+  straight onto the Skills panel opens that dialog with them already staged. A file over **2 MB**, or a batch over **5 MB** in total, is skipped with a
   notice naming it; a name collision keeps the dialog open and marks the offending rows without
   writing anything.
 
@@ -79,8 +79,8 @@ what the pull request has actually become, so you can read the state off the pag
 | Pill | What it means |
 |------|---------------|
 | **Draft** | The pull request is still a draft |
-| **In review** | Open and awaiting review |
-| **Published** | Merged — the skill is upstream |
+| **Open** | Open and awaiting review |
+| **Merged** | Merged — the skill is upstream |
 | **Closed** | Closed without merging |
 | **Submitted** | You published, but the pull request's state isn't known yet |
 
@@ -88,13 +88,13 @@ what the pull request has actually become, so you can read the state off the pag
 pull request is open or in draft there's already one to review, and once it's merged the next step is
 tracking rather than republishing.
 
-Once a skill shows **Published**, its **⋯** menu offers **Track from &lt;source&gt;** — this hands the
+Once a skill shows **Merged**, its **⋯** menu offers **Track from &lt;source&gt;** — this hands the
 skill over to that source, so it becomes an installed skill that follows the source from then on and
 gets the usual update prompts when the source moves. It **overwrites your local copy** (you'll be
 asked to confirm, and warned if yours has diverged), and it's one-way.
 
 The item can appear **disabled**, with a note saying the source hasn't been scanned yet — tracking
-needs to know which version upstream now holds. **Re-scan** the source and it becomes available.
+needs to know which version upstream now holds. **Rescan** the source and it becomes available.
 
 Publishing shares a skill; it doesn't move it. Deleting a skill you published doesn't withdraw its
 pull request — follow the link if you want to close it yourself.
@@ -152,7 +152,7 @@ repos; a source on GitHub Enterprise or another host can't be previewed this way
 Installed skills are downloaded into your agent and become available on the **next session** — the
 harness picks them up when it next starts, not mid-session. Installing takes the version the source
 was **last scanned** at, not whatever its repo holds this second — so re-installing is how you
-update, and **Re-scan** is how you pick up a commit pushed in the last few minutes. When a source
+update, and **Rescan** is how you pick up a commit pushed in the last few minutes. When a source
 moves ahead of what you have, the skill shows an **Update** pill; click it to reinstall at the latest
 scanned version, or follow the compare link beside it to see what changed upstream first.
 
@@ -189,9 +189,9 @@ active, the button narrows to the matches instead — *Enable 4 matching*.
 !!! note "The scan time hides while a source is broken"
     A source that can't be read shows its error in place of the *scanned …* label, so there's no
     freshness to read off a failing card. Fix the cause — usually a missing GitHub connection — then
-    **Re-scan**.
+    **Rescan**.
 
-Each source card's **⋯** menu holds **Re-scan** (re-read the repo now — the card shows when its list
+Each source card's **⋯** menu holds **Rescan** (re-read the repo now — the card shows when its list
 was last scanned), **View on GitHub**, and, for a source you added, **Remove source**.
 
 If you add your own source pointing at a repo the platform already provides, yours takes over the
@@ -231,8 +231,8 @@ usual locations.* Changing the subdirectory means removing the source and adding
 
 A subdirectory that doesn't pay off **fails by name** rather than quietly listing nothing: the card
 tells you whether the path isn't a directory in the repo at all, or is one but holds no skill — naming
-the path, and the commit it looked at. Skills are found **one level below** the path you give, so
-pointing at an individual skill's own folder finds nothing.
+the path, and the commit it looked at. Skills are found **one level below** the path you give, and a path
+that is itself a skill's folder counts as that skill, so you can point at a single skill too.
 
 !!! tip "Your agent can manage skills itself"
     Beyond the panel, the agent has built-in tools to discover and install skills mid-task — list

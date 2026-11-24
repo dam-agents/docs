@@ -93,8 +93,7 @@ Open **Starter kits** and pick the **Knowledge** tab. Two kits build a knowledge
 and **Plain Wiki** — and which you choose is the one decision you can't undo later, so it's worth
 knowing what each actually installs.
 
-Neither is a different kind of agent or a different engine. Both run whichever harness you pick during
-creation, and both keep their knowledge as markdown files in the workspace. What differs
+Neither is a different kind of agent or a different engine. Both run on the harness the kit starts on, and both keep their knowledge as markdown files in the workspace. What differs
 is the *working method* installed on top: a set of instructions the agent reads every session, and — for
 one of them — a toolkit of commands and checks.
 
@@ -115,9 +114,9 @@ offline once installed, with nothing to break; you just don't get the graph or t
 Pick **LLM Wiki** when the connections between facts are the point, **Plain Wiki** for a personal base
 or a straightforward reference an agent tidies for you.
 
-Open the kit you want and click **Use this Starter Kit**. On the **Create an agent** page, choose a name
-you'll recognize in Slack — such as `team-memory` — pick a **Harness**, and choose a **Provider**. The
-kit has answered the rest.
+Open the kit you want, give the agent a name you'll recognize in Slack at the top of the kit's page — such
+as `team-memory` — and click **Use this starter kit**. There's no harness or provider to pick: the kit
+starts on its own harness with one of your providers, and has answered the rest.
 
 !!! note "Both are open, and neither is a black box"
     Each kit is installed from a public repo by a one-shot setup script when the base is created —
@@ -273,7 +272,7 @@ first line.
 
 ### Have it read Slack itself
 
-The **Slack** card in the connection catalog's **Apps** tab is a different thing from the binding
+The **Slack Account** card in the connection catalog's **Apps** tab is a different thing from the binding
 above: it connects *your* Slack account, so the base can search, read, post, and react as you. It's
 backed by Slack's own MCP server, so it arrives as a set of tools the agent calls.
 
@@ -311,18 +310,9 @@ knowledge behind it changes.
 
 ### Let other people's agents read it
 
-An artifact is a snapshot of one answer. If you want colleagues asking their *own* questions of the
-base, share the base itself: under
-**Agent Setup** → **Knowledge**, pick the folders to publish and hand out the `kbshare_…` link. Their
-agents get read-only access — they can search and read what you published, and change nothing.
-
-Two things make this the natural fit for a team memory. It's **read-only by construction**, so the
-per-person rules you wrote in step 2 stop being the only thing standing between a colleague and your
-knowledge. And the published copy is served independently of the agent, so people can read the base
-**while it's hibernated** — no wake, no compute off your budget, no queue behind your own questions.
-
-Feeding it stays yours: only the folders you named are published, and only the raw notes travel — your
-instructions, commands, and the base's working method don't.
+Sharing a knowledge base with other people's agents is paused while it's redesigned, so there's no way
+to start a new share right now. An artifact, above, is the way to hand someone an answer in the
+meantime.
 
 ## 7. Turn knowledge into action
 
