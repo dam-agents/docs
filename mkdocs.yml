@@ -107,6 +107,6 @@ nav:
     - Create your LiteLLM key: reference/litellm-key.md
     - Roadmap: reference/roadmap.md
   - Help:
-    - "#dam-community (IBM Slack) ↗": https://ibm.enterprise.slack.com/archives/C0B3F03NB24
-    - "DAM status (IBM hosted) ↗": https://ibm.biz/dam-status
+    - "IBMers: #dam-community on IBM Slack ↗": https://ibm.enterprise.slack.com/archives/C0B3F03NB24
+    - "IBMers: status of the IBM hosted DAM ↗": https://ibm.biz/dam-status
     - Contact: reference/contact.md

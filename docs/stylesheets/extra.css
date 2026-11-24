@@ -1113,3 +1113,9 @@
 .md-typeset .home-cta p { color: #525252; margin: 0 auto 1.5rem; max-width: 30rem; }
 [data-md-color-scheme="slate"] .md-typeset .home-cta p { color: #a8a8a8; }
 
+
+.md-typeset .welcome-ibm {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color--light);
+}

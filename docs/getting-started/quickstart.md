@@ -153,7 +153,7 @@ dam session list my-agent      # List sessions
 
 ## Next Steps
 
-!!! tip "Stuck?"
+!!! tip "Stuck? (IBMers)"
     Ask in [**#dam-community**](https://ibm.enterprise.slack.com/archives/C0B3F03NB24){:target="_blank"} on IBM Slack. If something stops working,
     check [ibm.biz/dam-status](https://ibm.biz/dam-status){:target="_blank"} to see whether it's a known problem.
 
