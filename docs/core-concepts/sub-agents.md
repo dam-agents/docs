@@ -12,7 +12,7 @@ something only a separate agent gives:
 
 - a different harness
 - its own setup: a repository, an install command, environment variables, or skills
-- more CPU, memory, or disk than the agent has
+- more disk than the agent has
 - isolation from the agent's own workspace
 - heavy parallel work
 - a result checked against a fixed shape
@@ -78,5 +78,5 @@ as a new turn in the conversation, and wakes the agent if it needs to.
 - **Network access**: the [network rules](network-access.md) of the agent you asked. A request those
   rules neither allow nor deny raises an approval for that agent, and allowing it permanently adds the
   rule there.
-- **Compute**: a sub-agent counts against your budget like any running agent. One too large for your
-  whole budget is refused at once.
+- **Compute**: a sub-agent shares your memory pool with your other agents. One that doesn't fit right
+  away waits for room and starts when it frees.

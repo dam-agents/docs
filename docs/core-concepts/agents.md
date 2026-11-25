@@ -1,6 +1,6 @@
 # Agents
 
-An **agent** is a running AI assistant with its own persistent workspace, credential access, and configuration. It's the core thing you create and work with on the platform, and it's isolated from every other agent — its own compute pod, workspace, and network boundary.
+An **agent** is a running AI assistant with its own persistent workspace, credential access, and configuration. It's the core thing you create and work with on the platform, and it's isolated from every other agent — its own virtual machine, workspace, and network boundary.
 
 ## What You Get
 
@@ -58,14 +58,16 @@ finishes.
 | Persists | Lost |
 |----------|------|
 | Workspace files (`~/work`) | Running processes |
-| Home directory (`$HOME`, except `~/.cache`) | In-memory state |
+| Home directory (`$HOME`) | In-memory state |
 | Installed skills | Open terminal sessions |
-| Session history | Files outside the persisted mounts (e.g. `/tmp`) |
-| Connections and egress rules | Packages installed outside `$HOME` (apt, system-level) |
+| Session history | Files in `/tmp` and `/var/tmp`, emptied at every start |
+| Connections and egress rules | |
+| Packages installed outside `$HOME` (apt, system-level), until a platform update replaces the system image | |
 
 !!! tip "Bake long-term dependencies into an image"
     Anything your agent needs permanently — system packages, tools installed at runtime — should go
-    into a custom image, or it will vanish on the next hibernation.
+    into a custom image or under `$HOME`. System packages survive hibernation, but a platform update
+    that replaces the system image starts them over.
 
 ## Compute budget and resources
 

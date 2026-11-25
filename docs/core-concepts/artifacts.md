@@ -229,11 +229,11 @@ sees their email. See [Sharing an interactive page with your team](#sharing-an-i
 Turning visibility back to private disables the link immediately.
 
 Folders get a public page automatically once something inside them is shared — it lists only the
-artifacts that are **themselves shared**. **Copy folder link** in the folder's **⋯** menu gives you
+artifacts inside that are **public**; restricted ones never appear there. **Copy folder link** in the folder's **⋯** menu gives you
 the URL, and stays disabled until at least one artifact inside is public.
 
 Each artifact records **who published it** (which agent, or you if you uploaded it) and a **view
-count** of public renders. The count is a bare number — no viewer identity or timestamps — and
+count** of share-page views. The count is a bare number — no viewer identity or timestamps — and
 in-app previews don't add to it.
 
 !!! note "Shared HTML and JSX is live code"

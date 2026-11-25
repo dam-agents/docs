@@ -135,8 +135,8 @@ A window may cross midnight (10pm–7am works as written), and it uses the same 
 
 A schedule fire **wakes a sleeping agent** automatically — you don't need to keep it running.
 
-A fire that can't reach the agent right away — it's erroring, or waiting for memory — waits about an hour
-for it to come back, then lapses. So a brief outage still gets its run, but an agent that stays down
+A fire that can't reach the agent right away — it's erroring, or waiting for memory — waits up to an hour, or until
+the schedule's next run if that comes sooner, then lapses. So a brief outage still gets its run, but an agent that stays down
 longer won't hand you a burst of catch-up runs when it finally wakes.
 
 ## Viewing History

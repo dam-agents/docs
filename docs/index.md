@@ -4,7 +4,7 @@
 
 # Welcome to DAM
 
-<p class="welcome-lead">An open platform for long-lived AI agents. Any harness, any model, on Kubernetes.</p>
+<p class="welcome-lead">AI agents that work for you on their own: on a schedule, in Slack, and after you close your laptop.</p>
 
 <div class="welcome-cta" markdown>
 [Launch DAM for IBMers →](https://ibm.biz/dam-agents){:target="_blank" .md-button .md-button--primary}
@@ -17,7 +17,33 @@
 
 ## What is DAM?
 
-**DAM is an open platform for running long-lived AI agents, built at IBM Research.** An agent runs in its own microVM with a persistent workspace, injected credentials, and its own network boundary — so it can work against real systems, on a schedule, and in Slack, and keep going after you close your laptop. Each agent is built from the same shared building blocks: connections, skills, schedules, channels, artifacts, and knowledge bases. See **[The building blocks](core-concepts/building-blocks.md)** to learn more.
+**DAM gives you AI agents that do work for you, not just answer questions.** An agent can send you a
+morning brief, keep a knowledge base of your project you can ask questions about, review every pull
+request in a repo, or draft your weekly update every Friday. It works on a schedule, in your Slack
+channels, and keeps going after you close your laptop.
+
+**It's for anyone at IBM, technical or not.** A few examples:
+
+- **Admins and operations:** answer the same questions from a knowledge base, track requests, send reminders.
+- **Analysts and researchers:** watch sources overnight and send a summary in the morning.
+- **Managers:** keep track of workstreams and draft status updates.
+- **Developers:** review pull requests, fix issues, and run long coding tasks.
+
+**Your first agent is already there.** The first time you sign in, you meet **Dammy**, the personal
+agent everyone gets. Tell it what you do, and it helps you find a first task worth handing over. See
+the [new user tour](getting-started/tour.md#meet-dammy-your-first-agent).
+
+## Is DAM for me?
+
+- **Do I need to be technical?** No. You work with agents by telling them what you need, in plain words,
+  in the chat or in Slack.
+- **Does it cost anything?** No. On the IBM hosted deployment, DAM is free to use, and agents run on
+  CurveBender, IBM-hosted open-source models, unless you connect a provider of your own.
+- **How is it different from ChatGPT or Gemini?** A chat assistant answers when you ask. A DAM agent also
+  works when you're not there: it runs on a schedule, works in your Slack channels, keeps its files
+  between sessions, and remembers how you like things done.
+- **What data can I use?** See the Terms of Use. You accept them when you first sign in, and you can
+  read them again any time in **Settings** › **About DAM** › **Terms of Use**.
 
 ## Two ways to run DAM
 
@@ -49,9 +75,14 @@
     and CurveBender providers, the server URL, and the IBM Slack workspace. Where a page covers one of
     these, it says so.
 
-## What problem does it solve, and for whom?
+## How it works
 
-It's for **engineers and researchers** who run agent workloads — and the **teams and leaders** who want the good ones to spread. In most organizations, people have built genuinely useful agents and workflows, but most live on one laptop and each new team rebuilds the same infrastructure — running agents, managing credentials, scheduling, storing results — before it can even start. So the work rarely compounds. DAM turns that infrastructure into shared building blocks no one has to rebuild: a practice proven in one place can be picked up everywhere, and new ones — from any team, or the wider industry — get captured once and made available to all.
+**DAM is an open platform for running long-lived AI agents, built at IBM Research.** Each agent runs in
+its own microVM with a persistent workspace, injected credentials and its own network boundary, so it
+can work against real systems safely. Every agent is built from the same shared building blocks:
+connections, skills, schedules, channels, artifacts and knowledge bases. A practice proven in one place
+can be picked up everywhere, so good work compounds instead of being rebuilt by each team. See
+**[The building blocks](core-concepts/building-blocks.md)** to learn more.
 
 ## Start building
 
@@ -59,20 +90,20 @@ Pick your entry point.
 
 <div class="grid cards" markdown>
 
-- :material-rocket-launch-outline: **Quickstart**
-
-    ---
-
-    Launch your first Claude Code agent in minutes — in the web UI or the CLI.
-
-    [Run the Quickstart →](getting-started/quickstart.md)
-
 - :material-map-outline: **Take the tour**
 
     ---
 
-    A guided walkthrough that builds one agent up capability by capability, so you see the whole platform first.
+    New to DAM? Meet Dammy, then see what agents can do for you, one piece at a time.
 
     [Start the tour →](getting-started/tour.md)
+
+- :material-rocket-launch-outline: **Quickstart**
+
+    ---
+
+    Want to jump straight in? Create your own agent in minutes, in the web UI or the CLI.
+
+    [Run the Quickstart →](getting-started/quickstart.md)
 
 </div>
