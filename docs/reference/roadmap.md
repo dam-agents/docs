@@ -24,8 +24,6 @@ DAM is a research project, and real users drive its direction. Much of what we b
 
 - **Users can't tell or control what keeps running after they leave**: Clear, predictable rules for what keeps running when you close the page or disconnect, and a way to see and control it. Tracked in [#4416](https://github.com/dam-agents/dam/issues/4416){:target="_blank"}.
 
-- **Microsoft 365**: Agents that work with your Microsoft 365 account. The calendar comes first, so a morning brief knows your day and meeting prep finds the meeting and who is in it. Mail follows, and an agent sends a mail only after you approve it. Teams meeting transcripts come after that, so an agent can pull action items and decisions out of your meetings. On the IBM hosted deployment, this waits on an IBM security review. The open source platform is not affected. Tracked in [#6750](https://github.com/dam-agents/dam/issues/6750){:target="_blank"}.
-
 - **Owners see and edit what an agent is about to send before it goes out**: Before an agent sends something for you, such as a GitHub issue, a Slack post or a mail, you see it as it will appear. You can change it or ask the agent to rework it, then send it, right away or later from one place. Tracked in [#6868](https://github.com/dam-agents/dam/issues/6868){:target="_blank"}.
 
 - **Users know when to use artifacts, Environments or sub-agents**: An agent can publish a file, publish a page that talks back to it, run a sandbox you open by link, or start a sub-agent. Each was built separately, with its own name and its own sharing rules. Next, we're making them one clear set: you know which one to reach for, anyone who opens a shared link sees who made it and whose access it runs under, and all of them follow one set of sharing and security rules. Tracked in [#6628](https://github.com/dam-agents/dam/issues/6628){:target="_blank"}.
@@ -33,6 +31,8 @@ DAM is a research project, and real users drive its direction. Much of what we b
 - **Events from outside DAM start agent runs**: Agents that start work when something happens, not only on a schedule: a label on an issue, a review request, a failing check, or a message from GitHub, Slack or a webhook. A cheap check runs first, so a trigger that finds nothing costs no model time. You can also @-mention an agent in a GitHub issue or pull request and it replies there, the way it does in Slack today. Tracked in [#3623](https://github.com/dam-agents/dam/issues/3623){:target="_blank"} and [#3482](https://github.com/dam-agents/dam/issues/3482){:target="_blank"}.
 
 ## Later
+
+- **Microsoft 365**: Agents that work with your Microsoft 365 account. The calendar comes first, so a morning brief knows your day and meeting prep finds the meeting and who is in it. Mail follows, and an agent sends a mail only after you approve it. Teams meeting transcripts come after that, so an agent can pull action items and decisions out of your meetings. On the IBM hosted deployment, this waits on an IBM security review. The open source platform is not affected. Tracked in [#6750](https://github.com/dam-agents/dam/issues/6750){:target="_blank"}.
 
 - **Every user has a built-in assistant that helps them use DAM**: A built-in assistant inside DAM. It answers questions about the platform, knows the state of your agents, and over time explains problems and helps with setup. Tracked in [#3587](https://github.com/dam-agents/dam/issues/3587){:target="_blank"}.
 
